@@ -119,6 +119,7 @@ statcheck <- function(x,stat=c("t","F"))
   Res <- ddply(Res,.(Source),function(x)x[order(x$Location),])
   Res[['Reported.Comparison']] <- gsub("5","=",Res[['Reported.Comparison']])
   Res[['Reported.Comparison']] <- gsub(",","<",Res[['Reported.Comparison']])
+  class(Res) <- "statcheck"
   return(Res)
 }
 
