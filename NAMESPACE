@@ -1,5 +1,6 @@
 export(statcheck)
 export(checkPDF)
 export(checkPDFdir)
+S3method(plot,statcheck)
 importFrom(tcltk,"tk_choose.dir")
 import(plyr)
