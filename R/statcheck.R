@@ -56,7 +56,7 @@ statcheck <- function(x,stat=c("t","F"))
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
         
         # Create data frame:
-        tRes <- data.frame(Source = names(x)[i], Statistic="t", df1= df, df2=NA, Value = tVals, Reported.Comparison= pEq, Reported.P.Value=pVals, Computed = pmin(pt(tVals,df),1-pt(tVals,df))*2, OneTail = pmin(pt(tVals,df),1-pt(tVals,df)), Location = tLoc)
+        tRes <- data.frame(Source = names(x)[i], Statistic="t", df1= df, df2=NA, Value = tVals, Reported.Comparison= pEq, Reported.P.Value=pVals, Computed = ifelse(abs(pVals - pt(tVals,df)) < abs(pVals - (1-pt(tVals,df))),pt(tVals,df)*2,1-pt(tVals,df)*2), OneTail = ifelse(abs(pVals - pt(tVals,df)) < abs(pVals - (1-pt(tVals,df))),pt(tVals,df),1-pt(tVals,df)), Location = tLoc)
         
         # Append, clean and close:
         Res <- rbind(Res,tRes)
