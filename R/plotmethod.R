@@ -1,7 +1,7 @@
 plot.statcheck <- function(x,...) {
   
   reported <- x$Reported.P.Value[x$Reported.Comparison=="="]
-  computed <- x$computed[x$Reported.Comparison=="="]
+  computed <- x$Computed[x$Reported.Comparison=="="]
   
   # scatterplot of reported and recalculated p values
   plot.default(reported,computed,
