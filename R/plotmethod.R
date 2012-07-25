@@ -1,7 +1,10 @@
 plot.statcheck <- function(x,...) {
   
+  reported <- x$Reported.P.Value[x$Reported.Comparison=="="]
+  computed <- x$computed[x$Reported.Comparison=="="]
+  
   # scatterplot of reported and recalculated p values
-  plot.default(x$Reported.P.Value,x$Computed,
+  plot.default(reported,computed,
                xlab="reported p value",
                ylab="recalculated p value",
                xlim=c(0,1),ylim=c(0,1),
@@ -9,12 +12,12 @@ plot.statcheck <- function(x,...) {
   
   
   # red dot for gross error (non-sig reported as sig and vice versa)
-  points(x$Reported.P.Value[which(x$Reported.P.Value>.05 & x$Computed<.05)],
-         x$Computed[which(x$Reported.P.Value>.05 & x$Computed<.05)],
+  points(reported[which(reported>.05 & computed<.05)],
+         computed[which(reported>.05 & computed<.05)],
          pch=20,col="red")
   
-  points(x$Reported.P.Value[which(x$Reported.P.Value<.05 & x$Computed>.05)],
-         x$Computed[which(x$Reported.P.Value<.05 & x$Computed>.05)],
+  points(reported[which(reported<.05 & computed>.05)],
+         computed[which(reported<.05 & computed>.05)],
          pch=20,col="red")
   
   
