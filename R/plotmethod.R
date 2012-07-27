@@ -1,5 +1,5 @@
 plot.statcheck <- function(x,...) {
-  
+   
   reported <- x$Reported.P.Value
   computed <- x$Computed
   
