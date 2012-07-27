@@ -24,7 +24,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
     if ("t"%in%stat)
     {
       # Get location of t-values in text:
-      tLoc <- gregexpr("t\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt)[[1]]
+      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt)[[1]]
       
       if (tLoc[1] != -1)
       {
@@ -63,9 +63,10 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
                            Value = tVals, 
                            Reported.Comparison= pEq, 
                            Reported.P.Value=pVals, 
-                           Computed = pmin(pt(-1*abs(tVals),df)*2,1), 
+                           Computed = pt(-1*abs(tVals),df)*2, 
                            OneTail = ifelse(abs(pVals - pt(tVals,df,lower.tail=TRUE)) < abs(pVals - (pt(tVals,df,lower.tail=FALSE))),pt(tVals,df,lower.tail=TRUE),pt(tVals,df,lower.tail=FALSE)), 
-                           Location = tLoc)
+                           Location = tLoc,
+                           Raw = tRaw)
         
         # Append, clean and close:
         Res <- rbind(Res,tRes)
@@ -77,7 +78,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
     if ("F"%in%stat)
     {
       # Get location of t-values in text:
-      tLoc <- gregexpr("F\\(\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p)\\s?.?\\s?\\d?\\.\\d+",txt)[[1]]
+      tLoc <- gregexpr("F\\s?\\(\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p)\\s?.?\\s?\\d?\\.\\d+",txt)[[1]]
       
       if (tLoc[1] != -1)
       {
@@ -125,7 +126,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
           Reported.Comparison= pEq, 
           Reported.P.Value=pVals, 
           Computed = pf(FVals,df1,df2,lower.tail=FALSE), 
-          OneTail = NA, Location = tLoc)
+          OneTail = NA, Location = tLoc,
+          Raw = tRaw)
         
         # Append, clean and close:
         Res <- rbind(Res,tRes)
@@ -138,7 +140,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
     if (any(c("r","cor","correlations")%in%stat))
     {
       # Get location of t-values in text:
-      tLoc <- gregexpr("r\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt)[[1]]
+      tLoc <- gregexpr("r\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt)[[1]]
       
       if (tLoc[1] != -1)
       {
@@ -184,7 +186,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
                            Reported.P.Value=pVals, 
                            Computed = pmin(pt(-1*abs(r2t(tVals,df)),df)*2,1), 
                            OneTail = ifelse(abs(pVals - pt(r2t(tVals,df),df,lower.tail=TRUE)) < abs(pVals - (pt(r2t(tVals,df),df,lower.tail=FALSE))),pt(r2t(tVals,df),df,lower.tail=TRUE),pt(r2t(tVals,df),df,lower.tail=FALSE)), 
-                           Location = tLoc)
+                           Location = tLoc,
+                           Raw = tRaw)
         
         # Append, clean and close:
         Res <- rbind(Res,tRes)
@@ -197,7 +200,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
     if ("chisq"%in%stat)
     {
       # Get location of not-t-values in text:
-      tLoc <- gregexpr("(?<=[^(t|r)])\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,perl=TRUE)[[1]]
+      tLoc <- gregexpr("[^(t|r|\\s)]\\s+\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,perl=TRUE)[[1]]
       
       if (tLoc[1] != -1)
       {
@@ -238,7 +241,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
                            Reported.P.Value=pVals, 
                            Computed = pchisq(tVals,df,lower.tail=FALSE), 
                            OneTail = NA, 
-                           Location = tLoc)
+                           Location = tLoc,
+                           Raw = tRaw)
         
         # Append, clean and close:
         Res <- rbind(Res,tRes)

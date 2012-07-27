@@ -31,7 +31,7 @@ plot.statcheck <- function(x,...) {
   
   # triangles for exact p values
   points(x$Reported.P.Value[x$Reported.Comparison=="="],
-         x$Computed[x$Reported.Comparison=="="],
+         computed[x$Reported.Comparison=="="],
          pch=5)
   
   
