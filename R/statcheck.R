@@ -1,6 +1,6 @@
 
 ## Main function, checks t and F statistics of vector of strings (articles).
-statcheck <- function(x,stat=c("t","F"))
+statcheck <- function(x,stat=c("t","F","cor","chisq"))
 {
   '%rem%'<- function(x,y)
   {
@@ -24,7 +24,7 @@ statcheck <- function(x,stat=c("t","F"))
     if ("t"%in%stat)
     {
       # Get location of t-values in text:
-      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt)[[1]]
+      tLoc <- gregexpr("t\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt)[[1]]
       
       if (tLoc[1] != -1)
       {
@@ -77,7 +77,7 @@ statcheck <- function(x,stat=c("t","F"))
     if ("F"%in%stat)
     {
       # Get location of t-values in text:
-      tLoc <- gregexpr("F\\s?\\(\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?)\\s?.?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p)\\s?.?\\s?\\d?\\.\\d+",txt)[[1]]
+      tLoc <- gregexpr("F\\(\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p)\\s?.?\\s?\\d?\\.\\d+",txt)[[1]]
       
       if (tLoc[1] != -1)
       {
@@ -132,6 +132,122 @@ statcheck <- function(x,stat=c("t","F"))
         rm(tRes)
       }
     }
+    
+    
+    # correlations:
+    if (any(c("r","cor","correlations")%in%stat))
+    {
+      # Get location of t-values in text:
+      tLoc <- gregexpr("r\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt)[[1]]
+      
+      if (tLoc[1] != -1)
+      {
+        # Get raw text of t-values:
+        tRaw <- substring(txt,tLoc,tLoc+attr(tLoc,"match.length")-1)
+        # Extract location of numbers:
+        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",tRaw)
+        
+        for (k in 1:length(nums))
+        {
+          if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%c(2,4)
+          if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%2
+          if (length(nums[[k]]) != 3) warning(paste("Could not extract statistics properly from",tRaw[k]))
+        }
+        # Extract df:
+        df <- as.numeric(substring(tRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
+        
+        # Extract t-values
+        tVals <- as.numeric(substring(tRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
+        
+        # Extract p-values
+        pVals <- as.numeric(substring(tRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
+        
+        # Extract (in)equality
+        #pEq <- ifelse(grepl("\\=|<",tRaw),substring(tRaw,sapply(gregexpr("\\=|<",tRaw),'[',2),sapply(gregexpr("\\=|<",tRaw),'[',2)),"?")
+        eqLoc <- gregexpr("p\\s?.?",tRaw)
+        pEq <- substring(tRaw,
+                         sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
+                         sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+        
+        r2t <- function(r,df)
+        {
+          r / (sqrt((1-r^2)/df))
+        }
+        
+        # Create data frame:
+        tRes <- data.frame(Source = names(x)[i], 
+                           Statistic="r", 
+                           df1= df, 
+                           df2=NA, 
+                           Value = tVals, 
+                           Reported.Comparison= pEq, 
+                           Reported.P.Value=pVals, 
+                           Computed = pmin(pt(-1*abs(r2t(tVals,df)),df)*2,1), 
+                           OneTail = ifelse(abs(pVals - pt(r2t(tVals,df),df,lower.tail=TRUE)) < abs(pVals - (pt(r2t(tVals,df),df,lower.tail=FALSE))),pt(r2t(tVals,df),df,lower.tail=TRUE),pt(r2t(tVals,df),df,lower.tail=FALSE)), 
+                           Location = tLoc)
+        
+        # Append, clean and close:
+        Res <- rbind(Res,tRes)
+        rm(tRes)
+      }
+    }
+    
+    
+    # Chis2-values:
+    if ("chisq"%in%stat)
+    {
+      # Get location of not-t-values in text:
+      tLoc <- gregexpr("(?<=[^(t|r)])\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,perl=TRUE)[[1]]
+      
+      if (tLoc[1] != -1)
+      {
+        # Get raw text of t-values:
+        tRaw <- substring(txt,tLoc,tLoc+attr(tLoc,"match.length")-1)
+        # Extract location of numbers:
+        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",tRaw)
+        
+        for (k in 1:length(nums))
+        {
+          if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%c(2,4)
+          if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%2
+          if (length(nums[[k]]) != 3) warning(paste("Could not extract statistics properly from",tRaw[k]))
+        }
+        # Extract df:
+        df <- as.numeric(substring(tRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
+        
+        # Extract t-values
+        tVals <- as.numeric(substring(tRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
+        
+        # Extract p-values
+        pVals <- as.numeric(substring(tRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
+        
+        # Extract (in)equality
+        #pEq <- ifelse(grepl("\\=|<",tRaw),substring(tRaw,sapply(gregexpr("\\=|<",tRaw),'[',2),sapply(gregexpr("\\=|<",tRaw),'[',2)),"?")
+        eqLoc <- gregexpr("p\\s?.?",tRaw)
+        pEq <- substring(tRaw,
+                         sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
+                         sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+        
+        # Create data frame:
+        tRes <- data.frame(Source = names(x)[i], 
+                           Statistic="Chi2", 
+                           df1= df, 
+                           df2=NA, 
+                           Value = tVals, 
+                           Reported.Comparison= pEq, 
+                           Reported.P.Value=pVals, 
+                           Computed = pchisq(tVals,df,lower.tail=FALSE), 
+                           OneTail = NA, 
+                           Location = tLoc)
+        
+        # Append, clean and close:
+        Res <- rbind(Res,tRes)
+        rm(tRes)
+      }
+    }
+    
+    
+    
   }
   Source <- NULL
   Res <- ddply(Res,.(Source),function(x)x[order(x$Location),])
