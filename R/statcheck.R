@@ -1,5 +1,5 @@
 
-## Main function, checks t and F statistics of vector of strings (articles).
+## Main function, checks statistics of vector of strings (articles).
 statcheck <- function(x,stat=c("t","F","cor","chisq"))
 {
   '%rem%'<- function(x,y)
@@ -200,7 +200,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
     if ("chisq"%in%stat)
     {
       # Get location of not-t-values in text:
-      tLoc <- gregexpr("[^(t|r|\\s)]\\s+\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,perl=TRUE)[[1]]
+      tLoc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)2?\\s?|[^(t|r|\\s)]\\s+)\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,perl=TRUE)[[1]]
       
       if (tLoc[1] != -1)
       {
@@ -261,42 +261,3 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
   return(Res)
 }
 
-
-# Inner function to read pdf:
-getPDF <- function(x,dir)
-{
-  txtfiles <- character(length(x))
-  for (i in 1:length(x))
-  {
-    system(paste('pdftotext -q -enc "ASCII7" "',x[i],'"',sep=""))
-    if (file.exists(gsub("\\.pdf","\\.txt",x[i])))
-    {
-      #txtfiles[i] <- paste(scan(gsub(".pdf",".txt",x[i]),what="character",sep=" "),collapse=" ")
-      fileName <- gsub("\\.pdf","\\.txt",x[i])
-      txtfiles[i] <- readChar(fileName, file.info(fileName)$size)
-    } else
-    {
-      warning(paste("Failure in file",x[i]))
-      txtfiles[i] <- ""
-    }
-  }
-  return(txtfiles)
-}
-
-## Function to check directory of PDFs:
-checkPDFdir <- function(dir,...)
-{
-  if (missing(dir)) dir <- tk_choose.dir()
-  files <- list.files(dir,pattern=".pdf",full.names=TRUE)
-  txts <-  sapply(files,getPDF,dir=dir)
-  names(txts) <- gsub(".pdf","",list.files(dir,pattern=".pdf"))
-  return(statcheck(txts,...))
-}
-
-## Function to given PDFs:
-checkPDF <- function(files,...)
-{
-  txts <-  sapply(files,getPDF,dir=dir)
-  names(txts) <- gsub(".pdf","",list.files(dir,pattern=".pdf"))
-  return(statcheck(txts,...))
-}
