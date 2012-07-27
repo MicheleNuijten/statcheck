@@ -56,7 +56,16 @@ statcheck <- function(x,stat=c("t","F"))
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
         
         # Create data frame:
-        tRes <- data.frame(Source = names(x)[i], Statistic="t", df1= df, df2=NA, Value = tVals, Reported.Comparison= pEq, Reported.P.Value=pVals, Computed = ifelse(abs(pVals - pt(tVals,df)) < abs(pVals - (1-pt(tVals,df))),pt(tVals,df)*2,1-pt(tVals,df)*2), OneTail = ifelse(abs(pVals - pt(tVals,df)) < abs(pVals - (1-pt(tVals,df))),pt(tVals,df),1-pt(tVals,df)), Location = tLoc)
+        tRes <- data.frame(Source = names(x)[i], 
+                          Statistic="t", 
+                           df1= df, 
+                           df2=NA, 
+                           Value = tVals, 
+                           Reported.Comparison= pEq, 
+                           Reported.P.Value=pVals, 
+                           Computed = pmin(pt(-1*abs(tVals),df)*2,1), 
+                           OneTail = ifelse(abs(pVals - pt(tVals,df,lower.tail=TRUE)) < abs(pVals - (pt(tVals,df,lower.tail=FALSE))),pt(tVals,df,lower.tail=TRUE),pt(tVals,df,lower.tail=FALSE)), 
+                           Location = tLoc)
         
         # Append, clean and close:
         Res <- rbind(Res,tRes)
@@ -107,7 +116,16 @@ statcheck <- function(x,stat=c("t","F"))
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
         
         # Create data frame:
-        tRes <- data.frame(Source = names(x)[i], Statistic="F", df1= df1, df2= df2, Value = FVals,  Reported.Comparison= pEq, Reported.P.Value=pVals, Computed = pmin(pf(FVals,df1,df2),1-pf(FVals,df1,df2)), OneTail = NA, Location = tLoc)
+        tRes <- data.frame(
+          Source = names(x)[i], 
+          Statistic="F", 
+          df1= df1, 
+          df2= df2, 
+          Value = FVals,  
+          Reported.Comparison= pEq, 
+          Reported.P.Value=pVals, 
+          Computed = pf(FVals,df1,df2,lower.tail=FALSE), 
+          OneTail = NA, Location = tLoc)
         
         # Append, clean and close:
         Res <- rbind(Res,tRes)

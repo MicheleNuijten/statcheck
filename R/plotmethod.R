@@ -1,14 +1,24 @@
 plot.statcheck <- function(x,...) {
+  
+  # Extract limit args:
+  args <- list(...)
+  if (is.null(args$xlim)) args$xlim <- c(0,1)
+  if (is.null(args$ylim)) args$ylim <- c(0,1)
    
   reported <- x$Reported.P.Value
   computed <- x$Computed
   
+  # Choose onetailed if more appropriate:
+  computed[!is.na(x$OneTail)] <- ifelse(
+    abs(x[["Reported.P.Value"]] - x$Onetail)[!is.na(x$OneTail)] <
+    abs(x[["Reported.P.Value"]] - x$Computed)[!is.na(x$OneTail)],  
+    x$OneTail[!is.na(x$OneTail)],x$Computed[!is.na(x$OneTail)])
+  
   # scatterplot of reported and recalculated p values
-  plot.default(reported,computed,
+  do.call(plot.default,c(list(x=reported,y=computed,
                xlab="reported p value",
-               ylab="recalculated p value",
-               xlim=c(0,1),ylim=c(0,1),
-               pch=20)
+               ylab="recalculated p value",                         
+               pch=20),args))
   
   # red dot for gross error (non-sig reported as sig and vice versa)
   points(reported[reported>.05 & computed<.05],
