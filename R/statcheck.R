@@ -24,7 +24,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
     if ("t"%in%stat)
     {
       # Get location of t-values in text:
-      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt)[[1]]
+      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (tLoc[1] != -1)
       {
@@ -78,7 +78,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
     if ("F"%in%stat)
     {
       # Get location of t-values in text:
-      tLoc <- gregexpr("F\\s?\\(\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p)\\s?.?\\s?\\d?\\.\\d+",txt)[[1]]
+      tLoc <- gregexpr("F\\s?\\(\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p)\\s?.?\\s?\\d?\\.\\d+",txt,ignore.case=TRUE)[[1]]
       
       if (tLoc[1] != -1)
       {
@@ -140,7 +140,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
     if (any(c("r","cor","correlations")%in%stat))
     {
       # Get location of t-values in text:
-      tLoc <- gregexpr("r\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt)[[1]]
+      tLoc <- gregexpr("r\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (tLoc[1] != -1)
       {
@@ -200,7 +200,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
     if ("chisq"%in%stat)
     {
       # Get location of not-t-values in text:
-      tLoc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)2?\\s?|[^(t|r|\\s)]\\s+)\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,perl=TRUE)[[1]]
+      tLoc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)2?\\s?|[^(t|r|\\s)]\\s+)\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,perl=TRUE,ignore.case=TRUE)[[1]]
       
       if (tLoc[1] != -1)
       {
