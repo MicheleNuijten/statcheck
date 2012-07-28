@@ -1,7 +1,7 @@
 
 
 # Inner function to read pdf:
-getPDF <- function(x,dir)
+getPDF <- function(x)
 {
   txtfiles <- character(length(x))
   for (i in 1:length(x))
@@ -26,15 +26,15 @@ checkPDFdir <- function(dir,...)
 {
   if (missing(dir)) dir <- tk_choose.dir()
   files <- list.files(dir,pattern=".pdf",full.names=TRUE)
-  txts <-  sapply(files,getPDF,dir=dir)
-  names(txts) <- gsub(".pdf","",list.files(dir,pattern=".pdf"))
+  txts <-  sapply(files,getPDF)
+  names(txts) <- gsub(".pdf","",basename(files))
   return(statcheck(txts,...))
 }
 
 ## Function to given PDFs:
 checkPDF <- function(files,...)
 {
-  txts <-  sapply(files,getPDF,dir=dir)
-  names(txts) <- gsub(".pdf","",list.files(dir,pattern=".pdf"))
+  txts <-  sapply(files,getPDF)
+  names(txts) <- gsub(".pdf","",basename(files))
   return(statcheck(txts,...))
 }

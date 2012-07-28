@@ -12,7 +12,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
   }
   
   # Create empty data frame:
-  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, oneTail = NULL, Location = NULL)
+  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, oneTail = NULL, Location = NULL,stringsAsFactors=FALSE)
   
   if (is.null(names(x))) names(x) <-  1:length(x)
   for (i in 1:length(x))
@@ -66,7 +66,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
                            Computed = pt(-1*abs(tVals),df)*2, 
                            OneTail = ifelse(abs(pVals - pt(tVals,df,lower.tail=TRUE)) < abs(pVals - (pt(tVals,df,lower.tail=FALSE))),pt(tVals,df,lower.tail=TRUE),pt(tVals,df,lower.tail=FALSE)), 
                            Location = tLoc,
-                           Raw = tRaw)
+                           Raw = tRaw,
+                           stringsAsFactors=FALSE)
         
         # Append, clean and close:
         Res <- rbind(Res,tRes)
@@ -127,7 +128,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
           Reported.P.Value=pVals, 
           Computed = pf(FVals,df1,df2,lower.tail=FALSE), 
           OneTail = NA, Location = tLoc,
-          Raw = tRaw)
+          Raw = tRaw,
+          stringsAsFactors=FALSE)
         
         # Append, clean and close:
         Res <- rbind(Res,tRes)
@@ -187,7 +189,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
                            Computed = pmin(pt(-1*abs(r2t(tVals,df)),df)*2,1), 
                            OneTail = ifelse(abs(pVals - pt(r2t(tVals,df),df,lower.tail=TRUE)) < abs(pVals - (pt(r2t(tVals,df),df,lower.tail=FALSE))),pt(r2t(tVals,df),df,lower.tail=TRUE),pt(r2t(tVals,df),df,lower.tail=FALSE)), 
                            Location = tLoc,
-                           Raw = tRaw)
+                           Raw = tRaw,
+                           stringsAsFactors=FALSE)
         
         # Append, clean and close:
         Res <- rbind(Res,tRes)
@@ -242,7 +245,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
                            Computed = pchisq(tVals,df,lower.tail=FALSE), 
                            OneTail = NA, 
                            Location = tLoc,
-                           Raw = tRaw)
+                           Raw = tRaw,
+                           stringsAsFactors=FALSE)
         
         # Append, clean and close:
         Res <- rbind(Res,tRes)

@@ -25,7 +25,7 @@ checkHTMLdir <- function(dir,...)
   if (missing(dir)) dir <- tk_choose.dir()
   files <- list.files(dir,pattern=".html",full.names=TRUE)
   txts <-  sapply(files,getHTML)
-  names(txts) <- gsub(".html","",list.files(dir,pattern=".html"))
+  names(txts) <- gsub(".html","",basename(files))
   return(statcheck(txts,...))
 }
 
@@ -33,7 +33,7 @@ checkHTMLdir <- function(dir,...)
 checkHTML <- function(files,...)
 {
   txts <-  sapply(files,getHTML)
-  names(txts) <- gsub(".html","",list.files(dir,pattern=".html"))
+  names(txts) <- gsub(".html","",basename(files))
   return(statcheck(txts,...))
 }
 
