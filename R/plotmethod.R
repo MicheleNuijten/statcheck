@@ -10,8 +10,8 @@ plot.statcheck <- function(x,...) {
   
   # Choose onetailed if more appropriate:
   computed[!is.na(x$OneTail)] <- ifelse(
-    abs(x[["Reported.P.Value"]] - x$Onetail)[!is.na(x$OneTail)] <
-    abs(x[["Reported.P.Value"]] - x$Computed)[!is.na(x$OneTail)],  
+    abs(x$Reported.P.Value - x$OneTail)[!is.na(x$OneTail)] <
+    abs(x$Reported.P.Value - x$Computed)[!is.na(x$OneTail)],  
     x$OneTail[!is.na(x$OneTail)],x$Computed[!is.na(x$OneTail)])
   
   # scatterplot of reported and recalculated p values
@@ -50,8 +50,11 @@ plot.statcheck <- function(x,...) {
   
   text(.5,0,"sig reported as non-sig",cex=.7)
   
-  legend("topleft",
+  par(xpd=TRUE)
+  legend(.88,-.15,
          pch=c(20,5),
          col=c("red","black"),
-         legend=c("gross error","exact"))
+         legend=c("gross error","exact"),
+         cex=.8)
+  par(xpd=FALSE)
 }
