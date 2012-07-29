@@ -8,7 +8,7 @@ Extract statistics and recompute p-values.
 This function extracts statistics (currently t and F statistics in APA format with no effect size) from strings and returns the extracted values, reported p-values and recomputed p-values.
 }
 \usage{
-statcheck(x, stat = c("t", "F"))
+statcheck(x, stat = c("t", "F", "cor", "chisq"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
