@@ -1,13 +1,6 @@
-# library('plyr')
-# library('devtools')
-# install_github("statcheck","sachaepskamp")
-# library('statcheck')
-# dat <- checkPDFdir()
-
-
-summary.statcheck <- function(x,...){
+summary.statcheck <- function(object,...){
   
-  
+  x <- object
   
   # Papers analyzed
   Paper <- c(unique(x$Source),"Total")
@@ -26,7 +19,6 @@ summary.statcheck <- function(x,...){
   
   x <- cbind(x,computed)
   
-  
   # Significant results reported as non significant per paper and in total
   SigAsNonSig <- ddply(x,"Source",function(x){
     sum(x$Reported.P.Value<.05 & x$computed>.05) 
@@ -41,20 +33,30 @@ summary.statcheck <- function(x,...){
   
   NonSigAsSig <- c(NonSigAsSig, sum(NonSigAsSig))
   
-  # Number of gross errors per paper and in total
-  GrossErrors <- ddply(x,"Source",function(x){
-    sum(x$Reported.P.Value>.05 & x$computed<.05,
-        x$Reported.P.Value<.05 & x$computed>.05) 
+  # Total amount of errors in exact p values
+  TotalExactErrors <- ddply(x,"Source",function(x){
+    sum(abs(x$Reported.P.Value[x$Reported.Comparison=="="]-
+      x$computed[x$Reported.Comparison=="="])>.01)
   })[,2]
   
-  GrossErrors <- c(GrossErrors,sum(GrossErrors))
-    
+  TotalExactErrors <- c(TotalExactErrors,sum(TotalExactErrors))
+  
+  # Mean deviation between reported and computed exact p values
+  MeanDeviationExact <- ddply(x,"Source",function(x){
+    mean(abs(x$Reported.P.Value[x$Reported.Comparison=="="]-
+      x$computed[x$Reported.Comparison=="="]))
+  })[,2]
+  
+  MeanDeviationExact <- c(MeanDeviationExact,mean(MeanDeviationExact,na.rm=TRUE))
+  
+  
   # Results in dataframe
   res <- data.frame(Paper=Paper,
-                    Number_of_p_values=pValues,
+                    pValues=pValues,
                     NonSigAsSig=NonSigAsSig,
                     SigAsNonSig=SigAsNonSig,
-                    TotalGrossErrors=GrossErrors)
+                    TotalExactErrors=TotalExactErrors,
+                    MeanDeviationExact=MeanDeviationExact)
 
   class(res) <- c("statcheck","data.frame")
   
