@@ -13,6 +13,9 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
   
   # Create empty data frame:
   Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, oneTail = NULL, Location = NULL,stringsAsFactors=FALSE)
+  class(Res) <- c("statcheck","data.frame")
+  
+  if (length(x)==0) return(Res)
   
   if (is.null(names(x))) names(x) <-  1:length(x)
   for (i in 1:length(x))
