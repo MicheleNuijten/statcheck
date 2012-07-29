@@ -38,7 +38,7 @@ Recalculations of the p value that render a previously non significant result (p
 }
 \author{
 %%  ~~who you are~~
-Sacha Epskamp (mail@sachaepskamp.com) & Mich\`ele Nuijten
+Sacha Epskamp (mail $@$ sachaepskamp.com) & Mich\`ele Nuijten
 }
 \note{
 %%  ~~further notes~~

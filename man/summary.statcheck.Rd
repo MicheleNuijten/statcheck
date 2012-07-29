@@ -6,6 +6,7 @@ Summary method for "statcheck"
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
+Gives the summaries for a "statcheck" object.
 }
 \usage{
 \method{summary}{statcheck}(object, ...)
@@ -14,6 +15,7 @@ Summary method for "statcheck"
 \arguments{
   \item{object}{
 %%     ~~Describe \code{x} here~~
+a "statcheck" object.
 }
   \item{\dots}{
 %%     ~~Describe \code{\dots} here~~
@@ -28,12 +30,19 @@ Summary method for "statcheck"
 %%  \item{comp1 }{Description of 'comp1'}
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
+\verb|summary.statcheck| returns a data.frame of class "statcheck" with the following summaries reported per paper and in total:
+\item{pValues} The number of p values extracted.
+\item{NonSigAsSig} The number of results that were reported as significant, but turned out to be non significant after recalculation.
+\item{SigAsNonSig} The number of results that were reported as non significant, but turned out to be significant after recalculation.
+\item{TotalExactErrors} The total number of errors in the exactly reported p values as compared to the recalculated p values. A difference between the reported and recalculated was counted as an error when it was greater than .01.
+\item{MeanDeviationExact} The mean deviation of the exactly reported p values from the recalculated p values.
 }
 \references{
 %% ~put references to the literature/web site here ~
 }
 \author{
 %%  ~~who you are~~
+Sacha Epskamp (mail $@$ sachaepskamp.com) & Mich\`ele Nuijten
 }
 \note{
 %%  ~~further notes~~
