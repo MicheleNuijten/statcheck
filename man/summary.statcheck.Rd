@@ -42,7 +42,7 @@ a "statcheck" object.
 }
 \author{
 %%  ~~who you are~~
-Sacha Epskamp (mail $@$ sachaepskamp.com) & Mich\`ele Nuijten
+Sacha Epskamp <mail@sachaepskamp.com> and Mich\`ele Nuijten
 }
 \note{
 %%  ~~further notes~~
