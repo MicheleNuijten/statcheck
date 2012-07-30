@@ -18,6 +18,9 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
   if (length(x)==0) return(Res)
   
   if (is.null(names(x))) names(x) <-  1:length(x)
+  
+  message("Extracting statistics...")
+  pb <- txtProgressBar(max=length(x),style=3)
   for (i in 1:length(x))
   {
     
@@ -258,8 +261,9 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
     }
     
     
-    
+    setTxtProgressBar(pb, i)
   }
+  close(pb)
   Source <- NULL
   Res <- ddply(Res,.(Source),function(x)x[order(x$Location),])
   Res[['Reported.Comparison']] <- gsub("5","=",Res[['Reported.Comparison']])
