@@ -21,14 +21,14 @@ summary.statcheck <- function(object,...){
   
   # Significant results reported as non significant per paper and in total
   SigAsNonSig <- ddply(x,"Source",function(x){
-    sum(x$Reported.P.Value<.05 & x$computed>.05) 
+    sum(x$Reported.P.Value<.05 & x$computed>.05,na.rm=TRUE) 
   })[,2]
   
   SigAsNonSig <- c(SigAsNonSig,sum(SigAsNonSig))
   
   # Non significant results reported as significant per paper and in total
   NonSigAsSig <- ddply(x,"Source",function(x){
-    sum(x$Reported.P.Value>.05 & x$computed<.05)
+    sum(x$Reported.P.Value>.05 & x$computed<.05,na.rm=TRUE)
   })[,2]
   
   NonSigAsSig <- c(NonSigAsSig, sum(NonSigAsSig))
@@ -36,7 +36,7 @@ summary.statcheck <- function(object,...){
   # Total amount of errors in exact p values
   TotalExactErrors <- ddply(x,"Source",function(x){
     sum(abs(x$Reported.P.Value[x$Reported.Comparison=="="]-
-      x$computed[x$Reported.Comparison=="="])>.01)
+      x$computed[x$Reported.Comparison=="="])>.01,na.rm=TRUE)
   })[,2]
   
   TotalExactErrors <- c(TotalExactErrors,sum(TotalExactErrors))
@@ -44,7 +44,7 @@ summary.statcheck <- function(object,...){
   # Mean deviation between reported and computed exact p values
   MeanDeviationExact <- ddply(x,"Source",function(x){
     mean(abs(x$Reported.P.Value[x$Reported.Comparison=="="]-
-      x$computed[x$Reported.Comparison=="="]))
+      x$computed[x$Reported.Comparison=="="]),na.rm=TRUE)
   })[,2]
   
   MeanDeviationExact <- c(MeanDeviationExact,mean(MeanDeviationExact,na.rm=TRUE))
