@@ -5,7 +5,7 @@
 Extract test statistics from all HTML files in a folder.
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+Extracts statistical references from a directory with HTML versions of artices. By default a gui window is opened that allows you to choose the directory (using tcltk).
 }
 \usage{
 checkHTMLdir(dir, ...)
@@ -13,54 +13,34 @@ checkHTMLdir(dir, ...)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{dir}{
-%%     ~~Describe \code{dir} here~~
+String indicating the directory to be used.
 }
   \item{\dots}{
-%%     ~~Describe \code{\dots} here~~
+Arguments sent to  \code{\link{statcheck}}
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+See \code{\link{statcheck}} for more details. Use \code{\link{checkHTML}} to import individual HTML files. 
+
+Note that the conversion to plain text and extraction of statistics can result in errors. Some statistical values can be missed, especially if the notation is unconvetional. It is recommended to manually check some of the results.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
+A data frame containing for each extracted statistic:
+\item{Source}{Name of the file of which the statistic is extracted}
+\item{Statistic}{Character indicating the statistic that is extracted}
+\item{df1}{First degree of freedom}
+\item{df2}{Second degree of freedom (if applicable)}
+\item{Value}{Reported value of the statistic}
+\item{Reported.Comparison}{Reported comparison, when importing from pdf this will often not be converted properly}
+\item{Reported.P.Value}{The reported p-value, or NA if the reported value was NS}
+\item{Computed}{The re-computed p-value}
+\item{OneTail}{Smallest one-tailed recoputed p-value (if applicable)}
+\item{Location}{Location of the statistic in the string.}
+\item{Raw}{Raw string of the statistical reference that is extracted}
 }
 \author{
-%%  ~~who you are~~
+Sacha Epskamp <mail@sachaepskamp.com> & Michele Nuijten
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkPDFdir}}, \code{\link{checkHTML}}, \code{\link{checkdir}}
 }
-\examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function (dir, ...) 
-{
-    if (missing(dir)) 
-        dir <- tk_choose.dir()
-    files <- list.files(dir, pattern = ".html", full.names = TRUE)
-    txts <- sapply(files, getHTML)
-    names(txts) <- gsub(".html", "", basename(files))
-    return(statcheck(txts, ...))
-  }
-}
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

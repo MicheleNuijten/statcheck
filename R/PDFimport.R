@@ -26,7 +26,15 @@ checkPDFdir <- function(dir,...)
 {
   if (missing(dir)) dir <- tk_choose.dir()
   files <- list.files(dir,pattern=".pdf",full.names=TRUE)
-  txts <-  sapply(files,getPDF)
+  txts <- character(length(files))
+  message("Importing PDF files...")
+  pb <- txtProgressBar(max=length(files),style=3)
+  for (i in 1:length(files))
+  {
+    txts[i] <-  getPDF(files[i])    
+    setTxtProgressBar(pb, i)
+  }
+  close(pb)
   names(txts) <- gsub(".pdf","",basename(files))
   return(statcheck(txts,...))
 }

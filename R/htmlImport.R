@@ -24,7 +24,15 @@ checkHTMLdir <- function(dir,...)
 {
   if (missing(dir)) dir <- tk_choose.dir()
   files <- list.files(dir,pattern=".html",full.names=TRUE)
-  txts <-  sapply(files,getHTML)
+  txts <- character(length(files))
+  message("Importing HTML files...")
+  pb <- txtProgressBar(max=length(files),style=3)
+  for (i in 1:length(files))
+  {
+    txts[i] <-  getHTML(files[i])    
+    setTxtProgressBar(pb, i)
+  }
+  close(pb)
   names(txts) <- gsub(".html","",basename(files))
   return(statcheck(txts,...))
 }

@@ -1,9 +1,9 @@
 Package: statcheck
 Type: Package
 Title: Extract and recompute significance values from articles.
-Version: 0.0.1
+Version: 0.1.0
 Date: 2012-03-26
-Author: Sacha Epskamp, Michele Nuijten
+Author: Sacha Epskamp and Michele Nuijten
 Maintainer: Sacha Epskamp <mail@sachaepskamp.com>
 Depends:
     R (>= 2.14.2)
