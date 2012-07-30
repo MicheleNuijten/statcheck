@@ -52,14 +52,16 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
         tVals <- as.numeric(substring(tRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
         
         # Extract p-values
-        pVals <- as.numeric(substring(tRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
-        
+        suppressWarnings(
+          pVals <- as.numeric(substring(tRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
+        )
         # Extract (in)equality
         #pEq <- ifelse(grepl("\\=|<",tRaw),substring(tRaw,sapply(gregexpr("\\=|<",tRaw),'[',2),sapply(gregexpr("\\=|<",tRaw),'[',2)),"?")
         eqLoc <- gregexpr("p\\s?.?",tRaw)
         pEq <- substring(tRaw,
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+        pEq[grepl("ns",tRaw,ignore.case=TRUE)] <- "ns"
         
         # Create data frame:
         tRes <- data.frame(Source = names(x)[i], 
@@ -113,8 +115,10 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
         FVals <- as.numeric(substring(tRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
         
         # Extract p-values
+        suppressWarnings(
         pVals <- as.numeric(substring(tRaw,sapply(nums,'[',4),sapply(nums,function(x)x[4]+attr(x,"match.length")[4]-1)))
-        
+        )
+                  
         # Extract (in)equality
         #pEq <- ifelse(grepl("\\=|<",tRaw),substring(tRaw,sapply(gregexpr("\\=|<",tRaw),'[',2),sapply(gregexpr("\\=|<",tRaw),'[',2)),"?")
         #pEq <- substring(tRaw,sapply(gregexpr("p",tRaw),'[',1)+1,sapply(nums,'[',4)-1)
@@ -122,6 +126,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
         pEq <- substring(tRaw,
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+        pEq[grepl("ns",tRaw,ignore.case=TRUE)] <- "ns"
         
         # Create data frame:
         tRes <- data.frame(
@@ -170,14 +175,17 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
         tVals <- as.numeric(substring(tRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
         
         # Extract p-values
+        suppressWarnings(
         pVals <- as.numeric(substring(tRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
-        
+        )
+                  
         # Extract (in)equality
         #pEq <- ifelse(grepl("\\=|<",tRaw),substring(tRaw,sapply(gregexpr("\\=|<",tRaw),'[',2),sapply(gregexpr("\\=|<",tRaw),'[',2)),"?")
         eqLoc <- gregexpr("p\\s?.?",tRaw)
         pEq <- substring(tRaw,
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+        pEq[grepl("ns",tRaw,ignore.case=TRUE)] <- "ns"
         
         r2t <- function(r,df)
         {
@@ -231,14 +239,17 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
         tVals <- as.numeric(substring(tRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
         
         # Extract p-values
+        suppressWarnings(
         pVals <- as.numeric(substring(tRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
-        
+        )
+                  
         # Extract (in)equality
         #pEq <- ifelse(grepl("\\=|<",tRaw),substring(tRaw,sapply(gregexpr("\\=|<",tRaw),'[',2),sapply(gregexpr("\\=|<",tRaw),'[',2)),"?")
         eqLoc <- gregexpr("p\\s?.?",tRaw)
         pEq <- substring(tRaw,
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+        pEq[grepl("ns",tRaw,ignore.case=TRUE)] <- "ns"
         
         # Create data frame:
         tRes <- data.frame(Source = names(x)[i], 

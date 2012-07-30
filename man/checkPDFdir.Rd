@@ -43,7 +43,7 @@ A data frame containing for each extracted statistic:
 \item{Raw}{Raw string of the statistical reference that is extracted}
 }
 \author{
-Sacha Epskamp <mail@sachaepskamp.com> & Mich\`ele Nuijten
+Sacha Epskamp <mail@sachaepskamp.com> & Michele Nuijten
 }
 \seealso{
 \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkHTMLdir}}, \code{\link{checkHTML}}, \code{\link{checkdir}}
