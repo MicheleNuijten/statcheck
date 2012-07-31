@@ -223,7 +223,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
       {
         # Get raw text of t-values:
         tRaw <- substring(txt,tLoc,tLoc+attr(tLoc,"match.length")-1)
-        substr(tRaw,1,1)[grepl("\\d",substr(tRaw,1,1))] <- ""
+        substr(tRaw,1,1)[grepl("\\d",substr(tRaw,1,1))] <- " "
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",tRaw)
         
