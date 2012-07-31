@@ -8,12 +8,7 @@ plot.statcheck <- function(x,...) {
   reported <- x$Reported.P.Value
   
   # Choose onetailed if more appropriate:
-  computed <- x$Computed
-  
-  computed[!is.na(x$OneTail)] <- ifelse(
-    abs(x$Reported.P.Value - x$OneTail)[!is.na(x$OneTail)] <
-      abs(x$Reported.P.Value - x$Computed)[!is.na(x$OneTail)],  
-    x$OneTail[!is.na(x$OneTail)],x$Computed[!is.na(x$OneTail)])  
+  computed <- getClosest(x)
   
   x <- cbind(x,computed=computed)
   

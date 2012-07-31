@@ -12,7 +12,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
   }
   
   # Create empty data frame:
-  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, oneTail = NULL, Location = NULL,stringsAsFactors=FALSE)
+  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, oneTail = NULL, InExactError = NULL, ExactError=NULL, Location = NULL,stringsAsFactors=FALSE)
   class(Res) <- c("statcheck","data.frame")
   
   if (length(x)==0) return(Res)
@@ -279,6 +279,31 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
   Res <- ddply(Res,.(Source),function(x)x[order(x$Location),])
   Res[['Reported.Comparison']] <- gsub("5","=",Res[['Reported.Comparison']])
   Res[['Reported.Comparison']] <- gsub(",","<",Res[['Reported.Comparison']])
+  
+  InExTest <- function(x)
+  {
+    computed <- getClosest(x)      
+    comparison <- x$Reported.Comparison
+    reported <- x$Reported.P.Value
+    Match <- paste(computed,comparison,reported)
+    InExTests <- grepl("<|>",Match)
+    InExTests[grepl("<|>",Match)] <- sapply(Match[grepl("<|>",Match)],function(m)!eval(parse(text=m)))
+    
+    return(InExTests)
+  }
+  ExTest <- function(x)
+  {
+    computed <- getClosest(x)
+    comparison <- x$Reported.Comparison
+    reported <- x$Reported.P.Value
+    ExTests <- grepl("=",comparison)
+    ExTests[grepl("=",comparison)] <- ((reported>.05 & computed<.05)|(reported<.05 & computed>.05))[grepl("=",comparison)]
+    return(ExTests)
+  }
+  
+  Res$InExactError <- InExTest(Res)
+  Res$ExactError <- ExTest(Res)
+  
   class(Res) <- c("statcheck","data.frame")
   return(Res)
 }
