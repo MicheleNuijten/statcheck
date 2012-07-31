@@ -17,7 +17,7 @@ summary.statcheck <- function(object,...){
       abs(x$Reported.P.Value - x$Computed)[!is.na(x$OneTail)],  
     x$OneTail[!is.na(x$OneTail)],x$Computed[!is.na(x$OneTail)])  
   
-  x <- cbind(x,computed)
+  x <- cbind(x,computed=computed)
   
   # Significant results reported as non significant per paper and in total
   SigAsNonSig <- ddply(x,"Source",function(x){

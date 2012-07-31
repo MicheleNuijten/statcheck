@@ -6,13 +6,17 @@ plot.statcheck <- function(x,...) {
   if (is.null(args$ylim)) args$ylim <- c(0,1)
    
   reported <- x$Reported.P.Value
-  computed <- x$Computed
   
   # Choose onetailed if more appropriate:
+  computed <- x$Computed
+  
   computed[!is.na(x$OneTail)] <- ifelse(
     abs(x$Reported.P.Value - x$OneTail)[!is.na(x$OneTail)] <
-    abs(x$Reported.P.Value - x$Computed)[!is.na(x$OneTail)],  
-    x$OneTail[!is.na(x$OneTail)],x$Computed[!is.na(x$OneTail)])
+      abs(x$Reported.P.Value - x$Computed)[!is.na(x$OneTail)],  
+    x$OneTail[!is.na(x$OneTail)],x$Computed[!is.na(x$OneTail)])  
+  
+  x <- cbind(x,computed=computed)
+  
   
   # scatterplot of reported and recalculated p values
   do.call(plot.default,c(list(x=reported,y=computed,
@@ -26,7 +30,6 @@ plot.statcheck <- function(x,...) {
   
     comparison <- x$Reported.Comparison
   
-    computed <- x$computed
     reported <- x$Reported.P.Value
     Match <- paste(computed,comparison,reported)
     InExTests <- grepl("<|>",Match)
