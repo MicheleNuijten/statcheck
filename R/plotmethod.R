@@ -20,13 +20,25 @@ plot.statcheck <- function(x,...) {
                ylab="recalculated p value",                         
                pch=20),args))
   
-  # red dot for gross error (non-sig reported as sig and vice versa)
-  points(reported[reported>.05 & computed<.05],
-         computed[reported>.05 & computed<.05],
-         pch=20,col="red")
+  ## Gross error if:
+    # Inexact p value wrongly specified
+    # Exact p value leads to different conclusion
   
-  points(reported[reported<.05 & computed>.05],
-         computed[reported<.05 & computed>.05],
+    comparison <- x$Reported.Comparison
+  
+    computed <- x$computed
+    reported <- x$Reported.P.Value
+    Match <- paste(computed,comparison,reported)
+    InExTests <- grepl("<|>",Match)
+    InExTests[grepl("<|>",Match)] <- sapply(Match[grepl("<|>",Match)],function(m)!eval(parse(text=m)))  
+    
+    ExTests <- grepl("=",comparison)
+    ExTests[grepl("=",comparison)] <- ((reported>.05 & computed<.05)|(reported<.05 & computed>.05))[grepl("=",comparison)]
+  
+  
+  # red dot for gross error (non-sig reported as sig and vice versa)
+  points(reported[InExTests|ExTests],
+         computed[InExTests|ExTests],
          pch=20,col="red")
   
   # triangles for exact p values

@@ -3,11 +3,11 @@ summary.statcheck <- function(object,...){
   x <- object
   
   # Papers analyzed
-  Paper <- c(unique(x$Source),"Total")
+  Paper <- c(daply(x,.(Source),function(x)unique(x$Source)),"Total")
   
   # Number of p values extracted per article and in total
   pValues <- c(ddply(x,"Source",function(x) nrow(x))[,2],nrow(x))
- 
+  
   
   # Choose onetailed if more appropriate:
   computed <- x$Computed
@@ -21,14 +21,14 @@ summary.statcheck <- function(object,...){
   
   # Significant results reported as non significant per paper and in total
   SigAsNonSig <- ddply(x,"Source",function(x){
-    sum(x$Reported.P.Value<.05 & x$computed>.05,na.rm=TRUE) 
+    sum((x$Reported.P.Value<.05 & x$computed>.05)[x$Reported.Comparison=="="],na.rm=TRUE) 
   })[,2]
   
   SigAsNonSig <- c(SigAsNonSig,sum(SigAsNonSig))
   
   # Non significant results reported as significant per paper and in total
   NonSigAsSig <- ddply(x,"Source",function(x){
-    sum(x$Reported.P.Value>.05 & x$computed<.05,na.rm=TRUE)
+    sum((x$Reported.P.Value>.05 & x$computed<.05)[x$Reported.Comparison=="="],na.rm=TRUE)
   })[,2]
   
   NonSigAsSig <- c(NonSigAsSig, sum(NonSigAsSig))
@@ -49,6 +49,17 @@ summary.statcheck <- function(object,...){
   
   MeanDeviationExact <- c(MeanDeviationExact,mean(MeanDeviationExact,na.rm=TRUE))
   
+  InExErrors <- function(x)
+  {
+    comparison <- gsub("=","==",x$Reported.Comparison)
+    computed <- x$computed
+    reported <- x$Reported.P.Value
+    Match <- paste(computed,comparison,reported)
+    InExMatch <- Match[grepl("<|>",Match)]
+    InExTests <- sapply(InExMatch,function(m)eval(parse(text=m)))  
+    return(sum(!InExTests,na.rm=TRUE))
+  }
+  
   
   # Results in dataframe
   res <- data.frame(Paper=Paper,
@@ -56,8 +67,9 @@ summary.statcheck <- function(object,...){
                     NonSigAsSig=NonSigAsSig,
                     SigAsNonSig=SigAsNonSig,
                     TotalExactErrors=TotalExactErrors,
-                    MeanDeviationExact=MeanDeviationExact)
-
+                    MeanDeviationExact=MeanDeviationExact,
+                    TotalInExactErrors =c(daply(x,.(Source),InExErrors),InExErrors(x))
+  )  
   class(res) <- c("statcheck","data.frame")
   
   return(res)

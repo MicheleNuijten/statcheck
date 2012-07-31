@@ -29,10 +29,11 @@ a "statcheck" object.
 %% ...
 summary.statcheck returns a data.frame of class "statcheck" with the following summaries reported per paper and in total:
 \item{pValues}{The number of p values extracted.}
-\item{NonSigAsSig}{The number of results that were reported as significant, but turned out to be non significant after recalculation.}
-\item{SigAsNonSig}{The number of results that were reported as non significant, but turned out to be significant after recalculation.}
+\item{NonSigAsSig}{The number of exact results that were reported as significant, but turned out to be non significant after recalculation.}
+\item{SigAsNonSig}{The number of exact results that were reported as non significant, but turned out to be significant after recalculation.}
 \item{TotalExactErrors}{The total number of errors in the exactly reported p values as compared to the recalculated p values. A difference between the reported and recalculated was counted as an error when it was greater than .01.}
 \item{MeanDeviationExact}{The mean deviation of the exactly reported p values from the recalculated p values.}
+\item{TotalInExactErrors}{Total number of errors in inexact reported p values as compared to the recalculated p values.}
 }
 \author{
 %%  ~~who you are~~
