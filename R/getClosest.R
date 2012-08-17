@@ -1,4 +1,4 @@
-# Inner function to extract closest computed match:
+# Inner function to extract closest computed match: 
 getClosest <- function(x)
 {
   computed <- x$Computed
