@@ -3,10 +3,11 @@
 ## Function to check directory of PDFs:
 checkdir <- function(dir,...)
 {
+  if (missing(dir)) dir <- tk_choose.dir()
+  
   pdfs <- any(grepl("\\.pdf",list.files(dir)))
   htmls <- any(grepl("\\.html",list.files(dir)))
   
-  if (missing(dir)) dir <- tk_choose.dir()
    if (pdfs) pdfres <- checkPDFdir(dir,...)
    if (htmls) htmlres <- checkHTMLdir(dir,...)
   
