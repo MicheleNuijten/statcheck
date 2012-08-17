@@ -288,7 +288,10 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
     reported <- x$Reported.P.Value
     Match <- paste(computed,comparison,reported)
     InExTests <- grepl("<|>",Match)
-    InExTests[grepl("<|>",Match)] <- sapply(Match[grepl("<|>",Match)],function(m)!eval(parse(text=m)))
+    if (any(InExTests))
+    {
+      InExTests[grepl("<|>",Match)] <- sapply(Match[grepl("<|>",Match)],function(m)!eval(parse(text=m)))
+    }
     
     return(InExTests)
   }
