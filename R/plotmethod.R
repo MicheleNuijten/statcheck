@@ -28,7 +28,7 @@ plot.statcheck <- function(x,...) {
     reported <- x$Reported.P.Value
     Match <- paste(computed,comparison,reported)
     InExTests <- grepl("<|>",Match)
-    InExTests[grepl("<|>",Match)] <- sapply(Match[grepl("<|>",Match)],function(m)!eval(parse(text=m)))  
+    if (any(InExTests)) InExTests[grepl("<|>",Match)] <- sapply(Match[grepl("<|>",Match)],function(m)!eval(parse(text=m)))  
     
     ExTests <- grepl("=",comparison)
     ExTests[grepl("=",comparison)] <- ((reported>.05 & computed<.05)|(reported<.05 & computed>.05))[grepl("=",comparison)]
