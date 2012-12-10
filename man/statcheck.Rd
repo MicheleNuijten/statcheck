@@ -5,7 +5,7 @@
 Extract statistics and recompute p-values.
 }
 \description{
-This function extracts statistics from strings and returns the extracted values, reported p-values and recomputed p-values.
+This function extracts statistics from strings and returns the extracted values, reported p-values and recomputed p-values. The package relies on the program "pdftotext", see the paragraph "Note" for details on the installation.
 }
 \usage{
 statcheck(x, stat = c("t", "F", "cor", "chisq"))
@@ -21,8 +21,6 @@ A vector of strings containing whole articles.
 }
 \details{
 This function can be used if the text of articles has already been imported in R. To import text from pdf files and automatically send the results to this function use \code{\link{checkPDFdir}} or \code{\link{checkPDF}}. To import text from HTML files use the similar functions \code{\link{checkHTMLdir}} or \code{\link{checkHTML}}. Finally, \code{\link{checkdir}} can be used to import text from both PDF and HTML files in a folder.
-
-For PDF files the "pdftotext" program is used to convert PDF files to plain text files. This must be installed and PATH variables must be properly set so that this program can be used from command line.
 
 This function uses regular expressions to find statistial references in the form "stat (df1, df2) = value, p = value". If the statistic is "t" and there is only one degree of freedom a t value is extracted, if the statistic is "r" with one degree of freedom a correlation is extraced and if the statistic is "F" with two degrees of freedom a F value is extracted. Finally, chi-square values are extracted by finding all statistical references with one degree of freedom that do not follow a "t" or "r".
 
@@ -41,6 +39,9 @@ A data frame containing for each extracted statistic:
 \item{OneTail}{Smallest one-tailed recoputed p-value (if applicable)}
 \item{Location}{Location of the statistic in the string.}
 \item{Raw}{Raw string of the statistical reference that is extracted}
+}
+\Note{
+For PDF files the "pdftotext" program is used to convert PDF files to plain text files. You can obtain pdftotext from \code{http://www.foolabs.com/xpdf/download.html}. Download and unzip the precompiled binaries. Next, add the folder with the binaries to the PATH variables so that this program can be used from command line.
 }
 \author{
 Sacha Epskamp <mail@sachaepskamp.com> & Michele Nuijten
