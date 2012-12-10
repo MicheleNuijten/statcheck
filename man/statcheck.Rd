@@ -26,7 +26,7 @@ For PDF files the "pdftotext" program is used to convert PDF files to plain text
 
 This function uses regular expressions to find statistial references in the form "stat (df1, df2) = value, p = value". If the statistic is "t" and there is only one degree of freedom a t value is extracted, if the statistic is "r" with one degree of freedom a correlation is extraced and if the statistic is "F" with two degrees of freedom a F value is extracted. Finally, chi-square values are extracted by finding all statistical references with one degree of freedom that do not follow a "t" or "r".
 
-Note that the conversion to plain text and extraction of statistics can result in errors. Some statistical values can be missed, especially if the notation is unconvetional. It is recommended to manually check some of the results.
+Note that the conversion to plain text and extraction of statistics can result in errors. Some statistical values can be missed, especially if the notation is unconventional. It is recommended to manually check some of the results.
 }
 \value{
 A data frame containing for each extracted statistic:
@@ -50,7 +50,7 @@ Sacha Epskamp <mail@sachaepskamp.com> & Michele Nuijten
 }
 
 \examples{
-Text <- "blablabla the effect was very signigicant (t(100)=1, p < 0.001)"
+Text <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"
 
 statcheck(Text)
 }
