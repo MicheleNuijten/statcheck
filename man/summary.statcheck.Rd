@@ -37,7 +37,7 @@ summary.statcheck returns a data.frame of class "statcheck" with the following s
 }
 \author{
 %%  ~~who you are~~
-Sacha Epskamp <mai@sachaepskamp.com> & Michele Nuijten
+Sacha Epskamp <mail@sachaepskamp.com> & Michele Nuijten
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
