@@ -22,7 +22,7 @@ Arguments sent to  \code{\link{statcheck}}
 \details{
 See \code{\link{statcheck}} for more details. Use \code{\link{checkHTML}} to import individual HTML files. 
 
-Note that the conversion to plain text and extraction of statistics can result in errors. Some statistical values can be missed, especially if the notation is unconvetional. It is recommended to manually check some of the results.
+Note that the conversion to plain text and extraction of statistics can result in errors. Some statistical values can be missed, especially if the notation is unconventional. It is recommended to manually check some of the results.
 }
 \value{
 A data frame containing for each extracted statistic:
