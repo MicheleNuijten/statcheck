@@ -14,6 +14,9 @@ getHTML <- function(x)
   strings <- lapply(strings,gsub,pattern="&gt;",replacement=".",fixed=TRUE)
   strings <- lapply(strings,gsub,pattern="&#40;",replacement="(",fixed=TRUE)
   strings <- lapply(strings,gsub,pattern="&#41;",replacement=")",fixed=TRUE)
+  strings <- lapply(strings,gsub,pattern="\n",replacement="")
+  strings <- lapply(strings,gsub,pattern="\r",replacement="")
+  strings <- lapply(strings,gsub,pattern="\\s+",replacement=" ")
 
   return(strings)
 }
