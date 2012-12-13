@@ -39,7 +39,7 @@ plot.statcheck <- function(x,...) {
          computed[InExTests|ExTests],
          pch=20,col="red")
   
-  # triangles for exact p values
+  # indicate exact p values with diamond
   points(x$Reported.P.Value[x$Reported.Comparison=="="],
          computed[x$Reported.Comparison=="="],
          pch=5)
