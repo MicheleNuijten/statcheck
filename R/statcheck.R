@@ -65,7 +65,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
         
         # Create data frame:
         tRes <- data.frame(Source = names(x)[i], 
-                          Statistic="t", 
+                           Statistic="t", 
                            df1= df, 
                            df2=NA, 
                            Value = tVals, 
