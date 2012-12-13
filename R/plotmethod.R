@@ -19,31 +19,19 @@ plot.statcheck <- function(x,...) {
                ylab="recalculated p value",                         
                pch=20),args))
   
-  ## Gross error if:
-    # Inexact p value wrongly specified
-    # Exact p value leads to different conclusion
-  
-    comparison <- x$Reported.Comparison
-  
-    reported <- x$Reported.P.Value
-    Match <- paste(computed,comparison,reported)
-    InExTests <- grepl("<|>",Match)
-    if (any(InExTests)) InExTests[grepl("<|>",Match)] <- sapply(Match[grepl("<|>",Match)],function(m)!eval(parse(text=m)))  
-    
-    ExTests <- grepl("=",comparison)
-    ExTests[grepl("=",comparison)] <- ((reported>.05 & computed<.05)|(reported<.05 & computed>.05))[grepl("=",comparison)]
-  
-  
   # red dot for gross error (non-sig reported as sig and vice versa)
-  points(reported[InExTests|ExTests],
-         computed[InExTests|ExTests],
+  points(reported[reported>.05 & computed<.05],
+         computed[reported>.05 & computed<.05],
+         pch=20,col="red")
+  
+  points(reported[reported<.05 & computed>.05],
+         computed[reported<.05 & computed>.05],
          pch=20,col="red")
   
   # indicate exact p values with diamond
   points(x$Reported.P.Value[x$Reported.Comparison=="="],
          computed[x$Reported.Comparison=="="],
-         pch=5)
-  
+         pch=5)  
   
   # general layout of figure:
   # lines & text to indicate under- and overestimates
