@@ -44,3 +44,15 @@ Sacha Epskamp <mail@sachaepskamp.com> & Michele Nuijten
 \seealso{
 \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkPDFdir}}, \code{\link{checkHTML}}, \code{\link{checkdir}}
 }
+\examples{
+\dontrun{
+
+# with this command a menu will pop up from which you can select the directory with HTML articles
+checkHTMLdir()
+
+# you could also specify the directory beforehand
+# for instance:
+DIR <- "C:/mydocuments/articles"
+checkHTMLdir(DIR)
+}
+}

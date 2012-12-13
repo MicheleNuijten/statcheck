@@ -44,3 +44,12 @@ Sacha Epskamp <mail@sachaepskamp.com> & Michele Nuijten
 \seealso{
 \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkPDFdir}}, \code{\link{checkHTMLdir}}, \code{\link{checkdir}}
 }
+\examples{
+\dontrun{
+
+# given that my HTML file is called "article.html"
+# and I saved it in "C:/mydocuments/articles"
+
+checkHTML("C:/mydocuments/articles/article.html")
+}
+}

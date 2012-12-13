@@ -43,3 +43,12 @@ Sacha Epskamp (mail@sachaepskamp.com)
 \seealso{
 \code{\link{statcheck}}, \code{\link{checkPDFdir}}
 }
+\examples{
+\dontrun{
+
+# given that my PDF file is called "article.pdf"
+# and I saved it in "C:/mydocuments/articles"
+
+checkPDF("C:/mydocuments/articles/article.pdf")
+}
+}
