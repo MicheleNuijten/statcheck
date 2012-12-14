@@ -2,10 +2,6 @@ summary.statcheck <- function(object,...){
   
   x <- object
   
-  # Papers analyzed
-  #Source <- c(daply(x,.(Source),function(x)unique(x$Source)),"Total")
-  Source <- c(unique(x$Source),"Total")
-  
   # Number of p values extracted per article and in total
   pValues <- c(ddply(x,"Source",function(x) nrow(x))[,2],nrow(x))
   
@@ -48,7 +44,7 @@ summary.statcheck <- function(object,...){
   InExErrors <- function(x)
   {
     comparison <- gsub("=","==",x$Reported.Comparison)
-    computed <- x$Computed
+    computed <- x$computed
     reported <- x$Reported.P.Value
     Match <- paste(computed,comparison,reported)
     InExMatch <- Match[grepl("<|>",Match)]
@@ -58,8 +54,7 @@ summary.statcheck <- function(object,...){
   
   
   # Results in dataframe
-  res <- data.frame(Source=Source,
-                    pValues=pValues,
+  res <- data.frame(pValues=pValues,
                     NonSigAsSig=NonSigAsSig,
                     SigAsNonSig=SigAsNonSig,
                     ExactErrors=ExactErrors,
