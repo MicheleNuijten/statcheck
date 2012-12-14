@@ -34,11 +34,11 @@ A data frame containing for each extracted statistic:
 \item{Reported.Comparison}{Reported comparison, when importing from pdf this will often not be converted properly}
 \item{Reported.P.Value}{The reported p-value, or NA if the reported value was NS}
 \item{Computed}{The re-computed p-value}
-\item{OneTail}{Smallest one-tailed recoputed p-value (if applicable)}
+\item{OneTail}{Smallest one-tailed recomputed p-value (if applicable)}
 \item{Location}{Location of the statistic in the string.}
 }
 \author{
-Sacha Epskamp (mail@sachaepskamp.com)
+Sacha Epskamp (mail@sachaepskamp.com) & Michele B. Nuijten <m.b.nuijten@uvt.nl>
 }
 \seealso{
 \code{\link{statcheck}}, \code{\link{checkPDFdir}}
