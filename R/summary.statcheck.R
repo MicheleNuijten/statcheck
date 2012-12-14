@@ -3,7 +3,8 @@ summary.statcheck <- function(object,...){
   x <- object
   
   # Papers analyzed
-  Paper <- c(daply(x,.(Source),function(x)unique(x$Source)),"Total")
+  #Source <- c(daply(x,.(Source),function(x)unique(x$Source)),"Total")
+  Source <- c(unique(x$Source),"Total")
   
   # Number of p values extracted per article and in total
   pValues <- c(ddply(x,"Source",function(x) nrow(x))[,2],nrow(x))
@@ -29,12 +30,12 @@ summary.statcheck <- function(object,...){
   NonSigAsSig <- c(NonSigAsSig, sum(NonSigAsSig))
   
   # Total amount of errors in exact p values
-  TotalExactErrors <- ddply(x,"Source",function(x){
+  ExactErrors <- ddply(x,"Source",function(x){
     sum(abs(x$Reported.P.Value[x$Reported.Comparison=="="]-
       x$computed[x$Reported.Comparison=="="])>.01,na.rm=TRUE)
   })[,2]
   
-  TotalExactErrors <- c(TotalExactErrors,sum(TotalExactErrors))
+  ExactErrors <- c(ExactErrors,sum(ExactErrors))
   
   # Mean deviation between reported and computed exact p values
   MeanDeviationExact <- ddply(x,"Source",function(x){
@@ -47,7 +48,7 @@ summary.statcheck <- function(object,...){
   InExErrors <- function(x)
   {
     comparison <- gsub("=","==",x$Reported.Comparison)
-    computed <- x$computed
+    computed <- x$Computed
     reported <- x$Reported.P.Value
     Match <- paste(computed,comparison,reported)
     InExMatch <- Match[grepl("<|>",Match)]
@@ -57,13 +58,13 @@ summary.statcheck <- function(object,...){
   
   
   # Results in dataframe
-  res <- data.frame(Paper=Paper,
+  res <- data.frame(Source=Source,
                     pValues=pValues,
                     NonSigAsSig=NonSigAsSig,
                     SigAsNonSig=SigAsNonSig,
-                    TotalExactErrors=TotalExactErrors,
+                    ExactErrors=ExactErrors,
                     MeanDeviationExact=MeanDeviationExact,
-                    TotalInExactErrors =c(daply(x,.(Source),InExErrors),InExErrors(x))
+                    InExactErrors =c(daply(x,.(Source),InExErrors),InExErrors(x))
   )  
   class(res) <- c("statcheck","data.frame")
   
