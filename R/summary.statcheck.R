@@ -6,21 +6,16 @@ summary.statcheck <- function(object,...){
   pValues <- c(ddply(x,"Source",function(x) nrow(x))[,2],nrow(x))
   
   
-  # Choose onetailed if more appropriate:
-  computed <- getClosest(x) 
-  
-  x <- cbind(x,computed=computed)
-  
   # Significant results reported as non significant per paper and in total
   SigAsNonSig <- ddply(x,"Source",function(x){
-    sum((x$Reported.P.Value<.05 & x$computed>.05)[x$Reported.Comparison=="="],na.rm=TRUE) 
+    sum((x$Reported.P.Value<.05 & x$Computed>.05)[x$Reported.Comparison=="="],na.rm=TRUE) 
   })[,2]
   
   SigAsNonSig <- c(SigAsNonSig,sum(SigAsNonSig))
   
   # Non significant results reported as significant per paper and in total
   NonSigAsSig <- ddply(x,"Source",function(x){
-    sum((x$Reported.P.Value>.05 & x$computed<.05)[x$Reported.Comparison=="="],na.rm=TRUE)
+    sum((x$Reported.P.Value>.05 & x$Computed<.05)[x$Reported.Comparison=="="],na.rm=TRUE)
   })[,2]
   
   NonSigAsSig <- c(NonSigAsSig, sum(NonSigAsSig))
@@ -28,7 +23,7 @@ summary.statcheck <- function(object,...){
   # Total amount of errors in exact p values
   ExactErrors <- ddply(x,"Source",function(x){
     sum(abs(x$Reported.P.Value[x$Reported.Comparison=="="]-
-      x$computed[x$Reported.Comparison=="="])>.01,na.rm=TRUE)
+      x$Computed[x$Reported.Comparison=="="])>.01,na.rm=TRUE)
   })[,2]
   
   ExactErrors <- c(ExactErrors,sum(ExactErrors))
@@ -36,7 +31,7 @@ summary.statcheck <- function(object,...){
   # Mean deviation between reported and computed exact p values
   MeanDeviationExact <- ddply(x,"Source",function(x){
     mean(abs(x$Reported.P.Value[x$Reported.Comparison=="="]-
-      x$computed[x$Reported.Comparison=="="]),na.rm=TRUE)
+      x$Computed[x$Reported.Comparison=="="]),na.rm=TRUE)
   })[,2]
   
   MeanDeviationExact <- c(MeanDeviationExact,mean(MeanDeviationExact,na.rm=TRUE))
@@ -44,7 +39,7 @@ summary.statcheck <- function(object,...){
   InExErrors <- function(x)
   {
     comparison <- gsub("=","==",x$Reported.Comparison)
-    computed <- x$computed
+    computed <- x$Computed
     reported <- x$Reported.P.Value
     Match <- paste(computed,comparison,reported)
     InExMatch <- Match[grepl("<|>",Match)]
