@@ -8,11 +8,8 @@ plot.statcheck <- function(x,...) {
   reported <- x$Reported.P.Value
   
   # Choose onetailed if more appropriate:
-  computed <- getClosest(x)
-  
-  x <- cbind(x,computed=computed)
-  
-  
+  computed <- x$Computed
+    
   # scatterplot of reported and recalculated p values
   do.call(plot.default,c(list(x=reported,y=computed,
                xlab="reported p value",

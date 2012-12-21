@@ -3,8 +3,8 @@
 getClosest <- function(x)
 {
   computed <- x$Computed
-  
   comparison <- x$Reported.Comparison
+  
   computed[!is.na(x$OneTail)] <- ifelse(
     (!grepl("<|>",comparison)[!is.na(x$OneTail)] & abs(x$Reported.P.Value - x$OneTail)[!is.na(x$OneTail)] <
       abs(x$Reported.P.Value - x$Computed)[!is.na(x$OneTail)]) 
