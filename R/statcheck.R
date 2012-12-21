@@ -253,7 +253,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
                            Reported.Comparison= pEq, 
                            Reported.P.Value=pVals, 
                            Computed = pchisq(chi2Vals,df,lower.tail=FALSE), 
-                           Location = tLoc,
+                           Location = chi2Loc,
                            Raw = chi2Raw,
                            stringsAsFactors=FALSE)
         
