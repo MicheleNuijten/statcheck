@@ -296,7 +296,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
     ExTests <- grepl("=",Match)
     if (any(ExTests))
     {
-      ExTests[grepl("=",Match)] <- sapply(Match[grepl("=",Match)],function(m)!eval(parse(text=m)))
+      ExTests[grepl("=",Match)] <- (round(computed[ExTests],3)==reported[ExTests]|round(computed[ExTests],2)==round(reported[ExTests],2))
     }
     return(ExTests)
   }
