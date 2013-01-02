@@ -17,28 +17,14 @@ a \code{statcheck} object.
 additional arguments to be passed on to the plot method.
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+This function returns both a plot and a dataframe. For the contents of the dataframe see \code{\link{statcheck}}.
 }
-
 \author{
 Sacha Epskamp <mail@sachaepskamp.com> and Michele B. Nuijten <m.b.nuijten@uvt.nl>
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{statcheck}}
 }
 \examples{
 # given that the articles of interest are saved in "DIR"
@@ -46,4 +32,9 @@ DIR <- "C:/mydocuments/articles"
 stat_result <- checkdir(DIR)
 
 identify(stat_result)
+
+## Further instructions:
+# click on one or multiple points of interest
+# press Esc
+# a dataframe with information on the selected points will appear
 }
