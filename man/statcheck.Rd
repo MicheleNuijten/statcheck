@@ -1,6 +1,5 @@
 \name{statcheck}
 \alias{statcheck}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Extract statistics and recompute p-values.
 }
@@ -10,7 +9,6 @@ This function extracts statistics from strings and returns the extracted values,
 \usage{
 statcheck(x, stat = c("t", "F", "cor", "chisq"))
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
 A vector of strings containing whole articles.

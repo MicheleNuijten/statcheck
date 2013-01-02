@@ -1,6 +1,5 @@
 \name{checkdir}
 \alias{checkdir}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Extract test statistics from all HTML and PDF files in a folder.
 }
@@ -12,7 +11,6 @@ By default a gui window is opened that allows you to choose the directory (using
 \usage{
 checkdir(dir, ...)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{dir}{
 String indicating the directory to be used.
