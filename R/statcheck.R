@@ -1,9 +1,7 @@
 
 ## Main function, checks statistics of vector of strings (articles).
-statcheck <- function(x,stat=c("t","F","cor","chisq"))
-{
-  '%rem%'<- function(x,y)
-  {
+statcheck <- function(x,stat=c("t","F","cor","chisq")){
+  '%rem%'<- function(x,y){
     at <- attr(x,"match.length")
     x <- x[-y]
     at <- at[-y]
@@ -21,26 +19,22 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
   
   message("Extracting statistics...")
   pb <- txtProgressBar(max=length(x),style=3)
-  for (i in 1:length(x))
-  {
+  for (i in 1:length(x)){
     
     txt <- x[i]
     
     # t-values:
-    if ("t"%in%stat)
-    {
+    if ("t"%in%stat){
       # Get location of t-values in text:
       tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
-      if (tLoc[1] != -1)
-      {
+      if (tLoc[1] != -1){
         # Get raw text of t-values:
         tRaw <- substring(txt,tLoc,tLoc+attr(tLoc,"match.length")-1)
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",tRaw)
         
-        for (k in 1:length(nums))
-        {
+        for (k in 1:length(nums)){
           if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%c(2,4)
           if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%2
           if (length(nums[[k]]) != 3) warning(paste("Could not extract statistics properly from",tRaw[k]))
@@ -53,8 +47,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
         
         # Extract p-values
         suppressWarnings(
-          pVals <- as.numeric(substring(tRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
-        )
+          pVals <- as.numeric(substring(tRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1))))
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",tRaw)
         pEq <- substring(tRaw,
@@ -82,21 +75,18 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
     }
     
     # F-values:
-    if ("F"%in%stat)
-    {
+    if ("F"%in%stat){
       # Get location of F-values in text:
       FLoc <- gregexpr("F\\s?\\(\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p)\\s?.?\\s?\\d?\\.\\d+",txt,ignore.case=TRUE)[[1]]
       
-      if (FLoc[1] != -1)
-      {
+      if (FLoc[1] != -1){
         # Get raw text of F-values:
         FRaw <- substring(txt,FLoc,FLoc+attr(FLoc,"match.length")-1)
         
         # Extract location of numbers:
         nums <- gregexpr("(\\d*\\.?\\d+)|ns",FRaw)
         
-        for (k in 1:length(nums))
-        {
+        for (k in 1:length(nums)){
           if (length(nums[[k]]) == 6) nums[[k]] <- nums[[k]]%rem%c(3,5)
           if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%3
           if (length(nums[[k]]) != 4) warning(paste("Could not extract statistics properly from",FRaw[k]))
@@ -113,8 +103,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
         
         # Extract p-values
         suppressWarnings(
-        pVals <- as.numeric(substring(FRaw,sapply(nums,'[',4),sapply(nums,function(x)x[4]+attr(x,"match.length")[4]-1)))
-        )
+        pVals <- as.numeric(substring(FRaw,sapply(nums,'[',4),sapply(nums,function(x)x[4]+attr(x,"match.length")[4]-1))))
                   
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",FRaw)
@@ -145,20 +134,17 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
     
     
     # correlations:
-    if (any(c("r","cor","correlations")%in%stat))
-    {
+    if (any(c("r","cor","correlations")%in%stat)){
       # Get location of r-values in text:
       rLoc <- gregexpr("r\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
-      if (rLoc[1] != -1)
-      {
+      if (rLoc[1] != -1){
         # Get raw text of r-values:
         rRaw <- substring(txt,rLoc,rLoc+attr(rLoc,"match.length")-1)
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",rRaw)
         
-        for (k in 1:length(nums))
-        {
+        for (k in 1:length(nums)){
           if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%c(2,4)
           if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%2
           if (length(nums[[k]]) != 3) warning(paste("Could not extract statistics properly from",rRaw[k]))
@@ -171,8 +157,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
         
         # Extract p-values
         suppressWarnings(
-        pVals <- as.numeric(substring(rRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
-        )
+        pVals <- as.numeric(substring(rRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1))))
                   
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",rRaw)
@@ -181,8 +166,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
         pEq[grepl("ns",rRaw,ignore.case=TRUE)] <- "ns"
         
-        r2t <- function(r,df)
-        {
+        r2t <- function(r,df){
           r / (sqrt((1-r^2)/df))
         }
         
@@ -207,21 +191,18 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
     
     
     # Chis2-values:
-    if ("chisq"%in%stat)
-    {
+    if ("chisq"%in%stat){
       # Get location of not-t-values in text: (?)
       chi2Loc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)2?\\s?|[^(t|r|\\s)]\\s+)\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,perl=TRUE,ignore.case=TRUE)[[1]]
       
-      if (chi2Loc[1] != -1)
-      {
+      if (chi2Loc[1] != -1){
         # Get raw text of chi2-values:
         chi2Raw <- substring(txt,chi2Loc,chi2Loc+attr(chi2Loc,"match.length")-1)
         substr(chi2Raw,1,1)[grepl("\\d",substr(chi2Raw,1,1))] <- " "
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",chi2Raw)
         
-        for (k in 1:length(nums))
-        {
+        for (k in 1:length(nums)){
           if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%c(2,4)
           if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%2
           if (length(nums[[k]]) != 3) warning(paste("Could not extract statistics properly from",chi2Raw[k]))
@@ -234,8 +215,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
         
         # Extract p-values
         suppressWarnings(
-        pVals <- as.numeric(substring(chi2Raw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
-        )
+        pVals <- as.numeric(substring(chi2Raw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1))))
                   
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",chi2Raw)
@@ -272,31 +252,27 @@ statcheck <- function(x,stat=c("t","F","cor","chisq"))
   Res[['Reported.Comparison']] <- gsub("5","=",Res[['Reported.Comparison']])
   Res[['Reported.Comparison']] <- gsub(",","<",Res[['Reported.Comparison']])
   
-  InExTest <- function(x)
-  {
+  InExTest <- function(x){
     computed <- x$Computed
     comparison <- x$Reported.Comparison
     reported <- x$Reported.P.Value
     Match <- paste(computed,comparison,reported)
     InExTests <- grepl("<|>",Match)
-    if (any(InExTests))
-    {
+    if (any(InExTests)){
       InExTests[grepl("<|>",Match)] <- sapply(Match[grepl("<|>",Match)],function(m)!eval(parse(text=m)))
     }
     
     return(InExTests)
   }
   
-  ExTest <- function(x)
-  {
+  ExTest <- function(x){
     computed <- x$Computed
     comparison <- x$Reported.Comparison
     reported <- x$Reported.P.Value
     Match <- paste(computed,comparison,reported)
     ExTests <- grepl("=",Match)
-    if (any(ExTests))
-    {
-      ExTests[grepl("=",Match)] <- (round(computed[ExTests],3)==reported[ExTests]|round(computed[ExTests],2)==round(reported[ExTests],2))
+    if (any(ExTests)){
+      ExTests[grepl("=",Match)] <- !(round(computed[ExTests],3)==reported[ExTests]|round(computed[ExTests],2)==round(reported[ExTests],2))
     }
     return(ExTests)
   }
