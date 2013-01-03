@@ -27,6 +27,7 @@ Sacha Epskamp <mail@sachaepskamp.com> and Michele B. Nuijten <m.b.nuijten@uvt.nl
 \code{\link{statcheck}}
 }
 \examples{
+\dontrun{
 # given that the articles of interest are saved in "DIR"
 DIR <- "C:/mydocuments/articles"
 stat_result <- checkdir(DIR)
@@ -37,4 +38,5 @@ identify(stat_result)
 # click on one or multiple points of interest
 # press Esc
 # a dataframe with information on the selected points will appear
+}
 }
