@@ -1,18 +1,21 @@
-\name{diagnose}
-\alias{diagnose}
+\name{print.diagnose}
+\alias{print.diagnose}
 \title{
-Diagnose the most likely cause for p values that are inconsistent with their test statistic and degrees of freedom.
+Print diagnose output.
 }
 \description{
-This function analyzes whether inconsistent results in articles (as diagnosed with \code{\link{statcheck}} could be due to one of the most frequently observed causes (Bakker & Wicherts, 2011).
+Print the output of a \code{diagnose} object.
 }
 \usage{
-diagnose(x)
+\method{print}{diagnose}(x,\dots)
 }
 \arguments{
   \item{x}{
-a \code{statcheck} output.
+a \code{diagnose} object.
 }
+  \item{\dots}{
+  further arguments passed to or from other methods.
+  }
 }
 \value{
 a list that contains four dataframes: ErrorDiagnosis, CopyPaste, Summary, and FullDiagnosis. In the following sections the content of these dataframes will be described in detail. 
@@ -43,22 +46,14 @@ This dataframe contains an overview of the detected copy-paste errors in all the
 This dataframe provides a summary of all detected errors. It summarizes the number of detected errors in each of the aforementioned categories per article. The copy-paste errors are counted in a way that two identical strings of results are counted as one copy-paste error.
 }
 }
-\section{FullDiagnosis}{
-\describe{
-This dataframe contains the error diagnosis for every article, not just the articles that contained an error. The components are the same as in ErrorDiagnosis. This dataframe is not automatically printed but can be obtained through $FullDiagnosis.
-}
-}
-\references{
-Bakker, M. & Wicherts, J. M. (2011). The (mis)reporting of statistical results in psychology journals. Behavior Research Methods, 43, 666-678.
-}
 \author{
 Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten <m.b.nuijten@uvt.nl>
 }
 \note{
-Please note that the resulting diagnosis is more a rough indication of what could be going on than it is a clear cut verdict. The function is therefore most suitable if you want to get a rough idea of the type of errors made in a certain set of articles. 
+Use $FullDiagnosis to inspect the dataframe with the full diagnosis results.
 }
 \seealso{
-\code{\link{statcheck}}, \code{\link{identify.statcheck}}
+\code{\link{diagnose}}, \code{\link{statcheck}}
 }
 \examples{
 \dontrun{
@@ -66,13 +61,6 @@ Please note that the resulting diagnosis is more a rough indication of what coul
 DIR <- "C:/mydocuments/articles"
 stat_result <- checkdir(DIR)
 
-diagnosis <- diagnose(stat_result)
-
-# print diagnosis
-diagnosis
-
-# print diagnosis for all articles
-diagnosis$FullDiagnosis
-
+diagnose(stat_result)
 }
 }
