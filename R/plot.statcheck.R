@@ -15,12 +15,12 @@ plot.statcheck <- function(x,...) {
                pch=20),args))
   
   # red dot for gross error (non-sig reported as sig and vice versa)
-  points(reported[x$GrossError],
-         computed[x$GrossError],
+  points(reported[x$DecisionError],
+         computed[x$DecisionError],
          pch=20,col="red")
   
-  points(reported[x$GrossError],
-         computed[x$GrossError],
+  points(reported[x$DecisionError],
+         computed[x$DecisionError],
          pch=20,col="red")
   
   # indicate exact p values with diamond

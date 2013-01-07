@@ -10,7 +10,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq")){
   }
   
   # Create empty data frame:
-  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, oneTail = NULL, InExactError = NULL, ExactError=NULL, GrossError=NULL, Location = NULL,stringsAsFactors=FALSE)
+  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, oneTail = NULL, InExactError = NULL, ExactError=NULL, DecisionError=NULL, Location = NULL,stringsAsFactors=FALSE)
   class(Res) <- c("statcheck","data.frame")
   
   if (length(x)==0) return(Res)
@@ -296,7 +296,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq")){
     
   Res$InExactError <- InExTest(Res)
   Res$ExactError <- ExTest(Res)
-  Res$GrossError <- GrossTest(Res)
+  Res$DecisionError <- GrossTest(Res)
   
   class(Res) <- c("statcheck","data.frame")
   return(Res[,!(names(Res)%in%"Location")])

@@ -2,60 +2,28 @@ summary.statcheck <- function(object,...){
   
   x <- object
   
+  # Source
+  Source <- c(ddply(x,"Source",function(x) unique(x$Source))[,2],"Total")
+  
   # Number of p values extracted per article and in total
   pValues <- c(ddply(x,"Source",function(x) nrow(x))[,2],nrow(x))
   
+  # Number of exact errors per article and in total
+  ExactErrors <- c(ddply(x,"Source",function(x) sum(x$ExactError))[,2],sum(x$ExactError))
   
-  # Significant results reported as non significant per paper and in total
-  SigAsNonSig <- ddply(x,"Source",function(x){
-    sum((x$Reported.P.Value<.05 & x$Computed>.05)[x$Reported.Comparison=="="],na.rm=TRUE) 
-  })[,2]
+  # Number of exact errors per article and in total
+  InExactErrors <- c(ddply(x,"Source",function(x) sum(x$InExactError))[,2],sum(x$InExactError))
   
-  SigAsNonSig <- c(SigAsNonSig,sum(SigAsNonSig))
-  
-  # Non significant results reported as significant per paper and in total
-  NonSigAsSig <- ddply(x,"Source",function(x){
-    sum((x$Reported.P.Value>.05 & x$Computed<.05)[x$Reported.Comparison=="="],na.rm=TRUE)
-  })[,2]
-  
-  NonSigAsSig <- c(NonSigAsSig, sum(NonSigAsSig))
-  
-  # Total amount of errors in exact p values
-  ExactErrors <- ddply(x,"Source",function(x){
-    sum(abs(x$Reported.P.Value[x$Reported.Comparison=="="]-
-      x$Computed[x$Reported.Comparison=="="])>.01,na.rm=TRUE)
-  })[,2]
-  
-  ExactErrors <- c(ExactErrors,sum(ExactErrors))
-  
-  # Mean deviation between reported and computed exact p values
-  MeanDeviationExact <- ddply(x,"Source",function(x){
-    mean(abs(x$Reported.P.Value[x$Reported.Comparison=="="]-
-      x$Computed[x$Reported.Comparison=="="]),na.rm=TRUE)
-  })[,2]
-  
-  MeanDeviationExact <- c(MeanDeviationExact,mean(MeanDeviationExact,na.rm=TRUE))
-  
-  InExErrors <- function(x)
-  {
-    comparison <- gsub("=","==",x$Reported.Comparison)
-    computed <- x$Computed
-    reported <- x$Reported.P.Value
-    Match <- paste(computed,comparison,reported)
-    InExMatch <- Match[grepl("<|>",Match)]
-    InExTests <- sapply(InExMatch,function(m)eval(parse(text=m)))  
-    return(sum(!InExTests,na.rm=TRUE))
-  }
-  
+  # Number of decision errors per article and in total
+  DecisionErrors <- c(ddply(x,"Source",function(x) sum(x$DecisionError))[,2],sum(x$DecisionError))
   
   # Results in dataframe
-  res <- data.frame(pValues=pValues,
-                    NonSigAsSig=NonSigAsSig,
-                    SigAsNonSig=SigAsNonSig,
+  res <- data.frame(Source=c(unique(x$Source),"Total"),
+                    pValues=pValues,
                     ExactErrors=ExactErrors,
-                    MeanDeviationExact=MeanDeviationExact,
-                    InExactErrors =c(daply(x,.(Source),InExErrors),InExErrors(x))
-  )  
+                    InExactErrors=InExactErrors,
+                    DecisionErrors=DecisionErrors)
+  
   class(res) <- c("statcheck","data.frame")
   
   return(res)

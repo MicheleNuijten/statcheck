@@ -37,6 +37,9 @@ A data frame containing for each extracted statistic:
 \item{OneTail}{Smallest one-tailed recomputed p-value (if applicable)}
 \item{Location}{Location of the statistic in the string.}
 \item{Raw}{Raw string of the statistical reference that is extracted}
+\item{InExactError}{a}
+\item{ExactError}{a}
+\item{DecisionError}{a}
 }
 \section{Note}{
 For PDF files the "pdftotext" program is used to convert PDF files to plain text files. You can obtain pdftotext from \code{http://www.foolabs.com/xpdf/download.html}. Download and unzip the precompiled binaries. Next, add the folder with the binaries to the PATH variables so that this program can be used from command line.
@@ -45,7 +48,7 @@ For PDF files the "pdftotext" program is used to convert PDF files to plain text
 Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten <m.b.nuijten@uvt.nl>
 }
 \seealso{
-\code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkHTMLdir}}, \code{\link{checkHTML}}, \code{\link{checkdir}}
+\code{\link{checkPDF}}, \code{\link{checkHTMLdir}}, \code{\link{checkHTML}}, \code{\link{checkdir}}
 }
 
 \examples{
