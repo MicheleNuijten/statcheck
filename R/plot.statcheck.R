@@ -6,8 +6,6 @@ plot.statcheck <- function(x,...) {
   if (is.null(args$ylim)) args$ylim <- c(0,1)
    
   reported <- x$Reported.P.Value
-  
-  # Choose onetailed if more appropriate:
   computed <- x$Computed
     
   # scatterplot of reported and recalculated p values
@@ -17,12 +15,12 @@ plot.statcheck <- function(x,...) {
                pch=20),args))
   
   # red dot for gross error (non-sig reported as sig and vice versa)
-  points(reported[reported>.05 & computed<.05],
-         computed[reported>.05 & computed<.05],
+  points(reported[x$GrossError],
+         computed[x$GrossError],
          pch=20,col="red")
   
-  points(reported[reported<.05 & computed>.05],
-         computed[reported<.05 & computed>.05],
+  points(reported[x$GrossError],
+         computed[x$GrossError],
          pch=20,col="red")
   
   # indicate exact p values with diamond

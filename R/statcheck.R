@@ -10,7 +10,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq")){
   }
   
   # Create empty data frame:
-  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, oneTail = NULL, InExactError = NULL, ExactError=NULL, Location = NULL,stringsAsFactors=FALSE)
+  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, oneTail = NULL, InExactError = NULL, ExactError=NULL, GrossError=NULL, Location = NULL,stringsAsFactors=FALSE)
   class(Res) <- c("statcheck","data.frame")
   
   if (length(x)==0) return(Res)
@@ -277,9 +277,26 @@ statcheck <- function(x,stat=c("t","F","cor","chisq")){
     return(ExTests)
   }
   
+  GrossTest <- function(x){
+    computed <- x$Computed
+    comparison <- x$Reported.Comparison
+    reported <- x$Reported.P.Value
+    Match <- paste(computed,comparison,reported)
+    AllTests <- grepl("=|<|>",Match)
+    if (any(AllTests)){
+      AllTests[grepl("<",Match)] <- reported[grepl("<",Match)]<=.05 & computed[grepl("<",Match)] >=.05
+      AllTests[grepl(">",Match)] <- reported[grepl(">",Match)] >=.05 & computed[grepl(">",Match)]<.05
+      AllTests[grepl("=",Match)] <- (reported[grepl("=",Match)]<.05 & computed[grepl("=",Match)]>=.5)|
+      (reported[grepl("=",Match)]>=.05 & computed[grepl("=",Match)]<.05)
+    }
+      AllTests <- as.logical(AllTests)
+    
+    return(AllTests)
+  }
     
   Res$InExactError <- InExTest(Res)
   Res$ExactError <- ExTest(Res)
+  Res$GrossError <- GrossTest(Res)
   
   class(Res) <- c("statcheck","data.frame")
   return(Res[,!(names(Res)%in%"Location")])
