@@ -33,10 +33,11 @@ A data frame containing for each extracted statistic:
 \item{Value}{Reported value of the statistic}
 \item{Reported.Comparison}{Reported comparison, when importing from pdf this will often not be converted properly}
 \item{Reported.P.Value}{The reported p-value, or NA if the reported value was NS}
-\item{Computed}{The re-computed p-value}
-\item{OneTail}{Smallest one-tailed recomputed p-value (if applicable)}
-\item{Location}{Location of the statistic in the string.}
+\item{Computed}{The recomputed p-value}
 \item{Raw}{Raw string of the statistical reference that is extracted}
+\item{InExactError}{Error in inexactly reported p values as compared to the recalculated p values}
+\item{ExactError}{Error in exactly reported p values as compared to the recalculated p values}
+\item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
 }
 \author{
 Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten <m.b.nuijten@uvt.nl>

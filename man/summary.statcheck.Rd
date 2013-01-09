@@ -18,14 +18,19 @@ additional arguments affecting the summary produced.
 }
 }
 \value{
-summary.statcheck returns a data.frame of class \code{statcheck} with the following summaries reported per paper and in total:
-\item{Source}{Source of the extracted statistic. Usually the name of the file, if no file name is available the sources will be numbered.}
-\item{pValues}{The number of p values extracted.}
-\item{NonSigAsSig}{The number of exact results that were reported as significant, but turned out to be non significant after recalculation.}
-\item{SigAsNonSig}{The number of exact results that were reported as non significant, but turned out to be significant after recalculation.}
-\item{ExactErrors}{The total number of errors in the exactly reported p values as compared to the recalculated p values. A difference between the reported and recalculated was counted as an error when it was greater than .01.}
-\item{MeanDeviationExact}{The mean deviation of the exactly reported p values from the recalculated p values.}
-\item{InExactErrors}{Total number of errors in inexact reported p values as compared to the recalculated p values.}
+A data frame containing for each extracted statistic:
+\item{Source}{Name of the file of which the statistic is extracted}
+\item{Statistic}{Character indicating the statistic that is extracted}
+\item{df1}{First degree of freedom}
+\item{df2}{Second degree of freedom (if applicable)}
+\item{Value}{Reported value of the statistic}
+\item{Reported.Comparison}{Reported comparison, when importing from pdf this will often not be converted properly}
+\item{Reported.P.Value}{The reported p-value, or NA if the reported value was NS}
+\item{Computed}{The recomputed p-value}
+\item{Raw}{Raw string of the statistical reference that is extracted}
+\item{InExactError}{Error in inexactly reported p values as compared to the recalculated p values}
+\item{ExactError}{Error in exactly reported p values as compared to the recalculated p values}
+\item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
 }
 \author{
 Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten <m.b.nuijten@uvt.nl>

@@ -1,12 +1,6 @@
 diagnose <- function(x){
   # x = a statcheck output
   
-  # store full results in new object
-  #full <- x
-  
-  # select wrong results (there's no need to diagnose sound results)
-  #x <- x[!(x$InExactError==FALSE & x$ExactError==FALSE),]
-  
   # create shorter variable names
   computed <- x$Computed
   comparison <- x$Reported.Comparison
@@ -113,7 +107,7 @@ diagnose <- function(x){
   # summary
   summary <- ddply(res_full,.(Source),function(x) colSums(x[,4:11]))
   summary$CopyPaste <- summary$CopyPaste/2
-  
+    
   # complete result
   res <- list(FullDiagnosis=res_full,ErrorDiagnosis=res_error,CopyPaste=res_copy,Summary=summary)
   

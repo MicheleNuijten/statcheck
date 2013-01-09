@@ -34,12 +34,10 @@ A data frame containing for each extracted statistic:
 \item{Reported.Comparison}{Reported comparison, when importing from pdf this will often not be converted properly}
 \item{Reported.P.Value}{The reported p-value, or NA if the reported value was NS}
 \item{Computed}{The recomputed p-value}
-\item{OneTail}{Smallest one-tailed recomputed p-value (if applicable)}
-\item{Location}{Location of the statistic in the string.}
 \item{Raw}{Raw string of the statistical reference that is extracted}
-\item{InExactError}{a}
-\item{ExactError}{a}
-\item{DecisionError}{a}
+\item{InExactError}{Error in inexactly reported p values as compared to the recalculated p values}
+\item{ExactError}{Error in exactly reported p values as compared to the recalculated p values}
+\item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
 }
 \section{Note}{
 For PDF files the "pdftotext" program is used to convert PDF files to plain text files. You can obtain pdftotext from \code{http://www.foolabs.com/xpdf/download.html}. Download and unzip the precompiled binaries. Next, add the folder with the binaries to the PATH variables so that this program can be used from command line.

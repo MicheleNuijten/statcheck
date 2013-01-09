@@ -26,16 +26,18 @@ Note that this function is still in devellopment. Some statistical values can be
 }
 \value{
 A data frame containing for each extracted statistic:
-\item{Source}{Name of the element in the vector 'x' of which the statistic is extracted}
+\item{Source}{Name of the file of which the statistic is extracted}
 \item{Statistic}{Character indicating the statistic that is extracted}
 \item{df1}{First degree of freedom}
 \item{df2}{Second degree of freedom (if applicable)}
 \item{Value}{Reported value of the statistic}
 \item{Reported.Comparison}{Reported comparison, when importing from pdf this will often not be converted properly}
 \item{Reported.P.Value}{The reported p-value, or NA if the reported value was NS}
-\item{Computed}{The re-computed p-value}
-\item{OneTail}{Smallest one-tailed recomputed p-value (if applicable)}
-\item{Location}{Location of the statistic in the string.}
+\item{Computed}{The recomputed p-value}
+\item{Raw}{Raw string of the statistical reference that is extracted}
+\item{InExactError}{Error in inexactly reported p values as compared to the recalculated p values}
+\item{ExactError}{Error in exactly reported p values as compared to the recalculated p values}
+\item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
 }
 \author{
 Sacha Epskamp (mail@sachaepskamp.com) & Michele B. Nuijten <m.b.nuijten@uvt.nl>

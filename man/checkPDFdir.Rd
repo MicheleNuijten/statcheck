@@ -1,18 +1,16 @@
 \name{checkPDFdir}
 \alias{checkPDFdir}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Extract statistics and recompute p values from a directory with pdf files.
 }
 \description{
-Extracts statistical references from a directory with PDF files. The "pdftotext" program is used to convert PDF files to plain text files. This must be installed and PATH variables must be properly set so that this program can be used from command line.
+Extracts statistical references from a directory with PDF files. The "pdftotext" program (http://www.foolabs.com/xpdf/download.html) is used to convert PDF files to plain text files. This must be installed and PATH variables must be properly set so that this program can be used from command line.
 
-By default a gui window is opened that allows you to choose the directory (using tcltk).
+By default a GUI window is opened that allows you to choose the directory (using tcltk).
 }
 \usage{
 checkPDFdir(dir, ...)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{dir}{
 String indicating the directory to be used.
@@ -37,10 +35,11 @@ A data frame containing for each extracted statistic:
 \item{Value}{Reported value of the statistic}
 \item{Reported.Comparison}{Reported comparison, when importing from pdf this will often not be converted properly}
 \item{Reported.P.Value}{The reported p-value, or NA if the reported value was NS}
-\item{Computed}{The re-computed p-value}
-\item{OneTail}{Smallest one-tailed recomputed p-value (if applicable)}
-\item{Location}{Location of the statistic in the string.}
+\item{Computed}{The recomputed p-value}
 \item{Raw}{Raw string of the statistical reference that is extracted}
+\item{InExactError}{Error in inexactly reported p values as compared to the recalculated p values}
+\item{ExactError}{Error in exactly reported p values as compared to the recalculated p values}
+\item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
 }
 \author{
 Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten <m.b.nuijten@uvt.nl>
