@@ -209,8 +209,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq")){
         }
         # Extract df:
         df <- as.numeric(substring(chi2Raw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
-        
-        # Extract t-values
+               
+        # Extract chi2-values
         chi2Vals <- as.numeric(substring(chi2Raw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
         
         # Extract p-values
