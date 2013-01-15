@@ -200,7 +200,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq")){
         chi2Raw <- substring(txt,chi2Loc,chi2Loc+attr(chi2Loc,"match.length")-1)
         substr(chi2Raw,1,1)[grepl("\\d",substr(chi2Raw,1,1))] <- " "
         # Extract location of numbers:
-        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",chi2Raw)
+        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",sub("^.*?\\(","",chi2Raw))
         
         for (k in 1:length(nums)){
           if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%c(2,4)
@@ -208,14 +208,14 @@ statcheck <- function(x,stat=c("t","F","cor","chisq")){
           if (length(nums[[k]]) != 3) warning(paste("Could not extract statistics properly from",chi2Raw[k]))
         }
         # Extract df:
-        df <- as.numeric(substring(chi2Raw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
+        df <- as.numeric(substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
                
         # Extract chi2-values
-        chi2Vals <- as.numeric(substring(chi2Raw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
+        chi2Vals <- as.numeric(substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
         
         # Extract p-values
         suppressWarnings(
-        pVals <- as.numeric(substring(chi2Raw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1))))
+        pVals <- as.numeric(substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1))))
                   
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",chi2Raw)
