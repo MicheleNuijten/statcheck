@@ -10,4 +10,4 @@ identify.statcheck <- function(x,...){
   class(res) <- c("statcheck","data.frame")
   
   return(res)
-}
+} 
