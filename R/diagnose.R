@@ -14,7 +14,7 @@ diagnose <- function(x){
   onetail <- computed/2
   
   OneTail <- ifelse(!(x$InExactError==FALSE & x$ExactError==FALSE) &
-    (grepl("=",comparison)[!is.na(onetail)] & reported==onetail)
+    (grepl("=",comparison)[!is.na(onetail)] & round(reported,2)==round(onetail,2))
     | (grepl("<",comparison) & reported==.05 & onetail < reported & computed > reported)[!is.na(onetail)],
     TRUE,FALSE)
   
@@ -104,12 +104,8 @@ diagnose <- function(x){
   res_copy <- res_full[res_full$CopyPaste,]
   res_copy <- res_copy[order(res_copy$Raw),]
   
-  # summary
-  summary <- ddply(res_full,.(Source),function(x) colSums(x[,4:11]))
-  summary$CopyPaste <- summary$CopyPaste/2
-    
   # complete result
-  res <- list(FullDiagnosis=res_full,ErrorDiagnosis=res_error,CopyPaste=res_copy,Summary=summary)
+  res <- list(FullDiagnosis=res_full,ErrorDiagnosis=res_error,CopyPaste=res_copy)
   
   class(res) <- c("statcheck","diagnose","list")
   
