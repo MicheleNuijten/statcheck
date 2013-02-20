@@ -243,6 +243,53 @@ statcheck <- function(x,stat=c("t","F","cor","chisq")){
       }
     }
     
+    # z-values:
+    if ("Z"%in%stat){
+      # Get location of z-values in text:
+      zLoc <- gregexpr("(\\z|\\Z)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      
+      if (zLoc[1] != -1){
+        # Get raw text of z-values:
+        zRaw <- substring(txt,zLoc,zLoc+attr(zLoc,"match.length")-1)
+        # Extract location of numbers:
+        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",zRaw)
+        
+        for (k in 1:length(nums)){
+          if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%c(2,4)
+          if (length(nums[[k]]) == 3) nums[[k]] <- nums[[k]]%rem%2
+          if (length(nums[[k]]) != 2) warning(paste("Could not extract statistics properly from",zRaw[k]))
+        }
+        # Extract z-values
+        zVals <- as.numeric(substring(zRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
+        
+        # Extract p-values
+        suppressWarnings(
+          pVals <- as.numeric(substring(zRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
+        # Extract (in)equality
+        eqLoc <- gregexpr("p\\s?.?",zRaw)
+        pEq <- substring(zRaw,
+                         sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
+                         sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+        pEq[grepl("ns",zRaw,ignore.case=TRUE)] <- "ns"
+        
+        # Create data frame:
+        zRes <- data.frame(Source = names(x)[i], 
+                           Statistic="Z", 
+                           df1= NA, 
+                           df2=NA, 
+                           Value = zVals, 
+                           Reported.Comparison= pEq, 
+                           Reported.P.Value=pVals, 
+                           Computed = pnorm(zVals,lower.tail=FALSE)*2, 
+                           Location = zLoc,
+                           Raw = zRaw,
+                           stringsAsFactors=FALSE)
+        
+        # Append, clean and close:
+        Res <- rbind(Res,zRes)
+        rm(zRes)
+      }
+    }
     
     setTxtProgressBar(pb, i)
   }
