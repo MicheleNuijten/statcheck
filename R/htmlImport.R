@@ -26,7 +26,7 @@ getHTML <- function(x)
 checkHTMLdir <- function(dir,...)
 {
   if (missing(dir)) dir <- tk_choose.dir()
-  files <- list.files(dir,pattern=".html",full.names=TRUE)
+  files <- list.files(dir,pattern=".html|.htm",full.names=TRUE)
   txts <- character(length(files))
   message("Importing HTML files...")
   pb <- txtProgressBar(max=length(files),style=3)
