@@ -1,6 +1,6 @@
 
 ## Main function, checks statistics of vector of strings (articles).
-statcheck <- function(x,stat=c("t","F","cor","chisq")){
+statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
   '%rem%'<- function(x,y){
     at <- attr(x,"match.length")
     x <- x[-y]
@@ -189,6 +189,118 @@ statcheck <- function(x,stat=c("t","F","cor","chisq")){
       }
     }
     
+    # z-values:
+    if ("Z"%in%stat){
+      # Get location of z-values in text:
+      zLoc <- gregexpr("(\\z|\\Z)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      
+      if (zLoc[1] != -1){
+        # Get raw text of z-values:
+        zRaw <- substring(txt,zLoc,zLoc+attr(zLoc,"match.length")-1)
+        # Extract location of numbers:
+        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",zRaw)
+        
+        for (k in 1:length(nums)){
+          if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%c(2,4)
+          if (length(nums[[k]]) == 3) nums[[k]] <- nums[[k]]%rem%2
+          if (length(nums[[k]]) != 2) warning(paste("Could not extract statistics properly from",zRaw[k]))
+        }
+        # Extract z-values
+        zVals <- as.numeric(substring(zRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
+        
+        # Extract p-values
+        suppressWarnings(
+          pVals <- as.numeric(substring(zRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
+        # Extract (in)equality
+        eqLoc <- gregexpr("p\\s?.?",zRaw)
+        pEq <- substring(zRaw,
+                         sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
+                         sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+        pEq[grepl("ns",zRaw,ignore.case=TRUE)] <- "ns"
+        
+        # Create data frame:
+        zRes <- data.frame(Source = names(x)[i], 
+                           Statistic="Z", 
+                           df1= NA, 
+                           df2=NA, 
+                           Value = zVals, 
+                           Reported.Comparison= pEq, 
+                           Reported.P.Value=pVals, 
+                           Computed = pnorm(zVals,lower.tail=FALSE)*2, 
+                           Location = zLoc,
+                           Raw = zRaw,
+                           stringsAsFactors=FALSE)
+        
+        # Append, clean and close:
+        Res <- rbind(Res,zRes)
+        rm(zRes)
+      }
+    }
+    
+    # Wald test results
+    if ("Wald"%in%stat){
+      # Get location of Wald results in text:
+      wLoc <- gregexpr("(\\wald|\\Wald)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      
+      if (wLoc[1] != -1){
+        # Get raw text of Wald results:
+        wRaw <- substring(txt,wLoc,wLoc+attr(wLoc,"match.length")-1)
+        # Extract location of numbers:
+        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",wRaw)
+        
+        for (k in 1:length(nums)){
+          if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%c(1,3)
+          if (length(nums[[k]]) == 3) nums[[k]] <- nums[[k]]%rem%3
+          if (length(nums[[k]]) != 2) warning(paste("Could not extract statistics properly from",wRaw[k]))
+        }
+        # Extract test statistic (Z or chisq2)
+        wVals <- as.numeric(substring(wRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
+        
+        # Extract p-values
+        suppressWarnings(
+          pVals <- as.numeric(substring(wRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
+        # Extract (in)equality
+        eqLoc <- gregexpr("p\\s?.?",wRaw)
+        pEq <- substring(wRaw,
+                         sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
+                         sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+        pEq[grepl("ns",wRaw,ignore.case=TRUE)] <- "ns"
+        
+        # recompute p-values and decide whether a Z or chisq test is more appropriate
+        comp <- numeric()
+        df <- numeric()
+        
+        for(j in 1:length(wVals)){
+          pZ <- pnorm(wVals[j],lower.tail=FALSE)*2
+          pChisq <- pchisq(wVals[j],1,lower.tail=FALSE)
+          
+          if(abs(pVals[j]-pZ)<abs(pVals[j]-pChisq)){
+            comp[j] <- pZ
+            df[j] <- NA
+          } else{
+            comp[j] <- pChisq
+            df[j] <- 1
+          }
+        }
+        
+        # Create data frame:
+        wRes <- data.frame(Source = names(x)[i], 
+                           Statistic="Wald", 
+                           df1= df, 
+                           df2=NA, 
+                           Value = wVals, 
+                           Reported.Comparison= pEq, 
+                           Reported.P.Value=pVals, 
+                           Computed = comp, 
+                           Location = wLoc,
+                           Raw = wRaw,
+                           stringsAsFactors=FALSE)
+        
+        # Append, clean and close:
+        Res <- rbind(Res,wRes)
+        rm(wRes)
+      }
+    }
     
     # Chis2-values:
     if ("chisq"%in%stat){
@@ -243,54 +355,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq")){
       }
     }
     
-    # z-values:
-    if ("Z"%in%stat){
-      # Get location of z-values in text:
-      zLoc <- gregexpr("(\\z|\\Z)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
-      if (zLoc[1] != -1){
-        # Get raw text of z-values:
-        zRaw <- substring(txt,zLoc,zLoc+attr(zLoc,"match.length")-1)
-        # Extract location of numbers:
-        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",zRaw)
-        
-        for (k in 1:length(nums)){
-          if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%c(2,4)
-          if (length(nums[[k]]) == 3) nums[[k]] <- nums[[k]]%rem%2
-          if (length(nums[[k]]) != 2) warning(paste("Could not extract statistics properly from",zRaw[k]))
-        }
-        # Extract z-values
-        zVals <- as.numeric(substring(zRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
-        
-        # Extract p-values
-        suppressWarnings(
-          pVals <- as.numeric(substring(zRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
-        # Extract (in)equality
-        eqLoc <- gregexpr("p\\s?.?",zRaw)
-        pEq <- substring(zRaw,
-                         sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
-                         sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
-        pEq[grepl("ns",zRaw,ignore.case=TRUE)] <- "ns"
-        
-        # Create data frame:
-        zRes <- data.frame(Source = names(x)[i], 
-                           Statistic="Z", 
-                           df1= NA, 
-                           df2=NA, 
-                           Value = zVals, 
-                           Reported.Comparison= pEq, 
-                           Reported.P.Value=pVals, 
-                           Computed = pnorm(zVals,lower.tail=FALSE)*2, 
-                           Location = zLoc,
-                           Raw = zRaw,
-                           stringsAsFactors=FALSE)
-        
-        # Append, clean and close:
-        Res <- rbind(Res,zRes)
-        rm(zRes)
-      }
-    }
-    
     setTxtProgressBar(pb, i)
   }
   close(pb)
