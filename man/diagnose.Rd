@@ -38,11 +38,6 @@ This dataframe contains the error diagnosis of the analyzed articles that contai
 This dataframe contains an overview of the detected copy-paste errors in all the articles. Its components are the same as the ones in ErrorDiagnosis. Note that a copy-paste error could still be congruent in terms of test statistic and p value, so it is possible that these errors do not show up in ErrorDiagnosis. 
 }
 }
-\section{Summary}{
-\describe{
-This dataframe provides a summary of all detected errors. It summarizes the number of detected errors in each of the aforementioned categories per article. The copy-paste errors are counted in a way that two identical strings of results are counted as one copy-paste error.
-}
-}
 \section{FullDiagnosis}{
 \describe{
 This dataframe contains the error diagnosis for every article, not just the articles that contained an error. The components are the same as in ErrorDiagnosis. This dataframe is not automatically printed but can be obtained through $FullDiagnosis.
