@@ -10,7 +10,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
   }
   
   # Create empty data frame:
-  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, oneTail = NULL, InExactError = NULL, ExactError=NULL, DecisionError=NULL, Location = NULL,stringsAsFactors=FALSE)
+  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, oneTail = NULL, InExactError = NULL, ExactError=NULL, DecisionError=NULL, Location = NULL,stringsAsFactors=FALSE,dec=NULL)
   class(Res) <- c("statcheck","data.frame")
   
   if (length(x)==0) return(Res)
@@ -47,7 +47,10 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # Extract p-values
         suppressWarnings(
-          pVals <- as.numeric(substring(tRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1))))
+          pValsChar <- substring(tRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
+        
+        pVals <- as.numeric(pValsChar)
+        
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",tRaw)
         pEq <- substring(tRaw,
@@ -55,6 +58,10 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
         pEq[grepl("ns",tRaw,ignore.case=TRUE)] <- "ns"
         
+        # determine number of decimals of p value
+        pValsSplit <- unlist(strsplit(pValsChar,"\\."))
+        dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
+                
         # Create data frame:
         tRes <- data.frame(Source = names(x)[i], 
                            Statistic="t", 
@@ -66,7 +73,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
                            Computed = pt(-1*abs(tVals),df)*2, 
                            Location = tLoc,
                            Raw = tRaw,
-                           stringsAsFactors=FALSE)
+                           stringsAsFactors=FALSE,
+                           dec = dec)
         
         # Append, clean and close:
         Res <- rbind(Res,tRes)
@@ -103,14 +111,20 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # Extract p-values
         suppressWarnings(
-        pVals <- as.numeric(substring(FRaw,sapply(nums,'[',4),sapply(nums,function(x)x[4]+attr(x,"match.length")[4]-1))))
-                  
+        pValsChar <- substring(FRaw,sapply(nums,'[',4),sapply(nums,function(x)x[4]+attr(x,"match.length")[4]-1)))
+        
+        pVals <- as.numeric(pValsChar)
+        
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",FRaw)
         pEq <- substring(FRaw,
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
         pEq[grepl("ns",FRaw,ignore.case=TRUE)] <- "ns"
+        
+        # determine number of decimals of p value
+        pValsSplit <- unlist(strsplit(pValsChar,"\\."))
+        dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
         
         # Create data frame:
         FRes <- data.frame(
@@ -124,7 +138,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
           Computed = pf(FVals,df1,df2,lower.tail=FALSE), 
           Location = FLoc,
           Raw = FRaw,
-          stringsAsFactors=FALSE)
+          stringsAsFactors=FALSE,
+          dec=dec)
         
         # Append, clean and close:
         Res <- rbind(Res,FRes)
@@ -157,7 +172,9 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # Extract p-values
         suppressWarnings(
-        pVals <- as.numeric(substring(rRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1))))
+        pValsChar <- substring(rRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
+        
+        pVals <- as.numeric(pValsChar)
                   
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",rRaw)
@@ -170,6 +187,11 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
           r / (sqrt((1-r^2)/df))
         }
         
+        
+        # determine number of decimals of p value
+        pValsSplit <- unlist(strsplit(pValsChar,"\\."))
+        dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
+        
         # Create data frame:
         rRes <- data.frame(Source = names(x)[i], 
                            Statistic="r", 
@@ -181,7 +203,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
                            Computed = pmin(pt(-1*abs(r2t(rVals,df)),df)*2,1), 
                            Location = rLoc,
                            Raw = rRaw,
-                           stringsAsFactors=FALSE)
+                           stringsAsFactors=FALSE,
+                           dec=dec)
         
         # Append, clean and close:
         Res <- rbind(Res,rRes)
@@ -210,7 +233,10 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # Extract p-values
         suppressWarnings(
-          pVals <- as.numeric(substring(zRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
+          pValsChar <- substring(zRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
+        
+        pVals <- as.numeric(pValsChar)
+        
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",zRaw)
         pEq <- substring(zRaw,
@@ -229,7 +255,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
                            Computed = pnorm(zVals,lower.tail=FALSE)*2, 
                            Location = zLoc,
                            Raw = zRaw,
-                           stringsAsFactors=FALSE)
+                           stringsAsFactors=FALSE,
+                           dec=dec)
         
         # Append, clean and close:
         Res <- rbind(Res,zRes)
@@ -258,7 +285,10 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # Extract p-values
         suppressWarnings(
-          pVals <- as.numeric(substring(wRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
+          pValsChar <- substring(wRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
+        
+        pVals <- as.numeric(pValsChar)
+        
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",wRaw)
         pEq <- substring(wRaw,
@@ -294,7 +324,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
                            Computed = comp, 
                            Location = wLoc,
                            Raw = wRaw,
-                           stringsAsFactors=FALSE)
+                           stringsAsFactors=FALSE,
+                           dec=dec)
         
         # Append, clean and close:
         Res <- rbind(Res,wRes)
@@ -327,8 +358,10 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # Extract p-values
         suppressWarnings(
-        pVals <- as.numeric(substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1))))
-                  
+        pValsChar <- substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
+        
+        pVals <- as.numeric(pVals)
+        
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",chi2Raw)
         pEq <- substring(chi2Raw,
@@ -338,16 +371,17 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # Create data frame:
         chi2Res <- data.frame(Source = names(x)[i], 
-                           Statistic="Chi2", 
-                           df1= df, 
-                           df2=NA, 
-                           Value = chi2Vals, 
-                           Reported.Comparison= pEq, 
-                           Reported.P.Value=pVals, 
-                           Computed = pchisq(chi2Vals,df,lower.tail=FALSE), 
-                           Location = chi2Loc,
-                           Raw = chi2Raw,
-                           stringsAsFactors=FALSE)
+                              Statistic="Chi2", 
+                              df1= df, 
+                              df2=NA, 
+                              Value = chi2Vals, 
+                              Reported.Comparison= pEq, 
+                              Reported.P.Value=pVals, 
+                              Computed = pchisq(chi2Vals,df,lower.tail=FALSE), 
+                              Location = chi2Loc,
+                              Raw = chi2Raw,
+                              stringsAsFactors=FALSE,
+                              dec=dec)
         
         # Append, clean and close:
         Res <- rbind(Res,chi2Res)
@@ -384,7 +418,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     Match <- paste(computed,comparison,reported)
     ExTests <- grepl("=",Match)
     if (any(ExTests)){
-      ExTests[grepl("=",Match)] <- !(round(computed[ExTests],3)==reported[ExTests]|round(computed[ExTests],2)==round(reported[ExTests],2))
+      ExTests[grepl("=",Match)] <- !(round(computed[ExTests],x$dec[ExTests])==round(reported[ExTests],x$dec[ExTests]))
     }
     return(ExTests)
   }
@@ -411,6 +445,6 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
   Res$DecisionError <- GrossTest(Res)
   
   class(Res) <- c("statcheck","data.frame")
-  return(Res[,!(names(Res)%in%"Location")])
+  return(Res[,!(names(Res)%in%c("Location","dec"))])
 }
 
