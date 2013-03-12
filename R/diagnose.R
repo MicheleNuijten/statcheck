@@ -58,7 +58,7 @@ diagnose <- function(x){
   RoundError <- ifelse(!(x$InExactError==FALSE & x$ExactError==FALSE) & CorrectRound==FALSE & (reported==trunc(computed*100)/100|reported-.01==trunc(computed*100)/100),TRUE,FALSE)
   
   # reported p < .000
-  PSmallerThanZero <- ifelse(!(x$InExactError==FALSE & x$ExactError==FALSE) & grepl("<.000|< .000",raw),TRUE,FALSE)
+  PSmallerThanZero <- ifelse(!(x$InExactError==FALSE & x$ExactError==FALSE) & grepl("<",comparison) & reported==0,TRUE,FALSE)
   
   # reported < when = would be correct
   # e.g. p < .123 when p = .123
