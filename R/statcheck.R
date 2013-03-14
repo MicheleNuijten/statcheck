@@ -244,6 +244,10 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
         pEq[grepl("ns",zRaw,ignore.case=TRUE)] <- "ns"
         
+        # determine number of decimals of p value
+        pValsSplit <- unlist(strsplit(pValsChar,"\\."))
+        dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
+        
         # Create data frame:
         zRes <- data.frame(Source = names(x)[i], 
                            Statistic="Z", 
@@ -313,6 +317,10 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
           }
         }
         
+        # determine number of decimals of p value
+        pValsSplit <- unlist(strsplit(pValsChar,"\\."))
+        dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
+        
         # Create data frame:
         wRes <- data.frame(Source = names(x)[i], 
                            Statistic="Wald", 
@@ -360,7 +368,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         suppressWarnings(
         pValsChar <- substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
         
-        pVals <- as.numeric(pVals)
+        pVals <- as.numeric(pValsChar)
         
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",chi2Raw)
@@ -369,6 +377,10 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
         pEq[grepl("ns",chi2Raw,ignore.case=TRUE)] <- "ns"
         
+        # determine number of decimals of p value
+        pValsSplit <- unlist(strsplit(pValsChar,"\\."))
+        dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
+                
         # Create data frame:
         chi2Res <- data.frame(Source = names(x)[i], 
                               Statistic="Chi2", 
