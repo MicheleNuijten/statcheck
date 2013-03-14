@@ -49,7 +49,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         suppressWarnings(
           pValsChar <- substring(tRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
         
-        pVals <- as.numeric(pValsChar)
+        suppressWarnings(
+          pVals <- as.numeric(pValsChar))
         
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",tRaw)
@@ -61,6 +62,12 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         # determine number of decimals of p value
         pValsSplit <- unlist(strsplit(pValsChar,"\\."))
         dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
+        
+        if(is.integer(dec)){
+          dec <- 2
+        } else {
+          dec <- dec
+        }
                 
         # Create data frame:
         tRes <- data.frame(Source = names(x)[i], 
@@ -113,7 +120,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         suppressWarnings(
         pValsChar <- substring(FRaw,sapply(nums,'[',4),sapply(nums,function(x)x[4]+attr(x,"match.length")[4]-1)))
         
-        pVals <- as.numeric(pValsChar)
+        suppressWarnings(
+          pVals <- as.numeric(pValsChar))
         
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",FRaw)
@@ -125,6 +133,12 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         # determine number of decimals of p value
         pValsSplit <- unlist(strsplit(pValsChar,"\\."))
         dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
+        
+        if(is.integer(dec)){
+          dec <- 2
+        } else {
+          dec <- dec
+        }
         
         # Create data frame:
         FRes <- data.frame(
@@ -174,7 +188,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         suppressWarnings(
         pValsChar <- substring(rRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
         
-        pVals <- as.numeric(pValsChar)
+        suppressWarnings(
+          pVals <- as.numeric(pValsChar))
                   
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",rRaw)
@@ -191,6 +206,12 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         # determine number of decimals of p value
         pValsSplit <- unlist(strsplit(pValsChar,"\\."))
         dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
+        
+        if(is.integer(dec)){
+          dec <- 2
+        } else {
+          dec <- dec
+        }
         
         # Create data frame:
         rRes <- data.frame(Source = names(x)[i], 
@@ -235,7 +256,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         suppressWarnings(
           pValsChar <- substring(zRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
         
-        pVals <- as.numeric(pValsChar)
+        suppressWarnings(
+          pVals <- as.numeric(pValsChar))
         
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",zRaw)
@@ -247,6 +269,12 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         # determine number of decimals of p value
         pValsSplit <- unlist(strsplit(pValsChar,"\\."))
         dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
+        
+        if(is.integer(dec)){
+          dec <- 2
+        } else {
+          dec <- dec
+        }
         
         # Create data frame:
         zRes <- data.frame(Source = names(x)[i], 
@@ -291,7 +319,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         suppressWarnings(
           pValsChar <- substring(wRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
         
-        pVals <- as.numeric(pValsChar)
+        suppressWarnings(
+          pVals <- as.numeric(pValsChar))
         
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",wRaw)
@@ -320,6 +349,12 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         # determine number of decimals of p value
         pValsSplit <- unlist(strsplit(pValsChar,"\\."))
         dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
+        
+        if(is.integer(dec)){
+          dec <- 2
+        } else {
+          dec <- dec
+        }
         
         # Create data frame:
         wRes <- data.frame(Source = names(x)[i], 
@@ -368,7 +403,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         suppressWarnings(
         pValsChar <- substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
         
-        pVals <- as.numeric(pValsChar)
+        suppressWarnings(
+          pVals <- as.numeric(pValsChar))
         
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",chi2Raw)
@@ -380,6 +416,12 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         # determine number of decimals of p value
         pValsSplit <- unlist(strsplit(pValsChar,"\\."))
         dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
+        
+        if(is.integer(dec)){
+          dec <- 2
+        } else {
+          dec <- dec
+        }
                 
         # Create data frame:
         chi2Res <- data.frame(Source = names(x)[i], 
