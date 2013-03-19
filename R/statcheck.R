@@ -61,14 +61,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # determine number of decimals of p value
         pValsSplit <- unlist(strsplit(pValsChar,"\\."))
-        dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
+        dec <- nchar(pValsSplit[!(grepl("^0$|^$|^ +$",pValsSplit))])
         
-        if(is.integer(dec)){
-          dec <- 2
-        } else {
-          dec <- dec
-        }
-                
         # Create data frame:
         tRes <- data.frame(Source = names(x)[i], 
                            Statistic="t", 
@@ -118,7 +112,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # Extract p-values
         suppressWarnings(
-        pValsChar <- substring(FRaw,sapply(nums,'[',4),sapply(nums,function(x)x[4]+attr(x,"match.length")[4]-1)))
+          pValsChar <- substring(FRaw,sapply(nums,'[',4),sapply(nums,function(x)x[4]+attr(x,"match.length")[4]-1)))
         
         suppressWarnings(
           pVals <- as.numeric(pValsChar))
@@ -132,13 +126,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # determine number of decimals of p value
         pValsSplit <- unlist(strsplit(pValsChar,"\\."))
-        dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
-        
-        if(is.integer(dec)){
-          dec <- 2
-        } else {
-          dec <- dec
-        }
+        dec <- nchar(pValsSplit[!(grepl("^0$|^$|^ +$",pValsSplit))])
         
         # Create data frame:
         FRes <- data.frame(
@@ -186,11 +174,11 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # Extract p-values
         suppressWarnings(
-        pValsChar <- substring(rRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
+          pValsChar <- substring(rRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
         
         suppressWarnings(
           pVals <- as.numeric(pValsChar))
-                  
+        
         # Extract (in)equality
         eqLoc <- gregexpr("p\\s?.?",rRaw)
         pEq <- substring(rRaw,
@@ -205,13 +193,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # determine number of decimals of p value
         pValsSplit <- unlist(strsplit(pValsChar,"\\."))
-        dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
-        
-        if(is.integer(dec)){
-          dec <- 2
-        } else {
-          dec <- dec
-        }
+        dec <- nchar(pValsSplit[!(grepl("^0$|^$|^ +$",pValsSplit))])
         
         # Create data frame:
         rRes <- data.frame(Source = names(x)[i], 
@@ -268,13 +250,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # determine number of decimals of p value
         pValsSplit <- unlist(strsplit(pValsChar,"\\."))
-        dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
-        
-        if(is.integer(dec)){
-          dec <- 2
-        } else {
-          dec <- dec
-        }
+        dec <- nchar(pValsSplit[!(grepl("^0$|^$|^ +$",pValsSplit))])
         
         # Create data frame:
         zRes <- data.frame(Source = names(x)[i], 
@@ -333,28 +309,30 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         comp <- numeric()
         df <- numeric()
         
+        
         for(j in 1:length(wVals)){
-          pZ <- pnorm(wVals[j],lower.tail=FALSE)*2
-          pChisq <- pchisq(wVals[j],1,lower.tail=FALSE)
-          
-          if(abs(pVals[j]-pZ)<abs(pVals[j]-pChisq)){
-            comp[j] <- pZ
+          if(!(is.na(pVals[j]))){
+            
+            pZ <- pnorm(wVals[j],lower.tail=FALSE)*2
+            pChisq <- pchisq(wVals[j],1,lower.tail=FALSE)
+            
+            if(abs(pVals[j]-pZ)<abs(pVals[j]-pChisq)){
+              comp[j] <- pZ
+              df[j] <- NA
+              
+            } else{
+              comp[j] <- pChisq
+              df[j] <- 1
+            }
+          } else {
+            comp[j] <- NA
             df[j] <- NA
-          } else{
-            comp[j] <- pChisq
-            df[j] <- 1
           }
         }
         
         # determine number of decimals of p value
         pValsSplit <- unlist(strsplit(pValsChar,"\\."))
-        dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
-        
-        if(is.integer(dec)){
-          dec <- 2
-        } else {
-          dec <- dec
-        }
+        dec <- nchar(pValsSplit[!(grepl("^0$|^$|^ +$",pValsSplit))])
         
         # Create data frame:
         wRes <- data.frame(Source = names(x)[i], 
@@ -395,13 +373,13 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         }
         # Extract df:
         df <- as.numeric(substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
-               
+        
         # Extract chi2-values
         chi2Vals <- as.numeric(substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
         
         # Extract p-values
         suppressWarnings(
-        pValsChar <- substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
+          pValsChar <- substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
         
         suppressWarnings(
           pVals <- as.numeric(pValsChar))
@@ -415,14 +393,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # determine number of decimals of p value
         pValsSplit <- unlist(strsplit(pValsChar,"\\."))
-        dec <- nchar(pValsSplit[(1:length(pValsSplit))%%2==0])
+        dec <- nchar(pValsSplit[!(grepl("^0$|^$|^ +$",pValsSplit))])
         
-        if(is.integer(dec)){
-          dec <- 2
-        } else {
-          dec <- dec
-        }
-                
         # Create data frame:
         chi2Res <- data.frame(Source = names(x)[i], 
                               Statistic="Chi2", 
@@ -443,7 +415,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
       }
     }
     
-      
+    
     setTxtProgressBar(pb, i)
   }
   close(pb)
@@ -487,13 +459,13 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
       AllTests[grepl("<",Match)] <- reported[grepl("<",Match)]<=.05 & computed[grepl("<",Match)] >=.05
       AllTests[grepl(">",Match)] <- reported[grepl(">",Match)] >=.05 & computed[grepl(">",Match)]<.05
       AllTests[grepl("=",Match)] <- (reported[grepl("=",Match)]<.05 & computed[grepl("=",Match)]>=.5)|
-      (reported[grepl("=",Match)]>=.05 & computed[grepl("=",Match)]<.05)
+        (reported[grepl("=",Match)]>=.05 & computed[grepl("=",Match)]<.05)
     }
-      AllTests <- as.logical(AllTests)
+    AllTests <- as.logical(AllTests)
     
     return(AllTests)
   }
-    
+  
   Res$InExactError <- InExTest(Res)
   Res$ExactError <- ExTest(Res)
   Res$DecisionError <- GrossTest(Res)
