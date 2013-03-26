@@ -43,7 +43,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         df <- as.numeric(substring(tRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
         
         # Extract t-values
-        tVals <- as.numeric(substring(tRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
+        suppressWarnings(
+          tVals <- as.numeric(substring(tRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
         
         # Extract p-values
         suppressWarnings(
@@ -60,9 +61,9 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         pEq[grepl("ns",tRaw,ignore.case=TRUE)] <- "ns"
         
         # determine number of decimals of p value
-        pValsSplit <- unlist(strsplit(pValsChar,"\\."))
-        dec <- nchar(pValsSplit[!(grepl("^0$|^$|^ +$",pValsSplit))])
-        
+        dec <- attr(regexpr("\\.\\d+",pValsChar),"match.length")-1
+        dec[dec<0] <- NA
+                
         # Create data frame:
         tRes <- data.frame(Source = names(x)[i], 
                            Statistic="t", 
@@ -86,7 +87,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     # F-values:
     if ("F"%in%stat){
       # Get location of F-values in text:
-      FLoc <- gregexpr("F\\s?\\(\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p)\\s?.?\\s?\\d?\\.\\d+",txt,ignore.case=TRUE)[[1]]
+      FLoc <- gregexpr("F\\s?\\(\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (FLoc[1] != -1){
         # Get raw text of F-values:
@@ -107,8 +108,9 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         # Extract df2:
         df2 <- as.numeric(substring(FRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
         
-        # Extract t-values
-        FVals <- as.numeric(substring(FRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
+        # Extract F-values
+        suppressWarnings(
+          FVals <- as.numeric(substring(FRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1))))
         
         # Extract p-values
         suppressWarnings(
@@ -125,8 +127,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         pEq[grepl("ns",FRaw,ignore.case=TRUE)] <- "ns"
         
         # determine number of decimals of p value
-        pValsSplit <- unlist(strsplit(pValsChar,"\\."))
-        dec <- nchar(pValsSplit[!(grepl("^0$|^$|^ +$",pValsSplit))])
+        dec <- attr(regexpr("\\.\\d+",pValsChar),"match.length")-1
+        dec[dec<0] <- NA
         
         # Create data frame:
         FRes <- data.frame(
@@ -170,7 +172,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         df <- as.numeric(substring(rRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
         
         # Extract r-values
-        rVals <- as.numeric(substring(rRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
+        suppressWarnings(
+          rVals <- as.numeric(substring(rRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
         
         # Extract p-values
         suppressWarnings(
@@ -192,8 +195,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         
         # determine number of decimals of p value
-        pValsSplit <- unlist(strsplit(pValsChar,"\\."))
-        dec <- nchar(pValsSplit[!(grepl("^0$|^$|^ +$",pValsSplit))])
+        dec <- attr(regexpr("\\.\\d+",pValsChar),"match.length")-1
+        dec[dec<0] <- NA
         
         # Create data frame:
         rRes <- data.frame(Source = names(x)[i], 
@@ -232,7 +235,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
           if (length(nums[[k]]) != 2) warning(paste("Could not extract statistics properly from",zRaw[k]))
         }
         # Extract z-values
-        zVals <- as.numeric(substring(zRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
+        suppressWarnings(
+          zVals <- as.numeric(substring(zRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1))))
         
         # Extract p-values
         suppressWarnings(
@@ -249,8 +253,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         pEq[grepl("ns",zRaw,ignore.case=TRUE)] <- "ns"
         
         # determine number of decimals of p value
-        pValsSplit <- unlist(strsplit(pValsChar,"\\."))
-        dec <- nchar(pValsSplit[!(grepl("^0$|^$|^ +$",pValsSplit))])
+        dec <- attr(regexpr("\\.\\d+",pValsChar),"match.length")-1
+        dec[dec<0] <- NA
         
         # Create data frame:
         zRes <- data.frame(Source = names(x)[i], 
@@ -275,7 +279,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     # Wald test results
     if ("Wald"%in%stat){
       # Get location of Wald results in text:
-      wLoc <- gregexpr("(\\wald|\\Wald)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      wLoc <- gregexpr("(\\wald|\\Wald)\\s?\\D?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (wLoc[1] != -1){
         # Get raw text of Wald results:
@@ -289,7 +293,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
           if (length(nums[[k]]) != 2) warning(paste("Could not extract statistics properly from",wRaw[k]))
         }
         # Extract test statistic (Z or chisq2)
-        wVals <- as.numeric(substring(wRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
+        suppressWarnings(
+          wVals <- as.numeric(substring(wRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1))))
         
         # Extract p-values
         suppressWarnings(
@@ -331,8 +336,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         }
         
         # determine number of decimals of p value
-        pValsSplit <- unlist(strsplit(pValsChar,"\\."))
-        dec <- nchar(pValsSplit[!(grepl("^0$|^$|^ +$",pValsSplit))])
+        dec <- attr(regexpr("\\.\\d+",pValsChar),"match.length")-1
+        dec[dec<0] <- NA
         
         # Create data frame:
         wRes <- data.frame(Source = names(x)[i], 
@@ -375,7 +380,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         df <- as.numeric(substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
         
         # Extract chi2-values
-        chi2Vals <- as.numeric(substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
+        suppressWarnings(
+        chi2Vals <- as.numeric(substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
         
         # Extract p-values
         suppressWarnings(
@@ -392,8 +398,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         pEq[grepl("ns",chi2Raw,ignore.case=TRUE)] <- "ns"
         
         # determine number of decimals of p value
-        pValsSplit <- unlist(strsplit(pValsChar,"\\."))
-        dec <- nchar(pValsSplit[!(grepl("^0$|^$|^ +$",pValsSplit))])
+        dec <- attr(regexpr("\\.\\d+",pValsChar),"match.length")-1
+        dec[dec<0] <- NA
         
         # Create data frame:
         chi2Res <- data.frame(Source = names(x)[i], 
