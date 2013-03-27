@@ -24,7 +24,6 @@ This dataframe contains the error diagnosis of the analyzed articles that contai
 \item{Raw}{Raw string of the statistical reference that is extracted}
 \item{Computed}{The recomputed p-value}
 \item{OneTail}{Logical. Is it likely that the reported p value resulted from a correction for one-sided testing?}
-\item{CorrectRound}{Logical. Is the reported p value correct when we take the possibility into account that the test statistic was rounded after calculating the corresponding p value? For instance, a reported t value of 2.35 could correspond to an actual value of 2.345 to 2.354 with a range of p values that can slightly deviate from the recomputed p value but still be correct.}
 \item{RoundError}{Logical. P value wrongly rounded upward or downward. E.g. rounding a p value of .049 to .04.}
 \item{PSmallerThanZero}{Logical. Reported p <.000.}
 \item{SmallerInsteadEqual}{Logical. Reported "<" when "=" would be correct. E.g. F(2,20)=2.33, p <.123, whereas the correct p value is equal to .123.}
