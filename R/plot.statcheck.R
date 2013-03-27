@@ -14,15 +14,20 @@ plot.statcheck <- function(x,...) {
                ylab="recalculated p value",                         
                pch=20),args))
   
+  # orange dot for error 
+  points(reported[x$ExactError],
+         computed[x$ExactError],
+         pch=20,col="orange")
+  
+  points(reported[x$InExactError],
+         computed[x$InExactError],
+         pch=20,col="orange")
+  
   # red dot for gross error (non-sig reported as sig and vice versa)
   points(reported[x$DecisionError],
          computed[x$DecisionError],
          pch=20,col="red")
-  
-  points(reported[x$DecisionError],
-         computed[x$DecisionError],
-         pch=20,col="red")
-  
+   
   # indicate exact p values with diamond
   points(x$Reported.P.Value[x$Reported.Comparison=="="],
          computed[x$Reported.Comparison=="="],
@@ -45,9 +50,9 @@ plot.statcheck <- function(x,...) {
   
   par(xpd=TRUE)
   legend(.88,-.15,
-         pch=c(20,5),
-         col=c("red","black"),
-         legend=c("decision error","exact"),
+         pch=c(20,20,5),
+         col=c("orange","red","black"),
+         legend=c("p inconsistency","decision error","exact"),
          cex=.8)
   par(xpd=FALSE)
 }
