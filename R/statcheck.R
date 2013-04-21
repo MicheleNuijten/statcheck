@@ -487,7 +487,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     r / (sqrt((1-r^2)/df))
   }
   
-  for(i in 1:nrow(Res)){
+  for(i in seq_len(nrow(Res))){
     
     if(Res[i,]$Statistic=="F"){
       upP <- pf(lower[i],Res[i,]$df1,Res[i,]$df2,lower.tail=FALSE)
