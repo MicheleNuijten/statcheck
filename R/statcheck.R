@@ -26,11 +26,22 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     # t-values:
     if ("t"%in%stat){
       # Get location of t-values in text:
-      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
-      
+      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\D{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.?\\d+)",txt,ignore.case=TRUE)[[1]]
+            
       if (tLoc[1] != -1){
         # Get raw text of t-values:
         tRaw <- substring(txt,tLoc,tLoc+attr(tLoc,"match.length")-1)
+        
+        # Replace weird codings of a minus sign with actual minus sign:
+        # First remove spaces
+        tRaw <- gsub("(?<=\\=)\\s+(?=.*\\,)","",tRaw,perl=TRUE)
+        
+        # Replace any weird string with a minus sign
+        tRaw <- gsub("(?<=\\=)\\s?[^\\d\\.]+(?=.*\\,)"," -",tRaw,perl=TRUE)
+        
+        # Add spaces again:
+        tRaw <- gsub("(?<=\\=)(?=(\\.|\\d))"," ",tRaw,perl=TRUE)  
+                
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",tRaw)
         
@@ -155,11 +166,22 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     # correlations:
     if (any(c("r","cor","correlations")%in%stat)){
       # Get location of r-values in text:
-      rLoc <- gregexpr("r\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      rLoc <- gregexpr("r\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\D{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (rLoc[1] != -1){
         # Get raw text of r-values:
         rRaw <- substring(txt,rLoc,rLoc+attr(rLoc,"match.length")-1)
+        
+        # Replace weird codings of a minus sign with actual minus sign:
+        # First remove spaces
+        rRaw <- gsub("(?<=\\=)\\s+(?=.*\\,)","",rRaw,perl=TRUE)
+        
+        # Replace any weird string with a minus sign
+        rRaw <- gsub("(?<=\\=)\\s?[^\\d\\.]+(?=.*\\,)"," -",rRaw,perl=TRUE)
+        
+        # Add spaces again:
+        rRaw <- gsub("(?<=\\=)(?=(\\.|\\d))"," ",rRaw,perl=TRUE) 
+        
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",rRaw)
         
@@ -221,11 +243,22 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     # z-values:
     if ("Z"%in%stat){
       # Get location of z-values in text:
-      zLoc <- gregexpr("(\\z|\\Z)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      zLoc <- gregexpr("(\\z|\\Z)\\s?.?\\s?\\D{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (zLoc[1] != -1){
         # Get raw text of z-values:
         zRaw <- substring(txt,zLoc,zLoc+attr(zLoc,"match.length")-1)
+        
+        # Replace weird codings of a minus sign with actual minus sign:
+        # First remove spaces
+        zRaw <- gsub("(?<=\\=)\\s+(?=.*\\,)","",zRaw,perl=TRUE)
+        
+        # Replace any weird string with a minus sign
+        zRaw <- gsub("(?<=\\=)\\s?[^\\d\\.]+(?=.*\\,)"," -",zRaw,perl=TRUE)
+        
+        # Add spaces again:
+        zRaw <- gsub("(?<=\\=)(?=(\\.|\\d))"," ",zRaw,perl=TRUE) 
+        
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",zRaw)
         
@@ -264,7 +297,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
                            Value = zVals, 
                            Reported.Comparison= pEq, 
                            Reported.P.Value=pVals, 
-                           Computed = pnorm(zVals,lower.tail=FALSE)*2, 
+                           Computed = pnorm(abs(zVals),lower.tail=FALSE)*2, 
                            Location = zLoc,
                            Raw = zRaw,
                            stringsAsFactors=FALSE,
