@@ -317,6 +317,17 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
       if (wLoc[1] != -1){
         # Get raw text of Wald results:
         wRaw <- substring(txt,wLoc,wLoc+attr(wLoc,"match.length")-1)
+        
+        # Replace weird codings of a minus sign with actual minus sign:
+        # First remove spaces
+        wRaw <- gsub("(?<=\\=)\\s+(?=.*\\,)","",wRaw,perl=TRUE)
+        
+        # Replace any weird string with a minus sign
+        wRaw <- gsub("(?<=\\=)\\s?[^\\d\\.]+(?=.*\\,)"," -",wRaw,perl=TRUE)
+        
+        # Add spaces again:
+        wRaw <- gsub("(?<=\\=)(?=(\\.|\\d))"," ",wRaw,perl=TRUE) 
+        
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",wRaw)
         
