@@ -27,7 +27,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     if ("t"%in%stat){
       # Get location of t-values in text:
       tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\D{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.?\\d+)",txt,ignore.case=TRUE)[[1]]
-            
+      
       if (tLoc[1] != -1){
         # Get raw text of t-values:
         tRaw <- substring(txt,tLoc,tLoc+attr(tLoc,"match.length")-1)
@@ -41,7 +41,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # Add spaces again:
         tRaw <- gsub("(?<=\\=)(?=(\\.|\\d))"," ",tRaw,perl=TRUE)  
-                
+        
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",tRaw)
         
@@ -74,7 +74,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         # determine number of decimals of p value
         dec <- attr(regexpr("\\.\\d+",pValsChar),"match.length")-1
         dec[dec<0] <- NA
-                
+        
         # Create data frame:
         tRes <- data.frame(Source = names(x)[i], 
                            Statistic="t", 
@@ -425,7 +425,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # Extract chi2-values
         suppressWarnings(
-        chi2Vals <- as.numeric(substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
+          chi2Vals <- as.numeric(substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
         
         # Extract p-values
         suppressWarnings(
@@ -523,7 +523,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
   # "correct" rounding differences
   # e.g. t=2.3 could be 2.25 to 2.34 with its range of p values
   correct_round <- numeric()
-    
+  
   lower <- Res$Value-.005
   upper <- Res$Value+.004
   
@@ -548,6 +548,14 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     } else if(Res[i,]$Statistic=="r"){
       upP <- pmin(pt(-1*abs(r2t(lower[i],Res[i,]$df1)),Res[i,]$df1)*2,1)
       lowP  <- pmin(pt(-1*abs(r2t(upper[i],Res[i,]$df1)),Res[i,]$df1)*2,1)
+      
+    } else if(Res[i,]$Statistic=="Z"|Res[i,]$Statistic=="z"){
+      upP <- pnorm(abs(lower),lower.tail=FALSE)*2
+      lowP  <- pnorm(abs(upper),lower.tail=FALSE)*2
+      
+    } else if(Res[i,]$Statistic=="Wald"|Res[i,]$Statistic=="wald"){
+      upP <- min(pnorm(lower,lower.tail=FALSE)*2,pchisq(lower,1,lower.tail=FALSE))
+      lowP  <- max(pnorm(upper,lower.tail=FALSE)*2,pchisq(lower,1,lower.tail=FALSE))
     }
     
     correct_round[i] <- ifelse(!(Res[i,]$InExactError==FALSE & Res[i,]$ExactError==FALSE) & Res$Reported.P.Value[i]>lowP & Res$Reported.P.Value[i]<upP,TRUE,FALSE)
