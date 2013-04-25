@@ -243,7 +243,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     # z-values:
     if ("Z"%in%stat){
       # Get location of z-values in text:
-      zLoc <- gregexpr("(\\z|\\Z)\\s?.?\\s?\\D{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      zLoc <- gregexpr("\\s(\\z|\\Z)\\s?.?\\s?\\D{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (zLoc[1] != -1){
         # Get raw text of z-values:
@@ -312,7 +312,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     # Wald test results
     if ("Wald"%in%stat){
       # Get location of Wald results in text:
-      wLoc <- gregexpr("(\\wald|\\Wald)\\s?\\D?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      wLoc <- gregexpr("\\s(\\wald|\\Wald)\\s?\\D?\\s?\\D{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (wLoc[1] != -1){
         # Get raw text of Wald results:
@@ -550,15 +550,15 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
       lowP  <- pmin(pt(-1*abs(r2t(upper[i],Res[i,]$df1)),Res[i,]$df1)*2,1)
       
     } else if(Res[i,]$Statistic=="Z"|Res[i,]$Statistic=="z"){
-      upP <- pnorm(abs(lower),lower.tail=FALSE)*2
-      lowP  <- pnorm(abs(upper),lower.tail=FALSE)*2
+      upP <- pnorm(abs(lower[i]),lower.tail=FALSE)*2
+      lowP  <- pnorm(abs(upper[i]),lower.tail=FALSE)*2
       
     } else if(Res[i,]$Statistic=="Wald"|Res[i,]$Statistic=="wald"){
-      upP <- min(pnorm(lower,lower.tail=FALSE)*2,pchisq(lower,1,lower.tail=FALSE))
-      lowP  <- max(pnorm(upper,lower.tail=FALSE)*2,pchisq(lower,1,lower.tail=FALSE))
+      upP <- min(pnorm(lower[i],lower.tail=FALSE)*2,pchisq(lower,1,lower.tail=FALSE))
+      lowP  <- max(pnorm(upper[i],lower.tail=FALSE)*2,pchisq(lower,1,lower.tail=FALSE))
     }
     
-    correct_round[i] <- ifelse(!(Res[i,]$InExactError==FALSE & Res[i,]$ExactError==FALSE) & Res$Reported.P.Value[i]>lowP & Res$Reported.P.Value[i]<upP,TRUE,FALSE)
+    correct_round[i] <- ifelse(!(Res[i,]$InExactError==FALSE & Res[i,]$ExactError==FALSE) & Res$Reported.P.Value[i]>=lowP & Res$Reported.P.Value[i]<=upP,TRUE,FALSE)
   }
   
   CorrectRound <- as.logical(correct_round)
