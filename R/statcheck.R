@@ -73,7 +73,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # determine number of decimals of p value
         dec <- attr(regexpr("\\.\\d+",pValsChar),"match.length")-1
-        dec[dec<0] <- NA
+        dec[dec<0] <- 0
         
         # Create data frame:
         tRes <- data.frame(Source = names(x)[i], 
@@ -218,7 +218,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # determine number of decimals of p value
         dec <- attr(regexpr("\\.\\d+",pValsChar),"match.length")-1
-        dec[dec<0] <- NA
+        dec[dec<0] <- 0
         
         # Create data frame:
         rRes <- data.frame(Source = names(x)[i], 
@@ -287,7 +287,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # determine number of decimals of p value
         dec <- attr(regexpr("\\.\\d+",pValsChar),"match.length")-1
-        dec[dec<0] <- NA
+        dec[dec<0] <- 0
         
         # Create data frame:
         zRes <- data.frame(Source = names(x)[i], 
@@ -381,7 +381,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # determine number of decimals of p value
         dec <- attr(regexpr("\\.\\d+",pValsChar),"match.length")-1
-        dec[dec<0] <- NA
+        dec[dec<0] <- 0
         
         # Create data frame:
         wRes <- data.frame(Source = names(x)[i], 
@@ -443,7 +443,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # determine number of decimals of p value
         dec <- attr(regexpr("\\.\\d+",pValsChar),"match.length")-1
-        dec[dec<0] <- NA
+        dec[dec<0] <- 0
         
         # Create data frame:
         chi2Res <- data.frame(Source = names(x)[i], 
