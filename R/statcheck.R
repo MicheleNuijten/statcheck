@@ -26,11 +26,14 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     # t-values:
     if ("t"%in%stat){
       # Get location of t-values in text:
-      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\D{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.?\\d+)",txt,ignore.case=TRUE)[[1]]
+      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\D{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.?\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (tLoc[1] != -1){
         # Get raw text of t-values:
         tRaw <- substring(txt,tLoc,tLoc+attr(tLoc,"match.length")-1)
+        
+        # remove commas (thousands separators)
+        tRaw <- gsub("(?<=\\d),(?=\\d+)","",tRaw,perl=TRUE)
         
         # Replace weird codings of a minus sign with actual minus sign:
         # First remove spaces
@@ -114,11 +117,14 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     # F-values:
     if ("F"%in%stat){
       # Get location of F-values in text:
-      FLoc <- gregexpr("F\\s?\\(\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      FLoc <- gregexpr("F\\s?\\(\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (FLoc[1] != -1){
         # Get raw text of F-values:
         FRaw <- substring(txt,FLoc,FLoc+attr(FLoc,"match.length")-1)
+        
+        # remove commas (thousands separators)
+        FRaw <- gsub("(?<=\\d),(?=\\d+\\.)","",FRaw,perl=TRUE)
         
         # Extract location of numbers:
         nums <- gregexpr("(\\d*\\.?\\d+)|ns",FRaw)
@@ -291,11 +297,14 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     # z-values:
     if ("Z"%in%stat){
       # Get location of z-values in text:
-      zLoc <- gregexpr("\\s(\\z|\\Z)\\s?.?\\s?\\D{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      zLoc <- gregexpr("\\s(\\z|\\Z)\\s?.?\\s?\\D{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (zLoc[1] != -1){
         # Get raw text of z-values:
         zRaw <- substring(txt,zLoc,zLoc+attr(zLoc,"match.length")-1)
+        
+        # remove commas (thousands separators)
+        zRaw <- gsub("(?<=\\d),(?=\\d+\\.)","",zRaw,perl=TRUE)
         
         # Replace weird codings of a minus sign with actual minus sign:
         # First remove spaces
@@ -376,12 +385,15 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     # Wald test results
     if ("Wald"%in%stat){
       # Get location of Wald results in text:
-      wLoc <- gregexpr("\\s(\\wald|\\Wald)\\s?\\D?\\s?\\D{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      wLoc <- gregexpr("\\s(\\wald|\\Wald)\\s?\\D?\\s?\\D{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (wLoc[1] != -1){
         # Get raw text of Wald results:
         wRaw <- substring(txt,wLoc,wLoc+attr(wLoc,"match.length")-1)
         
+        # remove commas (thousands separators)
+        wRaw <- gsub("(?<=\\d),(?=\\d+\\.)","",wRaw,perl=TRUE)
+                
         # Replace weird codings of a minus sign with actual minus sign:
         # First remove spaces
         wRaw <- gsub("(?<=\\=)\\s+(?=.*\\,)","",wRaw,perl=TRUE)
@@ -486,12 +498,16 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     # Chis2-values:
     if ("chisq"%in%stat){
       # Get location of not-t-values in text: (?)
-      chi2Loc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)2?\\s?|[^(t|r|\\s)]\\s+)\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\-?\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,perl=TRUE,ignore.case=TRUE)[[1]]
+      chi2Loc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)2?\\s?|[^(t|r|\\s)]\\s+)\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\s?\\d*\\,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,perl=TRUE,ignore.case=TRUE)[[1]]
       
       if (chi2Loc[1] != -1){
         # Get raw text of chi2-values:
         chi2Raw <- substring(txt,chi2Loc,chi2Loc+attr(chi2Loc,"match.length")-1)
         substr(chi2Raw,1,1)[grepl("\\d",substr(chi2Raw,1,1))] <- " "
+        
+        # remove commas (thousands separators)
+        chi2Raw <- gsub("(?<=\\d),(?=\\d+\\.)","",chi2Raw,perl=TRUE)
+                
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",sub("^.*?\\(","",chi2Raw))
         
@@ -695,6 +711,6 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
   Res$DecisionError[CorrectRound] <- FALSE
   
   class(Res) <- c("statcheck","data.frame")
-  return(Res[,!(names(Res)%in%c("Location","dec"))])
+  return(Res[,!(names(Res)%in%c("Location","dec","testdec"))])
 }
 
