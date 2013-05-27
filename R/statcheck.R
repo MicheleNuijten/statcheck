@@ -10,7 +10,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
   }
   
   # Create empty data frame:
-  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, oneTail = NULL, InExactError = NULL, ExactError=NULL, DecisionError=NULL, Location = NULL,stringsAsFactors=FALSE,dec=NULL)
+  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Test.Comparison=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, oneTail = NULL, InExactError = NULL, ExactError=NULL, DecisionError=NULL, Location = NULL,stringsAsFactors=FALSE,dec=NULL)
   class(Res) <- c("statcheck","data.frame")
   
   if (length(x)==0) return(Res)
@@ -57,6 +57,13 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         suppressWarnings(
           tVals <- as.numeric(substring(tRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
         
+        # Extract (in)equality test statistic
+        testEqLoc <- gregexpr("\\)\\s?.?",tRaw)
+        testEq <- substring(tRaw,
+                            sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
+                            sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+        
+        
         # Extract p-values
         suppressWarnings(
           pValsChar <- substring(tRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
@@ -79,7 +86,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         tRes <- data.frame(Source = names(x)[i], 
                            Statistic="t", 
                            df1= df, 
-                           df2=NA, 
+                           df2=NA,
+                           Test.Comparison=testEq,
                            Value = tVals, 
                            Reported.Comparison= pEq, 
                            Reported.P.Value=pVals, 
@@ -123,6 +131,13 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         suppressWarnings(
           FVals <- as.numeric(substring(FRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1))))
         
+        # Extract (in)equality test statistic
+        testEqLoc <- gregexpr("\\)\\s?.?",FRaw)
+        testEq <- substring(FRaw,
+                            sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
+                            sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+        
+        
         # Extract p-values
         suppressWarnings(
           pValsChar <- substring(FRaw,sapply(nums,'[',4),sapply(nums,function(x)x[4]+attr(x,"match.length")[4]-1)))
@@ -142,19 +157,19 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         dec[dec<0] <- NA
         
         # Create data frame:
-        FRes <- data.frame(
-          Source = names(x)[i], 
-          Statistic="F", 
-          df1= df1, 
-          df2= df2, 
-          Value = FVals,  
-          Reported.Comparison= pEq, 
-          Reported.P.Value=pVals, 
-          Computed = pf(FVals,df1,df2,lower.tail=FALSE), 
-          Location = FLoc,
-          Raw = FRaw,
-          stringsAsFactors=FALSE,
-          dec=dec)
+        FRes <- data.frame(Source = names(x)[i], 
+                           Statistic="F", 
+                           df1= df1, 
+                           df2= df2,
+                           Test.Comparison=testEq,
+                           Value = FVals,  
+                           Reported.Comparison= pEq, 
+                           Reported.P.Value=pVals, 
+                           Computed = pf(FVals,df1,df2,lower.tail=FALSE), 
+                           Location = FLoc,
+                           Raw = FRaw,
+                           stringsAsFactors=FALSE,
+                           dec=dec)
         
         # Append, clean and close:
         Res <- rbind(Res,FRes)
@@ -197,6 +212,13 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         suppressWarnings(
           rVals <- as.numeric(substring(rRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
         
+        # Extract (in)equality test statistic
+        testEqLoc <- gregexpr("\\)\\s?.?",rRaw)
+        testEq <- substring(rRaw,
+                            sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
+                            sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+        
+        
         # Extract p-values
         suppressWarnings(
           pValsChar <- substring(rRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
@@ -224,7 +246,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         rRes <- data.frame(Source = names(x)[i], 
                            Statistic="r", 
                            df1= df, 
-                           df2=NA, 
+                           df2=NA,
+                           Test.Comparison=testEq,
                            Value = rVals, 
                            Reported.Comparison= pEq, 
                            Reported.P.Value=pVals, 
@@ -271,6 +294,13 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         suppressWarnings(
           zVals <- as.numeric(substring(zRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1))))
         
+        # Extract (in)equality test statistic
+        testEqLoc <- gregexpr("\\)\\s?.?",zRaw)
+        testEq <- substring(zRaw,
+                            sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
+                            sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+        
+        
         # Extract p-values
         suppressWarnings(
           pValsChar <- substring(zRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
@@ -293,7 +323,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         zRes <- data.frame(Source = names(x)[i], 
                            Statistic="Z", 
                            df1= NA, 
-                           df2=NA, 
+                           df2=NA,
+                           Test.Comparison=testEq,
                            Value = zVals, 
                            Reported.Comparison= pEq, 
                            Reported.P.Value=pVals, 
@@ -339,6 +370,13 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         # Extract test statistic (Z or chisq2)
         suppressWarnings(
           wVals <- as.numeric(substring(wRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1))))
+        
+        # Extract (in)equality test statistic
+        testEqLoc <- gregexpr("\\)\\s?.?",wRaw)
+        testEq <- substring(wRaw,
+                            sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
+                            sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+        
         
         # Extract p-values
         suppressWarnings(
@@ -387,7 +425,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         wRes <- data.frame(Source = names(x)[i], 
                            Statistic="Wald", 
                            df1= df, 
-                           df2=NA, 
+                           df2=NA,
+                           Test.Comparison=testEq,
                            Value = wVals, 
                            Reported.Comparison= pEq, 
                            Reported.P.Value=pVals, 
@@ -427,6 +466,13 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         suppressWarnings(
           chi2Vals <- as.numeric(substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
         
+        # Extract (in)equality test statistic
+        testEqLoc <- gregexpr("\\)\\s?.?",chi2Raw)
+        testEq <- substring(chi2Raw,
+                            sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
+                            sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+        
+        
         # Extract p-values
         suppressWarnings(
           pValsChar <- substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
@@ -449,7 +495,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         chi2Res <- data.frame(Source = names(x)[i], 
                               Statistic="Chi2", 
                               df1= df, 
-                              df2=NA, 
+                              df2=NA,
+                              Test.Comparison=testEq,
                               Value = chi2Vals, 
                               Reported.Comparison= pEq, 
                               Reported.P.Value=pVals, 
@@ -475,13 +522,33 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
   Res[['Reported.Comparison']] <- gsub(",","<",Res[['Reported.Comparison']])
   
   InExTest <- function(x){
+    
     computed <- x$Computed
     comparison <- x$Reported.Comparison
     reported <- x$Reported.P.Value
+    testcomp <- x$Test.Comparison
+    
     Match <- paste(computed,comparison,reported)
     InExTests <- grepl("<|>",Match)
+    
     if (any(InExTests)){
       InExTests[grepl("<|>",Match)] <- sapply(Match[grepl("<|>",Match)],function(m)!eval(parse(text=m)))
+      
+      smallsmall <- x$Test.Comparison=="<" & grepl("<",Match)
+      smallgreat <- x$Test.Comparison=="<" & grepl(">",Match)
+      greatsmall <- x$Test.Comparison==">" & grepl("<",Match)
+      greatgreat <- x$Test.Comparison==">" & grepl(">",Match)
+      
+      if(any(smallsmall)){
+        InExTests[smallsmall] <- !(round(computed[smallsmall],x$dec[smallsmall])<=round(reported[smallsmall],x$dec[smallsmall]))
+      }
+      
+      InExTests[smallgreat] <- FALSE
+      InExTests[greatsmall] <- FALSE
+      
+      if(any(greatgreat)){
+        InExTests[greatgreat] <- !(round(computed[greatgreat],x$dec[greatgreat])>=round(reported[greatgreat],x$dec[greatgreat]))
+      }
     }
     
     return(InExTests)
@@ -489,12 +556,23 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
   
   ExTest <- function(x){
     computed <- x$Computed
-    comparison <- x$Reported.Comparison
     reported <- x$Reported.P.Value
-    Match <- paste(computed,comparison,reported)
-    ExTests <- grepl("=",Match)
+    comparison <- x$Reported.Comparison
+    ExTests <- comparison=="="
     if (any(ExTests)){
-      ExTests[grepl("=",Match)] <- !(round(computed[ExTests],x$dec[ExTests])==round(reported[ExTests],x$dec[ExTests]))
+      ExTests[comparison=="="] <- !(round(computed[ExTests],x$dec[ExTests])==round(reported[ExTests],x$dec[ExTests]))
+      
+      smallequal <- x$Test.Comparison=="<" & comparison=="="
+      greatequal <- x$Test.Comparison==">" & comparison=="="
+      
+      if(any(smallequal)){
+        ExTests[smallequal] <- !(round(computed[smallequal],x$dec[smallequal])<round(reported[smallequal],x$dec[smallequal]))
+      }
+      
+      if(any(greatequal)){
+        ExTests[greatequal] <- !(round(computed[greatequal],x$dec[greatequal])>round(reported[greatequal],x$dec[greatequal]))
+      }
+      
     }
     return(ExTests)
   }
@@ -508,7 +586,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     if (any(AllTests)){
       AllTests[grepl("<",Match)] <- reported[grepl("<",Match)]<=.05 & computed[grepl("<",Match)] >=.05
       AllTests[grepl(">",Match)] <- reported[grepl(">",Match)] >=.05 & computed[grepl(">",Match)]<.05
-      AllTests[grepl("=",Match)] <- (reported[grepl("=",Match)]<.05 & computed[grepl("=",Match)]>=.5)|
+      AllTests[grepl("=",Match)] <- (reported[grepl("=",Match)]<.05 & computed[grepl("=",Match)]>=.05)|
         (reported[grepl("=",Match)]>=.05 & computed[grepl("=",Match)]<.05)
     }
     AllTests <- as.logical(AllTests)
