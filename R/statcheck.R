@@ -10,7 +10,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
   }
   
   # Create empty data frame:
-  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Test.Comparison=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, oneTail = NULL, InExactError = NULL, ExactError=NULL, DecisionError=NULL, Location = NULL,stringsAsFactors=FALSE,dec=NULL)
+  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Test.Comparison=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, oneTail = NULL, InExactError = NULL, ExactError=NULL, DecisionError=NULL, Location = NULL,stringsAsFactors=FALSE,dec=NULL,testdec=NULL)
   class(Res) <- c("statcheck","data.frame")
   
   if (length(x)==0) return(Res)
@@ -55,7 +55,14 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # Extract t-values
         suppressWarnings(
-          tVals <- as.numeric(substring(tRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
+          tValsChar <- substring(tRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
+        
+        suppressWarnings(
+          tVals <- as.numeric(tValsChar))
+        
+        # Extract number of decimals test statistic
+        testdec <- attr(regexpr("\\.\\d+",tValsChar),"match.length")-1
+        testdec[testdec<0] <- 0
         
         # Extract (in)equality test statistic
         testEqLoc <- gregexpr("\\)\\s?.?",tRaw)
@@ -95,7 +102,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
                            Location = tLoc,
                            Raw = tRaw,
                            stringsAsFactors=FALSE,
-                           dec = dec)
+                           dec = dec,
+                           testdec=testdec)
         
         # Append, clean and close:
         Res <- rbind(Res,tRes)
@@ -129,7 +137,14 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # Extract F-values
         suppressWarnings(
-          FVals <- as.numeric(substring(FRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1))))
+          FValsChar <- substring(FRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
+        
+        suppressWarnings(
+          FVals <- as.numeric(FValsChar))
+        
+        # Extract number of decimals test statistic
+        testdec <- attr(regexpr("\\.\\d+",FValsChar),"match.length")-1
+        testdec[testdec<0] <- 0
         
         # Extract (in)equality test statistic
         testEqLoc <- gregexpr("\\)\\s?.?",FRaw)
@@ -169,7 +184,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
                            Location = FLoc,
                            Raw = FRaw,
                            stringsAsFactors=FALSE,
-                           dec=dec)
+                           dec=dec,
+                           testdec=testdec)
         
         # Append, clean and close:
         Res <- rbind(Res,FRes)
@@ -210,7 +226,15 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # Extract r-values
         suppressWarnings(
-          rVals <- as.numeric(substring(rRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
+          rValsChar <- substring(rRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
+        
+        suppressWarnings(
+          rVals <- as.numeric(rValsChar))
+        
+        # Extract number of decimals test statistic
+        testdec <- attr(regexpr("\\.\\d+",rValsChar),"match.length")-1
+        testdec[testdec<0] <- 0
+        
         
         # Extract (in)equality test statistic
         testEqLoc <- gregexpr("\\)\\s?.?",rRaw)
@@ -255,7 +279,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
                            Location = rLoc,
                            Raw = rRaw,
                            stringsAsFactors=FALSE,
-                           dec=dec)
+                           dec=dec,
+                           testdec=testdec)
         
         # Append, clean and close:
         Res <- rbind(Res,rRes)
@@ -292,7 +317,14 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         }
         # Extract z-values
         suppressWarnings(
-          zVals <- as.numeric(substring(zRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1))))
+          zValsChar <- substring(zRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
+        
+        suppressWarnings(
+          zVals <- as.numeric(zValsChar))
+        
+        # Extract number of decimals test statistic
+        testdec <- attr(regexpr("\\.\\d+",zValsChar),"match.length")-1
+        testdec[testdec<0] <- 0
         
         # Extract (in)equality test statistic
         testEqLoc <- gregexpr("\\)\\s?.?",zRaw)
@@ -332,7 +364,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
                            Location = zLoc,
                            Raw = zRaw,
                            stringsAsFactors=FALSE,
-                           dec=dec)
+                           dec=dec,
+                           testdec=testdec)
         
         # Append, clean and close:
         Res <- rbind(Res,zRes)
@@ -369,7 +402,14 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         }
         # Extract test statistic (Z or chisq2)
         suppressWarnings(
-          wVals <- as.numeric(substring(wRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1))))
+          wValsChar <- substring(wRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
+                
+        suppressWarnings(
+          wVals <- as.numeric(wValsChar))
+        
+        # Extract number of decimals test statistic
+        testdec <- attr(regexpr("\\.\\d+",wValsChar),"match.length")-1
+        testdec[testdec<0] <- 0
         
         # Extract (in)equality test statistic
         testEqLoc <- gregexpr("\\)\\s?.?",wRaw)
@@ -434,7 +474,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
                            Location = wLoc,
                            Raw = wRaw,
                            stringsAsFactors=FALSE,
-                           dec=dec)
+                           dec=dec,
+                           testdec=testdec)
         
         # Append, clean and close:
         Res <- rbind(Res,wRes)
@@ -464,7 +505,14 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # Extract chi2-values
         suppressWarnings(
-          chi2Vals <- as.numeric(substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1))))
+          chi2ValsChar <- substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
+        
+        suppressWarnings(
+          chi2Vals <- as.numeric(chi2ValsChar))
+        
+        # Extract number of decimals test statistic
+        testdec <- attr(regexpr("\\.\\d+",chi2ValsChar),"match.length")-1
+        testdec[testdec<0] <- 0
         
         # Extract (in)equality test statistic
         testEqLoc <- gregexpr("\\)\\s?.?",chi2Raw)
@@ -504,7 +552,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
                               Location = chi2Loc,
                               Raw = chi2Raw,
                               stringsAsFactors=FALSE,
-                              dec=dec)
+                              dec=dec,
+                              testdec=testdec)
         
         # Append, clean and close:
         Res <- rbind(Res,chi2Res)
@@ -602,8 +651,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
   # e.g. t=2.3 could be 2.25 to 2.34 with its range of p values
   correct_round <- numeric()
   
-  lower <- Res$Value-.005
-  upper <- Res$Value+.004
+  lower <- Res$Value-(.5/10^Res$testdec)
+  upper <- Res$Value+(.4/10^Res$testdec)
   
   r2t <- function(r,df){
     r / (sqrt((1-r^2)/df))
