@@ -593,6 +593,10 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     reported <- x$Reported.P.Value
     testcomp <- x$Test.Comparison
     
+    # replace 'ns' for > .05
+    reported[comparison=="ns"] <- .05
+    comparison[comparison=="ns"] <- ">"
+    
     Match <- paste(computed,comparison,reported)
     InExTests <- grepl("<|>",Match)
     
@@ -646,6 +650,11 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
     computed <- x$Computed
     comparison <- x$Reported.Comparison
     reported <- x$Reported.P.Value
+    
+    # replace 'ns' for > .05
+    reported[comparison=="ns"] <- .05
+    comparison[comparison=="ns"] <- ">"
+    
     Match <- paste(computed,comparison,reported)
     AllTests <- grepl("=|<|>",Match)
     if (any(AllTests)){
