@@ -1,6 +1,6 @@
 
 ## Main function, checks statistics of vector of strings (articles).
-statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
+statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneSidedAsError=TRUE){
   '%rem%'<- function(x,y){
     at <- attr(x,"match.length")
     x <- x[-y]
@@ -393,7 +393,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # remove commas (thousands separators)
         wRaw <- gsub("(?<=\\d),(?=\\d+\\.)","",wRaw,perl=TRUE)
-                
+        
         # Replace weird codings of a minus sign with actual minus sign:
         # First remove spaces
         wRaw <- gsub("(?<=\\=)\\s+(?=.*\\,)","",wRaw,perl=TRUE)
@@ -415,7 +415,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         # Extract test statistic (Z or chisq2)
         suppressWarnings(
           wValsChar <- substring(wRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
-                
+        
         suppressWarnings(
           wVals <- as.numeric(wValsChar))
         
@@ -507,7 +507,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         
         # remove commas (thousands separators)
         chi2Raw <- gsub("(?<=\\d),(?=\\d+\\.)","",chi2Raw,perl=TRUE)
-                
+        
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",sub("^.*?\\(","",chi2Raw))
         
@@ -718,6 +718,28 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
   Res$InExactError[CorrectRound] <- FALSE
   Res$ExactError[CorrectRound] <- FALSE
   Res$DecisionError[CorrectRound] <- FALSE
+  
+  # one-sided test
+  # this is not necessarily an error, it is entirely possible that the 
+  # researchers just made use of a one-sided test and reported it
+  # statcheck cannot detect this
+  
+  if(OneSidedAsError==FALSE){
+    computed <- Res$Computed
+    comparison <- Res$Reported.Comparison
+    reported <- Res$Reported.P.Value
+    raw <- Res$Raw
+    onetail <- computed/2
+    
+    OneTail <- ifelse(!(Res$InExactError==FALSE & Res$ExactError==FALSE) &
+                        (grepl("=",comparison)[!is.na(onetail)] & round(reported,2)==round(onetail,2))
+                      | (grepl("<",comparison) & reported==.05 & onetail < reported & computed > reported)[!is.na(onetail)],
+                      TRUE,FALSE)
+    
+    Res$InExactError[OneTail] <- FALSE
+    Res$ExactError[OneTail] <- FALSE
+    Res$DecisionError[OneTail] <- FALSE
+  }
   
   class(Res) <- c("statcheck","data.frame")
   return(Res[,!(names(Res)%in%c("Location","dec","testdec"))])

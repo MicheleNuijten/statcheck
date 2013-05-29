@@ -21,7 +21,7 @@ diagnose <- function(x){
 
   # rounding errors
   # e.g. p=.049 is rounded to p=.04 instead of .05
-  RoundError <- ifelse(!(x$InExactError==FALSE & x$ExactError==FALSE) & CorrectRound==FALSE & (reported==trunc(computed*100)/100|reported-.01==trunc(computed*100)/100),TRUE,FALSE)
+  RoundError <- ifelse(!(x$InExactError==FALSE & x$ExactError==FALSE) & (reported==trunc(computed*100)/100|reported-.01==trunc(computed*100)/100),TRUE,FALSE)
   
   # reported p < .000
   PSmallerThanZero <- ifelse(!(x$InExactError==FALSE & x$ExactError==FALSE) & grepl("<",comparison) & reported==0,TRUE,FALSE)
@@ -41,7 +41,7 @@ diagnose <- function(x){
   Bonferroni <- ifelse(!(x$InExactError==FALSE & x$ExactError==FALSE) & grepl("=",comparison) & (round(CorrectedP,3)==round(reported,3)|round(CorrectedP,2)==round(reported,2)),TRUE,FALSE)
   
   # unidentifiable error
-  Unidentifiable <- ifelse(!(x$InExactError==FALSE & x$ExactError==FALSE) & !(OneTail|CorrectRound|RoundError|PSmallerThanZero|SmallerInsteadEqual|Bonferroni),TRUE,FALSE)
+  Unidentifiable <- ifelse(!(x$InExactError==FALSE & x$ExactError==FALSE) & !(OneTail|RoundError|PSmallerThanZero|SmallerInsteadEqual|Bonferroni),TRUE,FALSE)
   
   # copy paste errors
   # same string of results elsewhere in article?
