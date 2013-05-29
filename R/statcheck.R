@@ -336,7 +336,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         testdec[testdec<0] <- 0
         
         # Extract (in)equality test statistic
-        testEqLoc <- gregexpr("\\)\\s?.?",zRaw)
+        testEqLoc <- gregexpr("(z|Z|z'|Z')\\s?.?",zRaw)
         testEq <- substring(zRaw,
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
@@ -424,7 +424,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald")){
         testdec[testdec<0] <- 0
         
         # Extract (in)equality test statistic
-        testEqLoc <- gregexpr("\\)\\s?.?",wRaw)
+        testEqLoc <- gregexpr("(Wald|wald)\\s?.?",wRaw)
         testEq <- substring(wRaw,
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
