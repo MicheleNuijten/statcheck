@@ -42,10 +42,11 @@ A data frame containing for each extracted statistic:
 \item{ExactError}{Error in exactly reported p values as compared to the recalculated p values}
 \item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
 }
-\section{Note}{
+\section{Installing pdftotext}{
 For PDF files the "pdftotext" program is used to convert PDF files to plain text files. You can obtain pdftotext from \code{http://www.foolabs.com/xpdf/download.html}. Download and unzip the precompiled binaries. Next, add the folder with the binaries to the PATH variables so that this program can be used from command line.
-
-Further note that a seemingly inconsistent p value can still be correct when we take the possibility into account that the test statistic was rounded after calculating the corresponding p value. For instance, a reported t value of 2.35 could correspond to an actual value of 2.345 to 2.354 with a range of p values that can slightly deviate from the recomputed p value but still be correct.
+}
+\section{Note}{
+Note that a seemingly inconsistent p value can still be correct when we take the possibility into account that the test statistic was rounded after calculating the corresponding p value. For instance, a reported t value of 2.35 could correspond to an actual value of 2.345 to 2.354 with a range of p values that can slightly deviate from the recomputed p value but still be correct.
 }
 \author{
 Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten <m.b.nuijten@uvt.nl>
