@@ -10,7 +10,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneSidedAsError
   }
   
   # Create empty data frame:
-  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Test.Comparison=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, oneTail = NULL, InExactError = NULL, ExactError=NULL, DecisionError=NULL, Location = NULL,stringsAsFactors=FALSE,dec=NULL,testdec=NULL)
+  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Test.Comparison=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, InExactError = NULL, ExactError=NULL, DecisionError=NULL, OneTail = NULL, CopyPaste=NULL, Location = NULL,stringsAsFactors=FALSE,dec=NULL,testdec=NULL)
   class(Res) <- c("statcheck","data.frame")
   
   if (length(x)==0) return(Res)
@@ -672,6 +672,43 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneSidedAsError
   Res$ExactError <- ExTest(Res)
   Res$DecisionError <- GrossTest(Res)  
   
+  
+  # one-sided test
+  # this is not necessarily an error, it is entirely possible that the 
+  # researchers just made use of a one-sided test and reported it
+  # statcheck cannot detect this
+    
+  computed <- Res$Computed
+  comparison <- Res$Reported.Comparison
+  reported <- Res$Reported.P.Value
+  raw <- Res$Raw
+  onetail <- computed/2
+  
+  OneTail <- ifelse(!(Res$InExactError==FALSE & Res$ExactError==FALSE) &
+                      (grepl("=",comparison)[!is.na(onetail)] & round(reported,2)==round(onetail,2))
+                    | (grepl("<",comparison) & reported==.05 & onetail < reported & computed > reported)[!is.na(onetail)],
+                    TRUE,FALSE)
+  
+  Res$OneTail <- OneTail
+  
+  # should onetailed results be counted as error T/F?
+  if(OneSidedAsError==FALSE){
+    Res$InExactError[OneTail] <- FALSE
+    Res$ExactError[OneTail] <- FALSE
+    Res$DecisionError[OneTail] <- FALSE
+  }
+  
+  # copy paste errors
+  # same string of results elsewhere in article?
+  CopyPaste <- numeric()
+  for (i in 1:length(Res$Raw)){
+    Res_new <- Res[-i,]
+    CopyPaste[i] <- Res$Raw[i]%in%Res_new$Raw[Res_new$Source==Res_new$Source[i]]
+  }
+  CopyPaste <- as.logical(CopyPaste)
+  
+  Res$CopyPaste <- CopyPaste
+  
   # "correct" rounding differences
   # e.g. t=2.3 could be 2.25 to 2.34 with its range of p values
   correct_round <- numeric()
@@ -719,28 +756,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneSidedAsError
   Res$ExactError[CorrectRound] <- FALSE
   Res$DecisionError[CorrectRound] <- FALSE
   
-  # one-sided test
-  # this is not necessarily an error, it is entirely possible that the 
-  # researchers just made use of a one-sided test and reported it
-  # statcheck cannot detect this
-  
-  if(OneSidedAsError==FALSE){
-    computed <- Res$Computed
-    comparison <- Res$Reported.Comparison
-    reported <- Res$Reported.P.Value
-    raw <- Res$Raw
-    onetail <- computed/2
-    
-    OneTail <- ifelse(!(Res$InExactError==FALSE & Res$ExactError==FALSE) &
-                        (grepl("=",comparison)[!is.na(onetail)] & round(reported,2)==round(onetail,2))
-                      | (grepl("<",comparison) & reported==.05 & onetail < reported & computed > reported)[!is.na(onetail)],
-                      TRUE,FALSE)
-    
-    Res$InExactError[OneTail] <- FALSE
-    Res$ExactError[OneTail] <- FALSE
-    Res$DecisionError[OneTail] <- FALSE
-  }
-  
+
   class(Res) <- c("statcheck","data.frame")
   return(Res[,!(names(Res)%in%c("Location","dec","testdec"))])
 }
