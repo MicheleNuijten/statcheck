@@ -41,6 +41,8 @@ A data frame containing for each extracted statistic:
 \item{InExactError}{Error in inexactly reported p values as compared to the recalculated p values}
 \item{ExactError}{Error in exactly reported p values as compared to the recalculated p values}
 \item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
+\item{OneTail}{Logical. Is it likely that the reported p value resulted from a correction for one-sided testing?}
+\item{CopyPaste}{Logical. Does the exact string of the extracted raw results occur anywhere else in the article?}
 }
 \section{Installing pdftotext}{
 For PDF files the "pdftotext" program is used to convert PDF files to plain text files. You can obtain pdftotext from \code{http://www.foolabs.com/xpdf/download.html}. Download and unzip the precompiled binaries. Next, add the folder with the binaries to the PATH variables so that this program can be used from command line.
