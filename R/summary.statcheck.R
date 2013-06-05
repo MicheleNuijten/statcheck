@@ -8,11 +8,8 @@ summary.statcheck <- function(object,...){
   # Number of p values extracted per article and in total
   pValues <- c(ddply(x,"Source",function(x) nrow(x))[,2],nrow(x))
   
-  # Number of exact errors per article and in total
-  ExactErrors <- c(ddply(x,"Source",function(x) sum(x$ExactError))[,2],sum(x$ExactError))
-  
-  # Number of exact errors per article and in total
-  InExactErrors <- c(ddply(x,"Source",function(x) sum(x$InExactError))[,2],sum(x$InExactError))
+  # Number of errors per article and in total
+  Errors <- c(ddply(x,"Source",function(x) sum(x$Error))[,2],sum(x$Error))
   
   # Number of decision errors per article and in total
   DecisionErrors <- c(ddply(x,"Source",function(x) sum(x$DecisionError))[,2],sum(x$DecisionError))
@@ -20,8 +17,7 @@ summary.statcheck <- function(object,...){
   # Results in dataframe
   res <- data.frame(Source=c(unique(x$Source),"Total"),
                     pValues=pValues,
-                    ExactErrors=ExactErrors,
-                    InExactErrors=InExactErrors,
+                    Errors=Errors,
                     DecisionErrors=DecisionErrors)
   
   class(res) <- c("statcheck","data.frame")

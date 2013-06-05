@@ -15,12 +15,8 @@ plot.statcheck <- function(x,...) {
                pch=20),args))
   
   # orange dot for error 
-  points(reported[x$ExactError],
-         computed[x$ExactError],
-         pch=20,col="orange")
-  
-  points(reported[x$InExactError],
-         computed[x$InExactError],
+  points(reported[x$Error],
+         computed[x$Error],
          pch=20,col="orange")
   
   # red dot for gross error (non-sig reported as sig and vice versa)

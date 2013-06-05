@@ -13,7 +13,7 @@ diagnose <- function(x){
   # statcheck cannot detect this
   onetail <- computed/2
   
-  OneTail <- ifelse(!(x$InExactError==FALSE & x$ExactError==FALSE) &
+  OneTail <- ifelse(x$Error==TRUE &
     (grepl("=",comparison)[!is.na(onetail)] & round(reported,2)==round(onetail,2))
     | (grepl("<",comparison) & reported==.05 & onetail < reported & computed > reported)[!is.na(onetail)],
     TRUE,FALSE)
@@ -21,14 +21,14 @@ diagnose <- function(x){
 
   # rounding errors
   # e.g. p=.049 is rounded to p=.04 instead of .05
-  RoundError <- ifelse(!(x$InExactError==FALSE & x$ExactError==FALSE) & (reported==trunc(computed*100)/100|reported-.01==trunc(computed*100)/100),TRUE,FALSE)
+  RoundError <- ifelse(x$Error==TRUE & (reported==trunc(computed*100)/100|reported-.01==trunc(computed*100)/100),TRUE,FALSE)
   
   # reported p < .000
-  PSmallerThanZero <- ifelse(!(x$InExactError==FALSE & x$ExactError==FALSE) & grepl("<",comparison) & reported==0,TRUE,FALSE)
+  PSmallerThanZero <- ifelse(x$Error==TRUE & grepl("<",comparison) & reported==0,TRUE,FALSE)
   
   # reported < when = would be correct
   # e.g. p < .123 when p = .123
-  SmallerInsteadEqual <- ifelse(!(x$InExactError==FALSE & x$ExactError==FALSE) & grepl("<|>",comparison) & (round(reported,3)==round(computed,3)|round(reported,2)==round(computed,2)),TRUE,FALSE)
+  SmallerInsteadEqual <- ifelse(x$Error==TRUE & grepl("<|>",comparison) & (round(reported,3)==round(computed,3)|round(reported,2)==round(computed,2)),TRUE,FALSE)
   
   # Bonferroni correction
   # e.g. when there are six tests reported and the p values are multiplied by 6
@@ -38,10 +38,10 @@ diagnose <- function(x){
     CorrectedP[i] <- computed[i]*as.numeric(table(x$Source)[x$Source[i]])
   }
   
-  Bonferroni <- ifelse(!(x$InExactError==FALSE & x$ExactError==FALSE) & grepl("=",comparison) & (round(CorrectedP,3)==round(reported,3)|round(CorrectedP,2)==round(reported,2)),TRUE,FALSE)
+  Bonferroni <- ifelse(x$Error==TRUE & grepl("=",comparison) & (round(CorrectedP,3)==round(reported,3)|round(CorrectedP,2)==round(reported,2)),TRUE,FALSE)
   
   # unidentifiable error
-  Unidentifiable <- ifelse(!(x$InExactError==FALSE & x$ExactError==FALSE) & !(OneTail|RoundError|PSmallerThanZero|SmallerInsteadEqual|Bonferroni),TRUE,FALSE)
+  Unidentifiable <- ifelse(x$Error==TRUE & !(OneTail|RoundError|PSmallerThanZero|SmallerInsteadEqual|Bonferroni),TRUE,FALSE)
   
   # copy paste errors
   # same string of results elsewhere in article?
@@ -64,7 +64,7 @@ diagnose <- function(x){
                          Unidentifiable=Unidentifiable,
                          CopyPaste=CopyPaste)
   
-  res_error <- res_full[!(x$InExactError==FALSE & x$ExactError==FALSE),]
+  res_error <- res_full[x$Error==TRUE,]
   
   res_copy <- res_full[res_full$CopyPaste,]
   res_copy <- res_copy[order(res_copy$Raw),]

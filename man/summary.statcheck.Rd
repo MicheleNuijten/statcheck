@@ -21,8 +21,7 @@ additional arguments affecting the summary produced.
 A data frame containing for each extracted statistic:
 \item{Source}{Name of the file of which the statistic is extracted}
 \item{pValues}{The number of reported p values per article}
-\item{ExactErrors}{The number of errors in exactly reported p values per article}
-\item{InExactErrors}{The number of errors in exactly reported p values per article}
+\item{Errors}{The number of errors per article}
 \item{DecisionErrors}{The number of errors that caused a non-significant result to be reported as significant (or vice versa) per article}
 }
 \author{
