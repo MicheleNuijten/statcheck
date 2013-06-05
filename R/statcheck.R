@@ -1,6 +1,6 @@
 
 ## Main function, checks statistics of vector of strings (articles).
-statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneSidedAsError=TRUE){
+statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=FALSE){
   '%rem%'<- function(x,y){
     at <- attr(x,"match.length")
     x <- x[-y]
@@ -10,7 +10,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneSidedAsError
   }
   
   # Create empty data frame:
-  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Test.Comparison=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, InExactError = NULL, ExactError=NULL, DecisionError=NULL, OneTail = NULL, CopyPaste=NULL, Location = NULL,stringsAsFactors=FALSE,dec=NULL,testdec=NULL)
+  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Test.Comparison=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, Error = NULL, InExactError = NULL, ExactError=NULL, DecisionError=NULL, CopyPaste=NULL, Location = NULL,stringsAsFactors=FALSE,dec=NULL,testdec=NULL,OneTail=NULL)
   class(Res) <- c("statcheck","data.frame")
   
   if (length(x)==0) return(Res)
@@ -586,6 +586,12 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneSidedAsError
   Res[['Reported.Comparison']] <- gsub("5","=",Res[['Reported.Comparison']])
   Res[['Reported.Comparison']] <- gsub(",","<",Res[['Reported.Comparison']])
   
+  if(OneTailedTests==TRUE){
+   
+    Res$Computed <- Res$Computed/2
+    
+  } 
+  
   InExTest <- function(x){
     
     computed <- x$Computed
@@ -651,7 +657,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneSidedAsError
     comparison <- x$Reported.Comparison
     reported <- x$Reported.P.Value
     
-    # replace 'ns' for > .05
+    # replace 'ns' by > .05
     reported[comparison=="ns"] <- .05
     comparison[comparison=="ns"] <- ">"
     
@@ -670,32 +676,32 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneSidedAsError
   
   Res$InExactError <- InExTest(Res)
   Res$ExactError <- ExTest(Res)
+  
+  Error <- !(Res$InExactError==FALSE & Res$ExactError==FALSE)
+  
+  Res$Error <- Error
   Res$DecisionError <- GrossTest(Res)  
   
-  
-  # one-sided test
-  # this is not necessarily an error, it is entirely possible that the 
-  # researchers just made use of a one-sided test and reported it
-  # statcheck cannot detect this
+  if(OneTailedTests==FALSE){
     
-  computed <- Res$Computed
-  comparison <- Res$Reported.Comparison
-  reported <- Res$Reported.P.Value
-  raw <- Res$Raw
-  onetail <- computed/2
-  
-  OneTail <- ifelse(!(Res$InExactError==FALSE & Res$ExactError==FALSE) &
-                      (grepl("=",comparison)[!is.na(onetail)] & round(reported,2)==round(onetail,2))
-                    | (grepl("<",comparison) & reported==.05 & onetail < reported & computed > reported)[!is.na(onetail)],
-                    TRUE,FALSE)
-  
-  Res$OneTail <- OneTail
-  
-  # should onetailed results be counted as error T/F?
-  if(OneSidedAsError==FALSE){
-    Res$InExactError[OneTail] <- FALSE
-    Res$ExactError[OneTail] <- FALSE
-    Res$DecisionError[OneTail] <- FALSE
+    # check if there could be one-sided tests in the data set
+    
+    computed <- Res$Computed
+    comparison <- Res$Reported.Comparison
+    reported <- Res$Reported.P.Value
+    raw <- Res$Raw
+    onetail <- computed/2
+    
+    OneTail <- ifelse(!(Res$InExactError==FALSE & Res$ExactError==FALSE) &
+                        (grepl("=",comparison)[!is.na(onetail)] & round(reported,2)==round(onetail,2))
+                      | (grepl("<",comparison) & reported==.05 & onetail < reported & computed > reported)[!is.na(onetail)],
+                      TRUE,FALSE)
+    Res$OneTail <- OneTail
+    
+    if(any(OneTail==TRUE)){
+      cat("\n Some of the p value incongruencies might in fact be one tailed tests. It is recommended to check this in the actual paper or text. Check if the p values would also be incongruent if the test is indeed one sided by running statcheck again with 'OneTailedTests' set to TRUE. To see which Sources probably contain a one tailed test, try unique(x$Source[x$OneTail]) (where x is the statcheck output). \n ",fill=TRUE)
+    }
+    
   }
   
   # copy paste errors
@@ -754,10 +760,11 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneSidedAsError
   
   Res$InExactError[CorrectRound] <- FALSE
   Res$ExactError[CorrectRound] <- FALSE
+  Res$Error[CorrectRound] <- FALSE
   Res$DecisionError[CorrectRound] <- FALSE
   
-
   class(Res) <- c("statcheck","data.frame")
-  return(Res[,!(names(Res)%in%c("Location","dec","testdec"))])
+  return(Res[,!(names(Res)%in%c("Location","dec","testdec", "InExactError", "ExactError"))])
+  
 }
 
