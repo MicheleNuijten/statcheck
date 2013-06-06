@@ -1,6 +1,6 @@
 
 ## Main function, checks statistics of vector of strings (articles).
-statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=FALSE){
+statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=FALSE,alpha=.05){
   '%rem%'<- function(x,y){
     at <- attr(x,"match.length")
     x <- x[-y]
@@ -586,21 +586,17 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   Res[['Reported.Comparison']] <- gsub("5","=",Res[['Reported.Comparison']])
   Res[['Reported.Comparison']] <- gsub(",","<",Res[['Reported.Comparison']])
   
-  if(OneTailedTests==TRUE){
-   
-    Res$Computed <- Res$Computed/2
-    
-  } 
+  ###---------------------------------------------------------------------
   
-  InExTest <- function(x){
+  InExTest <- function(x,...){
     
     computed <- x$Computed
     comparison <- x$Reported.Comparison
     reported <- x$Reported.P.Value
     testcomp <- x$Test.Comparison
     
-    # replace 'ns' for > .05
-    reported[comparison=="ns"] <- .05
+    # replace 'ns' for > alpha
+    reported[comparison=="ns"] <- alpha
     comparison[comparison=="ns"] <- ">"
     
     Match <- paste(computed,comparison,reported)
@@ -652,27 +648,31 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
     return(ExTests)
   }
   
-  GrossTest <- function(x){
+  GrossTest <- function(x,...){
     computed <- x$Computed
     comparison <- x$Reported.Comparison
     reported <- x$Reported.P.Value
     
-    # replace 'ns' by > .05
-    reported[comparison=="ns"] <- .05
+    # replace 'ns' by > alpha
+    reported[comparison=="ns"] <- alpha
     comparison[comparison=="ns"] <- ">"
     
     Match <- paste(computed,comparison,reported)
     AllTests <- grepl("=|<|>",Match)
     if (any(AllTests)){
-      AllTests[grepl("<",Match)] <- reported[grepl("<",Match)]<=.05 & computed[grepl("<",Match)] >=.05
-      AllTests[grepl(">",Match)] <- reported[grepl(">",Match)] >=.05 & computed[grepl(">",Match)]<.05
-      AllTests[grepl("=",Match)] <- (reported[grepl("=",Match)]<.05 & computed[grepl("=",Match)]>=.05)|
-        (reported[grepl("=",Match)]>=.05 & computed[grepl("=",Match)]<.05)
+      AllTests[grepl("<",Match)] <- reported[grepl("<",Match)]<=alpha & computed[grepl("<",Match)] >=alpha
+      AllTests[grepl(">",Match)] <- reported[grepl(">",Match)] >=alpha & computed[grepl(">",Match)]<alpha
+      AllTests[grepl("=",Match)] <- (reported[grepl("=",Match)]<alpha & computed[grepl("=",Match)]>=alpha)|
+        (reported[grepl("=",Match)]>=alpha & computed[grepl("=",Match)]<alpha)
     }
     AllTests <- as.logical(AllTests)
     
     return(AllTests)
   }
+  
+  if(OneTailedTests==TRUE){
+    Res$Computed <- Res$Computed/2
+  } 
   
   Res$InExactError <- InExTest(Res)
   Res$ExactError <- ExTest(Res)
@@ -681,6 +681,23 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   
   Res$Error <- Error
   Res$DecisionError <- GrossTest(Res)  
+  
+  ###---------------------------------------------------------------------
+  
+  # check if there would also be a decision error if alpha=.01 or .1
+  DecisionErrorAlphas <- logical()
+  alphas <- c(.01,.1)
+  
+  for(a in alphas){
+    alpha <- a
+    DecisionErrorAlphas <- c(DecisionErrorAlphas,GrossTest(Res))
+  }
+  
+  if(any(DecisionErrorAlphas)){
+    cat("\n Check the significance level. \n \n Some of the p value incongruencies are decision errors if the significance level is .1 or .01 instead of the conventional .05. It is recommended to check the actual significance level in the paper or text. Check if the reported p values are a decision error at a different significane level by running statcheck again with 'alpha' set to .1 and/or .01. \n ",fill=TRUE)
+  }
+  
+  ###---------------------------------------------------------------------
   
   if(OneTailedTests==FALSE){
     
@@ -699,10 +716,12 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
     Res$OneTail <- OneTail
     
     if(any(OneTail==TRUE)){
-      cat("\n Some of the p value incongruencies might in fact be one tailed tests. It is recommended to check this in the actual paper or text. Check if the p values would also be incongruent if the test is indeed one sided by running statcheck again with 'OneTailedTests' set to TRUE. To see which Sources probably contain a one tailed test, try unique(x$Source[x$OneTail]) (where x is the statcheck output). \n ",fill=TRUE)
+      cat("\n Check for one tailed tests. \n \n Some of the p value incongruencies might in fact be one tailed tests. It is recommended to check this in the actual paper or text. Check if the p values would also be incongruent if the test is indeed one sided by running statcheck again with 'OneTailedTests' set to TRUE. To see which Sources probably contain a one tailed test, try unique(x$Source[x$OneTail]) (where x is the statcheck output). \n ",fill=TRUE)
     }
     
   }
+  
+  ###---------------------------------------------------------------------
   
   # copy paste errors
   # same string of results elsewhere in article?
@@ -714,6 +733,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   CopyPaste <- as.logical(CopyPaste)
   
   Res$CopyPaste <- CopyPaste
+  
+  ###---------------------------------------------------------------------
   
   # "correct" rounding differences
   # e.g. t=2.3 could be 2.25 to 2.34 with its range of p values
@@ -757,6 +778,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   }
   
   CorrectRound <- as.logical(correct_round)
+  
+  ###---------------------------------------------------------------------
   
   Res$InExactError[CorrectRound] <- FALSE
   Res$ExactError[CorrectRound] <- FALSE
