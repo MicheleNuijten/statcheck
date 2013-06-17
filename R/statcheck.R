@@ -620,6 +620,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
       if(any(greatgreat)){
         InExTests[greatgreat] <- !(round(computed[greatgreat],x$dec[greatgreat])>=round(reported[greatgreat],x$dec[greatgreat]))
       }
+      
     }
     
     return(InExTests)
@@ -679,6 +680,10 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   
   Error <- !(Res$InExactError==FALSE & Res$ExactError==FALSE)
   
+  # p values smaller or equal to zero and p values larger than one are errors
+  ImpossibleP <- (Res$Reported.P.Value<=0|Res$Reported.P.Value>1)
+  Error[ImpossibleP] <- TRUE
+    
   Res$Error <- Error
   Res$DecisionError <- GrossTest(Res)  
   

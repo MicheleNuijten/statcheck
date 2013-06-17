@@ -7,7 +7,7 @@ Extract statistics and recompute p-values.
 This function extracts statistics from strings and returns the extracted values, reported p-values and recomputed p-values. The package relies on the program "pdftotext", see the paragraph "Note" for details on the installation.
 }
 \usage{
-statcheck(x, stat = c("t", "F", "cor", "chisq", "Z", "Wald"),OneTailedTests=FALSE)
+statcheck(x, stat = c("t", "F", "cor", "chisq", "Z", "Wald"),OneTailedTests=FALSE,alpha=.05)
 }
 \arguments{
   \item{x}{
@@ -19,6 +19,9 @@ A vector of strings containing whole articles.
   \item{OneTailedTests}{
 Logical. Do we assume that all reported tests are one tailed (TRUE) or two tailed (FALSE, default).
 }
+  \item{alpha}{
+Assumed level of significance in the scanned texts. Defaults to .05. 
+  }
 }
 \details{
 This function can be used if the text of articles has already been imported in R. To import text from pdf files and automatically send the results to this function use \code{\link{checkPDFdir}} or \code{\link{checkPDF}}. To import text from HTML files use the similar functions \code{\link{checkHTMLdir}} or \code{\link{checkHTML}}. Finally, \code{\link{checkdir}} can be used to import text from both PDF and HTML files in a folder.
