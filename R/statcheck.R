@@ -683,7 +683,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   # p values smaller or equal to zero and p values larger than one are errors
   ImpossibleP <- (Res$Reported.P.Value<=0|Res$Reported.P.Value>1)
   Error[ImpossibleP] <- TRUE
-    
+  
   Res$Error <- Error
   Res$DecisionError <- GrossTest(Res)  
   
@@ -779,7 +779,11 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
       lowP  <- max(pnorm(upper[i],lower.tail=FALSE)*2,pchisq(lower,1,lower.tail=FALSE))
     }
     
-    correct_round[i] <- ifelse(!(Res[i,]$InExactError==FALSE & Res[i,]$ExactError==FALSE) & Res$Reported.P.Value[i]>=lowP & Res$Reported.P.Value[i]<=upP,TRUE,FALSE)
+    if(OneTailedTests==FALSE){
+      correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]>=lowP & Res$Reported.P.Value[i]<=upP,TRUE,FALSE)
+    } else {
+      correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]/2>=lowP & Res$Reported.P.Value[i]/2<=upP,TRUE,FALSE)
+    }
   }
   
   CorrectRound <- as.logical(correct_round)
