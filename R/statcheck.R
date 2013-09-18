@@ -799,4 +799,3 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   return(Res[,!(names(Res)%in%c("Location","dec","testdec", "InExactError", "ExactError"))])
   
 }
-
