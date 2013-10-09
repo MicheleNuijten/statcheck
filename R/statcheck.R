@@ -1,6 +1,6 @@
 
 ## Main function, checks statistics of vector of strings (articles).
-statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=FALSE,alpha=.05){
+statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=FALSE,alpha=.05,OneTailedTxt=FALSE){
   '%rem%'<- function(x,y){
     at <- attr(x,"match.length")
     x <- x[-y]
@@ -10,8 +10,9 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   }
   
   # Create empty data frame:
-  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Test.Comparison=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, Error = NULL, InExactError = NULL, ExactError=NULL, DecisionError=NULL, CopyPaste=NULL, Location = NULL,stringsAsFactors=FALSE,dec=NULL,testdec=NULL,OneTail=NULL)
+  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Test.Comparison=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, Error = NULL, InExactError = NULL, ExactError=NULL, DecisionError=NULL, CopyPaste=NULL, Location = NULL,stringsAsFactors=FALSE,dec=NULL,testdec=NULL,OneTail=NULL,OneTailedInTxt=NULL)
   class(Res) <- c("statcheck","data.frame")
+  OneTailedInTxt <- NULL
   
   if (length(x)==0) return(Res)
   
@@ -22,6 +23,22 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   for (i in 1:length(x)){
     
     txt <- x[i]
+    
+    #---------------------------
+    
+    # search for "sided"/"tailed"/"directional" in full text to detect one-sided testing
+    
+    onesided <- gregexpr("sided|tailed|directional",txt,ignore.case=TRUE)[[1]]
+    
+    if(onesided[1] != -1){
+      onesided <- 1
+    } else {
+      onesided <- 0
+    }
+    
+    OneTailedInTxt <- as.logical(onesided)
+    
+    #---------------------------
     
     # t-values:
     if ("t"%in%stat){
@@ -106,7 +123,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
                            Raw = tRaw,
                            stringsAsFactors=FALSE,
                            dec = dec,
-                           testdec=testdec)
+                           testdec=testdec,
+                           OneTailedInTxt=OneTailedInTxt)
         
         # Append, clean and close:
         Res <- rbind(Res,tRes)
@@ -191,7 +209,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
                            Raw = FRaw,
                            stringsAsFactors=FALSE,
                            dec=dec,
-                           testdec=testdec)
+                           testdec=testdec,
+                           OneTailedInTxt=OneTailedInTxt)
         
         # Append, clean and close:
         Res <- rbind(Res,FRes)
@@ -286,7 +305,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
                            Raw = rRaw,
                            stringsAsFactors=FALSE,
                            dec=dec,
-                           testdec=testdec)
+                           testdec=testdec,
+                           OneTailedInTxt=OneTailedInTxt)
         
         # Append, clean and close:
         Res <- rbind(Res,rRes)
@@ -374,7 +394,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
                            Raw = zRaw,
                            stringsAsFactors=FALSE,
                            dec=dec,
-                           testdec=testdec)
+                           testdec=testdec,
+                           OneTailedInTxt=OneTailedInTxt)
         
         # Append, clean and close:
         Res <- rbind(Res,zRes)
@@ -487,7 +508,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
                            Raw = wRaw,
                            stringsAsFactors=FALSE,
                            dec=dec,
-                           testdec=testdec)
+                           testdec=testdec,
+                           OneTailedInTxt=OneTailedInTxt)
         
         # Append, clean and close:
         Res <- rbind(Res,wRes)
@@ -569,7 +591,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
                               Raw = chi2Raw,
                               stringsAsFactors=FALSE,
                               dec=dec,
-                              testdec=testdec)
+                              testdec=testdec,
+                              OneTailedInTxt=OneTailedInTxt)
         
         # Append, clean and close:
         Res <- rbind(Res,chi2Res)
@@ -585,6 +608,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   Res <- ddply(Res,.(Source),function(x)x[order(x$Location),])
   Res[['Reported.Comparison']] <- gsub("5","=",Res[['Reported.Comparison']])
   Res[['Reported.Comparison']] <- gsub(",","<",Res[['Reported.Comparison']])
+  
+  Res <- cbind(Res,OneTailedInTxt)
   
   ###---------------------------------------------------------------------
   
@@ -720,10 +745,19 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
                       TRUE,FALSE)
     Res$OneTail <- OneTail
     
-    if(any(OneTail==TRUE)){
+    if(any(OneTail==TRUE & OneTailedTxt==FALSE)){
       cat("\n Check for one tailed tests. \n \n Some of the p value incongruencies might in fact be one tailed tests. It is recommended to check this in the actual paper or text. Check if the p values would also be incongruent if the test is indeed one sided by running statcheck again with 'OneTailedTests' set to TRUE. To see which Sources probably contain a one tailed test, try unique(x$Source[x$OneTail]) (where x is the statcheck output). \n ",fill=TRUE)
     }
     
+  }
+  
+  ###---------------------------------------------------------------------
+  
+  # count errors as correct if they'd be correct one-sided
+  
+  if(OneTailedTxt==TRUE){
+    Res$Error[Res$OneTailedInTxt==TRUE & Res$OneTail==TRUE] <- FALSE
+    Res$DecisionError[Res$OneTailedInTxt==TRUE & Res$OneTail==TRUE] <- FALSE
   }
   
   ###---------------------------------------------------------------------
@@ -795,7 +829,25 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   Res$Error[CorrectRound] <- FALSE
   Res$DecisionError[CorrectRound] <- FALSE
   
-  class(Res) <- c("statcheck","data.frame")
-  return(Res[,!(names(Res)%in%c("Location","dec","testdec", "InExactError", "ExactError"))])
+  # final data frame
+  Res <- data.frame(Source = Res$Source, 
+                    Statistic = Res$Statistic, 
+                    df1 = Res$df1, 
+                    df2 = Res$df2,
+                    Test.Comparison = Res$Test.Comparison,
+                    Value = Res$Value, 
+                    Reported.Comparison = Res$Reported.Comparison, 
+                    Reported.P.Value = Res$Reported.P.Value, 
+                    Computed = Res$Computed, 
+                    Raw = Res$Raw,
+                    Error = Res$Error,
+                    DecisionError = Res$DecisionError,
+                    OneTail = Res$OneTail,
+                    OneTailedInTxt = Res$OneTailedInTxt,
+                    CopyPaste = Res$CopyPaste
+  )
   
+  class(Res) <- c("statcheck","data.frame")
+  
+  return(Res)
 }

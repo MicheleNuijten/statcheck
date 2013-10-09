@@ -7,7 +7,7 @@ Extract statistics and recompute p-values.
 This function extracts statistics from strings and returns the extracted values, reported p-values and recomputed p-values. The package relies on the program "pdftotext", see the paragraph "Note" for details on the installation.
 }
 \usage{
-statcheck(x, stat = c("t", "F", "cor", "chisq", "Z", "Wald"),OneTailedTests=FALSE,alpha=.05)
+statcheck(x, stat = c("t", "F", "cor", "chisq", "Z", "Wald"),OneTailedTests=FALSE,alpha=.05,OneTailedTxt=FALSE)
 }
 \arguments{
   \item{x}{
@@ -21,6 +21,9 @@ Logical. Do we assume that all reported tests are one tailed (TRUE) or two taile
 }
   \item{alpha}{
 Assumed level of significance in the scanned texts. Defaults to .05. 
+  }
+  \item{OneTailedTxt}{
+Logical. If TRUE, statcheck searches the text for "sided", "tailed", and "directional" to identify one-sided tests. If one or more of these strings is found in the text, and the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.
   }
 }
 \details{
@@ -45,6 +48,7 @@ A data frame containing for each extracted statistic:
 \item{ExactError}{Error in exactly reported p values as compared to the recalculated p values}
 \item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
 \item{OneTail}{Logical. Is it likely that the reported p value resulted from a correction for one-sided testing?}
+\item{OneTailedInTxt}{Logical. Does the text contain the string "sided", "tailed", and/or "directional"?}
 \item{CopyPaste}{Logical. Does the exact string of the extracted raw results occur anywhere else in the article?}
 }
 \section{Installing pdftotext}{
