@@ -23,7 +23,7 @@ Logical. Do we assume that all reported tests are one tailed (TRUE) or two taile
 Assumed level of significance in the scanned texts. Defaults to .05. 
   }
   \item{OneTailedTxt}{
-Logical. If TRUE, statcheck searches the text for "sided", "tailed", and "directional" to identify one-sided tests. If one or more of these strings is found in the text, and the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.
+Logical. If TRUE, statcheck searches the text for "sided", "tailed", and "directional" to identify the possible use of one-sided tests. If one or more of these strings is found in the text AND the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.
   }
 }
 \details{
