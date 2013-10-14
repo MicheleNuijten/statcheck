@@ -609,8 +609,6 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   Res[['Reported.Comparison']] <- gsub("5","=",Res[['Reported.Comparison']])
   Res[['Reported.Comparison']] <- gsub(",","<",Res[['Reported.Comparison']])
   
-  Res <- cbind(Res,OneTailedInTxt)
-  
   ###---------------------------------------------------------------------
   
   InExTest <- function(x,...){
