@@ -9,10 +9,10 @@ summary.statcheck <- function(object,...){
   pValues <- c(ddply(x,"Source",function(x) nrow(x))[,2],nrow(x))
   
   # Number of errors per article and in total
-  Errors <- c(ddply(x,"Source",function(x) sum(x$Error))[,2],sum(x$Error))
+  Errors <- c(ddply(x,"Source",function(x) sum(x$Error,na.rm=TRUE))[,2],sum(x$Error,na.rm=TRUE))
   
   # Number of decision errors per article and in total
-  DecisionErrors <- c(ddply(x,"Source",function(x) sum(x$DecisionError))[,2],sum(x$DecisionError))
+  DecisionErrors <- c(ddply(x,"Source",function(x) sum(x$DecisionError,na.rm=TRUE))[,2],sum(x$DecisionError,na.rm=TRUE))
   
   # Results in dataframe
   res <- data.frame(Source=c(unique(x$Source),"Total"),
