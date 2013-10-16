@@ -317,11 +317,14 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
     # z-values:
     if ("Z"%in%stat){
       # Get location of z-values in text:
-      zLoc <- gregexpr("\\s(\\z|\\Z)\\s?.?\\s?\\D{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      zLoc <- gregexpr("[^a-z]?(z|Z)\\s?.?\\s?\\D{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (zLoc[1] != -1){
         # Get raw text of z-values:
         zRaw <- substring(txt,zLoc,zLoc+attr(zLoc,"match.length")-1)
+        
+        # remove any character before test statistic
+        zRaw <- gsub(".?(z|Z)","Z",zRaw,perl=TRUE)
         
         # remove commas (thousands separators)
         zRaw <- gsub("(?<=\\d),(?=\\d+\\.)","",zRaw,perl=TRUE)
@@ -406,12 +409,15 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
     # Wald test results
     if ("Wald"%in%stat){
       # Get location of Wald results in text:
-      wLoc <- gregexpr("\\s(\\wald|\\Wald)\\s?\\D?\\s?\\D{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      wLoc <- gregexpr("[^a-z]?(\\wald|\\Wald)\\s?\\D?\\s?\\D{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (wLoc[1] != -1){
         # Get raw text of Wald results:
         wRaw <- substring(txt,wLoc,wLoc+attr(wLoc,"match.length")-1)
         
+        # remove any character before test statistic
+        wRaw <- gsub(".?(wald|Wald)","Wald",wRaw,perl=TRUE)
+                
         # remove commas (thousands separators)
         wRaw <- gsub("(?<=\\d),(?=\\d+\\.)","",wRaw,perl=TRUE)
         
@@ -752,10 +758,23 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   ###---------------------------------------------------------------------
   
   # count errors as correct if they'd be correct one-sided
+  # and there was a mention of 'sided','tailed', or 'directional' in the text
   
   if(OneTailedTxt==TRUE){
-    Res$Error[Res$OneTailedInTxt==TRUE & Res$OneTail==TRUE] <- FALSE
-    Res$DecisionError[Res$OneTailedInTxt==TRUE & Res$OneTail==TRUE] <- FALSE
+    
+    Res1tailed <- Res
+    Res1tailed$Computed <- Res1tailed$Computed/2
+    
+    Res1tailed$InExactError <- InExTest(Res1tailed)
+    Res1tailed$ExactError <- ExTest(Res1tailed)
+    
+    Res1tailed$Error <- Error
+    
+    Res$Error[Res$OneTailedInTxt==TRUE & Res1tailed$Error==FALSE] <- FALSE
+    Res$DecisionError[Res$OneTailedInTxt==TRUE & Res1tailed$DecisionError==FALSE] <- FALSE
+    
+    #     Res$Error[Res$OneTailedInTxt==TRUE & Res$OneTail==TRUE] <- FALSE
+    #     Res$DecisionError[Res$OneTailedInTxt==TRUE & Res$OneTail==TRUE] <- FALSE
   }
   
   ###---------------------------------------------------------------------
