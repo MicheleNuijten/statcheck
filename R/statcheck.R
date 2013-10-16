@@ -616,7 +616,6 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   Res[['Reported.Comparison']] <- gsub(",","<",Res[['Reported.Comparison']])
   
   ###---------------------------------------------------------------------
-  
   InExTest <- function(x,...){
     
     computed <- x$Computed
@@ -838,6 +837,8 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   }
   
   CorrectRound <- as.logical(correct_round)
+  
+  
   
   ###---------------------------------------------------------------------
   
