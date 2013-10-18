@@ -39,6 +39,7 @@ checkHTMLdir <- function(dir,...)
   }
   close(pb)
   names(txts) <- gsub(".html","",basename(files))
+  names(txts) <- gsub(".htm","",basename(files))
   return(statcheck(txts,...))
 }
 
