@@ -281,11 +281,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
         pEq[grepl("ns",rRaw,ignore.case=TRUE)] <- "ns"
-        
-        r2t <- function(r,df){
-          r / (sqrt((1-r^2)/df))
-        }
-        
+             
         
         # determine number of decimals of p value
         dec <- attr(regexpr("\\.\\d+",pValsChar),"match.length")-1
@@ -797,10 +793,6 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   
   lower <- Res$Value-(.5/10^Res$testdec)
   upper <- Res$Value+(.4/10^Res$testdec)
-  
-  r2t <- function(r,df){
-    r / (sqrt((1-r^2)/df))
-  }
   
   for(i in seq_len(nrow(Res))){
     
