@@ -612,7 +612,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   Res[['Reported.Comparison']] <- gsub(",","<",Res[['Reported.Comparison']])
   
   ###---------------------------------------------------------------------
-  InExTest <- function(x,...){
+  InExTest <- function(x,...,alpha=.05){
     
     computed <- x$Computed
     comparison <- x$Reported.Comparison
@@ -671,28 +671,6 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
       
     }
     return(ExTests)
-  }
-  
-  GrossTest <- function(x,...){
-    computed <- x$Computed
-    comparison <- x$Reported.Comparison
-    reported <- x$Reported.P.Value
-    
-    # replace 'ns' by > alpha
-    reported[comparison=="ns"] <- alpha
-    comparison[comparison=="ns"] <- ">"
-    
-    Match <- paste(computed,comparison,reported)
-    AllTests <- grepl("=|<|>",Match)
-    if (any(AllTests)){
-      AllTests[grepl("<",Match)] <- reported[grepl("<",Match)]<=alpha & computed[grepl("<",Match)] >=alpha
-      AllTests[grepl(">",Match)] <- reported[grepl(">",Match)] >=alpha & computed[grepl(">",Match)]<alpha
-      AllTests[grepl("=",Match)] <- (reported[grepl("=",Match)]<alpha & computed[grepl("=",Match)]>=alpha)|
-        (reported[grepl("=",Match)]>=alpha & computed[grepl("=",Match)]<alpha)
-    }
-    AllTests <- as.logical(AllTests)
-    
-    return(AllTests)
   }
   
   if(OneTailedTests==TRUE){
