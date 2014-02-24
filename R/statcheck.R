@@ -10,7 +10,10 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   }
   
   # Create empty data frame:
-  Res <- data.frame(Source = NULL, Statistic=NULL,df1=NULL,df2=NULL,Test.Comparison=NULL,Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, Error = NULL, InExactError = NULL, ExactError=NULL, DecisionError=NULL, CopyPaste=NULL, Location = NULL,stringsAsFactors=FALSE,dec=NULL,testdec=NULL,OneTail=NULL,OneTailedInTxt=NULL)
+  Res <- data.frame(Source = NULL,Statistic=NULL,df1=NULL,df2=NULL,Test.Comparison=NULL,
+                    Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, 
+                    Error = NULL,DecisionError=NULL,CopyPaste=NULL, Location = NULL,
+                    stringsAsFactors=FALSE,dec=NULL,testdec=NULL,OneTail=NULL,OneTailedInTxt=NULL)
   class(Res) <- c("statcheck","data.frame")
   OneTailedInTxt <- NULL
   
@@ -417,7 +420,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
         
         # remove any character before test statistic
         wRaw <- gsub(".?(wald|Wald)","Wald",wRaw,perl=TRUE)
-                
+        
         # remove commas (thousands separators)
         wRaw <- gsub("(?<=\\d),(?=\\d+\\.)","",wRaw,perl=TRUE)
         
@@ -616,68 +619,80 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   Res[['Reported.Comparison']] <- gsub(",","<",Res[['Reported.Comparison']])
   
   ###---------------------------------------------------------------------
-  InExTest <- function(x,...){
+  ErrorTest <- function(x,...){
     
-    computed <- x$Computed
-    comparison <- x$Reported.Comparison
-    reported <- x$Reported.P.Value
-    testcomp <- x$Test.Comparison
+    computed <- as.vector(x$Computed)
+    comparison <- as.vector(x$Reported.Comparison)
+    reported <-  as.vector(x$Reported.P.Value)
+    testcomp <-  as.vector(x$Test.Comparison)
     
     # replace 'ns' for > alpha
     reported[comparison=="ns"] <- alpha
     comparison[comparison=="ns"] <- ">"
     
     Match <- paste(computed,comparison,reported)
+    
+    #-----------------------------------------------
+    
+    # select inexactly reported p values (p<../p>..)
     InExTests <- grepl("<|>",Match)
     
-    if (any(InExTests)){
-      InExTests[grepl("<|>",Match)] <- sapply(Match[grepl("<|>",Match)],function(m)!eval(parse(text=m)))
-      
-      smallsmall <- x$Test.Comparison=="<" & grepl("<",Match)
-      smallgreat <- x$Test.Comparison=="<" & grepl(">",Match)
-      greatsmall <- x$Test.Comparison==">" & grepl("<",Match)
-      greatgreat <- x$Test.Comparison==">" & grepl(">",Match)
-      
-      if(any(smallsmall)){
-        InExTests[smallsmall] <- !(round(computed[smallsmall],x$dec[smallsmall])<=round(reported[smallsmall],x$dec[smallsmall]))
-      }
-      
-      InExTests[smallgreat] <- FALSE
-      InExTests[greatsmall] <- FALSE
-      
-      if(any(greatgreat)){
-        InExTests[greatgreat] <- !(round(computed[greatgreat],x$dec[greatgreat])>=round(reported[greatgreat],x$dec[greatgreat]))
-      }
-      
+    # evaluate errors when test statistics are reported exactly (t()=.../F(,)=...)
+    if(any(InExTests)){
+      InExTests[InExTests] <- sapply(Match[InExTests],function(m)!eval(parse(text=m)))
     }
     
-    return(InExTests)
-  }
-  
-  ExTest <- function(x){
-    computed <- x$Computed
-    reported <- x$Reported.P.Value
-    comparison <- x$Reported.Comparison
-    ExTests <- comparison=="="
-    if (any(ExTests)){
-      ExTests[comparison=="="] <- !(round(computed[ExTests],x$dec[ExTests])==round(reported[ExTests],x$dec[ExTests]))
-      
-      smallequal <- x$Test.Comparison=="<" & comparison=="="
-      greatequal <- x$Test.Comparison==">" & comparison=="="
-      
-      if(any(smallequal)){
-        ExTests[smallequal] <- !(round(computed[smallequal],x$dec[smallequal])<round(reported[smallequal],x$dec[smallequal]))
-      }
-      
-      if(any(greatequal)){
-        ExTests[greatequal] <- !(round(computed[greatequal],x$dec[greatequal])>round(reported[greatequal],x$dec[greatequal]))
-      }
-      
+    # evaluate errors when test statistics are reported inexactly (t()</>.../F(,)</>...)
+    smallsmall <- testcomp=="<" & comparison=="<"
+    smallgreat <- testcomp=="<" & comparison==">"
+    greatsmall <- testcomp==">" & comparison=="<"
+    greatgreat <- testcomp==">" & comparison==">"
+    
+    if(any(smallsmall)){
+      InExTests[smallsmall] <- !(round(computed[smallsmall],x$dec[smallsmall])<=round(reported[smallsmall],x$dec[smallsmall]))
     }
-    return(ExTests)
+    
+    if(any(greatgreat)){
+      InExTests[greatgreat] <- !(round(computed[greatgreat],x$dec[greatgreat])>=round(reported[greatgreat],x$dec[greatgreat]))
+    }
+    
+    # these combinations of < & > are logically always correct
+    InExTests[smallgreat] <- FALSE
+    InExTests[greatsmall] <- FALSE
+    
+    #-----------------------------------------------
+    
+    # select exactly reported p values (p=..)
+    ExTests <- comparison=="="
+    
+    # evaluate errors when test statistics are reported exactly (t()=.../F(,)=...)
+    if(any(ExTests)){
+      ExTests[ExTests] <- !(round(computed[ExTests],x$dec[ExTests])==round(reported[ExTests],x$dec[ExTests]))
+    }
+    
+    # evaluate errors when test statistics are reported inexactly (t()</>.../F(,)</>...)
+    smallequal <- x$Test.Comparison=="<" & comparison=="="
+    greatequal <- x$Test.Comparison==">" & comparison=="="
+    
+    if(any(smallequal)){
+      ExTests[smallequal] <- !(round(computed[smallequal],x$dec[smallequal])<round(reported[smallequal],x$dec[smallequal]))
+    }
+    
+    if(any(greatequal)){
+      ExTests[greatequal] <- !(round(computed[greatequal],x$dec[greatequal])>round(reported[greatequal],x$dec[greatequal]))
+    }
+    
+    #-----------------------------------------------
+    
+    # a result is an error if InExactError and/or ExactError are TRUE
+    Error <- !(InExTests==FALSE & ExTests==FALSE)
+    
+    return(Error)
   }
   
-  GrossTest <- function(x,...){
+  ###---------------------------------------------------------------------
+  
+  DecisionErrorTest <- function(x,...){
     computed <- x$Computed
     comparison <- x$Reported.Comparison
     reported <- x$Reported.P.Value
@@ -699,21 +714,19 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
     return(AllTests)
   }
   
+  ###---------------------------------------------------------------------
+  
   if(OneTailedTests==TRUE){
     Res$Computed <- Res$Computed/2
   } 
   
-  Res$InExactError <- InExTest(Res)
-  Res$ExactError <- ExTest(Res)
-  
-  Error <- !(Res$InExactError==FALSE & Res$ExactError==FALSE)
+  Res$Error <- ErrorTest(Res)
   
   # p values smaller or equal to zero and p values larger than one are errors
   ImpossibleP <- (Res$Reported.P.Value<=0|Res$Reported.P.Value>1)
-  Error[ImpossibleP] <- TRUE
+  Res$Error[ImpossibleP] <- TRUE
   
-  Res$Error <- Error
-  Res$DecisionError <- GrossTest(Res)  
+  Res$DecisionError <-  DecisionErrorTest(Res)  
   
   ###---------------------------------------------------------------------
   
@@ -723,7 +736,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   
   for(a in alphas){
     alpha <- a
-    DecisionErrorAlphas <- c(DecisionErrorAlphas,GrossTest(Res))
+    DecisionErrorAlphas <- c(DecisionErrorAlphas, DecisionErrorTest(Res))
   }
   
   if(any(DecisionErrorAlphas)){
@@ -742,7 +755,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
     raw <- Res$Raw
     onetail <- computed/2
     
-    OneTail <- ifelse(!(Res$InExactError==FALSE & Res$ExactError==FALSE) &
+    OneTail <- ifelse(Res$Error==TRUE &
                         (grepl("=",comparison)[!is.na(onetail)] & round(reported,2)==round(onetail,2))
                       | (grepl("<",comparison) & reported==.05 & onetail < reported & computed > reported)[!is.na(onetail)],
                       TRUE,FALSE)
@@ -764,10 +777,7 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
     Res1tailed <- Res
     Res1tailed$Computed <- Res1tailed$Computed/2
     
-    Res1tailed$InExactError <- InExTest(Res1tailed)
-    Res1tailed$ExactError <- ExTest(Res1tailed)
-    
-    Res1tailed$Error <- Error
+    Res1tailed$Error <- ErrorTest(Res1tailed)
     
     Res$Error[Res$OneTailedInTxt==TRUE & Res1tailed$Error==FALSE] <- FALSE
     Res$DecisionError[Res$OneTailedInTxt==TRUE & Res1tailed$DecisionError==FALSE] <- FALSE
@@ -842,8 +852,6 @@ statcheck <- function(x,stat=c("t","F","cor","chisq","Z","Wald"),OneTailedTests=
   
   ###---------------------------------------------------------------------
   
-  Res$InExactError[CorrectRound] <- FALSE
-  Res$ExactError[CorrectRound] <- FALSE
   Res$Error[CorrectRound] <- FALSE
   Res$DecisionError[CorrectRound] <- FALSE
   
