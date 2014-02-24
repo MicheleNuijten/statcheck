@@ -1,12 +1,14 @@
-\name{checkPDF}
-\alias{checkPDF}
-\title{checkPDF}
+\name{InExTest}
+\alias{InExTest}
+\title{InExTest}
 
-\usage{checkPDF(files, ...)}
+\usage{InExTest(x, ..., alpha = 0.05)}
 \arguments{
-  \item{files}{
+  \item{x}{
 }
   \item{\dots}{
+}
+  \item{alpha}{
 }
 }
 

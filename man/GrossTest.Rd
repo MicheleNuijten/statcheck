@@ -1,10 +1,12 @@
-\name{checkPDF}
-\alias{checkPDF}
-\title{checkPDF}
+\name{GrossTest}
+\alias{GrossTest}
+\title{GrossTest}
 
-\usage{checkPDF(files, ...)}
+\usage{GrossTest(x, alpha = 0.05, ...)}
 \arguments{
-  \item{files}{
+  \item{x}{
+}
+  \item{alpha}{
 }
   \item{\dots}{
 }

@@ -1,12 +1,12 @@
-\name{checkPDF}
-\alias{checkPDF}
-\title{checkPDF}
+\name{r2t}
+\alias{r2t}
+\title{r2t}
 
-\usage{checkPDF(files, ...)}
+\usage{r2t(r, df)}
 \arguments{
-  \item{files}{
+  \item{r}{
 }
-  \item{\dots}{
+  \item{df}{
 }
 }
 

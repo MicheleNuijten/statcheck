@@ -3,7 +3,7 @@ Type: Package
 Title: Extract statistics from articles and recompute p values
 Version: 0.1.0
 Date: 2013-01-04
-Author: Sacha Epskamp and Michele B. Nuijten
+Author: Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten <m.b.nuijten@uvt.nl>
 Maintainer: Michele B. Nuijten <m.b.nuijten@uvt.nl>
 Depends:
     R (>= 2.14.2)

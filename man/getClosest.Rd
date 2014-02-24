@@ -1,12 +1,10 @@
-\name{checkPDF}
-\alias{checkPDF}
-\title{checkPDF}
+\name{getClosest}
+\alias{getClosest}
+\title{getClosest}
 
-\usage{checkPDF(files, ...)}
+\usage{getClosest(x)}
 \arguments{
-  \item{files}{
-}
-  \item{\dots}{
+  \item{x}{
 }
 }
 

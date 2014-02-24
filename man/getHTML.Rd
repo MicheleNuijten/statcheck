@@ -1,12 +1,10 @@
-\name{checkPDF}
-\alias{checkPDF}
-\title{checkPDF}
+\name{getHTML}
+\alias{getHTML}
+\title{getHTML}
 
-\usage{checkPDF(files, ...)}
+\usage{getHTML(x)}
 \arguments{
-  \item{files}{
-}
-  \item{\dots}{
+  \item{x}{
 }
 }
 
