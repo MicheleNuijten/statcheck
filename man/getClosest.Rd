@@ -1,6 +1,6 @@
 \name{getClosest}
 \alias{getClosest}
-\title{getClosest}
+\title{Inner function to extract closest computed match}
 
 \usage{getClosest(x)}
 \arguments{

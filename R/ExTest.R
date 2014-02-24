@@ -1,4 +1,7 @@
-  ExTest <- function(x){
+  ExTest <- function(
+    x
+    )
+  {
     computed <- x$Computed
     reported <- x$Reported.P.Value
     comparison <- x$Reported.Comparison

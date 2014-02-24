@@ -1,6 +1,6 @@
-# Inner function to extract closest computed match: 
-
-getClosest <- function(x)
+getClosest <- function(# Inner function to extract closest computed match
+	x
+	)
 {
   computed <- x$Computed
   comparison <- x$Reported.Comparison

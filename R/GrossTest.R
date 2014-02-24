@@ -1,4 +1,9 @@
-  GrossTest <- function(x,alpha=.05,...){
+  GrossTest <- function(
+    x,
+    alpha=.05,
+    ...
+    )
+  {
     computed <- x$Computed
     comparison <- x$Reported.Comparison
     reported <- x$Reported.P.Value
