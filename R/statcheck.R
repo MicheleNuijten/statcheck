@@ -636,8 +636,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   Res[['Reported.Comparison']] <- gsub(",","<",Res[['Reported.Comparison']])
   
   ###---------------------------------------------------------------------
-<<<<<<< HEAD
-=======
   ErrorTest <- function(x,...){
     
     computed <- as.vector(x$Computed)
@@ -732,7 +730,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     return(AllTests)
   }
->>>>>>> cfe8a9d2da6c093f1b7b3e417faf6cca97e2cf4e
   
   ###---------------------------------------------------------------------
   
