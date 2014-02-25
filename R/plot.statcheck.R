@@ -1,4 +1,10 @@
-plot.statcheck <- function(x,...) {
+plot.statcheck <- function(
+  ### Function for plotting of "statcheck" objects. Reported p values are plotted against recalculated p values, which allows the user to easily spot if articles contain miscalculations of statistical results. 
+  x,
+  
+  ...
+
+  ) {
   
   # Extract limit args:
   args <- list(...)
