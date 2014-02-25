@@ -1,5 +1,12 @@
-summary.statcheck <- function(object,...){
-  
+summary.statcheck <- structure(function(# Summary method for \code{statcheck}.
+  ### Gives the summaries for a \code{statcheck} object.  
+  object,
+  ### a \code{statcheck} object.
+  ...
+  ### additional arguments affecting the summary produced.
+  ){
+  ##seealso<<
+  ## \code{\link{statcheck}}
   x <- object
   
   # Source
@@ -23,4 +30,15 @@ summary.statcheck <- function(object,...){
   class(res) <- c("statcheck","data.frame")
   
   return(res)
-}
+  ##value<<
+  ## A data frame containing for each extracted statistic:
+  ## \item{Source}{Name of the file of which the statistic is extracted}
+  ## \item{pValues}{The number of reported p values per article}
+  ## \item{Errors}{The number of errors per article}
+  ## \item{DecisionErrors}{The number of errors that caused a non-significant result to be reported as significant (or vice versa) per article}
+},ex=function(){
+  Text <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"
+Stat <- statcheck(Text)
+
+summary(Stat)
+  })
