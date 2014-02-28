@@ -909,3 +909,16 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   txt <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"
   statcheck(txt)
   })
+
+
+###########################
+
+r2t <- function(# Transform r values into t values
+  ### Function to transform r values into t values by use of raw r and degrees of freedom.
+  r,
+  ### Raw correlation value
+  df
+  ### Degrees of freedom (N-1)
+  ){
+          r / (sqrt((1-r^2)/df))
+        }
