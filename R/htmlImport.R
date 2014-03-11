@@ -20,7 +20,9 @@ getHTML <- function(
   strings <- lapply(strings,gsub,pattern="\n",replacement="")
   strings <- lapply(strings,gsub,pattern="\r",replacement="")
   strings <- lapply(strings,gsub,pattern="\\s+",replacement=" ")
-  
+  strings <- lapply(strings,gsub,pattern="&#935",replacement="χ")
+  strings <- lapply(strings,gsub,pattern="&#967",replacement="χ")
+ 
   return(strings)
 }
 
@@ -66,15 +68,15 @@ checkHTMLdir <- structure(function(# Extract test statistics from all HTML files
   ## \item{InExactError}{Error in inexactly reported p values as compared to the recalculated p values}
   ## \item{ExactError}{Error in exactly reported p values as compared to the recalculated p values}
   ## \item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
-},ex=function(){
+  },ex=function(){
   # with this command a menu will pop up from which you can select the directory with HTML articles
-checkHTMLdir()
+  checkHTMLdir()
 
 # you could also specify the directory beforehand
 # for instance:
 DIR <- "C:/mydocuments/articles"
 checkHTMLdir(DIR)
-  })
+})
 
 checkHTML <- structure(function(# Extract test statistics from HTML file.
   ### Extracts statistical references from given HTML files.
@@ -106,10 +108,10 @@ checkHTML <- structure(function(# Extract test statistics from HTML file.
   ## \item{InExactError}{Error in inexactly reported p values as compared to the recalculated p values}
   ## \item{ExactError}{Error in exactly reported p values as compared to the recalculated p values}
   ## \item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
-},ex=function(){
+  },ex=function(){
   # given that my HTML file is called "article.html"
 # and I saved it in "C:/mydocuments/articles"
 
 checkHTML("C:/mydocuments/articles/article.html")
-  })
+})
 
