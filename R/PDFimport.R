@@ -25,6 +25,8 @@ checkPDFdir <- structure(function(# Extract statistics and recompute p values fr
   ### By default a GUI window is opened that allows you to choose the directory (using tcltk).
   dir,
   ### String indicating the directory to be used.
+  subdir = TRUE,
+  ### Logical indicating whether you also want to check subfolders. Defaults to TRUE
   ...
   ### Arguments sent to  \code{\link{statcheck}}.
   )
@@ -36,7 +38,7 @@ checkPDFdir <- structure(function(# Extract statistics and recompute p values fr
   ##seealso<<
   ## \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkHTMLdir}}, \code{\link{checkHTML}}, \code{\link{checkdir}}
   if (missing(dir)) dir <- tk_choose.dir()
-  files <- list.files(dir,pattern=".pdf",full.names=TRUE)
+  files <- list.files(dir,pattern=".pdf",full.names=TRUE,recursive=subdir)
   txts <- character(length(files))
   message("Importing PDF files...")
   pb <- txtProgressBar(max=length(files),style=3)

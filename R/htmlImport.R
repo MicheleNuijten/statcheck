@@ -31,6 +31,8 @@ checkHTMLdir <- structure(function(# Extract test statistics from all HTML files
   ### Extracts statistical references from a directory with HTML versions of articles. By default a gui window is opened that allows you to choose the directory (using tcltk).
   dir,
   ### String indicating the directory to be used.
+  subdir = TRUE,
+  ### Logical indicating whether you also want to check subfolders. Defaults to TRUE
   ...
   ### Arguments sent to  \code{\link{statcheck}}
   )
@@ -41,7 +43,7 @@ checkHTMLdir <- structure(function(# Extract test statistics from all HTML files
   ##seealso<<
   ## \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkPDFdir}}, \code{\link{checkHTML}}, \code{\link{checkdir}}
   if (missing(dir)) dir <- tk_choose.dir()
-  files <- list.files(dir,pattern=".html|.htm",full.names=TRUE)
+  files <- list.files(dir,pattern=".html|.htm",full.names=TRUE,recursive=subdir)
   txts <- character(length(files))
   message("Importing HTML files...")
   pb <- txtProgressBar(max=length(files),style=3)
