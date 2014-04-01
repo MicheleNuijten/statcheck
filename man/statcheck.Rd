@@ -18,20 +18,35 @@ For PDF files the "pdftotext" program is used to convert PDF files to plain text
 Note that a seemingly inconsistent p value can still be correct when we take the possibility into account that the test statistic was rounded after calculating the corresponding p value. For instance, a reported t value of 2.35 could correspond to an actual value of 2.345 to 2.354 with a range of p values that can slightly deviate from the recomputed p value but still be correct.}
 \value{A data frame containing for each extracted statistic:
 Source: Name of the file of which the statistic is extracted
+
 Statistic: Character indicating the statistic that is extracted
+
 df1: First degree of freedom
+
 df2: Second degree of freedom (if applicable)
+
 Test.Comparison: Reported comparison of the test statistic, when importing from pdf this will often not be converted properly
+
 Value: Reported value of the statistic
+
 Reported.Comparison: Reported comparison of the p value, when importing from pdf this will often not be converted properly
+
 Reported.P.Value: The reported p-value, or NA if the reported value was NS
+
 Computed: The recomputed p-value
+
 Raw: Raw string of the statistical reference that is extracted
+
 Error: The computed p value is not congruent with the reported p value
+
 DecisionError: The reported result is significant whereas the computed result is not, or vice versa.
+
 OneTail: Logical. Is it likely that the reported p value resulted from a correction for one-sided testing?
+
 OneTailedInTxt: Logical. Does the text contain the string "sided", "tailed", and/or "directional"?
-CopyPaste: Logical. Does the exact string of the extracted raw results occur anywhere else in the article?}
+
+CopyPaste: Logical. Does the exact string of the extracted raw results occur anywhere else in the article?
+}
 
 \author{Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten <m.b.nuijten@uvt.nl>}
 

@@ -890,20 +890,35 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
 
   ### A data frame containing for each extracted statistic:
   ### Source: Name of the file of which the statistic is extracted
+  ### 
   ### Statistic: Character indicating the statistic that is extracted
+  ### 
   ### df1: First degree of freedom
+  ### 
   ### df2: Second degree of freedom (if applicable)
+  ### 
   ### Test.Comparison: Reported comparison of the test statistic, when importing from pdf this will often not be converted properly
+  ### 
   ### Value: Reported value of the statistic
+  ### 
   ### Reported.Comparison: Reported comparison of the p value, when importing from pdf this will often not be converted properly
+  ### 
   ### Reported.P.Value: The reported p-value, or NA if the reported value was NS
+  ### 
   ### Computed: The recomputed p-value
+  ### 
   ### Raw: Raw string of the statistical reference that is extracted
+  ### 
   ### Error: The computed p value is not congruent with the reported p value
+  ### 
   ### DecisionError: The reported result is significant whereas the computed result is not, or vice versa.
+  ### 
   ### OneTail: Logical. Is it likely that the reported p value resulted from a correction for one-sided testing?
+  ### 
   ### OneTailedInTxt: Logical. Does the text contain the string "sided", "tailed", and/or "directional"?
+  ### 
   ### CopyPaste: Logical. Does the exact string of the extracted raw results occur anywhere else in the article?
+  ### 
 },ex=function(){
   txt <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"
   statcheck(txt)
