@@ -6,8 +6,7 @@ print.diagnose <- structure(function(# Print diagnose output.
 	## further arguments passed to or from other methods.
 	){
 	##details<<
-	## \section{ErrorDiagnosis}
-	## {This dataframe contains the error diagnosis of the analyzed articles that contained an error and has the following components: 
+	## This dataframe contains the error diagnosis of the analyzed articles that contained an error and has the following components: 
 	## \item{Source}{Name of the file of which the statistic is extracted}
 	## \item{Raw}{Raw string of the statistical reference that is extracted}
 	## \item{Computed}{The recomputed p-value}
@@ -19,10 +18,8 @@ print.diagnose <- structure(function(# Print diagnose output.
 	## \item{Bonferroni}{Logical. Could the reported p value have resulted from a Bonferroni correction? Note: The corrected p values were calculated by multiplying the reported p values by the number of statistical results reported in one article. This is a rough estimation.}
 	## \item{Unidentifiable}{Logical. The error could not be classified on the basis of the extracted information.}
 	## \item{CopyPaste}{Logical. Does the exact string of the extracted raw results occur anywhere else in the article?}}
-	## \section{CopyPaste}
-	## {This dataframe contains an overview of the detected copy-paste errors in all the articles. Its components are the same as the ones in ErrorDiagnosis. Note that a copy-paste error could still be congruent in terms of test statistic and p value, so it is possible that these errors do not show up in ErrorDiagnosis. }
-	## \section{Summary}
-	## {This dataframe provides a summary of all detected errors. It summarizes the number of detected errors in each of the aforementioned categories per article. The copy-paste errors are counted in a way that two identical strings of results are counted as one copy-paste error.}
+	## This dataframe contains an overview of the detected copy-paste errors in all the articles. Its components are the same as the ones in ErrorDiagnosis. Note that a copy-paste error could still be congruent in terms of test statistic and p value, so it is possible that these errors do not show up in ErrorDiagnosis. 
+	## This dataframe provides a summary of all detected errors. It summarizes the number of detected errors in each of the aforementioned categories per article. The copy-paste errors are counted in a way that two identical strings of results are counted as one copy-paste error.
 	##seealso<<
 	## \code{\link{diagnose}}, \code{\link{statcheck}}
   print(x[!(names(x)%in%"FullDiagnosis")])
