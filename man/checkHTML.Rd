@@ -2,8 +2,7 @@
 \alias{checkHTML}
 \title{Extract test statistics from HTML file.}
 \description{Extracts statistical references from given HTML files.}
-\usage{checkHTML(files, ...)}
-\arguments{
+\usage{checkHTML(files, ...)}\arguments{
   \item{files}{Vector of strings containing file paths to HTML files to check.}
   \item{\dots}{Arguments sent to  \code{\link{statcheck}}.}
 }

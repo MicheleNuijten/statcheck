@@ -2,8 +2,7 @@
 \alias{checkPDF}
 \title{Extract statistics and recompute p-values from pdf files.}
 \description{Extracts statistical values (currently only t and F statistics) from PDF files. To this end the "pdftotext" program is used to convert PDF files to plain text files. This must be installed and PATH variables must be properly set so that this program can be used from command line.}
-\usage{checkPDF(files, ...)}
-\arguments{
+\usage{checkPDF(files, ...)}\arguments{
   \item{files}{Vector with paths to the PDF files.}
   \item{\dots}{Arguments sent to  \code{\link{statcheck}}}
 }

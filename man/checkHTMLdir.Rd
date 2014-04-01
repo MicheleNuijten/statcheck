@@ -2,9 +2,9 @@
 \alias{checkHTMLdir}
 \title{Extract test statistics from all HTML files in a folder.}
 \description{Extracts statistical references from a directory with HTML versions of articles. By default a gui window is opened that allows you to choose the directory (using tcltk).}
-\usage{checkHTMLdir(dir, ...)}
-\arguments{
+\usage{checkHTMLdir(dir, subdir = TRUE, ...)}\arguments{
   \item{dir}{String indicating the directory to be used.}
+  \item{subdir}{Logical indicating whether you also want to check subfolders. Defaults to TRUE}
   \item{\dots}{Arguments sent to  \code{\link{statcheck}}}
 }
 \details{See \code{\link{statcheck}} for more details. Use \code{\link{checkHTML}} to import individual HTML files. 
@@ -30,7 +30,7 @@ Note that the conversion to plain text and extraction of statistics can result i
 \seealso{\code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkPDFdir}}, \code{\link{checkHTML}}, \code{\link{checkdir}}}
 \examples{
   # with this command a menu will pop up from which you can select the directory with HTML articles
-checkHTMLdir()
+  checkHTMLdir()
 
 # you could also specify the directory beforehand
 # for instance:

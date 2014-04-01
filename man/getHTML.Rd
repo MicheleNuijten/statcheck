@@ -2,8 +2,7 @@
 \alias{getHTML}
 \title{getHTML}
 
-\usage{getHTML(x)}
-\arguments{
+\usage{getHTML(x)}\arguments{
   \item{x}{
 }
 }

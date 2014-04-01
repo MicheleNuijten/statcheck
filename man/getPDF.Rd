@@ -2,8 +2,7 @@
 \alias{getPDF}
 \title{getPDF}
 
-\usage{getPDF(x)}
-\arguments{
+\usage{getPDF(x)}\arguments{
   \item{x}{
 }
 }

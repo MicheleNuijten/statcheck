@@ -2,8 +2,7 @@
 \alias{print.diagnose}
 \title{Print diagnose output.}
 \description{Print the output of a \code{diagnose} object.}
-\usage{\method{print}{diagnose}(x, ...)}
-\arguments{
+\usage{\method{print}{diagnose}(x, ...)}\arguments{
   \item{x}{
 }
   \item{\dots}{

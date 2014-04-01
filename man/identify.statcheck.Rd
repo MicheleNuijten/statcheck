@@ -2,8 +2,7 @@
 \alias{identify.statcheck}
 \title{Identify specific points in a \code{statcheck} plot.}
 \description{With this function you can simply point and click on the datapoints in the plot to see the corresponding statcheck details, such as the paper from which the data came and the exact statistical results.}
-\usage{\method{identify}{statcheck}(x, ...)}
-\arguments{
+\usage{\method{identify}{statcheck}(x, ...)}\arguments{
   \item{x}{a \code{statcheck} object.}
   \item{\dots}{additional arguments to be passed on to the plot method.}
 }

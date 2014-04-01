@@ -2,8 +2,7 @@
 \alias{diagnose}
 \title{Diagnose the most likely cause why a p value is inconsistent with its test statistic and degrees of freedom.}
 \description{This function analyzes whether inconsistent results in articles (as diagnosed with \code{\link{statcheck}} could be due to one of the most frequently observed causes (Bakker & Wicherts, 2011).}
-\usage{diagnose(x)}
-\arguments{
+\usage{diagnose(x)}\arguments{
   \item{x}{a \code{statcheck} output.}
 }
 \details{\section{ErrorDiagnosis}{

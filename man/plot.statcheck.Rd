@@ -2,8 +2,7 @@
 \alias{plot.statcheck}
 \title{Plot method for "statcheck"}
 \description{Function for plotting of "statcheck" objects. Reported p values are plotted against recalculated p values, which allows the user to easily spot if articles contain miscalculations of statistical results. }
-\usage{\method{plot}{statcheck}(x, ...)}
-\arguments{
+\usage{\method{plot}{statcheck}(x, ...)}\arguments{
   \item{x}{a "statcheck" object. See \code{\link{statcheck}}.}
   \item{\dots}{arguments to be passed to methods, such as graphical parameters (see \code{\link{par}}).}
 }

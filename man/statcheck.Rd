@@ -3,8 +3,7 @@
 \title{Extract statistics and recompute p-values.}
 \description{This function extracts statistics from strings and returns the extracted values, reported p-values and recomputed p-values. The package relies on the program "pdftotext", see the paragraph "Note" for details on the installation.}
 \usage{statcheck(x, stat = c("t", "F", "cor", "chisq", "Z", "Wald"), 
-    OneTailedTests = FALSE, alpha = 0.05, OneTailedTxt = FALSE)}
-\arguments{
+    OneTailedTests = FALSE, alpha = 0.05, OneTailedTxt = FALSE)}\arguments{
   \item{x}{A vector of strings containing whole articles.}
   \item{stat}{"t" to extract t-values, "F" to extract F-values, "cor" to extract correlations, "chisq"to extract chisquare values, "Z" to extract Z-values, and "Wald" to extract the results of the Wald test.}
   \item{OneTailedTests}{Logical. Do we assume that all reported tests are one tailed (TRUE) or two tailed (FALSE, default).}

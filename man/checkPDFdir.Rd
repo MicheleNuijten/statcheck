@@ -3,9 +3,9 @@
 \title{Extract statistics and recompute p values from a directory with pdf files.}
 \description{Extracts statistical references from a directory with PDF files. The "pdftotext" program (http://www.foolabs.com/xpdf/download.html) is used to convert PDF files to plain text files. This must be installed and PATH variables must be properly set so that this program can be used from command line.
 By default a GUI window is opened that allows you to choose the directory (using tcltk).}
-\usage{checkPDFdir(dir, ...)}
-\arguments{
+\usage{checkPDFdir(dir, subdir = TRUE, ...)}\arguments{
   \item{dir}{String indicating the directory to be used.}
+  \item{subdir}{Logical indicating whether you also want to check subfolders. Defaults to TRUE}
   \item{\dots}{Arguments sent to  \code{\link{statcheck}}.}
 }
 \details{See \code{\link{statcheck}} for more details. Use \code{\link{checkPDF}} to import individual PDF files. Currently only statistics in the form "stat (df1, df2) = value, p = value" are extracted. Because the Chi-square symbol can not be repressented in plain text it is often lost in the conversion. Because of this Chi-square values are extracted by finding all statistical references with one degree of freedom that do not follow the symbol "t" or "r". While this does extract most Chi-square values it is possible that other statistics, possibly due to unconventional notation, are also extracted and reported as chi-square values.
