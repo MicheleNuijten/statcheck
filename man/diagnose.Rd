@@ -7,9 +7,10 @@
   \item{x}{a \code{statcheck} output.}
 }
 \details{This dataframe contains the error diagnosis of the analyzed articles that contained an error and has the following components: 
-Source: Name of the file of which the statistic is extracted \\
-Raw: Raw string of the statistical reference that is extracted \\
-Computed: The recomputed p-value \\
+Source: Name of the file of which the statistic is extracted 
+Raw: Raw string of the statistical reference that is extracted
+Computed: The recomputed p-value 
+
 OneTail: Logical. Is it likely that the reported p value resulted from a correction for one-sided testing?
 RoundError: Logical. P value wrongly rounded upward or downward. E.g. rounding a p value of .049 to .04.
 PSmallerThanZero: Logical. Reported p <.000.
