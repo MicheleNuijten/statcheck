@@ -136,8 +136,8 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         # Create data frame:
         tRes <- data.frame(Source = names(x)[i], 
                            Statistic="t", 
-                           df1= df, 
-                           df2=NA,
+                           df1= NA, 
+                           df2=df,
                            Test.Comparison=testEq,
                            Value = tVals, 
                            Reported.Comparison= pEq, 
@@ -314,8 +314,8 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         # Create data frame:
         rRes <- data.frame(Source = names(x)[i], 
                            Statistic="r", 
-                           df1= df, 
-                           df2=NA,
+                           df1= NA, 
+                           df2=df,
                            Test.Comparison=testEq,
                            Value = rVals, 
                            Reported.Comparison= pEq, 
@@ -499,8 +499,8 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         for(j in 1:length(wVals)){
           if(!(is.na(pVals[j]))){
             
-            pZ <- pnorm(wVals[j],lower.tail=FALSE)*2
-            pChisq <- pchisq(wVals[j],1,lower.tail=FALSE)
+            pZ <- pnorm(abs(wVals[j]),lower.tail=FALSE)*2
+            pChisq <- pchisq(abs(wVals[j]),1,lower.tail=FALSE)
             
             if(abs(pVals[j]-pZ)<abs(pVals[j]-pChisq)){
               comp[j] <- pZ
