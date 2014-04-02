@@ -10,7 +10,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   ### Assumed level of significance in the scanned texts. Defaults to .05. 
   OneTailedTxt=FALSE
   ### Logical. If TRUE, statcheck searches the text for "sided", "tailed", and "directional" to identify the possible use of one-sided tests. If one or more of these strings is found in the text AND the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.
-  )
+)
 {
   ##details<<
   ## This function can be used if the text of articles has already been imported in R. To import text from pdf files and automatically send the results to this function use \code{\link{checkPDFdir}} or \code{\link{checkPDF}}. To import text from HTML files use the similar functions \code{\link{checkHTMLdir}} or \code{\link{checkHTML}}. Finally, \code{\link{checkdir}} can be used to import text from both PDF and HTML files in a folder.
@@ -162,7 +162,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
       if (FLoc[1] != -1){
         # Get raw text of F-values:
         FRaw <- substring(txt,FLoc,FLoc+attr(FLoc,"match.length")-1)
-                
+        
         # Extract location of numbers:
         nums <- gregexpr("(\\d*\\.?\\d+)|ns",FRaw)
         
@@ -177,17 +177,17 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         
         # Extract df2:
         df2 <- as.numeric(substring(FRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
-                
+        
         # remove commas (thousands separators)
         Fsplit <- strsplit(FRaw,"\\)",perl=TRUE)
         
         FValsRaw <- Fsplit[[1]][2]
         FandDF <- Fsplit[[1]][1]
         
-        FValsRaw <- gsub("(?<=\\d),(?=\\d+\\.)","",FValsRaw,perl=TRUE)
+        FValsRaw <- gsub("(?<=\\d),(?=\\d+)","",FValsRaw,perl=TRUE)
         
         FRaw <- paste(FandDF,")",FValsRaw,sep="")
-               
+        
         # Extract F-values
         numsF <- gregexpr("(\\d*\\.?\\d+)|ns",FValsRaw)
         suppressWarnings(
@@ -311,7 +311,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
         pEq[grepl("ns",rRaw,ignore.case=TRUE)] <- "ns"
-             
+        
         
         # determine number of decimals of p value
         dec <- attr(regexpr("\\.\\d+",pValsChar),"match.length")-1
@@ -638,8 +638,10 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   close(pb)
   Source <- NULL
   Res <- ddply(Res,.(Source),function(x)x[order(x$Location),])
-  Res[['Reported.Comparison']] <- gsub("5","=",Res[['Reported.Comparison']])
-  Res[['Reported.Comparison']] <- gsub(",","<",Res[['Reported.Comparison']])
+  #MN: sacha built this in, i don't know why
+  #Res[['Reported.Comparison']] <- gsub("5","=",Res[['Reported.Comparison']])
+  #Res[['Reported.Comparison']] <- gsub(",","<",Res[['Reported.Comparison']])
+  
   
   ###---------------------------------------------------------------------
   ErrorTest <- function(x,...){
@@ -739,163 +741,174 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   
   ###---------------------------------------------------------------------
   
-  if(OneTailedTests==TRUE){
-    Res$Computed <- Res$Computed/2
-  } 
-  
-  Res$Error <- ErrorTest(Res)
-  
-  # p values smaller or equal to zero and p values larger than one are errors
-  ImpossibleP <- (Res$Reported.P.Value<=0|Res$Reported.P.Value>1)
-  Res$Error[ImpossibleP] <- TRUE
-  
-  Res$DecisionError <-  DecisionErrorTest(Res)  
-  
-  ###---------------------------------------------------------------------
-  
-  # check if there would also be a decision error if alpha=.01 or .1
-  DecisionErrorAlphas <- logical()
-  alphas <- c(.01,.1)
-  
-  for(a in alphas){
-    alpha <- a
-    DecisionErrorAlphas <- c(DecisionErrorAlphas, DecisionErrorTest(Res))
-  }
-  
-  if(any(DecisionErrorAlphas)){
-    cat("\n Check the significance level. \n \n Some of the p value incongruencies are decision errors if the significance level is .1 or .01 instead of the conventional .05. It is recommended to check the actual significance level in the paper or text. Check if the reported p values are a decision error at a different significane level by running statcheck again with 'alpha' set to .1 and/or .01. \n ",fill=TRUE)
-  }
-  
-  ###---------------------------------------------------------------------
-  
-  if(OneTailedTests==FALSE){
+  if(nrow(Res)>0){
     
-    # check if there could be one-sided tests in the data set
+    if(OneTailedTests==TRUE){
+      Res$Computed <- Res$Computed/2
+    } 
     
-    computed <- Res$Computed
-    comparison <- Res$Reported.Comparison
-    reported <- Res$Reported.P.Value
-    raw <- Res$Raw
-    onetail <- computed/2
+    Res$Error <- ErrorTest(Res)
     
-    OneTail <- ifelse(Res$Error==TRUE &
-                        (grepl("=",comparison)[!is.na(onetail)] & round(reported,2)==round(onetail,2))
-                      | (grepl("<",comparison) & reported==.05 & onetail < reported & computed > reported)[!is.na(onetail)],
-                      TRUE,FALSE)
-    Res$OneTail <- OneTail
+    # p values smaller or equal to zero and p values larger than one are errors
+    ImpossibleP <- (Res$Reported.P.Value<=0|Res$Reported.P.Value>1)
+    Res$Error[ImpossibleP] <- TRUE
     
-    if(any(OneTail==TRUE & OneTailedTxt==FALSE)){
-      cat("\n Check for one tailed tests. \n \n Some of the p value incongruencies might in fact be one tailed tests. It is recommended to check this in the actual paper or text. Check if the p values would also be incongruent if the test is indeed one sided by running statcheck again with 'OneTailedTests' set to TRUE. To see which Sources probably contain a one tailed test, try unique(x$Source[x$OneTail]) (where x is the statcheck output). \n ",fill=TRUE)
+    Res$DecisionError <-  DecisionErrorTest(Res)  
+    
+    ###---------------------------------------------------------------------
+    
+    # check if there would also be a decision error if alpha=.01 or .1
+    DecisionErrorAlphas <- logical()
+    alphas <- c(.01,.1)
+    
+    for(a in alphas){
+      alpha <- a
+      DecisionErrorAlphas <- c(DecisionErrorAlphas, DecisionErrorTest(Res))
     }
     
-  }
-  
-  ###---------------------------------------------------------------------
-  
-  # count errors as correct if they'd be correct one-sided
-  # and there was a mention of 'sided','tailed', or 'directional' in the text
-  
-  if(OneTailedTxt==TRUE){
-    
-    Res1tailed <- Res
-    Res1tailed$Computed <- Res1tailed$Computed/2
-    
-    Res1tailed$Error <- ErrorTest(Res1tailed)
-    
-    Res$Error[Res$OneTailedInTxt==TRUE & Res1tailed$Error==FALSE] <- FALSE
-    Res$DecisionError[Res$OneTailedInTxt==TRUE & Res1tailed$DecisionError==FALSE] <- FALSE
-    
-    #     Res$Error[Res$OneTailedInTxt==TRUE & Res$OneTail==TRUE] <- FALSE
-    #     Res$DecisionError[Res$OneTailedInTxt==TRUE & Res$OneTail==TRUE] <- FALSE
-  }
-  
-  ###---------------------------------------------------------------------
-  
-  # copy paste errors
-  # same string of results elsewhere in article?
-  CopyPaste <- numeric()
-  for (i in 1:length(Res$Raw)){
-    Res_new <- Res[-i,]
-    CopyPaste[i] <- Res$Raw[i]%in%Res_new$Raw[Res_new$Source==Res_new$Source[i]]
-  }
-  CopyPaste <- as.logical(CopyPaste)
-  
-  Res$CopyPaste <- CopyPaste
-  
-  ###---------------------------------------------------------------------
-  
-  # "correct" rounding differences
-  # e.g. t=2.3 could be 2.25 to 2.34 with its range of p values
-  correct_round <- numeric()
-  
-  lower <- Res$Value-(.5/10^Res$testdec)
-  upper <- Res$Value+(.4/10^Res$testdec)
-  
-  for(i in seq_len(nrow(Res))){
-    
-    if(Res[i,]$Statistic=="F"){
-      upP <- pf(lower[i],Res[i,]$df1,Res[i,]$df2,lower.tail=FALSE)
-      lowP  <- pf(upper[i],Res[i,]$df1,Res[i,]$df2,lower.tail=FALSE)
-      
-    } else if(Res[i,]$Statistic=="t"){
-      upP <- pt(-1*abs(lower[i]),Res[i,]$df1)*2
-      lowP  <- pt(-1*abs(upper[i]),Res[i,]$df1)*2
-      
-    } else if(Res[i,]$Statistic=="Chi2"){
-      upP <- pchisq(lower[i],Res[i,]$df1,lower.tail=FALSE)
-      lowP  <- pchisq(upper[i],Res[i,]$df1,lower.tail=FALSE)
-      
-    } else if(Res[i,]$Statistic=="r"){
-      upP <- pmin(pt(-1*abs(r2t(lower[i],Res[i,]$df1)),Res[i,]$df1)*2,1)
-      lowP  <- pmin(pt(-1*abs(r2t(upper[i],Res[i,]$df1)),Res[i,]$df1)*2,1)
-      
-    } else if(Res[i,]$Statistic=="Z"|Res[i,]$Statistic=="z"){
-      upP <- pnorm(abs(lower[i]),lower.tail=FALSE)*2
-      lowP  <- pnorm(abs(upper[i]),lower.tail=FALSE)*2
-      
-    } else if(Res[i,]$Statistic=="Wald"|Res[i,]$Statistic=="wald"){
-      upP <- min(pnorm(lower[i],lower.tail=FALSE)*2,pchisq(lower,1,lower.tail=FALSE))
-      lowP  <- max(pnorm(upper[i],lower.tail=FALSE)*2,pchisq(lower,1,lower.tail=FALSE))
+    if(any(DecisionErrorAlphas)){
+      cat("\n Check the significance level. \n \n Some of the p value incongruencies are decision errors if the significance level is .1 or .01 instead of the conventional .05. It is recommended to check the actual significance level in the paper or text. Check if the reported p values are a decision error at a different significance level by running statcheck again with 'alpha' set to .1 and/or .01. \n ",fill=TRUE)
     }
+    
+    ###---------------------------------------------------------------------
     
     if(OneTailedTests==FALSE){
-      correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]>=lowP & Res$Reported.P.Value[i]<=upP,TRUE,FALSE)
-    } else {
-      correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]/2>=lowP & Res$Reported.P.Value[i]/2<=upP,TRUE,FALSE)
+      
+      # check if there could be one-sided tests in the data set
+      
+      computed <- Res$Computed
+      comparison <- Res$Reported.Comparison
+      reported <- Res$Reported.P.Value
+      raw <- Res$Raw
+      onetail <- computed/2
+      
+      OneTail <- ifelse(Res$Error==TRUE &
+                          (grepl("=",comparison)[!is.na(onetail)] & round(reported,2)==round(onetail,2))
+                        | (grepl("<",comparison) & reported==.05 & onetail < reported & computed > reported)[!is.na(onetail)],
+                        TRUE,FALSE)
+      Res$OneTail <- OneTail
+      
+      if(any(OneTail==TRUE & OneTailedTxt==FALSE)){
+        cat("\n Check for one tailed tests. \n \n Some of the p value incongruencies might in fact be one tailed tests. It is recommended to check this in the actual paper or text. Check if the p values would also be incongruent if the test is indeed one sided by running statcheck again with 'OneTailedTests' set to TRUE. To see which Sources probably contain a one tailed test, try unique(x$Source[x$OneTail]) (where x is the statcheck output). \n ",fill=TRUE)
+      }
+      
     }
+    
+    ###---------------------------------------------------------------------
+    
+    # count errors as correct if they'd be correct one-sided
+    # and there was a mention of 'sided','tailed', or 'directional' in the text
+    
+    if(OneTailedTxt==TRUE){
+      
+      Res1tailed <- Res
+      Res1tailed$Computed <- Res1tailed$Computed/2
+      
+      Res1tailed$Error <- ErrorTest(Res1tailed)
+      
+      Res$Error[Res$OneTailedInTxt==TRUE & Res1tailed$Error==FALSE] <- FALSE
+      Res$DecisionError[Res$OneTailedInTxt==TRUE & Res1tailed$DecisionError==FALSE] <- FALSE
+      
+      #     Res$Error[Res$OneTailedInTxt==TRUE & Res$OneTail==TRUE] <- FALSE
+      #     Res$DecisionError[Res$OneTailedInTxt==TRUE & Res$OneTail==TRUE] <- FALSE
+    }
+    
+    ###---------------------------------------------------------------------
+    
+    # copy paste errors
+    # same string of results elsewhere in article?
+    CopyPaste <- numeric()
+    for (i in 1:length(Res$Raw)){
+      Res_new <- Res[-i,]
+      CopyPaste[i] <- Res$Raw[i]%in%Res_new$Raw[Res_new$Source==Res_new$Source[i]]
+    }
+    CopyPaste <- as.logical(CopyPaste)
+    
+    Res$CopyPaste <- CopyPaste
+    
+    ###---------------------------------------------------------------------
+    
+    # "correct" rounding differences
+    # e.g. t=2.3 could be 2.25 to 2.34 with its range of p values
+    correct_round <- numeric()
+    
+    lower <- Res$Value-(.5/10^Res$testdec)
+    upper <- Res$Value+(.4/10^Res$testdec)
+    
+    for(i in seq_len(nrow(Res))){
+      
+      if(Res[i,]$Statistic=="F"){
+        upP <- pf(lower[i],Res[i,]$df1,Res[i,]$df2,lower.tail=FALSE)
+        lowP  <- pf(upper[i],Res[i,]$df1,Res[i,]$df2,lower.tail=FALSE)
+        
+      } else if(Res[i,]$Statistic=="t"){
+        upP <- pt(-1*abs(lower[i]),Res[i,]$df1)*2
+        lowP  <- pt(-1*abs(upper[i]),Res[i,]$df1)*2
+        
+      } else if(Res[i,]$Statistic=="Chi2"){
+        upP <- pchisq(lower[i],Res[i,]$df1,lower.tail=FALSE)
+        lowP  <- pchisq(upper[i],Res[i,]$df1,lower.tail=FALSE)
+        
+      } else if(Res[i,]$Statistic=="r"){
+        upP <- pmin(pt(-1*abs(r2t(lower[i],Res[i,]$df1)),Res[i,]$df1)*2,1)
+        lowP  <- pmin(pt(-1*abs(r2t(upper[i],Res[i,]$df1)),Res[i,]$df1)*2,1)
+        
+      } else if(Res[i,]$Statistic=="Z"|Res[i,]$Statistic=="z"){
+        upP <- pnorm(abs(lower[i]),lower.tail=FALSE)*2
+        lowP  <- pnorm(abs(upper[i]),lower.tail=FALSE)*2
+        
+      } else if(Res[i,]$Statistic=="Wald"|Res[i,]$Statistic=="wald"){
+        upP <- min(pnorm(lower[i],lower.tail=FALSE)*2,pchisq(lower,1,lower.tail=FALSE))
+        lowP  <- max(pnorm(upper[i],lower.tail=FALSE)*2,pchisq(lower,1,lower.tail=FALSE))
+      }
+      
+      if(OneTailedTests==FALSE){
+        correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]>=lowP & Res$Reported.P.Value[i]<=upP,TRUE,FALSE)
+      } else {
+        correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]/2>=lowP & Res$Reported.P.Value[i]/2<=upP,TRUE,FALSE)
+      }
+    }
+    
+    CorrectRound <- as.logical(correct_round)
+    
+    
+    
+    ###---------------------------------------------------------------------
+    
+    Res$Error[CorrectRound] <- FALSE
+    Res$DecisionError[CorrectRound] <- FALSE
+    
+    # final data frame
+    Res <- data.frame(Source = Res$Source, 
+                      Statistic = Res$Statistic, 
+                      df1 = Res$df1, 
+                      df2 = Res$df2,
+                      Test.Comparison = Res$Test.Comparison,
+                      Value = Res$Value, 
+                      Reported.Comparison = Res$Reported.Comparison, 
+                      Reported.P.Value = Res$Reported.P.Value, 
+                      Computed = Res$Computed, 
+                      Raw = Res$Raw,
+                      Error = Res$Error,
+                      DecisionError = Res$DecisionError,
+                      OneTail = Res$OneTail,
+                      OneTailedInTxt = Res$OneTailedInTxt,
+                      CopyPaste = Res$CopyPaste
+    )
+    
+    class(Res) <- c("statcheck","data.frame")
+    
+  ###--------------------------------------------------------------------- 
+  # Return message when there are no results
+  
+  } else { 
+    Res <- cat("statcheck did not find any results\n")
   }
   
-  CorrectRound <- as.logical(correct_round)
-  
-  
-  
-  ###---------------------------------------------------------------------
-  
-  Res$Error[CorrectRound] <- FALSE
-  Res$DecisionError[CorrectRound] <- FALSE
-  
-  # final data frame
-  Res <- data.frame(Source = Res$Source, 
-                    Statistic = Res$Statistic, 
-                    df1 = Res$df1, 
-                    df2 = Res$df2,
-                    Test.Comparison = Res$Test.Comparison,
-                    Value = Res$Value, 
-                    Reported.Comparison = Res$Reported.Comparison, 
-                    Reported.P.Value = Res$Reported.P.Value, 
-                    Computed = Res$Computed, 
-                    Raw = Res$Raw,
-                    Error = Res$Error,
-                    DecisionError = Res$DecisionError,
-                    OneTail = Res$OneTail,
-                    OneTailedInTxt = Res$OneTailedInTxt,
-                    CopyPaste = Res$CopyPaste
-  )
-  
-  class(Res) <- c("statcheck","data.frame")
+  ###--------------------------------------------------------------------- 
   
   return(Res)
-
+  
   ### A data frame containing for each extracted statistic:
   ### Source: Name of the file of which the statistic is extracted
   ### 
@@ -930,7 +943,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
 },ex=function(){
   txt <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"
   statcheck(txt)
-  })
+})
 
 
 ###########################
@@ -941,6 +954,6 @@ r2t <- function(# Transform r values into t values
   ### Raw correlation value
   df
   ### Degrees of freedom (N-1)
-  ){
-          r / (sqrt((1-r^2)/df))
-        }
+){
+  r / (sqrt((1-r^2)/df))
+}
