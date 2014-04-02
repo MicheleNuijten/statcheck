@@ -3,6 +3,8 @@ checkdir <- structure(function(# Extract test statistics from all HTML and PDF f
   ### By default a gui window is opened that allows you to choose the directory (using tcltk).
   dir,
   ### String indicating the directory to be used.
+  subdir = TRUE,
+  ### Logical indicating whether you also want to check subfolders. Defaults to TRUE
   ...
   ### Arguments sent to  \code{\link{statcheck}}.
   )
@@ -16,8 +18,8 @@ checkdir <- structure(function(# Extract test statistics from all HTML and PDF f
   ## \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkHTMLdir}}, \code{\link{checkHTML}}, \code{\link{checkHTMLdir}}
   if (missing(dir)) dir <- tk_choose.dir()
   
-  pdfs <- any(grepl("\\.pdf$",list.files(dir),ignore.case=TRUE))
-  htmls <- any(grepl("\\.html?$",list.files(dir),ignore.case=TRUE))
+  pdfs <- any(grepl("\\.pdf$",list.files(dir,recursive=subdir),ignore.case=TRUE))
+  htmls <- any(grepl("\\.html?$",list.files(dir,recursive=subdir),ignore.case=TRUE))
   
    if (pdfs) pdfres <- checkPDFdir(dir,...)
    if (htmls) htmlres <- checkHTMLdir(dir,...)
