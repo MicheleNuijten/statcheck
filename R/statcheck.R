@@ -65,7 +65,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # t-values:
     if ("t"%in%stat){
       # Get location of t-values in text:
-      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\D{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.?\\d+)",txt,ignore.case=TRUE)[[1]]
+      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\D{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (tLoc[1] != -1){
         # Get raw text of t-values:
@@ -162,10 +162,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
       if (FLoc[1] != -1){
         # Get raw text of F-values:
         FRaw <- substring(txt,FLoc,FLoc+attr(FLoc,"match.length")-1)
-        
-        # remove commas (thousands separators)
-        FRaw <- gsub("(?<=\\d),(?=\\d+\\.)","",FRaw,perl=TRUE)
-        
+                
         # Extract location of numbers:
         nums <- gregexpr("(\\d*\\.?\\d+)|ns",FRaw)
         
@@ -180,10 +177,21 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         
         # Extract df2:
         df2 <- as.numeric(substring(FRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
+                
+        # remove commas (thousands separators)
+        Fsplit <- strsplit(FRaw,"\\)",perl=TRUE)
         
+        FValsRaw <- Fsplit[[1]][2]
+        FandDF <- Fsplit[[1]][1]
+        
+        FValsRaw <- gsub("(?<=\\d),(?=\\d+\\.)","",FValsRaw,perl=TRUE)
+        
+        FRaw <- paste(FandDF,")",FValsRaw,sep="")
+               
         # Extract F-values
+        numsF <- gregexpr("(\\d*\\.?\\d+)|ns",FValsRaw)
         suppressWarnings(
-          FValsChar <- substring(FRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
+          FValsChar <- substring(FValsRaw,sapply(numsF,'[',1),sapply(numsF,function(x)x[1]+attr(x,"match.length")[1]-1)))
         
         suppressWarnings(
           FVals <- as.numeric(FValsChar))
@@ -201,7 +209,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         
         # Extract p-values
         suppressWarnings(
-          pValsChar <- substring(FRaw,sapply(nums,'[',4),sapply(nums,function(x)x[4]+attr(x,"match.length")[4]-1)))
+          pValsChar <- substring(FValsRaw,sapply(numsF,'[',2),sapply(numsF,function(x)x[2]+attr(x,"match.length")[2]-1)))
         
         suppressWarnings(
           pVals <- as.numeric(pValsChar))
@@ -427,7 +435,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # Wald test results
     if ("Wald"%in%stat){
       # Get location of Wald results in text:
-      wLoc <- gregexpr("[^a-z]?(\\wald|\\Wald)\\s?\\D?\\s?\\D{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      wLoc <- gregexpr("[^a-z]?(\\wald|\\Wald)\\s?[^Zzχ]?\\s?\\D{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (wLoc[1] != -1){
         # Get raw text of Wald results:
@@ -543,8 +551,8 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     # Chis2-values:
     if ("chisq"%in%stat){
-      # Get location of χ values or not-t-or-r-values in text:
-      chi2Loc <- gregexpr("((χ|(Δ\\s?G))\\s?2?\\s?|[^(t|r|\\s)]\\s+)\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\s?\\d*\\,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,perl=TRUE,ignore.case=TRUE)[[1]]
+      # Get location of χ values or ΔG in text:
+      chi2Loc <- gregexpr("(χ|(Δ\\s?G))\\s?2?\\s?\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d+\\s?)?\\)\\s?.?\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (chi2Loc[1] != -1){
         # Get raw text of chi2-values:
