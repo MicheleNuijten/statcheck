@@ -28,13 +28,23 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     return(x)
   }
   
-  # Create empty data frame:
+  # Create empty data frame for main result:
   Res <- data.frame(Source = NULL,Statistic=NULL,df1=NULL,df2=NULL,Test.Comparison=NULL,
                     Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, 
                     Error = NULL,DecisionError=NULL,CopyPaste=NULL, Location = NULL,
-                    stringsAsFactors=FALSE,dec=NULL,testdec=NULL,OneTail=NULL,OneTailedInTxt=NULL)
+                    stringsAsFactors=FALSE,dec=NULL,testdec=NULL,OneTail=NULL,OneTailedInTxt=NULL,
+                    APAfactor = NULL)
   class(Res) <- c("statcheck","data.frame")
   OneTailedInTxt <- NULL
+  
+  # Create empty data frame for p values:
+  pRes <- data.frame(Source = NULL, 
+                     Statistic=NULL, 
+                     Reported.Comparison= NULL, 
+                     Reported.P.Value=NULL, 
+                     Raw = NULL,
+                     stringsAsFactors=FALSE
+  )
   
   if (length(x)==0) return(Res)
   
@@ -45,6 +55,52 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   for (i in 1:length(x)){
     
     txt <- x[i]
+    
+    #---------------------------
+    
+    # extract all p values in order to calculate the ratio statcheck results/total # of p values
+    
+    # p-values
+    # Get location of p-values in text:
+    pLoc <- gregexpr("(\\s+ns(\\s+|\\.))|(p\\s?[<|>|=]\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+    
+    if (pLoc[1] != -1){
+      # Get raw text of p-values:
+      pRaw <- substring(txt,pLoc,pLoc+attr(pLoc,"match.length")-1)
+      
+      nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",pRaw)
+      
+      # Extract p-values
+      suppressWarnings(
+        pValsChar <- substring(pRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
+      
+      suppressWarnings(
+        pVals <- as.numeric(pValsChar))
+      
+      # Extract (in)equality
+      eqLoc <- gregexpr("p\\s?.?",pRaw)
+      pEq <- substring(pRaw,
+                       sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
+                       sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+      pEq[grepl("ns",pRaw,ignore.case=TRUE)] <- "ns"
+      
+      
+      
+      pvalues <- data.frame(Source = names(x)[i], 
+                            Statistic="p", 
+                            Reported.Comparison= pEq, 
+                            Reported.P.Value=pVals, 
+                            Raw = pRaw,
+                            stringsAsFactors=FALSE
+      )
+      
+      # remove p values greater than one
+      pvalues <- pvalues[pvalues$Reported.P.Value<1|is.na(pvalues$Reported.P.Value),]
+      
+      pRes <- rbind(pRes,pvalues)
+      rm(pvalues)
+      
+    }
     
     #---------------------------
     
@@ -871,8 +927,13 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     CorrectRound <- as.logical(correct_round)
     
+    ###---------------------------------------------------------------------
     
+    # APAfactor: proportion of APA results (that statcheck reads) of total number of p values
     
+    APA <- by(Res,Res$Source,nrow)/by(pRes,pRes$Source,nrow)
+    Res$APAfactor <- apply(Res,1,function(x) APA[which(names(APA)==x["Source"])])
+        
     ###---------------------------------------------------------------------
     
     Res$Error[CorrectRound] <- FALSE
@@ -893,7 +954,8 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
                       DecisionError = Res$DecisionError,
                       OneTail = Res$OneTail,
                       OneTailedInTxt = Res$OneTailedInTxt,
-                      CopyPaste = Res$CopyPaste
+                      CopyPaste = Res$CopyPaste,
+                      APAfactor = Res$APAfactor
     )
     
     class(Res) <- c("statcheck","data.frame")
