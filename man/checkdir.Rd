@@ -3,8 +3,9 @@
 \title{Extract test statistics from all HTML and PDF files in a folder.}
 \description{Extracts statistical references from a directory with HTML and PDF files. The "pdftotext" program is used to convert PDF files to plain text files. This must be installed and PATH variables must be properly set so that this program can be used from command line.
 By default a gui window is opened that allows you to choose the directory (using tcltk).}
-\usage{checkdir(dir, ...)}\arguments{
+\usage{checkdir(dir, subdir = TRUE, ...)}\arguments{
   \item{dir}{String indicating the directory to be used.}
+  \item{subdir}{Logical indicating whether you also want to check subfolders. Defaults to TRUE}
   \item{\dots}{Arguments sent to  \code{\link{statcheck}}.}
 }
 \details{See \code{\link{statcheck}} for more details. This function is a wrapper around both \code{\link{checkPDFdir}} for PDF files and \code{\link{checkHTMLdir}} for HTML files.
