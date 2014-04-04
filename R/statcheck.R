@@ -12,8 +12,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   ### Logical. If TRUE, statcheck searches the text for "sided", "tailed", and "directional" to identify the possible use of one-sided tests. If one or more of these strings is found in the text AND the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.
   AllPValues=FALSE
   ### Logical. If TRUE, the output will consist of a dataframe with all detected p values, also the ones that were not part of the full results in APA format
-)
-{
+){
   ##details<<
   ## Statcheck uses regular expressions to find statistical results in APA format. When a statistical result deviates from APA format, statcheck will not find it. The APA formats that statcheck uses are: t(df) = value, p = value; F(df1,df2) = value, p = value; r(df) = value, p = value; χ2 (df, N = value) = value, p = value (N is optional, ΔG is also included); Z = value, p = value; Wald = value, p = value. All regular expressions take into account that test statistics and p values may be exactly (=) or inexactly (< or >) reported. Different spacing has also been taken into account.
   ## This function can be used if the text of articles has already been imported in R. To import text from pdf files and automatically send the results to this function use \code{\link{checkPDFdir}} or \code{\link{checkPDF}}. To import text from HTML files use the similar functions \code{\link{checkHTMLdir}} or \code{\link{checkHTML}}. Finally, \code{\link{checkdir}} can be used to import text from both PDF and HTML files in a folder.
@@ -963,21 +962,24 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     )
     
     class(Res) <- c("statcheck","data.frame")
-    
-  ###--------------------------------------------------------------------- 
-  # Return message when there are no results
-  
-  } else { 
-    Res <- cat("statcheck did not find any results\n")
   }
   
   ###--------------------------------------------------------------------- 
   
   if(AllPValues==FALSE){
-  return(Res)
+    
+    # Return message when there are no results
+    if(nrow(Res)>0){
+      return(Res) 
+    } else {
+      Res <- cat("statcheck did not find any results\n")
+    }
+    
   } else {
     return(pRes)
   }
+
+
   
   ### A data frame containing for each extracted statistic:
   ### Source: Name of the file of which the statistic is extracted
