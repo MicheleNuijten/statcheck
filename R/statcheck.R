@@ -8,8 +8,10 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   ### Logical. Do we assume that all reported tests are one tailed (TRUE) or two tailed (FALSE, default)?
   alpha=.05,
   ### Assumed level of significance in the scanned texts. Defaults to .05. 
-  OneTailedTxt=FALSE
+  OneTailedTxt=FALSE,
   ### Logical. If TRUE, statcheck searches the text for "sided", "tailed", and "directional" to identify the possible use of one-sided tests. If one or more of these strings is found in the text AND the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.
+  AllPValues=FALSE
+  ### Logical. If TRUE, the output will consist of a dataframe with all detected p values, also the ones that were not part of the full results in APA format
 )
 {
   ##details<<
@@ -931,9 +933,11 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     # APAfactor: proportion of APA results (that statcheck reads) of total number of p values
     
-    APA <- by(Res,Res$Source,nrow)/by(pRes,pRes$Source,nrow)
+    # select only the results of pRes that are from articles with at least 1 statcheck result
+    pRes_selection <- pRes[pRes$Source%in%Res$Source,]
+    APA <- by(Res,Res$Source,nrow)/by(pRes_selection,pRes_selection$Source,nrow)
     Res$APAfactor <- apply(Res,1,function(x) APA[which(names(APA)==x["Source"])])
-        
+            
     ###---------------------------------------------------------------------
     
     Res$Error[CorrectRound] <- FALSE
@@ -969,7 +973,11 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   
   ###--------------------------------------------------------------------- 
   
+  if(AllPValues==FALSE){
   return(Res)
+  } else {
+    return(pRes)
+  }
   
   ### A data frame containing for each extracted statistic:
   ### Source: Name of the file of which the statistic is extracted
