@@ -840,8 +840,8 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
       onetail <- computed/2
       
       OneTail <- ifelse(Res$Error==TRUE &
-                          (grepl("=",comparison)[!is.na(onetail)] & round(reported,2)==round(onetail,2))
-                        | (grepl("<",comparison) & reported==.05 & onetail < reported & computed > reported)[!is.na(onetail)],
+                          (grepl("=",comparison) & round(reported,2)==round(onetail,2))
+                        | (grepl("<",comparison) & reported==.05 & onetail < reported & computed > reported),
                         TRUE,FALSE)
       Res$OneTail <- OneTail
       
@@ -934,7 +934,14 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     # select only the results of pRes that are from articles with at least 1 statcheck result
     pRes_selection <- pRes[pRes$Source%in%Res$Source,]
-    APA <- by(Res,Res$Source,nrow)/by(pRes_selection,pRes_selection$Source,nrow)
+    
+    # select only the statcheck results that are from an article with at least one p value
+    # this only matters for PDFs: here you can have more statcheck results than p values,
+    # because pRes has stronger selection criteria (p </>/= |ns) than statcheck (p.|ns)
+    # the statcheck selection is less strict, to be able to extract at least some results from the pdfs
+    # even though sometimes the signs (</>/=) cannot be read
+    Res_selection <- Res[Res$Source%in%pRes_selection$Source,]
+    APA <- by(Res_selection,Res_selection$Source,nrow)/by(pRes_selection,pRes_selection$Source,nrow)
     Res$APAfactor <- apply(Res,1,function(x) APA[which(names(APA)==x["Source"])])
             
     ###---------------------------------------------------------------------
