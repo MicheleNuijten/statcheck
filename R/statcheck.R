@@ -122,7 +122,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # t-values:
     if ("t"%in%stat){
       # Get location of t-values in text:
-      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\D{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?[^a-zχ\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (tLoc[1] != -1){
         # Get raw text of t-values:
@@ -309,7 +309,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # correlations:
     if (any(c("r","cor","correlations")%in%stat)){
       # Get location of r-values in text:
-      rLoc <- gregexpr("r\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\D{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      rLoc <- gregexpr("r\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?[^a-zχ\\d]{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (rLoc[1] != -1){
         # Get raw text of r-values:
@@ -400,7 +400,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # z-values:
     if ("Z"%in%stat){
       # Get location of z-values in text:
-      zLoc <- gregexpr("[^a-z]?(z|Z)\\s?.?\\s?\\D{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      zLoc <- gregexpr("[^a-z]z\\s?[^a-z]?\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (zLoc[1] != -1){
         # Get raw text of z-values:
@@ -492,7 +492,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # Wald test results
     if ("Wald"%in%stat){
       # Get location of Wald results in text:
-      wLoc <- gregexpr("[^a-z]?(\\wald|\\Wald)\\s?[^Zzχ]?\\s?\\D{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      wLoc <- gregexpr("[^a-z]wald\\s?[^a-zχ]\\s?(\\(\\s?\\d*\\.?\\d+\\s?\\))?\\s?[^a-zχ\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (wLoc[1] != -1){
         # Get raw text of Wald results:
@@ -609,7 +609,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # Chis2-values:
     if ("chisq"%in%stat){
       # Get location of χ values or ΔG in text:
-      chi2Loc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)2?\\s?|[^(t|r|\\s)]\\s+)\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d+\\s?)?\\)\\s?.?\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      chi2Loc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)2?\\s?|[^(t|r|wald\\s)]\\s+)\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d+\\s?)?\\)\\s?.?\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (chi2Loc[1] != -1){
         # Get raw text of chi2-values:
@@ -942,7 +942,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # even though sometimes the signs (</>/=) cannot be read
     Res_selection <- Res[Res$Source%in%pRes_selection$Source,]
     APA <- by(Res_selection,Res_selection$Source,nrow)/by(pRes_selection,pRes_selection$Source,nrow)
-    Res$APAfactor <- apply(Res,1,function(x) APA[which(names(APA)==x["Source"])])
+    Res$APAfactor <- round(as.numeric(apply(Res,1,function(x) APA[which(names(APA)==x["Source"])])),2)
             
     ###---------------------------------------------------------------------
     
