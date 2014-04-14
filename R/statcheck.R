@@ -63,7 +63,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     # p-values
     # Get location of p-values in text:
-    pLoc <- gregexpr("(\\s+ns(\\s+|\\.))|(p\\s?[<|>|=]\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+    pLoc <- gregexpr("(\\s+ns(\\s+|\\.))|(p\\s?[<|>|=|≤|≥]\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
     
     if (pLoc[1] != -1){
       # Get raw text of p-values:
@@ -238,8 +238,8 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         # remove commas (thousands separators)
         Fsplit <- strsplit(FRaw,"\\)",perl=TRUE)
         
-        FValsRaw <- Fsplit[[1]][2]
-        FandDF <- Fsplit[[1]][1]
+        FValsRaw <- lapply(Fsplit,function(x) x[2])
+        FandDF <- lapply(Fsplit,function(x) x[1])
         
         FValsRaw <- gsub("(?<=\\d),(?=\\d+)","",FValsRaw,perl=TRUE)
         
