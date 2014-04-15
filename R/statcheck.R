@@ -63,7 +63,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     # p-values
     # Get location of p-values in text:
-    pLoc <- gregexpr("(\\s+ns(\\s+|\\.))|(p\\s?[<|>|=|≤|≥]\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+    pLoc <- gregexpr("(\\s+ns(\\s+|\\.))|(p\\s?[<|>|=]\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
     
     if (pLoc[1] != -1){
       # Get raw text of p-values:
