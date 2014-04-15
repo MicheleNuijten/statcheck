@@ -76,8 +76,8 @@ checkHTMLdir <- structure(function(# Extract test statistics from all HTML files
 
 # you could also specify the directory beforehand
 # for instance:
-DIR <- "C:/mydocuments/articles"
-checkHTMLdir(DIR)
+# DIR <- "C:/mydocuments/articles"
+# checkHTMLdir(DIR)
 })
 
 checkHTML <- structure(function(# Extract test statistics from HTML file.
@@ -114,6 +114,6 @@ checkHTML <- structure(function(# Extract test statistics from HTML file.
   # given that my HTML file is called "article.html"
 # and I saved it in "C:/mydocuments/articles"
 
-checkHTML("C:/mydocuments/articles/article.html")
+    #checkHTML("C:/mydocuments/articles/article.html")
 })
 

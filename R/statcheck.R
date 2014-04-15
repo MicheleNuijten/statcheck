@@ -14,7 +14,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   ### Logical. If TRUE, the output will consist of a dataframe with all detected p values, also the ones that were not part of the full results in APA format
 ){
   ##details<<
-  ## Statcheck uses regular expressions to find statistical results in APA format. When a statistical result deviates from APA format, statcheck will not find it. The APA formats that statcheck uses are: t(df) = value, p = value; F(df1,df2) = value, p = value; r(df) = value, p = value; χ2 (df, N = value) = value, p = value (N is optional, ΔG is also included); Z = value, p = value; Wald = value, p = value. All regular expressions take into account that test statistics and p values may be exactly (=) or inexactly (< or >) reported. Different spacing has also been taken into account.
+  ## Statcheck uses regular expressions to find statistical results in APA format. When a statistical result deviates from APA format, statcheck will not find it. The APA formats that statcheck uses are: t(df) = value, p = value; F(df1,df2) = value, p = value; r(df) = value, p = value; [chi]2 (df, N = value) = value, p = value (N is optional, delta G is also included); Z = value, p = value; Wald = value, p = value. All regular expressions take into account that test statistics and p values may be exactly (=) or inexactly (< or >) reported. Different spacing has also been taken into account.
   ## This function can be used if the text of articles has already been imported in R. To import text from pdf files and automatically send the results to this function use \code{\link{checkPDFdir}} or \code{\link{checkPDF}}. To import text from HTML files use the similar functions \code{\link{checkHTMLdir}} or \code{\link{checkHTML}}. Finally, \code{\link{checkdir}} can be used to import text from both PDF and HTML files in a folder.
   ## Note that the conversion from PDF (and sometimes also HTML) to plain text and extraction of statistics can result in errors. Some statistical values can be missed, especially if the notation is unconventional. It is recommended to manually check some of the results.
   ## PDF files should automatically be converted to plain text files. However, if this does not work, it might help to manually install the program "pdftotext". You can obtain pdftotext from \code{http://www.foolabs.com/xpdf/download.html}. Download and unzip the precompiled binaries. Next, add the folder with the binaries to the PATH variables so that this program can be used from command line.
@@ -122,7 +122,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # t-values:
     if ("t"%in%stat){
       # Get location of t-values in text:
-      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?[^a-zχ\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (tLoc[1] != -1){
         # Get raw text of t-values:
@@ -309,7 +309,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # correlations:
     if (any(c("r","cor","correlations")%in%stat)){
       # Get location of r-values in text:
-      rLoc <- gregexpr("r\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?[^a-zχ\\d]{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      rLoc <- gregexpr("r\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?[^a-z\\d]{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (rLoc[1] != -1){
         # Get raw text of r-values:
@@ -492,7 +492,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # Wald test results
     if ("Wald"%in%stat){
       # Get location of Wald results in text:
-      wLoc <- gregexpr("[^a-z]wald\\s?[^a-zχ]\\s?(\\(\\s?\\d*\\.?\\d+\\s?\\))?\\s?[^a-zχ\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      wLoc <- gregexpr("[^a-z]wald\\s?[^a-z]\\s?(\\(\\s?\\d*\\.?\\d+\\s?\\))?\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (wLoc[1] != -1){
         # Get raw text of Wald results:
@@ -608,7 +608,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     # Chis2-values:
     if ("chisq"%in%stat){
-      # Get location of χ values or ΔG in text:
+      # Get location of chi values or ΔG in text:
       chi2Loc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)2?\\s?|[^(t|r|wald\\s)]\\s+)\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d+\\s?)?\\)\\s?.?\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
       
       if (chi2Loc[1] != -1){
