@@ -110,14 +110,14 @@ diagnose <- structure(function(# Diagnose the most likely cause why a p value is
   ### a list that contains four dataframes: ErrorDiagnosis, CopyPaste, Summary, and FullDiagnosis. In the following sections the content of these dataframes will be described in detail. 
 },ex=function(){
   # given that the articles of interest are saved in "DIR"
-DIR <- "C:/mydocuments/articles"
-stat_result <- checkdir(DIR)
+# DIR <- "C:/mydocuments/articles"
+# stat_result <- checkdir(DIR)
 
-diagnosis <- diagnose(stat_result)
+# diagnosis <- diagnose(stat_result)
 
 # print diagnosis
-diagnosis
+# diagnosis
 
 # print diagnosis for all articles
-diagnosis$FullDiagnosis
+# diagnosis$FullDiagnosis
 })

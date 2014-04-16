@@ -37,8 +37,9 @@ print.diagnose <- structure(function(# Print diagnose output.
   ## a list that contains four dataframes: ErrorDiagnosis, CopyPaste, Summary, and FullDiagnosis. In the following sections the content of these dataframes will be described in detail. 
 },ex=function(){
 	# given that the articles of interest are saved in "DIR"
-DIR <- "C:/mydocuments/articles"
-stat_result <- checkdir(DIR)
 
-diagnose(stat_result)
+# DIR <- "C:/mydocuments/articles"
+# stat_result <- checkdir(DIR)
+
+# diagnose(stat_result)
 	})

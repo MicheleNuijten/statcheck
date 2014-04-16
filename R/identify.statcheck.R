@@ -22,10 +22,10 @@ identify.statcheck <- structure(function(# Identify specific points in a \code{s
   ## This function returns both a plot and a dataframe. For the contents of the dataframe see \code{\link{statcheck}}.
 },ex=function(){
 	# given that the articles of interest are saved in "DIR"
-DIR <- "C:/mydocuments/articles"
-stat_result <- checkdir(DIR)
+# DIR <- "C:/mydocuments/articles"
+# stat_result <- checkdir(DIR)
 
-identify(stat_result)
+# identify(stat_result)
 
 ## Further instructions:
 # click on one or multiple points of interest

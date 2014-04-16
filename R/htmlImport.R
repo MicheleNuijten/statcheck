@@ -72,7 +72,7 @@ checkHTMLdir <- structure(function(# Extract test statistics from all HTML files
   ## \item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
   },ex=function(){
   # with this command a menu will pop up from which you can select the directory with HTML articles
-  checkHTMLdir()
+  # checkHTMLdir()
 
 # you could also specify the directory beforehand
 # for instance:
