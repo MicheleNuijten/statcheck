@@ -63,13 +63,13 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     # p-values
     # Get location of p-values in text:
-    pLoc <- gregexpr("(\\s+ns(\\s+|[^a-z]))|(p\\s?[<|>|=]\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+    pLoc <- gregexpr("([^a-z]ns)|(p\\s?[<|>|=]\\s?\\d?\\.\\d+e?-?\\d*)",txt,ignore.case=TRUE)[[1]]
     
     if (pLoc[1] != -1){
       # Get raw text of p-values:
       pRaw <- substring(txt,pLoc,pLoc+attr(pLoc,"match.length")-1)
       
-      nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",pRaw)
+      nums <- gregexpr("(\\d*\\.?\\d+\\s?e?-?\\d*)|ns",pRaw,ignore.case=TRUE)
       
       # Extract p-values
       suppressWarnings(
@@ -96,7 +96,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
       )
       
       # remove p values greater than one
-      pvalues <- pvalues[pvalues$Reported.P.Value<1|is.na(pvalues$Reported.P.Value),]
+      pvalues <- pvalues[pvalues$Reported.P.Value<=1|is.na(pvalues$Reported.P.Value),]
       
       pRes <- rbind(pRes,pvalues)
       rm(pvalues)
@@ -122,7 +122,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # t-values:
     if ("t"%in%stat){
       # Get location of t-values in text:
-      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<|>|=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (tLoc[1] != -1){
         # Get raw text of t-values:
@@ -142,13 +142,13 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         tRaw <- gsub("(?<=\\=)(?=(\\.|\\d))"," ",tRaw,perl=TRUE)  
         
         # Extract location of numbers:
-        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",tRaw)
+        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+\\s?e?-?\\d*)|ns",tRaw,ignore.case=TRUE)
         
-        for (k in 1:length(nums)){
-          if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%c(2,4)
-          if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%2
-          if (length(nums[[k]]) != 3) warning(paste("Could not extract statistics properly from",tRaw[k]))
-        }
+                for (k in 1:length(nums)){
+                  if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%c(2,4)
+                  if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%2
+                  if (length(nums[[k]]) != 3) warning(paste("Could not extract statistics properly from",tRaw[k]))
+                }
         # Extract df:
         df <- as.numeric(substring(tRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
         
@@ -214,20 +214,20 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # F-values:
     if ("F"%in%stat){
       # Get location of F-values in text:
-      FLoc <- gregexpr("F\\s?\\(\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      FLoc <- gregexpr("F\\s?\\(\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<|>|=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (FLoc[1] != -1){
         # Get raw text of F-values:
         FRaw <- substring(txt,FLoc,FLoc+attr(FLoc,"match.length")-1)
         
         # Extract location of numbers:
-        nums <- gregexpr("(\\d*\\.?\\d+)|ns",FRaw)
+        nums <- gregexpr("(\\d*\\.?\\d+\\s?e?-?\\d*)|ns",FRaw,ignore.case=TRUE)
         
-        for (k in 1:length(nums)){
-          if (length(nums[[k]]) == 6) nums[[k]] <- nums[[k]]%rem%c(3,5)
-          if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%3
-          if (length(nums[[k]]) != 4) warning(paste("Could not extract statistics properly from",FRaw[k]))
-        }
+                for (k in 1:length(nums)){
+                  if (length(nums[[k]]) == 6) nums[[k]] <- nums[[k]]%rem%c(3,5)
+                  if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%3
+                  if (length(nums[[k]]) != 4) warning(paste("Could not extract statistics properly from",FRaw[k]))
+                }
         
         # Extract df1:
         df1 <- as.numeric(substring(FRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
@@ -309,7 +309,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # correlations:
     if (any(c("r","cor","correlations")%in%stat)){
       # Get location of r-values in text:
-      rLoc <- gregexpr("r\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?[^a-z\\d]{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      rLoc <- gregexpr("r\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?.?\\s?[^a-z\\d]{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<|>|=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (rLoc[1] != -1){
         # Get raw text of r-values:
@@ -326,13 +326,13 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         rRaw <- gsub("(?<=\\=)(?=(\\.|\\d))"," ",rRaw,perl=TRUE) 
         
         # Extract location of numbers:
-        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",rRaw)
+        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+\\s?e?-?\\d*)|ns",rRaw,ignore.case=TRUE)
         
-        for (k in 1:length(nums)){
-          if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%c(2,4)
-          if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%2
-          if (length(nums[[k]]) != 3) warning(paste("Could not extract statistics properly from",rRaw[k]))
-        }
+                for (k in 1:length(nums)){
+                  if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%c(2,4)
+                  if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%2
+                  if (length(nums[[k]]) != 3) warning(paste("Could not extract statistics properly from",rRaw[k]))
+                }
         # Extract df:
         df <- as.numeric(substring(rRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
         
@@ -400,7 +400,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # z-values:
     if ("Z"%in%stat){
       # Get location of z-values in text:
-      zLoc <- gregexpr("[^a-z]z\\s?[^a-z]?\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      zLoc <- gregexpr("[^a-z]z\\s?[^a-z]?\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<|>|=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (zLoc[1] != -1){
         # Get raw text of z-values:
@@ -423,13 +423,13 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         zRaw <- gsub("(?<=\\=)(?=(\\.|\\d))"," ",zRaw,perl=TRUE) 
         
         # Extract location of numbers:
-        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",zRaw)
+        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+\\s?e?-?\\d*)|ns",zRaw,ignore.case=TRUE)
         
-        for (k in 1:length(nums)){
-          if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%c(2,4)
-          if (length(nums[[k]]) == 3) nums[[k]] <- nums[[k]]%rem%2
-          if (length(nums[[k]]) != 2) warning(paste("Could not extract statistics properly from",zRaw[k]))
-        }
+                for (k in 1:length(nums)){
+                  if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%c(2,4)
+                  if (length(nums[[k]]) == 3) nums[[k]] <- nums[[k]]%rem%2
+                  if (length(nums[[k]]) != 2) warning(paste("Could not extract statistics properly from",zRaw[k]))
+                }
         # Extract z-values
         suppressWarnings(
           zValsChar <- substring(zRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
@@ -492,7 +492,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # Wald test results
     if ("Wald"%in%stat){
       # Get location of Wald results in text:
-      wLoc <- gregexpr("[^a-z]wald\\s?[^a-z]\\s?(\\(\\s?\\d*\\.?\\d+\\s?\\))?\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      wLoc <- gregexpr("[^a-z]wald\\s?[^a-z]\\s?(\\(\\s?\\d*\\.?\\d+\\s?\\))?\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<|>|=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (wLoc[1] != -1){
         # Get raw text of Wald results:
@@ -515,13 +515,13 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         wRaw <- gsub("(?<=\\=)(?=(\\.|\\d))"," ",wRaw,perl=TRUE) 
         
         # Extract location of numbers:
-        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",wRaw)
+        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+\\s?e?-?\\d*)|ns",wRaw,ignore.case=TRUE)
         
-        for (k in 1:length(nums)){
-          if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%c(1,3)
-          if (length(nums[[k]]) == 3) nums[[k]] <- nums[[k]]%rem%3
-          if (length(nums[[k]]) != 2) warning(paste("Could not extract statistics properly from",wRaw[k]))
-        }
+                for (k in 1:length(nums)){
+                  if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%c(1,3)
+                  if (length(nums[[k]]) == 3) nums[[k]] <- nums[[k]]%rem%3
+                  if (length(nums[[k]]) != 2) warning(paste("Could not extract statistics properly from",wRaw[k]))
+                }
         # Extract test statistic (Z or chisq2)
         suppressWarnings(
           wValsChar <- substring(wRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
@@ -609,7 +609,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # Chis2-values:
     if ("chisq"%in%stat){
       # Get location of chi values or ΔG in text:
-      chi2Loc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)\\s?|[^(t|r|wald\\s)]\\s+)2?\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d+\\s?)?\\)\\s?.?\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(ns|p\\s?.?\\s?\\d?\\.\\d+)",txt,ignore.case=TRUE)[[1]]
+      chi2Loc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)\\s?|[^(t|r|wald\\s)]\\s+)2?\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d+\\s?)?\\)\\s?.?\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<|>|=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (chi2Loc[1] != -1){
         # Get raw text of chi2-values:
@@ -620,13 +620,13 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         chi2Raw <- gsub("(?<=\\d),(?=\\d+\\.)","",chi2Raw,perl=TRUE)
         
         # Extract location of numbers:
-        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+)|ns",sub("^.*?\\(","",chi2Raw))
+        nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+\\s?e?-?\\d*)|ns",sub("^.*?\\(","",chi2Raw),ignore.case=TRUE)
         
-        for (k in 1:length(nums)){
-          if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%c(2,4)
-          if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%2
-          if (length(nums[[k]]) != 3) warning(paste("Could not extract statistics properly from",chi2Raw[k]))
-        }
+                for (k in 1:length(nums)){
+                  if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%c(2,4)
+                  if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%2
+                  if (length(nums[[k]]) != 3) warning(paste("Could not extract statistics properly from",chi2Raw[k]))
+                }
         # Extract df:
         df <- as.numeric(substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
         
@@ -695,9 +695,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   close(pb)
   Source <- NULL
   Res <- ddply(Res,.(Source),function(x)x[order(x$Location),])
-  #MN: sacha built this in, i don't know why
-  #Res[['Reported.Comparison']] <- gsub("5","=",Res[['Reported.Comparison']])
-  #Res[['Reported.Comparison']] <- gsub(",","<",Res[['Reported.Comparison']])
   
   
   ###---------------------------------------------------------------------
@@ -943,7 +940,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     Res_selection <- Res[Res$Source%in%pRes_selection$Source,]
     APA <- by(Res_selection,Res_selection$Source,nrow)/by(pRes_selection,pRes_selection$Source,nrow)
     Res$APAfactor <- round(as.numeric(apply(Res,1,function(x) APA[which(names(APA)==x["Source"])])),2)
-            
+    
     ###---------------------------------------------------------------------
     
     Res$Error[CorrectRound] <- FALSE
@@ -985,8 +982,8 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   } else {
     return(pRes)
   }
-
-
+  
+  
   
   ### A data frame containing for each extracted statistic:
   ### Source: Name of the file of which the statistic is extracted
