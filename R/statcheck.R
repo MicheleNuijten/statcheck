@@ -21,14 +21,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   ## Also, note that a seemingly inconsistent p value can still be correct when we take into account that the test statistic might have been rounded after calculating the corresponding p value. For instance, a reported t value of 2.35 could correspond to an actual value of 2.345 to 2.354 with a range of p values that can slightly deviate from the recomputed p value. Statcheck will not count cases like this as errors.
   ##seealso<<
   ## \code{\link{checkPDF}}, \code{\link{checkHTMLdir}}, \code{\link{checkHTML}}, \code{\link{checkdir}}
-  '%rem%'<- function(x,y){
-    at <- attr(x,"match.length")
-    x <- x[-y]
-    at <- at[-y]
-    attr(x,"match.length") <- at
-    return(x)
-  }
-  
+   
   # Create empty data frame for main result:
   Res <- data.frame(Source = NULL,Statistic=NULL,df1=NULL,df2=NULL,Test.Comparison=NULL,
                     Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, 
@@ -144,11 +137,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+\\s?e?-?\\d*)|ns",tRaw,ignore.case=TRUE)
         
-                for (k in 1:length(nums)){
-                  if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%c(2,4)
-                  if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%2
-                  if (length(nums[[k]]) != 3) warning(paste("Could not extract statistics properly from",tRaw[k]))
-                }
         # Extract df:
         df <- as.numeric(substring(tRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
         
@@ -222,12 +210,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         
         # Extract location of numbers:
         nums <- gregexpr("(\\d*\\.?\\d+\\s?e?-?\\d*)|ns",FRaw,ignore.case=TRUE)
-        
-                for (k in 1:length(nums)){
-                  if (length(nums[[k]]) == 6) nums[[k]] <- nums[[k]]%rem%c(3,5)
-                  if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%3
-                  if (length(nums[[k]]) != 4) warning(paste("Could not extract statistics properly from",FRaw[k]))
-                }
         
         # Extract df1:
         df1 <- as.numeric(substring(FRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
@@ -328,11 +310,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+\\s?e?-?\\d*)|ns",rRaw,ignore.case=TRUE)
         
-                for (k in 1:length(nums)){
-                  if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%c(2,4)
-                  if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%2
-                  if (length(nums[[k]]) != 3) warning(paste("Could not extract statistics properly from",rRaw[k]))
-                }
         # Extract df:
         df <- as.numeric(substring(rRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
         
@@ -425,11 +402,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+\\s?e?-?\\d*)|ns",zRaw,ignore.case=TRUE)
         
-                for (k in 1:length(nums)){
-                  if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%c(2,4)
-                  if (length(nums[[k]]) == 3) nums[[k]] <- nums[[k]]%rem%2
-                  if (length(nums[[k]]) != 2) warning(paste("Could not extract statistics properly from",zRaw[k]))
-                }
         # Extract z-values
         suppressWarnings(
           zValsChar <- substring(zRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
@@ -517,11 +489,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+\\s?e?-?\\d*)|ns",wRaw,ignore.case=TRUE)
         
-                for (k in 1:length(nums)){
-                  if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%c(1,3)
-                  if (length(nums[[k]]) == 3) nums[[k]] <- nums[[k]]%rem%3
-                  if (length(nums[[k]]) != 2) warning(paste("Could not extract statistics properly from",wRaw[k]))
-                }
         # Extract test statistic (Z or chisq2)
         suppressWarnings(
           wValsChar <- substring(wRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
@@ -622,11 +589,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+\\s?e?-?\\d*)|ns",sub("^.*?\\(","",chi2Raw),ignore.case=TRUE)
         
-                for (k in 1:length(nums)){
-                  if (length(nums[[k]]) == 5) nums[[k]] <- nums[[k]]%rem%c(2,4)
-                  if (length(nums[[k]]) == 4) nums[[k]] <- nums[[k]]%rem%2
-                  if (length(nums[[k]]) != 3) warning(paste("Could not extract statistics properly from",chi2Raw[k]))
-                }
         # Extract df:
         df <- as.numeric(substring(sub("^.*?\\(","",chi2Raw),sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
         
