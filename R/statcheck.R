@@ -56,7 +56,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     # p-values
     # Get location of p-values in text:
-    pLoc <- gregexpr("([^a-z]ns)|(p\\s?[<|>|=]\\s?\\d?\\.\\d+e?-?\\d*)",txt,ignore.case=TRUE)[[1]]
+    pLoc <- gregexpr("([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*)",txt,ignore.case=TRUE)[[1]]
     
     if (pLoc[1] != -1){
       # Get raw text of p-values:
@@ -115,7 +115,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # t-values:
     if ("t"%in%stat){
       # Get location of t-values in text:
-      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?[<|>|=]\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<|>|=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
+      tLoc <- gregexpr("t\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?[<>=]\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (tLoc[1] != -1){
         # Get raw text of t-values:
@@ -152,7 +152,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         testdec[testdec<0] <- 0
         
         # Extract (in)equality test statistic
-        testEqLoc <- gregexpr("\\)\\s?.?",tRaw)
+        testEqLoc <- gregexpr("\\)\\s?[<>=]",tRaw)
         testEq <- substring(tRaw,
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
@@ -166,7 +166,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
           pVals <- as.numeric(pValsChar))
         
         # Extract (in)equality
-        eqLoc <- gregexpr("p\\s?.?",tRaw)
+        eqLoc <- gregexpr("p\\s?[<>=]",tRaw,ignore.case=TRUE)
         pEq <- substring(tRaw,
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
@@ -202,7 +202,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # F-values:
     if ("F"%in%stat){
       # Get location of F-values in text:
-      FLoc <- gregexpr("F\\s?\\(\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?\\)\\s?[<|>|=]\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<|>|=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
+      FLoc <- gregexpr("F\\s?\\(\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?\\)\\s?[<>=]\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (FLoc[1] != -1){
         # Get raw text of F-values:
@@ -240,7 +240,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         testdec[testdec<0] <- 0
         
         # Extract (in)equality test statistic
-        testEqLoc <- gregexpr("\\)\\s?.?",FRaw)
+        testEqLoc <- gregexpr("\\)\\s?[<>=]",FRaw)
         testEq <- substring(FRaw,
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
@@ -254,7 +254,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
           pVals <- as.numeric(pValsChar))
         
         # Extract (in)equality
-        eqLoc <- gregexpr("p\\s?.?",FRaw)
+        eqLoc <- gregexpr("p\\s?[<>=]",FRaw,ignore.case=TRUE)
         pEq <- substring(FRaw,
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
@@ -291,7 +291,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # correlations:
     if (any(c("r","cor","correlations")%in%stat)){
       # Get location of r-values in text:
-      rLoc <- gregexpr("r\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?[<|>|=]\\s?[^a-z\\d]{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<|>|=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
+      rLoc <- gregexpr("r\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?[<>=]\\s?[^a-z\\d]{0,3}\\s?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (rLoc[1] != -1){
         # Get raw text of r-values:
@@ -326,7 +326,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         
         
         # Extract (in)equality test statistic
-        testEqLoc <- gregexpr("\\)\\s?.?",rRaw)
+        testEqLoc <- gregexpr("\\)\\s?[<>=]",rRaw)
         testEq <- substring(rRaw,
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
@@ -340,7 +340,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
           pVals <- as.numeric(pValsChar))
         
         # Extract (in)equality
-        eqLoc <- gregexpr("p\\s?.?",rRaw)
+        eqLoc <- gregexpr("p\\s?[<>=]",rRaw,ignore.case=TRUE)
         pEq <- substring(rRaw,
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
@@ -377,7 +377,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # z-values:
     if ("Z"%in%stat){
       # Get location of z-values in text:
-      zLoc <- gregexpr("[^a-z]z\\s?[<|>|=]\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<|>|=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
+      zLoc <- gregexpr("[^a-z]z\\s?[<>=]\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (zLoc[1] != -1){
         # Get raw text of z-values:
@@ -414,7 +414,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         testdec[testdec<0] <- 0
         
         # Extract (in)equality test statistic
-        testEqLoc <- gregexpr("(z|Z|z'|Z')\\s?.?",zRaw)
+        testEqLoc <- gregexpr("(z|Z|z'|Z')\\s?[<>=]",zRaw)
         testEq <- substring(zRaw,
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
@@ -428,7 +428,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
           pVals <- as.numeric(pValsChar))
         
         # Extract (in)equality
-        eqLoc <- gregexpr("p\\s?.?",zRaw)
+        eqLoc <- gregexpr("p\\s?[<>=]",zRaw,ignore.case=TRUE)
         pEq <- substring(zRaw,
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
@@ -464,7 +464,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # Wald test results
     if ("Wald"%in%stat){
       # Get location of Wald results in text:
-      wLoc <- gregexpr("[^a-z]wald\\s?\\s?(\\(\\s?\\d*\\.?\\d+\\s?\\))?\\s?[<|>|=][^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<|>|=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
+      wLoc <- gregexpr("[^a-z]wald\\s?\\s?(\\(\\s?\\d*\\.?\\d+\\s?\\))?\\s?[<>=][^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (wLoc[1] != -1){
         # Get raw text of Wald results:
@@ -489,62 +489,100 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+\\s?e?-?\\d*)|ns",wRaw,ignore.case=TRUE)
         
-        # Extract test statistic (Z or chisq2)
-        suppressWarnings(
-          wValsChar <- substring(wRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
+        # check if there are degrees of freedom
+        # if there are: treat result like a chi2 test
+        # if not: treat result like a z test
         
-        suppressWarnings(
-          wVals <- as.numeric(wValsChar))
+        if(gregexpr("\\(",wRaw)[[1]]!=-1){
+          # df; result is treated like a chi2 test
+          
+          # Extract df:
+          df <- as.numeric(substring(wRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
+          
+          suppressWarnings(
+            # extract test statistic
+            wValsChar <- substring(wRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
+          
+          suppressWarnings(
+            wVals <- as.numeric(wValsChar))
+          
+          # Extract (in)equality test statistic
+          testEqLoc <- gregexpr("\\)\\s?[<>=]",wRaw)
+          testEq <- substring(wRaw,
+                              sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
+                              sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+          
+          # Extract p-values
+          suppressWarnings(
+            pValsChar <- substring(wRaw,sapply(nums,'[',3),sapply(nums,function(x)x[3]+attr(x,"match.length")[3]-1)))
+                    
+          suppressWarnings(
+            pVals <- as.numeric(pValsChar))
+          
+          # recompute p-value
+          comp <- pchisq(abs(wVals),df,lower.tail=FALSE)
+          
+        } else {
+          # no df, it depends on the p-value if the result is treated like a z test
+          # or a chi2 with df=1
+          
+          suppressWarnings(
+            wValsChar <- substring(wRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
+          
+          # Extract (in)equality test statistic
+          testEqLoc <- gregexpr("(Wald|wald)\\s?[<>=]",wRaw)
+          testEq <- substring(wRaw,
+                              sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
+                              sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
+          
+          # Extract p-values
+          suppressWarnings(
+            pValsChar <- substring(wRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
+          
+          suppressWarnings(
+            pVals <- as.numeric(pValsChar))
+          
+          # recompute p-values and decide whether a Z or chisq test is more appropriate
+          comp <- numeric()
+          df <- numeric()
+          
+          
+          for(j in 1:length(wVals)){
+            if(!(is.na(pVals[j]))){
+              
+              pZ <- pnorm(abs(wVals[j]),lower.tail=FALSE)*2
+              pChisq <- pchisq(abs(wVals[j]),1,lower.tail=FALSE)
+              
+              if(abs(pVals[j]-pZ)<abs(pVals[j]-pChisq)){
+                comp[j] <- pZ
+                df[j] <- NA
+                
+              } else{
+                comp[j] <- pChisq
+                df[j] <- 1
+              }
+            } else {
+              comp[j] <- NA
+              df[j] <- NA
+            }
+          }
+          
+        }
+        
+       
         
         # Extract number of decimals test statistic
         testdec <- attr(regexpr("\\.\\d+",wValsChar),"match.length")-1
         testdec[testdec<0] <- 0
-        
-        # Extract (in)equality test statistic
-        testEqLoc <- gregexpr("(Wald|wald)\\s?.?",wRaw)
-        testEq <- substring(wRaw,
-                            sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
-                            sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
-        
-        
-        # Extract p-values
-        suppressWarnings(
-          pValsChar <- substring(wRaw,sapply(nums,'[',2),sapply(nums,function(x)x[2]+attr(x,"match.length")[2]-1)))
-        
-        suppressWarnings(
-          pVals <- as.numeric(pValsChar))
+     
         
         # Extract (in)equality
-        eqLoc <- gregexpr("p\\s?.?",wRaw)
+        eqLoc <- gregexpr("p\\s?[<>=]",wRaw,ignore.case=TRUE)
         pEq <- substring(wRaw,
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
         pEq[grepl("ns",wRaw,ignore.case=TRUE)] <- "ns"
         
-        # recompute p-values and decide whether a Z or chisq test is more appropriate
-        comp <- numeric()
-        df <- numeric()
-        
-        
-        for(j in 1:length(wVals)){
-          if(!(is.na(pVals[j]))){
-            
-            pZ <- pnorm(abs(wVals[j]),lower.tail=FALSE)*2
-            pChisq <- pchisq(abs(wVals[j]),1,lower.tail=FALSE)
-            
-            if(abs(pVals[j]-pZ)<abs(pVals[j]-pChisq)){
-              comp[j] <- pZ
-              df[j] <- NA
-              
-            } else{
-              comp[j] <- pChisq
-              df[j] <- 1
-            }
-          } else {
-            comp[j] <- NA
-            df[j] <- NA
-          }
-        }
         
         # determine number of decimals of p value
         dec <- attr(regexpr("\\.\\d+",pValsChar),"match.length")-1
@@ -576,12 +614,17 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # Chis2-values:
     if ("chisq"%in%stat){
       # Get location of chi values or ΔG in text:
-      chi2Loc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)\\s?|[^(t|r|wald\\s)]\\s+)2?\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d+\\s?)?\\)\\s?[<|>|=]\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<|>|=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
+      chi2Loc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)\\s?|([^tr]\\s?))2?\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d+\\s?)?\\)\\s?[<>=]\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (chi2Loc[1] != -1){
         # Get raw text of chi2-values:
         chi2Raw <- substring(txt,chi2Loc,chi2Loc+attr(chi2Loc,"match.length")-1)
         substr(chi2Raw,1,1)[grepl("\\d",substr(chi2Raw,1,1))] <- " "
+        
+        # remove sample size if reported for calculations
+        # save full result for "Raw" in final data frame
+        chi2Raw_inclN <- chi2Raw
+        chi2Raw <- gsub("N\\s?=\\s?\\d*","",chi2Raw,ignore.case=TRUE)
         
         # remove commas (thousands separators)
         chi2Raw <- gsub("(?<=\\d),(?=\\d+\\.)","",chi2Raw,perl=TRUE)
@@ -604,7 +647,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         testdec[testdec<0] <- 0
         
         # Extract (in)equality test statistic
-        testEqLoc <- gregexpr("\\)\\s?.?",chi2Raw)
+        testEqLoc <- gregexpr("\\)\\s?[<>=]",chi2Raw)
         testEq <- substring(chi2Raw,
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
@@ -618,7 +661,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
           pVals <- as.numeric(pValsChar))
         
         # Extract (in)equality
-        eqLoc <- gregexpr("p\\s?.?",chi2Raw)
+        eqLoc <- gregexpr("p\\s?[<>=]",chi2Raw,ignore.case=TRUE)
         pEq <- substring(chi2Raw,
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                          sapply(eqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
@@ -639,7 +682,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
                               Reported.P.Value=pVals, 
                               Computed = pchisq(chi2Vals,df,lower.tail=FALSE), 
                               Location = chi2Loc,
-                              Raw = chi2Raw,
+                              Raw = chi2Raw_inclN,
                               stringsAsFactors=FALSE,
                               dec=dec,
                               testdec=testdec,
@@ -658,6 +701,23 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   Source <- NULL
   Res <- ddply(Res,.(Source),function(x)x[order(x$Location),])
   
+  # remove wald tests that are read twice (second time as a chi2)
+  if(nrow(Res)>1){
+    
+    double_chi2 <- FALSE
+    
+    for(i in 2:nrow(Res)){
+      if(Res[i,]$Statistic=="Chi2" 
+         & Res[i-1,]$Statistic=="Wald"
+         & Res[i,]$Value==Res[i-1,]$Value){
+        double_chi2[i] <- TRUE
+      } else {
+        double_chi2[i] <- FALSE 
+      }
+    }
+    
+    Res <- Res[!double_chi2,]
+  }
   
   ###---------------------------------------------------------------------
   ErrorTest <- function(x,...){
