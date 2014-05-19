@@ -529,6 +529,9 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
           suppressWarnings(
             wValsChar <- substring(wRaw,sapply(nums,'[',1),sapply(nums,function(x)x[1]+attr(x,"match.length")[1]-1)))
           
+          suppressWarnings(
+            wVals <- as.numeric(wValsChar))
+          
           # Extract (in)equality test statistic
           testEqLoc <- gregexpr("(Wald|wald)\\s?[<>=]",wRaw)
           testEq <- substring(wRaw,
