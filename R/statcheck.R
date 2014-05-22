@@ -85,8 +85,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
                             Reported.Comparison= pEq, 
                             Reported.P.Value=pVals, 
                             Raw = pRaw,
-                            stringsAsFactors=FALSE
-      )
+                            stringsAsFactors=FALSE)
       
       # remove p values greater than one
       pvalues <- pvalues[pvalues$Reported.P.Value<=1|is.na(pvalues$Reported.P.Value),]
@@ -617,7 +616,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # Chis2-values:
     if ("chisq"%in%stat){
       # Get location of chi values or ΔG in text:
-      chi2Loc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)\\s?|([^tr]\\s?))2?\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d+\\s?)?\\)\\s?[<>=]\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
+      chi2Loc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)\\s?|([^tr ]\\s?))2?\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d+\\s?)?\\)\\s?[<>=]\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (chi2Loc[1] != -1){
         # Get raw text of chi2-values:
@@ -958,10 +957,10 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     pRes_selection <- pRes[pRes$Source%in%Res$Source,]
     
     # select only the statcheck results that are from an article with at least one p value
-    # this only matters for PDFs: here you can have more statcheck results than p values,
-    # because pRes has stronger selection criteria (p </>/= |ns) than statcheck (p.|ns)
-    # the statcheck selection is less strict, to be able to extract at least some results from the pdfs
-    # even though sometimes the signs (</>/=) cannot be read
+    # this is relevant, because it sometimes happens that statcheck extracts less p values 
+    # p values than statcheck results. For instance in cases when a p value appears to be
+    # greater than 1.
+   
     Res_selection <- Res[Res$Source%in%pRes_selection$Source,]
     APA <- by(Res_selection,Res_selection$Source,nrow)/by(pRes_selection,pRes_selection$Source,nrow)
     Res$APAfactor <- round(as.numeric(apply(Res,1,function(x) APA[which(names(APA)==x["Source"])])),2)
