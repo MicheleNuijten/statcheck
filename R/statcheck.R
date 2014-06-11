@@ -85,8 +85,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
                             Reported.Comparison= pEq, 
                             Reported.P.Value=pVals, 
                             Raw = pRaw,
-                            stringsAsFactors=FALSE
-      )
+                            stringsAsFactors=FALSE)
       
       # remove p values greater than one
       pvalues <- pvalues[pvalues$Reported.P.Value<=1|is.na(pvalues$Reported.P.Value),]
@@ -464,8 +463,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # Chis2-values:
     if ("chisq"%in%stat){
       # Get location of chi values or ΔG in text:
-#       chi2Loc <- gregexpr("(((\\[CHI\\]|\\[DELTA\\]G)\\s?)|([^tr]\\s?))2?\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d+\\s?)?\\)\\s?[<>=]\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
-      chi2Loc <- gregexpr("[^tr\\S]\\s?2?\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d+\\s?)?\\)\\s?[<>=]\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
+      chi2Loc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)\\s?|([^tr ]\\s?))2?\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d+\\s?)?\\)\\s?[<>=]\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (chi2Loc[1] != -1){
         # Get raw text of chi2-values:
@@ -552,7 +550,10 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   Source <- NULL
   Res <- ddply(Res,.(Source),function(x)x[order(x$Location),])
   
-  
+  if(nrow(Res)>0){
+    # remove p values greater than one
+    Res <- Res[Res$Reported.P.Value<=1|is.na(Res$Reported.P.Value),]
+  }
 
 
   ###---------------------------------------------------------------------
@@ -655,17 +656,16 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   
   if(nrow(Res)>0){
     
-    # remove p values greater than one
-    Res <- Res[Res$Reported.P.Value<=1|is.na(Res$Reported.P.Value),]
-    
+    # if indicated, count all tests as onesided
     if(OneTailedTests==TRUE){
       Res$Computed <- Res$Computed/2
     } 
     
+    # check for errors
     Res$Error <- ErrorTest(Res)
     
-    # p values smaller or equal to zero and p values larger than one are errors
-    ImpossibleP <- (Res$Reported.P.Value<=0|Res$Reported.P.Value>1)
+    # p values smaller or equal to zero are errors
+    ImpossibleP <- (Res$Reported.P.Value<=0)
     Res$Error[ImpossibleP] <- TRUE
     
     Res$DecisionError <-  DecisionErrorTest(Res)  
@@ -791,10 +791,10 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     pRes_selection <- pRes[pRes$Source%in%Res$Source,]
     
     # select only the statcheck results that are from an article with at least one p value
-    # this only matters for PDFs: here you can have more statcheck results than p values,
-    # because pRes has stronger selection criteria (p </>/= |ns) than statcheck (p.|ns)
-    # the statcheck selection is less strict, to be able to extract at least some results from the pdfs
-    # even though sometimes the signs (</>/=) cannot be read
+    # this is relevant, because it sometimes happens that statcheck extracts less p values 
+    # p values than statcheck results. For instance in cases when a p value appears to be
+    # greater than 1.
+   
     Res_selection <- Res[Res$Source%in%pRes_selection$Source,]
     APA <- by(Res_selection,Res_selection$Source,nrow)/by(pRes_selection,pRes_selection$Source,nrow)
     Res$APAfactor <- round(as.numeric(apply(Res,1,function(x) APA[which(names(APA)==x["Source"])])),2)
@@ -822,7 +822,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
                       CopyPaste = Res$CopyPaste,
                       APAfactor = Res$APAfactor
     )
-    
+        
     class(Res) <- c("statcheck","data.frame")
   }
   
@@ -830,8 +830,12 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   
   if(AllPValues==FALSE){
     
+    
+    
     # Return message when there are no results
     if(nrow(Res)>0){
+      
+      
       return(Res) 
     } else {
       Res <- cat("statcheck did not find any results\n")
