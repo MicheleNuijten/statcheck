@@ -757,16 +757,16 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         lowP  <- pf(upper[i],Res[i,]$df1,Res[i,]$df2,lower.tail=FALSE)
         
       } else if(Res[i,]$Statistic=="t"){
-        upP <- pt(-1*abs(lower[i]),Res[i,]$df1)*2
-        lowP  <- pt(-1*abs(upper[i]),Res[i,]$df1)*2
+        upP <- pt(-1*abs(lower[i]),Res[i,]$df2)*2
+        lowP  <- pt(-1*abs(upper[i]),Res[i,]$df2)*2
         
       } else if(Res[i,]$Statistic=="Chi2"){
         upP <- pchisq(lower[i],Res[i,]$df1,lower.tail=FALSE)
         lowP  <- pchisq(upper[i],Res[i,]$df1,lower.tail=FALSE)
         
       } else if(Res[i,]$Statistic=="r"){
-        upP <- pmin(pt(-1*abs(r2t(lower[i],Res[i,]$df1)),Res[i,]$df1)*2,1)
-        lowP  <- pmin(pt(-1*abs(r2t(upper[i],Res[i,]$df1)),Res[i,]$df1)*2,1)
+        upP <- pmin(pt(-1*abs(r2t(lower[i],Res[i,]$df2)),Res[i,]$df2)*2,1)
+        lowP  <- pmin(pt(-1*abs(r2t(upper[i],Res[i,]$df2)),Res[i,]$df2)*2,1)
         
       } else if(Res[i,]$Statistic=="Z"|Res[i,]$Statistic=="z"){
         upP <- pnorm(abs(lower[i]),lower.tail=FALSE)*2
