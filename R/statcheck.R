@@ -634,20 +634,51 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     computed <- x$Computed
     comparison <- x$Reported.Comparison
     reported <- x$Reported.P.Value
+    testcomp <-  as.vector(x$Test.Comparison)
     
     # replace 'ns' by > alpha
     reported[comparison=="ns"] <- alpha
     comparison[comparison=="ns"] <- ">"
     
-    Match <- paste(computed,comparison,reported)
-    AllTests <- grepl("=|<|>",Match)
+    #-----------------------------------------------
+    
+    equalsmall <- testcomp=="=" & comparison=="<"
+    equalgreat <- testcomp=="=" & comparison==">"
+    equalequal <- testcomp=="=" & comparison=="="
+    
+    smallsmall <- testcomp=="<" & comparison=="<"
+    smallgreat <- testcomp=="<" & comparison==">"
+    smallequal <- testcomp=="<" & comparison=="="
+    
+    greatsmall <- testcomp==">" & comparison=="<"
+    greatgreat <- testcomp==">" & comparison==">"
+    greatequal <- testcomp==">" & comparison=="="
+    
+    
+    AllTests <- grepl("=|<|>",comparison)
+    
     if (any(AllTests)){
-      AllTests[grepl("<",Match)] <- reported[grepl("<",Match)]<=alpha & computed[grepl("<",Match)] >=alpha
-      AllTests[grepl(">",Match)] <- reported[grepl(">",Match)] >=alpha & computed[grepl(">",Match)]<alpha
-      AllTests[grepl("=",Match)] <- (reported[grepl("=",Match)]<alpha & computed[grepl("=",Match)]>=alpha)|
-        (reported[grepl("=",Match)]>=alpha & computed[grepl("=",Match)]<alpha)
+      AllTests[equalsmall] <- reported[equalsmall]<=alpha & computed[equalsmall] >=alpha
+      AllTests[equalgreat] <- reported[equalgreat] >=alpha & computed[equalgreat]<alpha
+      AllTests[equalequal] <- (reported[equalequal]<alpha & computed[equalequal]>=alpha)|
+        (reported[equalequal]>=alpha & computed[equalequal]<alpha)
+      
+      AllTests[smallsmall] <- reported[smallsmall]<=alpha & computed[smallsmall]>=alpha
+      AllTests[smallequal] <- reported[smallequal]<alpha & computed[smallequal]>=alpha
+      
+      AllTests[greatgreat] <- reported[greatgreat]>=alpha & computed[greatgreat]<=alpha
+      AllTests[greatequal] <- reported[greatequal]>=alpha & computed[greatequal]<=alpha
+      
+      # these combinations of < & > are logically always correct
+      AllTests[smallgreat] <- FALSE
+      AllTests[greatsmall] <- FALSE
     }
+    
+    
     AllTests <- as.logical(AllTests)
+    
+    #-----------------------------------------------
+    
     
     return(AllTests)
   }
@@ -663,11 +694,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     # check for errors
     Res$Error <- ErrorTest(Res)
-    
-    # p values smaller or equal to zero are errors
-    ImpossibleP <- (Res$Reported.P.Value<=0)
-    Res$Error[ImpossibleP] <- TRUE
-    
+     
     Res$DecisionError <-  DecisionErrorTest(Res)  
     
     ###---------------------------------------------------------------------
@@ -724,8 +751,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
       Res$Error[Res$OneTailedInTxt==TRUE & Res1tailed$Error==FALSE] <- FALSE
       Res$DecisionError[Res$OneTailedInTxt==TRUE & Res1tailed$DecisionError==FALSE] <- FALSE
       
-      #     Res$Error[Res$OneTailedInTxt==TRUE & Res$OneTail==TRUE] <- FALSE
-      #     Res$DecisionError[Res$OneTailedInTxt==TRUE & Res$OneTail==TRUE] <- FALSE
     }
     
     ###---------------------------------------------------------------------
@@ -744,11 +769,11 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     ###---------------------------------------------------------------------
     
     # "correct" rounding differences
-    # e.g. t=2.3 could be 2.25 to 2.34 with its range of p values
+    # e.g. t=2.3 could be 2.25 to 2.34999999... with its range of p values
     correct_round <- numeric()
     
     lower <- Res$Value-(.5/10^Res$testdec)
-    upper <- Res$Value+(.4/10^Res$testdec)
+    upper <- Res$Value+(.5/10^Res$testdec)
     
     for(i in seq_len(nrow(Res))){
       
@@ -774,14 +799,33 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         
       } 
       
-      if(OneTailedTests==FALSE){
-        correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]>=lowP & Res$Reported.P.Value[i]<=upP,TRUE,FALSE)
-      } else {
-        correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]/2>=lowP & Res$Reported.P.Value[i]/2<=upP,TRUE,FALSE)
+      if(OneTailedTests==TRUE){
+        upP <- upP/2
+        lowP <- lowP/2
       }
+      
+      if(Res[i,"Reported.Comparison"]=="="){
+        correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]>=round(lowP,Res$dec[i]) & Res$Reported.P.Value[i]<=round(upP,Res$dec[i]),TRUE,FALSE)        
+      }
+      
+      if(Res[i,"Reported.Comparison"]=="<"){
+        correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]>lowP,TRUE,FALSE)
+      }
+      
+      if(Res[i,"Reported.Comparison"]==">"){
+        correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]<upP,TRUE,FALSE)
+      }
+      
+      
     }
     
     CorrectRound <- as.logical(correct_round)
+    
+    
+    # p values smaller or equal to zero are errors
+    ImpossibleP <- (Res$Reported.P.Value<=0)
+    Res$Error[ImpossibleP] <- TRUE
+    
     
     ###---------------------------------------------------------------------
     
