@@ -9,7 +9,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   alpha=.05,
   ### Assumed level of significance in the scanned texts. Defaults to .05. 
   OneTailedTxt=FALSE,
-  ### Logical. If TRUE, statcheck searches the text for "sided", "tailed", and "directional" to identify the possible use of one-sided tests. If one or more of these strings is found in the text AND the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.
+  ### Logical. If TRUE, statcheck searches the text for "one-sided", "one-tailed", and "directional" to identify the possible use of one-sided tests. If one or more of these strings is found in the text AND the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.
   AllPValues=FALSE
   ### Logical. If TRUE, the output will consist of a dataframe with all detected p values, also the ones that were not part of the full results in APA format
 ){
@@ -21,7 +21,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   ## Also, note that a seemingly inconsistent p value can still be correct when we take into account that the test statistic might have been rounded after calculating the corresponding p value. For instance, a reported t value of 2.35 could correspond to an actual value of 2.345 to 2.354 with a range of p values that can slightly deviate from the recomputed p value. Statcheck will not count cases like this as errors.
   ##seealso<<
   ## \code{\link{checkPDF}}, \code{\link{checkHTMLdir}}, \code{\link{checkHTML}}, \code{\link{checkdir}}
-   
+  
   # Create empty data frame for main result:
   Res <- data.frame(Source = NULL,Statistic=NULL,df1=NULL,df2=NULL,Test.Comparison=NULL,
                     Value=NULL,Reported.Comparison=NULL,Reported.P.Value=NULL, Computed = NULL, 
@@ -97,9 +97,10 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     #---------------------------
     
-    # search for "sided"/"tailed"/"directional" in full text to detect one-sided testing
+    # search for "one-sided"/"one-tailed"/"directional" in full text to detect one-sided testing
     
-    onesided <- gregexpr("sided|tailed|directional",txt,ignore.case=TRUE)[[1]]
+    #     onesided <- gregexpr("sided|tailed|directional",txt,ignore.case=TRUE)[[1]]
+    onesided <- gregexpr("one.?sided|one.?tailed|directional",txt,ignore.case=TRUE)[[1]]
     
     if(onesided[1] != -1){
       onesided <- 1
@@ -459,7 +460,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         rm(zRes)
       }
     }
-        
+    
     # Chis2-values:
     if ("chisq"%in%stat){
       # Get location of chi values or ΔG in text:
@@ -554,8 +555,8 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # remove p values greater than one
     Res <- Res[Res$Reported.P.Value<=1|is.na(Res$Reported.P.Value),]
   }
-
-
+  
+  
   ###---------------------------------------------------------------------
   ErrorTest <- function(x,...){
     
@@ -694,7 +695,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     # check for errors
     Res$Error <- ErrorTest(Res)
-     
+    
     Res$DecisionError <-  DecisionErrorTest(Res)  
     
     ###---------------------------------------------------------------------
@@ -739,7 +740,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     ###---------------------------------------------------------------------
     
     # count errors as correct if they'd be correct one-sided
-    # and there was a mention of 'sided','tailed', or 'directional' in the text
+    # and there was a mention of 'one-sided','one-tailed', or 'directional' in the text
     
     if(OneTailedTxt==TRUE){
       
@@ -747,181 +748,183 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
       Res1tailed$Computed <- Res1tailed$Computed/2
       
       Res1tailed$Error <- ErrorTest(Res1tailed)
+      Res1tailed$DecisionError <- DecisionErrorTest(Res1tailed)
       
-      Res$Error[Res$OneTailedInTxt==TRUE & Res1tailed$Error==FALSE] <- FALSE
-      Res$DecisionError[Res$OneTailedInTxt==TRUE & Res1tailed$DecisionError==FALSE] <- FALSE
+      Res$Error[!((Res$Statistic=="F"|Res$Statistic=="Chi2") & Res$df1>1) & Res$OneTailedInTxt==TRUE & Res1tailed$Error==FALSE] <- FALSE
+      Res$DecisionError[!((Res$Statistic=="F"|Res$Statistic=="Chi2") & Res$df1>1) & Res$OneTailedInTxt==TRUE & Res1tailed$DecisionError==FALSE] <- FALSE
       
+
     }
+
+###---------------------------------------------------------------------
+
+# copy paste errors
+# same string of results elsewhere in article?
+CopyPaste <- numeric()
+for (i in 1:length(Res$Raw)){
+  Res_new <- Res[-i,]
+  CopyPaste[i] <- Res$Raw[i]%in%Res_new$Raw[Res_new$Source==Res_new$Source[i]]
+}
+CopyPaste <- as.logical(CopyPaste)
+
+Res$CopyPaste <- CopyPaste
+
+###---------------------------------------------------------------------
+
+# "correct" rounding differences
+# e.g. t=2.3 could be 2.25 to 2.34999999... with its range of p values
+correct_round <- numeric()
+
+lower <- Res$Value-(.5/10^Res$testdec)
+upper <- Res$Value+(.5/10^Res$testdec)
+
+for(i in seq_len(nrow(Res))){
+  
+  if(Res[i,]$Statistic=="F"){
+    upP <- pf(lower[i],Res[i,]$df1,Res[i,]$df2,lower.tail=FALSE)
+    lowP  <- pf(upper[i],Res[i,]$df1,Res[i,]$df2,lower.tail=FALSE)
     
-    ###---------------------------------------------------------------------
+  } else if(Res[i,]$Statistic=="t"){
+    upP <- pt(-1*abs(lower[i]),Res[i,]$df2)*2
+    lowP  <- pt(-1*abs(upper[i]),Res[i,]$df2)*2
     
-    # copy paste errors
-    # same string of results elsewhere in article?
-    CopyPaste <- numeric()
-    for (i in 1:length(Res$Raw)){
-      Res_new <- Res[-i,]
-      CopyPaste[i] <- Res$Raw[i]%in%Res_new$Raw[Res_new$Source==Res_new$Source[i]]
-    }
-    CopyPaste <- as.logical(CopyPaste)
+  } else if(Res[i,]$Statistic=="Chi2"){
+    upP <- pchisq(lower[i],Res[i,]$df1,lower.tail=FALSE)
+    lowP  <- pchisq(upper[i],Res[i,]$df1,lower.tail=FALSE)
     
-    Res$CopyPaste <- CopyPaste
+  } else if(Res[i,]$Statistic=="r"){
+    upP <- pmin(pt(-1*abs(r2t(lower[i],Res[i,]$df2)),Res[i,]$df2)*2,1)
+    lowP  <- pmin(pt(-1*abs(r2t(upper[i],Res[i,]$df2)),Res[i,]$df2)*2,1)
     
-    ###---------------------------------------------------------------------
+  } else if(Res[i,]$Statistic=="Z"|Res[i,]$Statistic=="z"){
+    upP <- pnorm(abs(lower[i]),lower.tail=FALSE)*2
+    lowP  <- pnorm(abs(upper[i]),lower.tail=FALSE)*2
     
-    # "correct" rounding differences
-    # e.g. t=2.3 could be 2.25 to 2.34999999... with its range of p values
-    correct_round <- numeric()
-    
-    lower <- Res$Value-(.5/10^Res$testdec)
-    upper <- Res$Value+(.5/10^Res$testdec)
-    
-    for(i in seq_len(nrow(Res))){
-      
-      if(Res[i,]$Statistic=="F"){
-        upP <- pf(lower[i],Res[i,]$df1,Res[i,]$df2,lower.tail=FALSE)
-        lowP  <- pf(upper[i],Res[i,]$df1,Res[i,]$df2,lower.tail=FALSE)
-        
-      } else if(Res[i,]$Statistic=="t"){
-        upP <- pt(-1*abs(lower[i]),Res[i,]$df2)*2
-        lowP  <- pt(-1*abs(upper[i]),Res[i,]$df2)*2
-        
-      } else if(Res[i,]$Statistic=="Chi2"){
-        upP <- pchisq(lower[i],Res[i,]$df1,lower.tail=FALSE)
-        lowP  <- pchisq(upper[i],Res[i,]$df1,lower.tail=FALSE)
-        
-      } else if(Res[i,]$Statistic=="r"){
-        upP <- pmin(pt(-1*abs(r2t(lower[i],Res[i,]$df2)),Res[i,]$df2)*2,1)
-        lowP  <- pmin(pt(-1*abs(r2t(upper[i],Res[i,]$df2)),Res[i,]$df2)*2,1)
-        
-      } else if(Res[i,]$Statistic=="Z"|Res[i,]$Statistic=="z"){
-        upP <- pnorm(abs(lower[i]),lower.tail=FALSE)*2
-        lowP  <- pnorm(abs(upper[i]),lower.tail=FALSE)*2
-        
-      } 
-      
-      if(OneTailedTests==TRUE){
-        upP <- upP/2
-        lowP <- lowP/2
-      }
-      
-      if(Res[i,"Reported.Comparison"]=="="){
-        correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]>=round(lowP,Res$dec[i]) & Res$Reported.P.Value[i]<=round(upP,Res$dec[i]),TRUE,FALSE)        
-      }
-      
-      if(Res[i,"Reported.Comparison"]=="<"){
-        correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]>lowP,TRUE,FALSE)
-      }
-      
-      if(Res[i,"Reported.Comparison"]==">"){
-        correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]<upP,TRUE,FALSE)
-      }
-      
-      
-    }
-    
-    CorrectRound <- as.logical(correct_round)
-    
-    
-    # p values smaller or equal to zero are errors
-    ImpossibleP <- (Res$Reported.P.Value<=0)
-    Res$Error[ImpossibleP] <- TRUE
-    
-    
-    ###---------------------------------------------------------------------
-    
-    # APAfactor: proportion of APA results (that statcheck reads) of total number of p values
-    
-    # select only the results of pRes that are from articles with at least 1 statcheck result
-    pRes_selection <- pRes[pRes$Source%in%Res$Source,]
-    
-    # select only the statcheck results that are from an article with at least one p value
-    # this is relevant, because it sometimes happens that statcheck extracts less p values 
-    # p values than statcheck results. For instance in cases when a p value appears to be
-    # greater than 1.
-   
-    Res_selection <- Res[Res$Source%in%pRes_selection$Source,]
-    APA <- by(Res_selection,Res_selection$Source,nrow)/by(pRes_selection,pRes_selection$Source,nrow)
-    Res$APAfactor <- round(as.numeric(apply(Res,1,function(x) APA[which(names(APA)==x["Source"])])),2)
-    
-    ###---------------------------------------------------------------------
-    
-    Res$Error[CorrectRound] <- FALSE
-    Res$DecisionError[CorrectRound] <- FALSE
-    
-    # final data frame
-    Res <- data.frame(Source = Res$Source, 
-                      Statistic = Res$Statistic, 
-                      df1 = Res$df1, 
-                      df2 = Res$df2,
-                      Test.Comparison = Res$Test.Comparison,
-                      Value = Res$Value, 
-                      Reported.Comparison = Res$Reported.Comparison, 
-                      Reported.P.Value = Res$Reported.P.Value, 
-                      Computed = Res$Computed, 
-                      Raw = Res$Raw,
-                      Error = Res$Error,
-                      DecisionError = Res$DecisionError,
-                      OneTail = Res$OneTail,
-                      OneTailedInTxt = Res$OneTailedInTxt,
-                      CopyPaste = Res$CopyPaste,
-                      APAfactor = Res$APAfactor
-    )
-        
-    class(Res) <- c("statcheck","data.frame")
+  } 
+  
+  if(OneTailedTests==TRUE){
+    upP <- upP/2
+    lowP <- lowP/2
   }
   
-  ###--------------------------------------------------------------------- 
+  if(Res[i,"Reported.Comparison"]=="="){
+    correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]>=round(lowP,Res$dec[i]) & Res$Reported.P.Value[i]<=round(upP,Res$dec[i]),TRUE,FALSE)        
+  }
   
-  if(AllPValues==FALSE){
+  if(Res[i,"Reported.Comparison"]=="<"){
+    correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]>lowP,TRUE,FALSE)
+  }
+  
+  if(Res[i,"Reported.Comparison"]==">"){
+    correct_round[i] <- ifelse(Res[i,]$Error==TRUE & Res$Reported.P.Value[i]<upP,TRUE,FALSE)
+  }
+  
+  
+}
+
+CorrectRound <- as.logical(correct_round)
+
+
+# p values smaller or equal to zero are errors
+ImpossibleP <- (Res$Reported.P.Value<=0)
+Res$Error[ImpossibleP] <- TRUE
+
+
+###---------------------------------------------------------------------
+
+# APAfactor: proportion of APA results (that statcheck reads) of total number of p values
+
+# select only the results of pRes that are from articles with at least 1 statcheck result
+pRes_selection <- pRes[pRes$Source%in%Res$Source,]
+
+# select only the statcheck results that are from an article with at least one p value
+# this is relevant, because it sometimes happens that statcheck extracts less p values 
+# p values than statcheck results. For instance in cases when a p value appears to be
+# greater than 1.
+
+Res_selection <- Res[Res$Source%in%pRes_selection$Source,]
+APA <- by(Res_selection,Res_selection$Source,nrow)/by(pRes_selection,pRes_selection$Source,nrow)
+Res$APAfactor <- round(as.numeric(apply(Res,1,function(x) APA[which(names(APA)==x["Source"])])),2)
+
+###---------------------------------------------------------------------
+
+Res$Error[CorrectRound] <- FALSE
+Res$DecisionError[CorrectRound] <- FALSE
+
+# final data frame
+Res <- data.frame(Source = Res$Source, 
+                  Statistic = Res$Statistic, 
+                  df1 = Res$df1, 
+                  df2 = Res$df2,
+                  Test.Comparison = Res$Test.Comparison,
+                  Value = Res$Value, 
+                  Reported.Comparison = Res$Reported.Comparison, 
+                  Reported.P.Value = Res$Reported.P.Value, 
+                  Computed = Res$Computed, 
+                  Raw = Res$Raw,
+                  Error = Res$Error,
+                  DecisionError = Res$DecisionError,
+                  OneTail = Res$OneTail,
+                  OneTailedInTxt = Res$OneTailedInTxt,
+                  CopyPaste = Res$CopyPaste,
+                  APAfactor = Res$APAfactor
+)
+
+class(Res) <- c("statcheck","data.frame")
+  }
+
+###--------------------------------------------------------------------- 
+
+if(AllPValues==FALSE){
+  
+  
+  
+  # Return message when there are no results
+  if(nrow(Res)>0){
     
     
-    
-    # Return message when there are no results
-    if(nrow(Res)>0){
-      
-      
-      return(Res) 
-    } else {
-      Res <- cat("statcheck did not find any results\n")
-    }
-    
+    return(Res) 
   } else {
-    return(pRes)
+    Res <- cat("statcheck did not find any results\n")
   }
   
-  
-  
-  ### A data frame containing for each extracted statistic:
-  ### Source: Name of the file of which the statistic is extracted
-  ### 
-  ### Statistic: Character indicating the statistic that is extracted
-  ### 
-  ### df1: First degree of freedom
-  ### 
-  ### df2: Second degree of freedom (if applicable)
-  ### 
-  ### Test.Comparison: Reported comparison of the test statistic, when importing from pdf this will often not be converted properly
-  ### 
-  ### Value: Reported value of the statistic
-  ### 
-  ### Reported.Comparison: Reported comparison of the p value, when importing from pdf this will often not be converted properly
-  ### 
-  ### Reported.P.Value: The reported p-value, or NA if the reported value was NS
-  ### 
-  ### Computed: The recomputed p-value
-  ### 
-  ### Raw: Raw string of the statistical reference that is extracted
-  ### 
-  ### Error: The computed p value is not congruent with the reported p value
-  ### 
-  ### DecisionError: The reported result is significant whereas the computed result is not, or vice versa.
-  ### 
-  ### OneTail: Logical. Is it likely that the reported p value resulted from a correction for one-sided testing?
-  ### 
-  ### OneTailedInTxt: Logical. Does the text contain the string "sided", "tailed", and/or "directional"?
-  ### 
-  ### CopyPaste: Logical. Does the exact string of the extracted raw results occur anywhere else in the article?
-  ### 
+} else {
+  return(pRes)
+}
+
+
+
+### A data frame containing for each extracted statistic:
+### Source: Name of the file of which the statistic is extracted
+### 
+### Statistic: Character indicating the statistic that is extracted
+### 
+### df1: First degree of freedom
+### 
+### df2: Second degree of freedom (if applicable)
+### 
+### Test.Comparison: Reported comparison of the test statistic, when importing from pdf this will often not be converted properly
+### 
+### Value: Reported value of the statistic
+### 
+### Reported.Comparison: Reported comparison of the p value, when importing from pdf this will often not be converted properly
+### 
+### Reported.P.Value: The reported p-value, or NA if the reported value was NS
+### 
+### Computed: The recomputed p-value
+### 
+### Raw: Raw string of the statistical reference that is extracted
+### 
+### Error: The computed p value is not congruent with the reported p value
+### 
+### DecisionError: The reported result is significant whereas the computed result is not, or vice versa.
+### 
+### OneTail: Logical. Is it likely that the reported p value resulted from a correction for one-sided testing?
+### 
+### OneTailedInTxt: Logical. Does the text contain the string "sided", "tailed", and/or "directional"?
+### 
+### CopyPaste: Logical. Does the exact string of the extracted raw results occur anywhere else in the article?
+### 
 },ex=function(){
   txt <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"
   statcheck(txt)
