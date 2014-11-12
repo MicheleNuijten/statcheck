@@ -8,6 +8,8 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   ### Logical. Do we assume that all reported tests are one tailed (TRUE) or two tailed (FALSE, default)?
   alpha=.05,
   ### Assumed level of significance in the scanned texts. Defaults to .05. 
+  pEqualAlphaSig=TRUE,
+  ### Logical. If TRUE, statcheck counts p <= alpha as significant, if FALSE, statcheck counts p < alpha as significant
   OneTailedTxt=FALSE,
   ### Logical. If TRUE, statcheck searches the text for "one-sided", "one-tailed", and "directional" to identify the possible use of one-sided tests. If one or more of these strings is found in the text AND the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.
   AllPValues=FALSE
@@ -558,6 +560,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   
   
   ###---------------------------------------------------------------------
+  
   ErrorTest <- function(x,...){
     
     computed <- as.vector(x$Computed)
@@ -588,11 +591,11 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     greatgreat <- testcomp==">" & comparison==">"
     
     if(any(smallsmall)){
-      InExTests[smallsmall] <- !(round(computed[smallsmall],x$dec[smallsmall])<=round(reported[smallsmall],x$dec[smallsmall]))
+      InExTests[smallsmall] <- round(computed[smallsmall],x$dec[smallsmall])<=round(reported[smallsmall],x$dec[smallsmall])
     }
     
     if(any(greatgreat)){
-      InExTests[greatgreat] <- !(round(computed[greatgreat],x$dec[greatgreat])>=round(reported[greatgreat],x$dec[greatgreat]))
+      InExTests[greatgreat] <- round(computed[greatgreat],x$dec[greatgreat])>=round(reported[greatgreat],x$dec[greatgreat])
     }
     
     # these combinations of < & > are logically always correct
@@ -614,11 +617,11 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     greatequal <- x$Test.Comparison==">" & comparison=="="
     
     if(any(smallequal)){
-      ExTests[smallequal] <- !(round(computed[smallequal],x$dec[smallequal])<round(reported[smallequal],x$dec[smallequal]))
+      ExTests[smallequal] <- round(computed[smallequal],x$dec[smallequal])<=round(reported[smallequal],x$dec[smallequal])
     }
     
     if(any(greatequal)){
-      ExTests[greatequal] <- !(round(computed[greatequal],x$dec[greatequal])>round(reported[greatequal],x$dec[greatequal]))
+      ExTests[greatequal] <- round(computed[greatequal],x$dec[greatequal])>=round(reported[greatequal],x$dec[greatequal])
     }
     
     #-----------------------------------------------
@@ -643,32 +646,55 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     #-----------------------------------------------
     
+    equalequal <- testcomp=="=" & comparison=="="
     equalsmall <- testcomp=="=" & comparison=="<"
     equalgreat <- testcomp=="=" & comparison==">"
-    equalequal <- testcomp=="=" & comparison=="="
     
+    smallequal <- testcomp=="<" & comparison=="="
     smallsmall <- testcomp=="<" & comparison=="<"
     smallgreat <- testcomp=="<" & comparison==">"
-    smallequal <- testcomp=="<" & comparison=="="
     
+    greatequal <- testcomp==">" & comparison=="="
     greatsmall <- testcomp==">" & comparison=="<"
     greatgreat <- testcomp==">" & comparison==">"
-    greatequal <- testcomp==">" & comparison=="="
+    
     
     
     AllTests <- grepl("=|<|>",comparison)
     
     if (any(AllTests)){
-      AllTests[equalsmall] <- reported[equalsmall]<=alpha & computed[equalsmall] >=alpha
-      AllTests[equalgreat] <- reported[equalgreat] >=alpha & computed[equalgreat]<alpha
-      AllTests[equalequal] <- (reported[equalequal]<alpha & computed[equalequal]>=alpha)|
-        (reported[equalequal]>=alpha & computed[equalequal]<alpha)
       
-      AllTests[smallsmall] <- reported[smallsmall]<=alpha & computed[smallsmall]>=alpha
-      AllTests[smallequal] <- reported[smallequal]<alpha & computed[smallequal]>=alpha
+      if(pEqualAlphaSig==TRUE){
+        
+        AllTests[equalequal] <- (reported[equalequal]<=alpha & computed[equalequal]>alpha)|
+          (reported[equalequal]>alpha & computed[equalequal]<=alpha)
+        AllTests[equalsmall] <- reported[equalsmall]<=alpha & computed[equalsmall] >alpha
+        AllTests[equalgreat] <- reported[equalgreat] >=alpha & computed[equalgreat]<=alpha
+        
+        
+        AllTests[smallequal] <- reported[smallequal]<=alpha & computed[smallequal]>=alpha
+        AllTests[smallsmall] <- reported[smallsmall]<=alpha & computed[smallsmall]>=alpha
+        
+        AllTests[greatequal] <- reported[greatequal]>alpha & computed[greatequal]<=alpha
+        AllTests[greatgreat] <- reported[greatgreat]>=alpha & computed[greatgreat]<=alpha
+        
+        
+      } else {
+        
+        AllTests[equalequal] <- (reported[equalequal]<alpha & computed[equalequal]>=alpha)|
+          (reported[equalequal]>=alpha & computed[equalequal]<alpha)
+        AllTests[equalsmall] <- reported[equalsmall]<alpha & computed[equalsmall] >=alpha
+        AllTests[equalgreat] <- reported[equalgreat] >=alpha & computed[equalgreat]<alpha
+        
+        
+        AllTests[smallequal] <- reported[smallequal]<alpha & computed[smallequal]>=alpha
+        AllTests[smallsmall] <- reported[smallsmall]<=alpha & computed[smallsmall]>=alpha
+        
+        AllTests[greatequal] <- reported[greatequal]>=alpha & computed[greatequal]<alpha
+        AllTests[greatgreat] <- reported[greatgreat]>=alpha & computed[greatgreat]<alpha
+        
+      }
       
-      AllTests[greatgreat] <- reported[greatgreat]>=alpha & computed[greatgreat]<=alpha
-      AllTests[greatequal] <- reported[greatequal]>=alpha & computed[greatequal]<=alpha
       
       # these combinations of < & > are logically always correct
       AllTests[smallgreat] <- FALSE
