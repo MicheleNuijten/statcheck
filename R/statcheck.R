@@ -9,7 +9,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   alpha=.05,
   ### Assumed level of significance in the scanned texts. Defaults to .05. 
   pEqualAlphaSig=TRUE,
-  ### Logical. If TRUE, statcheck counts p <= alpha as significant, if FALSE, statcheck counts p < alpha as significant
+  ### Logical. If TRUE, statcheck counts p <= alpha as significant (default), if FALSE, statcheck counts p < alpha as significant
   OneTailedTxt=FALSE,
   ### Logical. If TRUE, statcheck searches the text for "one-sided", "one-tailed", and "directional" to identify the possible use of one-sided tests. If one or more of these strings is found in the text AND the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.
   AllPValues=FALSE
@@ -850,11 +850,20 @@ for(i in seq_len(nrow(Res))){
 
 CorrectRound <- as.logical(correct_round)
 
+###---------------------------------------------------------------------
 
 # p values smaller or equal to zero are errors
 ImpossibleP <- (Res$Reported.P.Value<=0)
 Res$Error[ImpossibleP] <- TRUE
 
+###---------------------------------------------------------------------
+
+# p values that are not an error can also not be a decision error
+# this happens sometimes when reported= "p=.05" and e.g. computed=.052...
+# this should be counted as correct
+
+NoErrorDecisionError <- Res$Error==FALSE & Res$DecisionError==TRUE
+Res$DecisionError[NoErrorDecisionError] <- FALSE
 
 ###---------------------------------------------------------------------
 
