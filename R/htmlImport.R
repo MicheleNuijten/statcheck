@@ -46,7 +46,11 @@ checkHTMLdir <- structure(function(# Extract test statistics from all HTML files
   ##seealso<<
   ## \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkPDFdir}}, \code{\link{checkHTML}}, \code{\link{checkdir}}
   if (missing(dir)) dir <- tk_choose.dir()
+  
   files <- list.files(dir,pattern=".html|.htm",full.names=TRUE,recursive=subdir)
+  
+  if(length(files)==0) stop("No HTML found")
+  
   txts <- character(length(files))
   message("Importing HTML files...")
   pb <- txtProgressBar(max=length(files),style=3)

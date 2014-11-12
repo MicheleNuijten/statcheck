@@ -57,7 +57,7 @@ plot.statcheck <- function(# Plot method for "statcheck"
   legend(.88,-.15,
          pch=c(20,20,5),
          col=c("orange","red","black"),
-         legend=c("p inconsistency","decision error","exact"),
+         legend=c("p inconsistency","decision error","exact (p = ...)"),
          cex=.8)
   par(xpd=FALSE)
 }

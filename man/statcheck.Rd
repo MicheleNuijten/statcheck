@@ -3,12 +3,14 @@
 \title{Extract statistics and recompute p-values.}
 \description{This function extracts statistics from strings and returns the extracted values, reported p-values and recomputed p-values. The package relies on the program "pdftotext", see the paragraph "Note" for details on the installation.}
 \usage{statcheck(x, stat = c("t", "F", "cor", "chisq", "Z"), OneTailedTests = FALSE, 
-    alpha = 0.05, OneTailedTxt = FALSE, AllPValues = FALSE)}\arguments{
+    alpha = 0.05, pEqualAlphaSig = TRUE, OneTailedTxt = FALSE, 
+    AllPValues = FALSE)}\arguments{
   \item{x}{A vector of strings containing whole articles.}
   \item{stat}{"t" to extract t-values, "F" to extract F-values, "cor" to extract correlations, "chisq"to extract chi-square values, and "Z" to extract Z-values.}
   \item{OneTailedTests}{Logical. Do we assume that all reported tests are one tailed (TRUE) or two tailed (FALSE, default)?}
   \item{alpha}{Assumed level of significance in the scanned texts. Defaults to .05. }
-  \item{OneTailedTxt}{Logical. If TRUE, statcheck searches the text for "sided", "tailed", and "directional" to identify the possible use of one-sided tests. If one or more of these strings is found in the text AND the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.}
+  \item{pEqualAlphaSig}{Logical. If TRUE, statcheck counts p <= alpha as significant, if FALSE, statcheck counts p < alpha as significant}
+  \item{OneTailedTxt}{Logical. If TRUE, statcheck searches the text for "one-sided", "one-tailed", and "directional" to identify the possible use of one-sided tests. If one or more of these strings is found in the text AND the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.}
   \item{AllPValues}{Logical. If TRUE, the output will consist of a dataframe with all detected p values, also the ones that were not part of the full results in APA format}
 }
 \details{Statcheck uses regular expressions to find statistical results in APA format. When a statistical result deviates from APA format, statcheck will not find it. The APA formats that statcheck uses are: t(df) = value, p = value; F(df1,df2) = value, p = value; r(df) = value, p = value; [chi]2 (df, N = value) = value, p = value (N is optional, delta G is also included); Z = value, p = value. All regular expressions take into account that test statistics and p values may be exactly (=) or inexactly (< or >) reported. Different spacing has also been taken into account.

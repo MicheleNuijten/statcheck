@@ -38,7 +38,11 @@ checkPDFdir <- structure(function(# Extract statistics and recompute p values fr
   ##seealso<<
   ## \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkHTMLdir}}, \code{\link{checkHTML}}, \code{\link{checkdir}}
   if (missing(dir)) dir <- tk_choose.dir()
+    
   files <- list.files(dir,pattern=".pdf",full.names=TRUE,recursive=subdir)
+  
+  if(length(files)==0) stop("No PDF found")
+  
   txts <- character(length(files))
   message("Importing PDF files...")
   pb <- txtProgressBar(max=length(files),style=3)
