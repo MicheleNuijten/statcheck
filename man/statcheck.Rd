@@ -9,7 +9,7 @@
   \item{stat}{"t" to extract t-values, "F" to extract F-values, "cor" to extract correlations, "chisq"to extract chi-square values, and "Z" to extract Z-values.}
   \item{OneTailedTests}{Logical. Do we assume that all reported tests are one tailed (TRUE) or two tailed (FALSE, default)?}
   \item{alpha}{Assumed level of significance in the scanned texts. Defaults to .05. }
-  \item{pEqualAlphaSig}{Logical. If TRUE, statcheck counts p <= alpha as significant, if FALSE, statcheck counts p < alpha as significant}
+  \item{pEqualAlphaSig}{Logical. If TRUE, statcheck counts p <= alpha as significant (default), if FALSE, statcheck counts p < alpha as significant}
   \item{OneTailedTxt}{Logical. If TRUE, statcheck searches the text for "one-sided", "one-tailed", and "directional" to identify the possible use of one-sided tests. If one or more of these strings is found in the text AND the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.}
   \item{AllPValues}{Logical. If TRUE, the output will consist of a dataframe with all detected p values, also the ones that were not part of the full results in APA format}
 }
