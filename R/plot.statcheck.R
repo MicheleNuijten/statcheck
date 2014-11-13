@@ -2,6 +2,8 @@ plot.statcheck <- function(# Plot method for "statcheck"
   ### Function for plotting of "statcheck" objects. Reported p values are plotted against recalculated p values, which allows the user to easily spot if articles contain miscalculations of statistical results. 
   x,
   ### a "statcheck" object. See \code{\link{statcheck}}.
+  alpha=.05,
+  ### Assumed level of significance in the scanned texts. Defaults to .05. 
   ...
   ### arguments to be passed to methods, such as graphical parameters (see \code{\link{par}}).
   ) {
@@ -17,6 +19,9 @@ plot.statcheck <- function(# Plot method for "statcheck"
   reported <- x$Reported.P.Value
   computed <- x$Computed
     
+  # replace 'ns' for > alpha
+  reported[x$Reported.Comparison=="ns"] <- alpha
+  
   # scatterplot of reported and recalculated p values
   do.call(plot.default,c(list(x=reported,y=computed,
                xlab="reported p value",

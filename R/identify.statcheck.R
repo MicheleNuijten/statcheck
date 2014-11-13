@@ -2,6 +2,8 @@ identify.statcheck <- structure(function(# Identify specific points in a \code{s
 	### With this function you can simply point and click on the datapoints in the plot to see the corresponding statcheck details, such as the paper from which the data came and the exact statistical results.
 	x,
 	### a \code{statcheck} object.
+	alpha=.05,
+	### Assumed level of significance in the scanned texts. Defaults to .05.
 	...
 	### additional arguments to be passed on to the plot method.
 	){
@@ -10,6 +12,9 @@ identify.statcheck <- structure(function(# Identify specific points in a \code{s
   ## \code{\link{statcheck}}
   reported <- x$Reported.P.Value
   computed <- x$Computed
+  
+  # replace 'ns' for > alpha
+  reported[x$Reported.Comparison=="ns"] <- alpha
   
   plot(x,...) # makes use of the plot.statcheck() function
   ID <- identify(reported,computed)
