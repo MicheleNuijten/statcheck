@@ -1,7 +1,7 @@
 statcheck <- structure(function(# Extract statistics and recompute p-values.
   ### This function extracts statistics from strings and returns the extracted values, reported p-values and recomputed p-values. The package relies on the program "pdftotext", see the paragraph "Note" for details on the installation.
   x,
-  ### A vector of strings containing whole articles.
+  ### A vector of strings.
   stat=c("t","F","cor","chisq","Z"),
   ### "t" to extract t-values, "F" to extract F-values, "cor" to extract correlations, "chisq"to extract chi-square values, and "Z" to extract Z-values.
   OneTailedTests=FALSE,
