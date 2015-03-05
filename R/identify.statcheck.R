@@ -3,7 +3,7 @@ identify.statcheck <- structure(function(# Identify specific points in a \code{s
 	x,
 	### a \code{statcheck} object.
 	alpha=.05,
-	### Assumed level of significance in the scanned texts. Defaults to .05.
+	### assumed level of significance in the scanned texts. Defaults to .05.
 	...
 	### additional arguments to be passed on to the plot method.
 	){

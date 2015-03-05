@@ -3,7 +3,7 @@ plot.statcheck <- function(# Plot method for "statcheck"
   x,
   ### a "statcheck" object. See \code{\link{statcheck}}.
   alpha=.05,
-  ### Assumed level of significance in the scanned texts. Defaults to .05. 
+  ### assumed level of significance in the scanned texts. Defaults to .05. 
   ...
   ### arguments to be passed to methods, such as graphical parameters (see \code{\link{par}}).
   ) {

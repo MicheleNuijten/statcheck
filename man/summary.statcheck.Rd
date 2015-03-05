@@ -13,7 +13,8 @@
 \item{Errors}{The number of errors per article}
 \item{DecisionErrors}{The number of errors that caused a non-significant result to be reported as significant (or vice versa) per article}}
 
-\author{Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten <m.b.nuijten@uvt.nl>}
+\author{Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten
+<m.b.nuijten@uvt.nl>}
 
 
 

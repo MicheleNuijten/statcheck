@@ -22,7 +22,8 @@ Note that the conversion to plain text and extraction of statistics can result i
 \item{ExactError}{Error in exactly reported p values as compared to the recalculated p values}
 \item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}}
 
-\author{Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten <m.b.nuijten@uvt.nl>}
+\author{Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten
+<m.b.nuijten@uvt.nl>}
 
 
 

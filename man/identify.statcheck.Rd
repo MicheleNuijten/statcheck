@@ -4,13 +4,14 @@
 \description{With this function you can simply point and click on the datapoints in the plot to see the corresponding statcheck details, such as the paper from which the data came and the exact statistical results.}
 \usage{\method{identify}{statcheck}(x, alpha = 0.05, ...)}\arguments{
   \item{x}{a \code{statcheck} object.}
-  \item{alpha}{Assumed level of significance in the scanned texts. Defaults to .05.}
+  \item{alpha}{assumed level of significance in the scanned texts. Defaults to .05.}
   \item{\dots}{additional arguments to be passed on to the plot method.}
 }
 
 \value{This function returns both a plot and a dataframe. For the contents of the dataframe see \code{\link{statcheck}}.}
 
-\author{Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten <m.b.nuijten@uvt.nl>}
+\author{Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten
+<m.b.nuijten@uvt.nl>}
 
 
 
