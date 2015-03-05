@@ -465,7 +465,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     # Chis2-values:
     if ("chisq"%in%stat){
-      # Get location of chi values or ΔG in text:
+      # Get location of chi values or delta G in text:
       chi2Loc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^tr ]\\s?)|(.2\\s?))2?\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?\\)\\s?[<>=]\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (chi2Loc[1] != -1){
@@ -811,20 +811,38 @@ for(i in seq_len(nrow(Res))){
     lowP  <- pf(upper[i],Res[i,]$df1,Res[i,]$df2,lower.tail=FALSE)
     
   } else if(Res[i,]$Statistic=="t"){
-    upP <- pt(-1*abs(lower[i]),Res[i,]$df2)*2
-    lowP  <- pt(-1*abs(upper[i]),Res[i,]$df2)*2
+    
+    if(lower[i]<0){
+      lowP <- pt(lower[i],Res[i,]$df2)*2
+      upP  <- pt(upper[i],Res[i,]$df2)*2
+    } else{
+      upP <- pt(-1*lower[i],Res[i,]$df2)*2
+      lowP  <- pt(-1*upper[i],Res[i,]$df2)*2
+    }
     
   } else if(Res[i,]$Statistic=="Chi2"){
     upP <- pchisq(lower[i],Res[i,]$df1,lower.tail=FALSE)
     lowP  <- pchisq(upper[i],Res[i,]$df1,lower.tail=FALSE)
     
   } else if(Res[i,]$Statistic=="r"){
-    upP <- pmin(pt(-1*abs(r2t(lower[i],Res[i,]$df2)),Res[i,]$df2)*2,1)
-    lowP  <- pmin(pt(-1*abs(r2t(upper[i],Res[i,]$df2)),Res[i,]$df2)*2,1)
+    
+    if(lower[i]<0){
+      lowP <- pmin(pt(r2t(lower[i],Res[i,]$df2),Res[i,]$df2)*2,1)
+      upP  <- pmin(pt(r2t(upper[i],Res[i,]$df2),Res[i,]$df2)*2,1)
+    } else {
+      upP <- pmin(pt(-1*r2t(lower[i],Res[i,]$df2),Res[i,]$df2)*2,1)
+      lowP  <- pmin(pt(-1*r2t(upper[i],Res[i,]$df2),Res[i,]$df2)*2,1)
+    }
     
   } else if(Res[i,]$Statistic=="Z"|Res[i,]$Statistic=="z"){
-    upP <- pnorm(abs(lower[i]),lower.tail=FALSE)*2
-    lowP  <- pnorm(abs(upper[i]),lower.tail=FALSE)*2
+    
+    if(lower[i]<0){
+      lowP <- pnorm(abs(lower[i]),lower.tail=FALSE)*2
+      upP  <- pnorm(abs(upper[i]),lower.tail=FALSE)*2
+    } else {
+      upP <- pnorm(lower[i],lower.tail=FALSE)*2
+      lowP  <- pnorm(upper[i],lower.tail=FALSE)*2
+    }
     
   } 
   
@@ -927,39 +945,23 @@ if(AllPValues==FALSE){
   return(pRes)
 }
 
-
-
 ### A data frame containing for each extracted statistic:
-### Source: Name of the file of which the statistic is extracted
-### 
-### Statistic: Character indicating the statistic that is extracted
-### 
-### df1: First degree of freedom
-### 
-### df2: Second degree of freedom (if applicable)
-### 
-### Test.Comparison: Reported comparison of the test statistic, when importing from pdf this will often not be converted properly
-### 
-### Value: Reported value of the statistic
-### 
-### Reported.Comparison: Reported comparison of the p value, when importing from pdf this will often not be converted properly
-### 
-### Reported.P.Value: The reported p-value, or NA if the reported value was NS
-### 
-### Computed: The recomputed p-value
-### 
-### Raw: Raw string of the statistical reference that is extracted
-### 
-### Error: The computed p value is not congruent with the reported p value
-### 
-### DecisionError: The reported result is significant whereas the computed result is not, or vice versa.
-### 
-### OneTail: Logical. Is it likely that the reported p value resulted from a correction for one-sided testing?
-### 
-### OneTailedInTxt: Logical. Does the text contain the string "sided", "tailed", and/or "directional"?
-### 
-### CopyPaste: Logical. Does the exact string of the extracted raw results occur anywhere else in the article?
-### 
+### \item{Source}{Name of the file of which the statistic is extracted}
+### \item{Statistic}{Character indicating the statistic that is extracted}
+### \item{df1}{First degree of freedom}
+### \item{df2}{Second degree of freedom (if applicable)}
+### \item{Test.Comparison}{Reported comparison of the test statistic, when importing from pdf this will often not be converted properly}
+### \item{Value}{Reported value of the statistic}
+### \item{Reported.Comparison}{Reported comparison, when importing from pdf this might not be converted properly}
+### \item{Reported.P.Value}{The reported p-value, or NA if the reported value was NS}
+### \item{Computed}{The recomputed p-value}
+### \item{Raw}{Raw string of the statistical reference that is extracted}
+### \item{Error}{The computed p value is not congruent with the reported p value}
+### \item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
+### \item{OneTail}{Logical. Is it likely that the reported p value resulted from a correction for one-sided testing?}
+### \item{OneTailedInTxt}{Logical. Does the text contain the string "sided", "tailed", and/or "directional"?}
+### \item{CopyPaste}{Logical. Does the exact string of the extracted raw results occur anywhere else in the article?}
+
 },ex=function(){
   txt <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"
   statcheck(txt)
