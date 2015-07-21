@@ -104,6 +104,7 @@ checkHTML <- structure(function(# Extract test statistics from HTML file.
   ## \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkPDFdir}}, \code{\link{checkHTMLdir}}, \code{\link{checkdir}}
   txts <-  sapply(files,getHTML)
   names(txts) <- gsub(".html","",basename(files))
+  names(txts) <- gsub(".htm","",names(txts))
   return(statcheck(txts,...))
   ##value<<
   ## A data frame containing for each extracted statistic:
