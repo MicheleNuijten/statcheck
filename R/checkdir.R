@@ -7,13 +7,13 @@ checkdir <- structure(function(# Extract test statistics from all HTML and PDF f
   ### Logical indicating whether you also want to check subfolders. Defaults to TRUE
   ...
   ### Arguments sent to  \code{\link{statcheck}}.
-  )
+)
 {
   ##details<<
   ## See \code{\link{statcheck}} for more details. This function is a wrapper around both \code{\link{checkPDFdir}} for PDF files and \code{\link{checkHTMLdir}} for HTML files.
   ## Depending on the PDF file the comparison operators (=/</>) can sometimes not be converted correctly, causing these to not be reported in the output. Using html versions of articles is reccomended for more stable results.
   ## Note that the conversion to plain text and extraction of statistics can result in errors. Some statistical values can be missed, especially if the notation is unconventional. It is recommended to manually check some of the results.
-
+  
   ##seealso<<
   ## \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkHTMLdir}}, \code{\link{checkHTML}}, \code{\link{checkHTMLdir}}
   if (missing(dir)) dir <- tk_choose.dir()
@@ -21,15 +21,35 @@ checkdir <- structure(function(# Extract test statistics from all HTML and PDF f
   pdfs <- any(grepl("\\.pdf$",list.files(dir,recursive=subdir),ignore.case=TRUE))
   htmls <- any(grepl("\\.html?$",list.files(dir,recursive=subdir),ignore.case=TRUE))
   
-   if (pdfs) pdfres <- checkPDFdir(dir,...)
-   if (htmls) htmlres <- checkHTMLdir(dir,...)
+  if (pdfs) pdfres <- checkPDFdir(dir,...)
+  if (htmls) htmlres <- checkHTMLdir(dir,...)
   
-  if (pdfs & htmls)
-  {
-    Res <- rbind(pdfres,htmlres)
-  } else if (pdfs & !htmls) Res <- pdfres else if (!pdfs & htmls) Res <- htmlres else stop("No PDF or HTML found")
+  if (pdfs & htmls){
+    if (!is.null(pdfres) & !is.null(htmlres)) 
+      Res <- rbind(pdfres,htmlres) 
+    else stop("statcheck did not find any results")
+    
+  } else 
+    if (pdfs & !htmls){
+      if (!is.null(pdfres))
+        Res <- pdfres 
+      else stop("statcheck did not find any results")
+    }
+  
+  else  
+    if (!pdfs & htmls){
+      if (!is.null(htmlres))
+        Res <- htmlres 
+      else stop("statcheck did not find any results")
+    }
+  
+  else
+    if (!pdfs & !htmls) stop("No PDF or HTML found")
+  
+  
   class(Res) <- c("statcheck","data.frame")
   return(Res)
+  
   ### A data frame containing for each extracted statistic:
   ### \item{Source}{Name of the file of which the statistic is extracted}
   ### \item{Statistic}{Character indicating the statistic that is extracted}
@@ -48,11 +68,11 @@ checkdir <- structure(function(# Extract test statistics from all HTML and PDF f
   ### \item{CopyPaste}{Logical. Does the exact string of the extracted raw results occur anywhere else in the article?}
   
 },ex=function(){
-# with this command a menu will pop up from which you can select the directory with articles
-# checkdir()
-
-# you could also specify the directory beforehand
-# for instance:
-# DIR <- "C:/mydocuments/articles"
-# checkdir(DIR)
+  # with this command a menu will pop up from which you can select the directory with articles
+  # checkdir()
+  
+  # you could also specify the directory beforehand
+  # for instance:
+  # DIR <- "C:/mydocuments/articles"
+  # checkdir(DIR)
 })
