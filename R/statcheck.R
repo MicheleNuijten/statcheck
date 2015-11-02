@@ -823,8 +823,8 @@ for(i in seq_len(nrow(Res))){
     upP <- 1 - 2 * abs(pt(r2t(lower[i],Res[i,]$df2),Res[i,]$df2) - .5)
     
   } else if(Res[i,]$Statistic=="Z"|Res[i,]$Statistic=="z"){
-    lowP <- 1 - 2 * abs(pnorm(lower[i],lower.tail=FALSE)) - .5)
-    upP <- 1 - 2 * abs(pnorm(lower[i],lower.tail=FALSE)) - .5)
+    lowP <- 1 - 2 * abs(pnorm(lower[i],lower.tail=FALSE) - .5)
+    upP <- 1 - 2 * abs(pnorm(lower[i],lower.tail=FALSE) - .5)
     
   } 
   
