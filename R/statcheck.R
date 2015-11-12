@@ -466,7 +466,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # Chis2-values:
     if ("chisq"%in%stat){
       # Get location of chi values or delta G in text:
-      chi2Loc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^tr ]\\s?)|(.2\\s?))2?\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?\\)\\s?[<>=]\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
+      chi2Loc <- gregexpr("((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^trF ]\\s?)|([^trF]2\\s?))2?\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?\\)\\s?[<>=]\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (chi2Loc[1] != -1){
         # Get raw text of chi2-values:
@@ -480,6 +480,11 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         
         # remove commas (thousands separators)
         chi2Raw <- gsub("(?<=\\d),(?=\\d+\\.)","",chi2Raw,perl=TRUE)
+        
+        # bug fix: remove extra opening brackets 
+        # if a chi2 result is reported between brackets, and the chi is not read by statcheck
+        # the opening bracket is translated as the chi symbol, and extracting the numerics goes wrong
+        chi2Raw <- gsub("\\((?=2\\()","",chi2Raw,perl=TRUE)
         
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+\\s?e?-?\\d*)|ns",sub("^.*?\\(","",chi2Raw),ignore.case=TRUE)
