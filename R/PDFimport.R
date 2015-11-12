@@ -96,6 +96,8 @@ checkPDF <- structure(function(# Extract statistics and recompute p-values from 
   ## Note that this function is still in devellopment. Some statistical values can be missed, especially if the notation is unconvetional. It is recommended to manually check some of the results.
   ##seealso<<
   ## \code{\link{statcheck}}, \code{\link{checkPDFdir}}
+  if (missing(files)) files <- tk_choose.files()
+  
   txts <-  sapply(files,getPDF)
   names(txts) <- gsub(".pdf","",basename(files))
   return(statcheck(txts,...))

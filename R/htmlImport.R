@@ -102,6 +102,8 @@ checkHTML <- structure(function(# Extract test statistics from HTML file.
   ## Note that the conversion to plain text and extraction of statistics can result in errors. Some statistical values can be missed, especially if the notation is unconvetional. It is recommended to manually check some of the results.
   ##seealso<<
   ## \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkPDFdir}}, \code{\link{checkHTMLdir}}, \code{\link{checkdir}}
+  if (missing(files)) files <- tk_choose.files()
+  
   txts <-  sapply(files,getHTML)
   names(txts) <- gsub(".html","",basename(files))
   names(txts) <- gsub(".htm","",names(txts))
