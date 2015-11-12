@@ -2,7 +2,8 @@
 \alias{checkHTMLdir}
 \title{Extract test statistics from all HTML files in a folder.}
 \description{Extracts statistical references from a directory with HTML versions of articles. By default a gui window is opened that allows you to choose the directory (using tcltk).}
-\usage{checkHTMLdir(dir, subdir = TRUE, ...)}\arguments{
+\usage{checkHTMLdir(dir, subdir = TRUE, ...)}
+\arguments{
   \item{dir}{String indicating the directory to be used.}
   \item{subdir}{Logical indicating whether you also want to check subfolders. Defaults to TRUE}
   \item{\dots}{Arguments sent to  \code{\link{statcheck}}}

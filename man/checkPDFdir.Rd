@@ -3,7 +3,8 @@
 \title{Extract statistics and recompute p values from a directory with pdf files.}
 \description{Extracts statistical references from a directory with PDF files. The "pdftotext" program (http://www.foolabs.com/xpdf/download.html) is used to convert PDF files to plain text files. This must be installed and PATH variables must be properly set so that this program can be used from command line.
 By default a GUI window is opened that allows you to choose the directory (using tcltk).}
-\usage{checkPDFdir(dir, subdir = TRUE, ...)}\arguments{
+\usage{checkPDFdir(dir, subdir = TRUE, ...)}
+\arguments{
   \item{dir}{String indicating the directory to be used.}
   \item{subdir}{Logical indicating whether you also want to check subfolders. Defaults to TRUE}
   \item{\dots}{Arguments sent to  \code{\link{statcheck}}.}

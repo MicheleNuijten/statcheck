@@ -2,7 +2,8 @@
 \alias{summary.statcheck}
 \title{Summary method for \code{statcheck}.}
 \description{Gives the summaries for a \code{statcheck} object.  }
-\usage{\method{summary}{statcheck}(object, ...)}\arguments{
+\usage{\method{summary}{statcheck}(object, ...)}
+\arguments{
   \item{object}{a \code{statcheck} object.}
   \item{\dots}{additional arguments affecting the summary produced.}
 }
