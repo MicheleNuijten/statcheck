@@ -16,7 +16,7 @@ identify.statcheck <- structure(function(# Identify specific points in a \code{s
   # replace 'ns' for > alpha
   reported[x$Reported.Comparison=="ns"] <- alpha
   
-  plot(x,...) # makes use of the plot.statcheck() function
+  plot(x,APAstyle=FALSE,...) # makes use of the plot.statcheck() function
   ID <- identify(reported,computed)
   
   res <- x[ID,]
