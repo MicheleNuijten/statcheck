@@ -484,7 +484,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         # bug fix: remove extra opening brackets 
         # if a chi2 result is reported between brackets, and the chi is not read by statcheck
         # the opening bracket is translated as the chi symbol, and extracting the numerics goes wrong
-        chi2Raw <- gsub("\\((?=2\\()","",chi2Raw,perl=TRUE)
+        chi2Raw <- gsub("\\((?=2\\s?\\()","",chi2Raw,perl=TRUE)
         
         # Extract location of numbers:
         nums <- gregexpr("(\\-?\\s?\\d*\\.?\\d+\\s?e?-?\\d*)|ns",sub("^.*?\\(","",chi2Raw),ignore.case=TRUE)
