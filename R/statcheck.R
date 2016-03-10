@@ -353,6 +353,10 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         dec <- attr(regexpr("\\.\\d+",pValsChar),"match.length")-1
         dec[dec<0] <- 0
         
+        # computed p = NA for correlations reported as >1 
+        pComputed <- pmin(pt(-1*abs(r2t(rVals,df)),df)*2,1)
+        pComputed[is.nan(pComputed)] <- NA
+        
         # Create data frame:
         rRes <- data.frame(Source = names(x)[i], 
                            Statistic="r", 
@@ -362,7 +366,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
                            Value = rVals, 
                            Reported.Comparison= pEq, 
                            Reported.P.Value=pVals, 
-                           Computed = pmin(pt(-1*abs(r2t(rVals,df)),df)*2,1), 
+                           Computed = pComputed, 
                            Location = rLoc,
                            Raw = rRaw,
                            stringsAsFactors=FALSE,
@@ -730,20 +734,20 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     Res$DecisionError <-  DecisionErrorTest(Res)  
     
     ###---------------------------------------------------------------------
-    
+
     # check if there would also be a decision error if alpha=.01 or .1
     DecisionErrorAlphas <- logical()
     alphas <- c(.01,.1)
-    
+
     for(a in alphas){
       alpha <- a
       DecisionErrorAlphas <- c(DecisionErrorAlphas, DecisionErrorTest(Res))
     }
-    
-    if(any(DecisionErrorAlphas)){
+
+    if(any(DecisionErrorAlphas[!is.na(DecisionErrorAlphas) & !is.nan(DecisionErrorAlphas)])){
       cat("\n Check the significance level. \n \n Some of the p value incongruencies are decision errors if the significance level is .1 or .01 instead of the conventional .05. It is recommended to check the actual significance level in the paper or text. Check if the reported p values are a decision error at a different significance level by running statcheck again with 'alpha' set to .1 and/or .01. \n ",fill=TRUE)
     }
-    
+
     ###---------------------------------------------------------------------
     
     if(OneTailedTests==FALSE){
@@ -762,7 +766,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
                         TRUE,FALSE)
       Res$OneTail <- OneTail
       
-      if(any(OneTail==TRUE & OneTailedTxt==FALSE)){
+      if(any(OneTail[!is.na(OneTail)]==TRUE & OneTailedTxt[!is.na(OneTailedTxt)]==FALSE)){
         cat("\n Check for one tailed tests. \n \n Some of the p value incongruencies might in fact be one tailed tests. It is recommended to check this in the actual paper or text. Check if the p values would also be incongruent if the test is indeed one sided by running statcheck again with 'OneTailedTests' set to TRUE. To see which Sources probably contain a one tailed test, try unique(x$Source[x$OneTail]) (where x is the statcheck output). \n ",fill=TRUE)
       }
       
