@@ -204,11 +204,16 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     # F-values:
     if ("F"%in%stat){
       # Get location of F-values in text:
-      FLoc <- gregexpr("F\\s?\\(\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?\\)\\s?[<>=]\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
+      # also pick up degrees of freedom wrongly converted into letters:
+      # 1 --> l or I
+      FLoc <- gregexpr("F\\s?\\(\\s?\\d*\\.?(I|l|\\d+)\\s?,\\s?\\d*\\.?\\d+\\s?\\)\\s?[<>=]\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",txt,ignore.case=TRUE)[[1]]
       
       if (FLoc[1] != -1){
         # Get raw text of F-values:
         FRaw <- substring(txt,FLoc,FLoc+attr(FLoc,"match.length")-1)
+        
+        # convert wrongly printed "l" or "I" into 1
+        FRaw <- gsub("l|I",1,FRaw)
         
         # Extract location of numbers:
         nums <- gregexpr("(\\d*\\.?\\d+\\s?e?-?\\d*)|ns",FRaw,ignore.case=TRUE)
