@@ -10,6 +10,8 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
   ### Assumed level of significance in the scanned texts. Defaults to .05. 
   pEqualAlphaSig=TRUE,
   ### Logical. If TRUE, statcheck counts p <= alpha as significant (default), if FALSE, statcheck counts p < alpha as significant
+  pZeroError=TRUE,
+  ### Logical. If TRUE, statcheck counts p=.000 as an error (because a p-value is never exactly zero, and should be reported as < .001), if FALSE, statcheck does not count p=.000 automatically as an error.
   OneTailedTxt=FALSE,
   ### Logical. If TRUE, statcheck searches the text for "one-sided", "one-tailed", and "directional" to identify the possible use of one-sided tests. If one or more of these strings is found in the text AND the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.
   AllPValues=FALSE
@@ -54,7 +56,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     #---------------------------
     
-    # extract all p values in order to calculate the ratio statcheck results/total # of p values
+    # extract all p values in order to calculate the ratio (statcheck results)/(total # of p values)
     
     # p-values
     # Get location of p-values in text:
@@ -101,7 +103,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     
     # search for "one-sided"/"one-tailed"/"directional" in full text to detect one-sided testing
     
-    #     onesided <- gregexpr("sided|tailed|directional",txt,ignore.case=TRUE)[[1]]
+    # onesided <- gregexpr("sided|tailed|directional",txt,ignore.case=TRUE)[[1]]
     onesided <- gregexpr("one.?sided|one.?tailed|directional",txt,ignore.case=TRUE)[[1]]
     
     if(onesided[1] != -1){
@@ -158,7 +160,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         testEq <- substring(tRaw,
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
-        
         
         # Extract p-values
         suppressWarnings(
@@ -252,7 +253,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
         
-        
         # Extract p-values
         suppressWarnings(
           pValsChar <- substring(FValsRaw,sapply(numsF,'[',2),sapply(numsF,function(x)x[2]+attr(x,"match.length")[2]-1)))
@@ -293,7 +293,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         rm(FRes)
       }
     }
-    
     
     # correlations:
     if (any(c("r","cor","correlations")%in%stat)){
@@ -337,7 +336,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         testEq <- substring(rRaw,
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
-        
         
         # Extract p-values
         suppressWarnings(
@@ -429,7 +427,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         testEq <- substring(zRaw,
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1),
                             sapply(testEqLoc,function(x)x[1]+attr(x,"match.length")[1]-1))
-        
         
         # Extract p-values
         suppressWarnings(
@@ -572,7 +569,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     Res <- Res[Res$Reported.P.Value<=1|is.na(Res$Reported.P.Value),]
   }
   
-  
   ###---------------------------------------------------------------------
   
   ErrorTest <- function(x,...){
@@ -672,8 +668,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     greatsmall <- testcomp==">" & comparison=="<"
     greatgreat <- testcomp==">" & comparison==">"
     
-    
-    
     AllTests <- grepl("=|<|>",comparison)
     
     if (any(AllTests)){
@@ -692,7 +686,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         AllTests[greatequal] <- reported[greatequal]>alpha & computed[greatequal]<=alpha
         AllTests[greatgreat] <- reported[greatgreat]>=alpha & computed[greatgreat]<=alpha
         
-        
       } else {
         
         AllTests[equalequal] <- (reported[equalequal]<alpha & computed[equalequal]>=alpha)|
@@ -709,7 +702,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
         
       }
       
-      
       # these combinations of < & > are logically always correct
       AllTests[smallgreat] <- FALSE
       AllTests[greatsmall] <- FALSE
@@ -719,7 +711,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     AllTests <- as.logical(AllTests)
     
     #-----------------------------------------------
-    
     
     return(AllTests)
   }
@@ -885,7 +876,13 @@ CorrectRound <- as.logical(correct_round)
 ###---------------------------------------------------------------------
 
 # p values smaller or equal to zero are errors
-ImpossibleP <- (Res$Reported.P.Value<=0)
+
+if(pZeroError==TRUE){
+  ImpossibleP <- (Res$Reported.P.Value<=0)
+} else {
+  ImpossibleP <- (Res$Reported.P.Value<0)
+}
+
 Res$Error[ImpossibleP] <- TRUE
 
 ###---------------------------------------------------------------------
