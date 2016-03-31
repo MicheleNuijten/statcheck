@@ -14,11 +14,9 @@ plot.statcheck <- function(# Plot method for "statcheck"
   ##details<<
   ## If APAstyle = FALSE, inconsistencies between the reported and the recalculated p value are indicated with an orange dot. Recalculations of the p value that render a previously non significant result (p >= .5) as significant (p < .05), and vice versa, are considered gross errors, and are indicated with a red dot. Exactly reported p values (i.e. p = ..., as opposed to p < ... or p > ...) are indicated with a diamond.
   ##seealso<<
-  ## \code{\link{statcheck}}
+  ## \code{\link{statcheck}}. Many thanks to John Sakaluk for writing the code for APA style plotting
   
   if(APAstyle==TRUE){
-    
-    # Many thanks for John Sakaluk for writing the code for APA style plotting
     
     # Add vector "Type" to statcheck object, specifying whether observations are 
     # correctly reported, reporting inconsistencies, or decision errors. 
@@ -56,8 +54,8 @@ plot.statcheck <- function(# Plot method for "statcheck"
         annotate("text", x= 0.5, y = .10, label="overestimated")+
         annotate("text", x= 0.5, y = .90, label="underestimated")+
         #Rename the x- and y-axis, and manually specify breaks
-        scale_x_continuous(name="Reported p-values", breaks=c(0.00, 0.05, 0.10, 0.25, 0.50, 0.75, 1.0))+
-        scale_y_continuous(name="Computed p-values", breaks=c(0.00, 0.05, 0.10, 0.25, 0.50, 0.75, 1.0))+
+        scale_x_continuous(name="Reported p-values", breaks=c(0.00, 0.05, 0.10, 0.25, 0.50, 0.75, 1.0), limits=c(0,1))+
+        scale_y_continuous(name="Computed p-values", breaks=c(0.00, 0.05, 0.10, 0.25, 0.50, 0.75, 1.0), limits=c(0,1))+
         #Manually specify greyscale colors for different levels of Type
         scale_color_manual(breaks=c("Correctly Reported","Reporting Inconsistency","Decision Error"), 
                            values = c("grey80", "black","grey50"))+
