@@ -789,19 +789,6 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
 
 ###---------------------------------------------------------------------
 
-# copy paste errors
-# same string of results elsewhere in article?
-CopyPaste <- numeric()
-for (i in 1:length(Res$Raw)){
-  Res_new <- Res[-i,]
-  CopyPaste[i] <- Res$Raw[i]%in%Res_new$Raw[Res_new$Source==Res_new$Source[i]]
-}
-CopyPaste <- as.logical(CopyPaste)
-
-Res$CopyPaste <- CopyPaste
-
-###---------------------------------------------------------------------
-
 # "correct" rounding differences
 # e.g. t=2.3 could be 2.25 to 2.34999999... with its range of p values
 correct_round <- numeric()
@@ -930,7 +917,6 @@ Res <- data.frame(Source = Res$Source,
                   DecisionError = Res$DecisionError,
                   OneTail = Res$OneTail,
                   OneTailedInTxt = Res$OneTailedInTxt,
-                  CopyPaste = Res$CopyPaste,
                   APAfactor = Res$APAfactor
 )
 
@@ -971,7 +957,7 @@ if(AllPValues==FALSE){
 ### \item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
 ### \item{OneTail}{Logical. Is it likely that the reported p value resulted from a correction for one-sided testing?}
 ### \item{OneTailedInTxt}{Logical. Does the text contain the string "sided", "tailed", and/or "directional"?}
-### \item{CopyPaste}{Logical. Does the exact string of the extracted raw results occur anywhere else in the article?}
+  # \item{APAfactor}{What proportion of all detected p-values was part of a fully APA reported result?}
 
 },ex=function(){
   txt <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"
