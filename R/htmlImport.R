@@ -23,6 +23,7 @@ getHTML <- function(
   strings <- lapply(strings,gsub,pattern="\n",replacement="")
   strings <- lapply(strings,gsub,pattern="\r",replacement="")
   strings <- lapply(strings,gsub,pattern="\\s+",replacement=" ")
+  strings <- lapply(strings,gsub,pattern=" ",replacement=" ")
  
   return(strings)
 }
@@ -34,6 +35,8 @@ checkHTMLdir <- structure(function(# Extract test statistics from all HTML files
   ### String indicating the directory to be used.
   subdir = TRUE,
   ### Logical indicating whether you also want to check subfolders. Defaults to TRUE
+  extension = TRUE,
+  ### Logical indicating whether the HTML extension should be checked. Defaults to TRUE
   ...
   ### Arguments sent to  \code{\link{statcheck}}
   )
@@ -44,8 +47,10 @@ checkHTMLdir <- structure(function(# Extract test statistics from all HTML files
   ##seealso<<
   ## \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkPDFdir}}, \code{\link{checkHTML}}, \code{\link{checkdir}}
   if (missing(dir)) dir <- tk_choose.dir()
+  if (extension == TRUE) pat = ".html|.htm"
+  if (extension == FALSE) pat = ""
   
-  files <- list.files(dir,pattern=".html|.htm",full.names=TRUE,recursive=subdir)
+  files <- list.files(dir,pattern = pat, full.names = TRUE, recursive = subdir)
   
   if(length(files)==0) stop("No HTML found")
   
