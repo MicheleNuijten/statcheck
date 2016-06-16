@@ -741,7 +741,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     }
 
     if(any(DecisionErrorAlphas[!is.na(DecisionErrorAlphas) & !is.nan(DecisionErrorAlphas)])){
-      cat("\n Check the significance level. \n \n Some of the p value incongruencies are decision errors if the significance level is .1 or .01 instead of the conventional .05. It is recommended to check the actual significance level in the paper or text. Check if the reported p values are a decision error at a different significance level by running statcheck again with 'alpha' set to .1 and/or .01. \n ",fill=TRUE)
+      message("\n Check the significance level. \n \n Some of the p value incongruencies are decision errors if the significance level is .1 or .01 instead of the conventional .05. It is recommended to check the actual significance level in the paper or text. Check if the reported p values are a decision error at a different significance level by running statcheck again with 'alpha' set to .1 and/or .01. \n ")
     }
 
     ###---------------------------------------------------------------------
@@ -763,7 +763,7 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
       Res$OneTail <- OneTail
       
       if(any(OneTail[!is.na(OneTail)]==TRUE & OneTailedTxt[!is.na(OneTailedTxt)]==FALSE)){
-        cat("\n Check for one tailed tests. \n \n Some of the p value incongruencies might in fact be one tailed tests. It is recommended to check this in the actual paper or text. Check if the p values would also be incongruent if the test is indeed one sided by running statcheck again with 'OneTailedTests' set to TRUE. To see which Sources probably contain a one tailed test, try unique(x$Source[x$OneTail]) (where x is the statcheck output). \n ",fill=TRUE)
+        message("\n Check for one tailed tests. \n \n Some of the p value incongruencies might in fact be one tailed tests. It is recommended to check this in the actual paper or text. Check if the p values would also be incongruent if the test is indeed one sided by running statcheck again with 'OneTailedTests' set to TRUE. To see which Sources probably contain a one tailed test, try unique(x$Source[x$OneTail]) (where x is the statcheck output). \n ")
       }
       
     }
@@ -957,7 +957,7 @@ if(AllPValues==FALSE){
 ### \item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
 ### \item{OneTail}{Logical. Is it likely that the reported p value resulted from a correction for one-sided testing?}
 ### \item{OneTailedInTxt}{Logical. Does the text contain the string "sided", "tailed", and/or "directional"?}
-  # \item{APAfactor}{What proportion of all detected p-values was part of a fully APA reported result?}
+### \item{APAfactor}{What proportion of all detected p-values was part of a fully APA reported result?}
 
 },ex=function(){
   txt <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"
