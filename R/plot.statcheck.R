@@ -14,7 +14,7 @@ plot.statcheck <- function(# Plot method for "statcheck"
   ##details<<
   ## If APAstyle = FALSE, inconsistencies between the reported and the recalculated p value are indicated with an orange dot. Recalculations of the p value that render a previously non significant result (p >= .5) as significant (p < .05), and vice versa, are considered gross errors, and are indicated with a red dot. Exactly reported p values (i.e. p = ..., as opposed to p < ... or p > ...) are indicated with a diamond.
   ##seealso<<
-  ## \code{\link{statcheck}}. Many thanks to John Sakaluk for writing the code for APA style plotting
+  ## \code{\link{statcheck}}.
   
   if(APAstyle==TRUE){
     
