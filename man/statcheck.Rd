@@ -8,7 +8,7 @@
 
 \usage{statcheck(x, stat = c("t", "F", "cor", "chisq", "Z"), 
 
-    OneTailedTests = FALSE, alpha = 0.05, pEqualAlphaSig = TRUE, 
+    OneTailedTests = FALSE, alpha = 0.05, pEqualAlphaSig = TRUE, pZeroError = TRUE,
 
     OneTailedTxt = FALSE, AllPValues = FALSE)}
 
@@ -20,9 +20,11 @@
 
   \item{OneTailedTests}{Logical. Do we assume that all reported tests are one tailed (TRUE) or two tailed (FALSE, default)?}
 
-  \item{alpha}{Assumed level of significance in the scanned texts. Defaults to .05. }
-
+  \item{alpha}{Assumed level of significance in the scanned texts. Defaults to .05.}
+  
   \item{pEqualAlphaSig}{Logical. If TRUE, statcheck counts p <= alpha as significant (default), if FALSE, statcheck counts p < alpha as significant}
+  
+\item{pZeroError}{Logical. If TRUE, statcheck counts p=.000 as an error (because a p-value is never exactly zero, and should be reported as < .001), if FALSE, statcheck does not count p=.000 automatically as an error.}
 
   \item{OneTailedTxt}{Logical. If TRUE, statcheck searches the text for "one-sided", "one-tailed", and "directional" to identify the possible use of one-sided tests. If one or more of these strings is found in the text AND the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.}
 
@@ -30,7 +32,7 @@
 
 }
 
-\details{Statcheck uses regular expressions to find statistical results in APA format. When a statistical result deviates from APA format, statcheck will not find it. The APA formats that statcheck uses are: t(df) = value, p = value; F(df1,df2) = value, p = value; r(df) = value, p = value; [chi]2 (df, N = value) = value, p = value (N is optional, delta G is also included); Z = value, p = value. All regular expressions take into account that test statistics and p values may be exactly (=) or inexactly (< or >) reported. Different spacing has also been taken into account.
+\details{statcheck uses regular expressions to find statistical results in APA format. When a statistical result deviates from APA format, statcheck will not find it. The APA formats that statcheck uses are: t(df) = value, p = value; F(df1,df2) = value, p = value; r(df) = value, p = value; [chi]2 (df, N = value) = value, p = value (N is optional, delta G is also included); Z = value, p = value. All regular expressions take into account that test statistics and p values may be exactly (=) or inexactly (< or >) reported. Different spacing has also been taken into account.
 
 This function can be used if the text of articles has already been imported in R. To import text from pdf files and automatically send the results to this function use \code{\link{checkPDFdir}} or \code{\link{checkPDF}}. To import text from HTML files use the similar functions \code{\link{checkHTMLdir}} or \code{\link{checkHTML}}. Finally, \code{\link{checkdir}} can be used to import text from both PDF and HTML files in a folder.
 
