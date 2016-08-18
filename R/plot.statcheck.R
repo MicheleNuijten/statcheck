@@ -18,6 +18,10 @@ plot.statcheck <- function(# Plot method for "statcheck"
   
   if(APAstyle==TRUE){
     
+    # add this line of code to avoid the NOTE in the R CMD check when building the package
+    # solves the NOTE: "No visible binding for global variable"
+    Type <- Computed <- Reported.P.Value <- NULL
+    
     # Add vector "Type" to statcheck object, specifying whether observations are 
     # correctly reported, reporting inconsistencies, or decision errors. 
     x$Type[x$Error=="FALSE" & x$DecisionError=="FALSE"] <- "Correctly Reported"
