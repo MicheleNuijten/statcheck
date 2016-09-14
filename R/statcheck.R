@@ -627,11 +627,11 @@ statcheck <- structure(function(# Extract statistics and recompute p-values.
     greatequal <- x$Test.Comparison==">" & comparison=="="
     
     if(any(smallequal)){
-      ExTests[smallequal] <- round(computed[smallequal],x$dec[smallequal])<=round(reported[smallequal],x$dec[smallequal])
+      ExTests[smallequal] <- round(computed[smallequal],x$dec[smallequal])>=round(reported[smallequal],x$dec[smallequal])
     }
     
     if(any(greatequal)){
-      ExTests[greatequal] <- round(computed[greatequal],x$dec[greatequal])>=round(reported[greatequal],x$dec[greatequal])
+      ExTests[greatequal] <- round(computed[greatequal],x$dec[greatequal])<=round(reported[greatequal],x$dec[greatequal])
     }
     
     #-----------------------------------------------
