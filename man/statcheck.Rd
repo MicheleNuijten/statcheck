@@ -72,7 +72,8 @@ Also, note that a seemingly inconsistent p value can still be correct when we ta
 
 \item{OneTailedInTxt}{Logical. Does the text contain the string "sided", "tailed", and/or "directional"?}
 
-\item{CopyPaste}{Logical. Does the exact string of the extracted raw results occur anywhere else in the article?}}
+\item{APAfactor}{What proportion of all detected p-values was part of a fully APA reported result?}
+}
 
 
 
