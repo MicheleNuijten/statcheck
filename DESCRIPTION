@@ -6,9 +6,10 @@ Date: 2016-08-18
 Author: Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten
     <m.b.nuijten@uvt.nl>
 Maintainer: Michele B. Nuijten <m.b.nuijten@uvt.nl>
-Depends:R (>= 2.14.2)
-Imports:plyr, ggplot2
+Depends: R (>= 2.14.2)
+Imports: plyr, ggplot2
 Description: Extract statistics from articles and recompute p values.
 License: GPL-2
 LazyLoad: yes
 ByteCompile: yes
+Suggests: testthat
