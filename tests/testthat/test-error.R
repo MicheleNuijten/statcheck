@@ -8,3 +8,4 @@ test_that("Detecting a p-value error from a t-test", {
   testthat::expect_true(result$Error)
   testthat::expect_true(result$DecisionError)
 })
+
