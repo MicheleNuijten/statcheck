@@ -7,7 +7,7 @@ Author: Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten
     <m.b.nuijten@uvt.nl>
 Maintainer: Michele B. Nuijten <m.b.nuijten@uvt.nl>
 Depends:R (>= 2.14.2)
-Imports:plyr, ggplot2
+Imports:plyr, ggplot2, rmarkdown
 Description: Extract statistics from articles and recompute p values.
 License: GPL-2
 LazyLoad: yes
