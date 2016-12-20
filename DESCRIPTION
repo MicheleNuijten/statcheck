@@ -1,8 +1,8 @@
 Package: statcheck
 Type: Package
 Title: Extract Statistics from Articles and Recompute p Values
-Version: 1.2.2
-Date: 2016-08-18
+Version: 1.2.3
+Date: 2016-12-20
 Author: Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten
     <m.b.nuijten@uvt.nl>
 Maintainer: Michele B. Nuijten <m.b.nuijten@uvt.nl>
