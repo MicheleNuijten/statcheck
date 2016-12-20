@@ -96,7 +96,7 @@ Also, statcheck results can sometimes be inaccurate for various reasons. The mos
 * Different words than "one-sided", "one-tailed", or "directional" were used to indicate one-sided testing
 * statcheck read the wrong type of test statistic (e.g., a "t" instead of an "r")
 
-If a result was wrongly marked as an inconsistency (or if an inconsistent result was mistakenly counted as consistent), please do not hesitate to contact the editor: R.S.Giner-Sorolla@kent.ac.uk.
+If a result was wrongly marked as an inconsistency (or if an inconsistent result was mistakenly counted as consistent), please do not hesitate to contact the editor.
 
 Beside mistakes in flagging inconsistencies, it is also possible that statcheck fails to extract a result entirely. This happens when a statistical result is reported in a table, or not in line with the APA format.
 
