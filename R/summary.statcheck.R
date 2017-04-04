@@ -10,7 +10,7 @@ summary.statcheck <- structure(function(# Summary method for \code{statcheck}.
   x <- object
   
   # Source
-  Source <- c(ddply(x,"Source",function(x) unique(x$Source))[,1],"Total")
+  Source <- c(as.vector(ddply(x,"Source",function(x) unique(x$Source))[,1]),"Total")
   
   # Number of p values extracted per article and in total
   pValues <- c(ddply(x,"Source",function(x) nrow(x))[,2],nrow(x))
