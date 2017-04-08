@@ -803,38 +803,20 @@ for(i in seq_len(nrow(Res))){
     lowP  <- pf(upper[i],Res[i,]$df1,Res[i,]$df2,lower.tail=FALSE)
     
   } else if(Res[i,]$Statistic=="t"){
-    
-    if(lower[i]<0){
-      lowP <- pt(lower[i],Res[i,]$df2)*2
-      upP  <- pt(upper[i],Res[i,]$df2)*2
-    } else{
-      upP <- pt(-1*lower[i],Res[i,]$df2)*2
-      lowP  <- pt(-1*upper[i],Res[i,]$df2)*2
-    }
+    lowP <- 1 - 2 * abs(pt(lower[i], Res[i,]$df2, lower.tail = FALSE) - .5)
+    upP <- 1 - 2 * abs(pt(lower[i], Res[i,]$df2, lower.tail = FALSE) - .5)
     
   } else if(Res[i,]$Statistic=="Chi2"){
     upP <- pchisq(lower[i],Res[i,]$df1,lower.tail=FALSE)
     lowP  <- pchisq(upper[i],Res[i,]$df1,lower.tail=FALSE)
     
   } else if(Res[i,]$Statistic=="r"){
-    
-    if(lower[i]<0){
-      lowP <- pmin(pt(r2t(lower[i],Res[i,]$df2),Res[i,]$df2)*2,1)
-      upP  <- pmin(pt(r2t(upper[i],Res[i,]$df2),Res[i,]$df2)*2,1)
-    } else {
-      upP <- pmin(pt(-1*r2t(lower[i],Res[i,]$df2),Res[i,]$df2)*2,1)
-      lowP  <- pmin(pt(-1*r2t(upper[i],Res[i,]$df2),Res[i,]$df2)*2,1)
-    }
+    lowP <- 1 - 2 * abs(pt(r2t(lower[i],Res[i,]$df2),Res[i,]$df2) - .5)
+    upP <- 1 - 2 * abs(pt(r2t(lower[i],Res[i,]$df2),Res[i,]$df2) - .5)
     
   } else if(Res[i,]$Statistic=="Z"|Res[i,]$Statistic=="z"){
-    
-    if(lower[i]<0){
-      lowP <- pnorm(abs(lower[i]),lower.tail=FALSE)*2
-      upP  <- pnorm(abs(upper[i]),lower.tail=FALSE)*2
-    } else {
-      upP <- pnorm(lower[i],lower.tail=FALSE)*2
-      lowP  <- pnorm(upper[i],lower.tail=FALSE)*2
-    }
+    lowP <- 1 - 2 * abs(pnorm(lower[i],lower.tail=FALSE) - .5)
+    upP <- 1 - 2 * abs(pnorm(lower[i],lower.tail=FALSE) - .5)
     
   } 
   
