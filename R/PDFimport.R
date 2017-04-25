@@ -5,13 +5,12 @@ getPDF <- function(x)
   for (i in 1:length(x))
   {
     system(paste('pdftotext -q -enc "ASCII7" "',x[i],'"',sep=""))
-    if (file.exists(gsub("\\.pdf","\\.txt",x[i])))
-    {
-      #txtfiles[i] <- paste(scan(gsub(".pdf",".txt",x[i]),what="character",sep=" "),collapse=" ")
-      fileName <- gsub("\\.pdf","\\.txt",x[i])
-      txtfiles[i] <- readChar(fileName, file.info(fileName)$size)
-    } else
-    {
+    
+    # make sure that files saved as "myfile.pdf.pdf" or "myfile.html.pdf" are still converted from pdf to text
+    if (file.exists(gsub("\\.pdf(?!(\\.pdf|\\.html?|//.txt))","\\.txt",x[i],perl=TRUE))){
+      fileName <- gsub("\\.pdf(?!(\\.pdf|\\.html?|\\.txt))","\\.txt",x[i],perl=TRUE)
+    txtfiles[i] <- readChar(fileName, file.info(fileName)$size)
+    } else{
       warning(paste("Failure in file",x[i]))
       txtfiles[i] <- ""
     }
@@ -39,7 +38,8 @@ checkPDFdir <- structure(function(# Extract statistics and recompute p values fr
   ## \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkHTMLdir}}, \code{\link{checkHTML}}, \code{\link{checkdir}}
   if (missing(dir)) dir <- tk_choose.dir()
     
-  files <- list.files(dir,pattern=".pdf",full.names=TRUE,recursive=subdir)
+  all.files <- list.files(dir,pattern="\\.pdf",full.names=TRUE,recursive=subdir)
+  files <- all.files[grepl("\\.pdf(?!(\\.pdf|\\.html?|\\.txt))",all.files,perl=TRUE)]
   
   if(length(files)==0) stop("No PDF found")
   
@@ -52,7 +52,7 @@ checkPDFdir <- structure(function(# Extract statistics and recompute p values fr
     setTxtProgressBar(pb, i)
   }
   close(pb)
-  names(txts) <- gsub(".pdf","",basename(files))
+  names(txts) <- gsub("\\.pdf(?!(\\.pdf|\\.html?|\\.txt))","",basename(files),perl=TRUE)
   return(statcheck(txts,...))
   ##value<<
   ## A data frame containing for each extracted statistic:
@@ -99,7 +99,7 @@ checkPDF <- structure(function(# Extract statistics and recompute p-values from 
   if (missing(files)) files <- tk_choose.files()
   
   txts <-  sapply(files,getPDF)
-  names(txts) <- gsub(".pdf","",basename(files))
+  names(txts) <- gsub("\\.pdf(?!(\\.pdf|\\.html?))","",basename(files),perl=TRUE)
   return(statcheck(txts,...))
   ##value<<
   ## A data frame containing for each extracted statistic:
