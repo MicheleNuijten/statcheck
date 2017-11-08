@@ -6,7 +6,8 @@ getdocx <- function(
   )
 {
   
-  strings <- read_docx(x,function(fileName))
+  strings <- read_docx(x)
+  strings <- paste(strings, collapse = " ")
   return(strings)
 }
 
@@ -25,7 +26,7 @@ checkdocxdir <- structure(function(dir, subdir = TRUE, extension = TRUE,...){
   pb <- txtProgressBar(max=length(files),style=3)
   for (i in 1:length(files))
   {
-    txts[i] <-  getHTML(files[i])    
+    txts[i] <-  getdocx(files[i])    
     setTxtProgressBar(pb, i)
   }
   close(pb)

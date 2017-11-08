@@ -10,6 +10,8 @@ checkdir <- structure(function(# Extract test statistics from all HTML and PDF f
 )
 {
   ##details<<
+  
+  
   ## See \code{\link{statcheck}} for more details. This function is a wrapper around both \code{\link{checkPDFdir}} for PDF files and \code{\link{checkHTMLdir}} for HTML files.
   ## Depending on the PDF file the comparison operators (=/</>) can sometimes not be converted correctly, causing these to not be reported in the output. Using html versions of articles is reccomended for more stable results.
   ## Note that the conversion to plain text and extraction of statistics can result in errors. Some statistical values can be missed, especially if the notation is unconventional. It is recommended to manually check some of the results.
@@ -20,31 +22,69 @@ checkdir <- structure(function(# Extract test statistics from all HTML and PDF f
   
   pdfs <- any(grepl("\\.pdf$",list.files(dir,recursive=subdir),ignore.case=TRUE))
   htmls <- any(grepl("\\.html?$",list.files(dir,recursive=subdir),ignore.case=TRUE))
+  # Added feature to search for & include docx files
+  docxs <- any(grepl("\\.docx$",list.files(dir,recursive=subdir),ignore.case=TRUE))
   
   if (pdfs) pdfres <- checkPDFdir(dir,...)
   if (htmls) htmlres <- checkHTMLdir(dir,...)
+  if (docxs) docxres <- checkdocxdir(dir,...)
   
-  if (pdfs & htmls){
-    if (!is.null(pdfres) & !is.null(htmlres)) 
-      Res <- rbind(pdfres,htmlres) 
+  if (pdfs & htmls & docxs){
+    if (!is.null(pdfres) & !is.null(htmlres) & !is.null(docxres)) 
+      Res <- rbind(pdfres,htmlres,docxres)
     else stop("statcheck did not find any results")
     
-  } else 
-    if (pdfs & !htmls){
+  } 
+  
+  else 
+    if (pdfs & !docxs & !htmls){
       if (!is.null(pdfres))
         Res <- pdfres 
       else stop("statcheck did not find any results")
-    }
+  }
   
   else  
-    if (!pdfs & htmls){
+    if (!pdfs & !docxs & htmls){
       if (!is.null(htmlres))
         Res <- htmlres 
       else stop("statcheck did not find any results")
+
+  }
+  
+  else  
+    if (pdfs & !docxs & htmls){
+      if (!is.null(htmlres) & !is.null(pdfres))
+        Res <- rbind(pdfres,htmlres) 
+      else stop("statcheck did not find any results")
+      
+  }
+  
+  else  
+    if (pdfs & docxs & !htmls){
+      if (!is.null(pdfres) & !is.null(docxres))
+        Res <- rbind(pdfres,docxres)
+      else stop("statcheck did not find any results")
+      
+    }
+  
+  else  
+    if (!pdfs & docxs & htmls){
+      if (!is.null(htmlres) & !is.null(docxres))
+        Res <- rbind(docxres,htmlres)
+      else stop("statcheck did not find any results")
+      
+    }
+  
+  else  
+    if (!pdfs & docxs & !htmls){
+      if (!is.null(docxres))
+        Res <- docxres
+      else stop("statcheck did not find any results")
+      
     }
   
   else
-    if (!pdfs & !htmls) stop("No PDF or HTML found")
+    if (!pdfs & !htmls & !docxs) stop("No PDF, HTML, or docx found")
   
   
   class(Res) <- c("statcheck","data.frame")
