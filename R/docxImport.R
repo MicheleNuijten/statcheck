@@ -1,6 +1,3 @@
-if(!require(textreadr)){install.packages('textreadr')}
-library(textreadr)
-
 getdocx <- function(
   x
   )
