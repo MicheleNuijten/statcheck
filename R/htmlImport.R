@@ -9,15 +9,15 @@ getHTML <- function(x){
   strings <- lapply(strings, gsub, pattern = "<(.|\n)*?>", replacement = "")
   
   # Replace html codes:
-  strings <- lapply(strings, gsub, pattern = "&#60;", replacement = "<",fixed = TRUE)
-  strings <- lapply(strings, gsub, pattern = "&lt;", replacement = "<",fixed = TRUE)
-  strings <- lapply(strings, gsub, pattern = "&#61;", replacement = "=",fixed = TRUE)
-  strings <- lapply(strings, gsub, pattern = "&#62;", replacement = ">",fixed = TRUE)
-  strings <- lapply(strings, gsub, pattern = "&gt;", replacement = ">",fixed = TRUE)
-  strings <- lapply(strings, gsub, pattern = "&#40;", replacement = "(",fixed = TRUE)
-  strings <- lapply(strings, gsub, pattern = "&#41;", replacement = ")",fixed = TRUE)
-  strings <- lapply(strings, gsub, pattern = "&thinsp;", replacement = " ",fixed = TRUE)
-  strings <- lapply(strings, gsub, pattern = "&nbsp;", replacement = " ",fixed = TRUE) # these are used in JCPP
+  strings <- lapply(strings, gsub, pattern = "&#60;", replacement = "<", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&lt;", replacement = "<", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#61;", replacement = "=", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#62;", replacement = ">", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&gt;", replacement = ">", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#40;", replacement = "(", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#41;", replacement = ")", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&thinsp;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&nbsp;", replacement = " ", fixed = TRUE) # these are used in JCPP
   strings <- lapply(strings, gsub, pattern = "\n", replacement = "")
   strings <- lapply(strings, gsub, pattern = "\r", replacement = "")
   strings <- lapply(strings, gsub, pattern = "\\s+", replacement = " ")
