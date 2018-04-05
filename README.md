@@ -17,7 +17,7 @@
 The algorithm behind `statcheck` consists of four basic steps:
 
 1. **Convert** pdf and html articles to plain text files.
-2. **Search** the text for instances of NHST results. Specifically, `statcheck` can recognize *t*-tests, *F*-tests, correlations, *z*-tests, and $\chi^2$-tests if they are reported completely (test statistic, degrees of freedom, and *p*-value) and in APA style.
+2. **Search** the text for instances of NHST results. Specifically, `statcheck` can recognize *t*-tests, *F*-tests, correlations, *z*-tests, $\chi^2$-tests, and Q-tests (from meta-analyses) if they are reported completely (test statistic, degrees of freedom, and *p*-value) and in APA style.
 3. **Recompute** the *p*-value using the reported test statistic and degrees of freedom.
 4. **Compare** the reported and recomputed *p*-value. If the reported *p*-value does not match the computed one, the result is marked as an *inconsistency* (`Error` in the output). If the reported *p*-value is significant and the computed is not, or vice versa, the result is marked as a *gross inconsistency* (`DecisionError` in the output).
 

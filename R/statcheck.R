@@ -17,7 +17,8 @@ statcheck <-
       OneTailedTxt = FALSE,
       ### Logical. If TRUE, statcheck searches the text for "one-sided", "one-tailed", and "directional" to identify the possible use of one-sided tests. If one or more of these strings is found in the text AND the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.
       AllPValues = FALSE
-      ### Logical. If TRUE, the output will consist of a dataframe with all detected p values, also the ones that were not part of the full results in APA format) {
+      ### Logical. If TRUE, the output will consist of a dataframe with all detected p values, also the ones that were not part of the full results in APA format) 
+      ) {
       ##details<<
       ## Statcheck uses regular expressions to find statistical results in APA format. When a statistical result deviates from APA format, statcheck will not find it. The APA formats that statcheck uses are: t(df) = value, p = value; F(df1,df2) = value, p = value; r(df) = value, p = value; [chi]2 (df, N = value) = value, p = value (N is optional, delta G is also included); Z = value, p = value; Q(df) = value, p = value (including Qw, Qwithin, Qb, and Qbetween). All regular expressions take into account that test statistics and p values may be exactly (=) or inexactly (< or >) reported. Different spacing has also been taken into account.
       ## This function can be used if the text of articles has already been imported in R. To import text from pdf files and automatically send the results to this function use \code{\link{checkPDFdir}} or \code{\link{checkPDF}}. To import text from HTML files use the similar functions \code{\link{checkHTMLdir}} or \code{\link{checkHTML}}. Finally, \code{\link{checkdir}} can be used to import text from both PDF and HTML files in a folder.
@@ -50,6 +51,7 @@ statcheck <-
           OneTailedInTxt = NULL,
           APAfactor = NULL
         )
+      
       class(Res) <- c("statcheck", "data.frame")
       OneTailedInTxt <- NULL
       
@@ -87,7 +89,8 @@ statcheck <-
         
         if (pLoc[1] != -1) {
           # Get raw text of p-values:
-          pRaw <- substring(txt, pLoc, pLoc + attr(pLoc, "match.length") - 1)
+          pRaw <-
+            substring(txt, pLoc, pLoc + attr(pLoc, "match.length") - 1)
           
           nums <-
             gregexpr("(\\d*\\.?\\d+\\s?e?-?\\d*)|ns", pRaw, ignore.case = TRUE)
@@ -113,8 +116,6 @@ statcheck <-
               x[1] + attr(x, "match.length")[1] - 1)
           )
           pEq[grepl("ns", pRaw, ignore.case = TRUE)] <- "ns"
-          
-          
           
           pvalues <- data.frame(
             Source = names(x)[i],
@@ -165,22 +166,24 @@ statcheck <-
           
           if (tLoc[1] != -1) {
             # Get raw text of t-values:
-            tRaw <- substring(txt, tLoc, tLoc + attr(tLoc, "match.length") -
-                                1)
+            tRaw <-
+              substring(txt, tLoc, tLoc + attr(tLoc, "match.length") - 1)
             
             # remove commas (thousands separators)
             tRaw <- gsub("(?<=\\d),(?=\\d+)", "", tRaw, perl = TRUE)
             
             # Replace weird codings of a minus sign with actual minus sign:
             # First remove spaces
-            tRaw <- gsub("(?<=\\=)\\s+(?=.*\\,)", "", tRaw, perl = TRUE)
+            tRaw <-
+              gsub("(?<=\\=)\\s+(?=.*\\,)", "", tRaw, perl = TRUE)
             
             # Replace any weird string with a minus sign
             tRaw <-
               gsub("(?<=\\=)\\s?[^\\d\\.]+(?=.*\\,)", " -", tRaw, perl = TRUE)
             
             # Add spaces again:
-            tRaw <- gsub("(?<=\\=)(?=(\\.|\\d))", " ", tRaw, perl = TRUE)
+            tRaw <-
+              gsub("(?<=\\=)(?=(\\.|\\d))", " ", tRaw, perl = TRUE)
             
             # Extract location of numbers:
             nums <-
@@ -235,7 +238,8 @@ statcheck <-
             suppressWarnings(pVals <- as.numeric(pValsChar))
             
             # Extract (in)equality
-            eqLoc <- gregexpr("p\\s?[<>=]", tRaw, ignore.case = TRUE)
+            eqLoc <-
+              gregexpr("p\\s?[<>=]", tRaw, ignore.case = TRUE)
             pEq <- substring(
               tRaw,
               sapply(eqLoc, function(x)
@@ -246,7 +250,8 @@ statcheck <-
             pEq[grepl("ns", tRaw, ignore.case = TRUE)] <- "ns"
             
             # determine number of decimals of p value
-            dec <- attr(regexpr("\\.\\d+", pValsChar), "match.length") - 1
+            dec <-
+              attr(regexpr("\\.\\d+", pValsChar), "match.length") - 1
             dec[dec < 0] <- 0
             
             # Create data frame:
@@ -274,6 +279,8 @@ statcheck <-
           }
         }
         
+        #---------------------------
+        
         # F-values:
         if ("F" %in% stat) {
           # Get location of F-values in text:
@@ -288,8 +295,8 @@ statcheck <-
           
           if (FLoc[1] != -1) {
             # Get raw text of F-values:
-            FRaw <- substring(txt, FLoc, FLoc + attr(FLoc, "match.length") -
-                                1)
+            FRaw <-
+              substring(txt, FLoc, FLoc + attr(FLoc, "match.length") - 1)
             
             # convert wrongly printed "l" or "I" into 1
             FRaw <- gsub("l|I", 1, FRaw)
@@ -324,7 +331,8 @@ statcheck <-
             FandDF <- lapply(Fsplit, function(x)
               x[1])
             
-            FValsRaw <- gsub("(?<=\\d),(?=\\d+)", "", FValsRaw, perl = TRUE)
+            FValsRaw <-
+              gsub("(?<=\\d),(?=\\d+)", "", FValsRaw, perl = TRUE)
             
             FRaw <- paste(FandDF, ")", FValsRaw, sep = "")
             
@@ -367,7 +375,8 @@ statcheck <-
             suppressWarnings(pVals <- as.numeric(pValsChar))
             
             # Extract (in)equality
-            eqLoc <- gregexpr("p\\s?[<>=]", FRaw, ignore.case = TRUE)
+            eqLoc <-
+              gregexpr("p\\s?[<>=]", FRaw, ignore.case = TRUE)
             pEq <- substring(
               FRaw,
               sapply(eqLoc, function(x)
@@ -378,7 +387,8 @@ statcheck <-
             pEq[grepl("ns", FRaw, ignore.case = TRUE)] <- "ns"
             
             # determine number of decimals of p value
-            dec <- attr(regexpr("\\.\\d+", pValsChar), "match.length") - 1
+            dec <-
+              attr(regexpr("\\.\\d+", pValsChar), "match.length") - 1
             dec[dec < 0] <- NA
             
             # Create data frame:
@@ -406,6 +416,8 @@ statcheck <-
           }
         }
         
+        #---------------------------
+        
         # correlations:
         if (any(c("r", "cor", "correlations") %in% stat)) {
           # Get location of r-values in text:
@@ -418,19 +430,21 @@ statcheck <-
           
           if (rLoc[1] != -1) {
             # Get raw text of r-values:
-            rRaw <- substring(txt, rLoc, rLoc + attr(rLoc, "match.length") -
-                                1)
+            rRaw <-
+              substring(txt, rLoc, rLoc + attr(rLoc, "match.length") - 1)
             
             # Replace weird codings of a minus sign with actual minus sign:
             # First remove spaces
-            rRaw <- gsub("(?<=\\=)\\s+(?=.*\\,)", "", rRaw, perl = TRUE)
+            rRaw <-
+              gsub("(?<=\\=)\\s+(?=.*\\,)", "", rRaw, perl = TRUE)
             
             # Replace any weird string with a minus sign
             rRaw <-
               gsub("(?<=\\=)\\s?[^\\d\\.]+(?=.*\\,)", " -", rRaw, perl = TRUE)
             
             # Add spaces again:
-            rRaw <- gsub("(?<=\\=)(?=(\\.|\\d))", " ", rRaw, perl = TRUE)
+            rRaw <-
+              gsub("(?<=\\=)(?=(\\.|\\d))", " ", rRaw, perl = TRUE)
             
             # Extract location of numbers:
             nums <-
@@ -486,7 +500,8 @@ statcheck <-
             suppressWarnings(pVals <- as.numeric(pValsChar))
             
             # Extract (in)equality
-            eqLoc <- gregexpr("p\\s?[<>=]", rRaw, ignore.case = TRUE)
+            eqLoc <-
+              gregexpr("p\\s?[<>=]", rRaw, ignore.case = TRUE)
             pEq <- substring(
               rRaw,
               sapply(eqLoc, function(x)
@@ -498,11 +513,13 @@ statcheck <-
             
             
             # determine number of decimals of p value
-            dec <- attr(regexpr("\\.\\d+", pValsChar), "match.length") - 1
+            dec <-
+              attr(regexpr("\\.\\d+", pValsChar), "match.length") - 1
             dec[dec < 0] <- 0
             
             # computed p = NA for correlations reported as >1
-            pComputed <- pmin(pt(-1 * abs(r2t(rVals, df)), df) * 2, 1)
+            pComputed <-
+              pmin(pt(-1 * abs(r2t(rVals, df)), df) * 2, 1)
             pComputed[is.nan(pComputed)] <- NA
             
             # Create data frame:
@@ -530,6 +547,8 @@ statcheck <-
           }
         }
         
+        #---------------------------
+        
         # z-values:
         if ("Z" %in% stat) {
           # Get location of z-values in text:
@@ -542,25 +561,28 @@ statcheck <-
           
           if (zLoc[1] != -1) {
             # Get raw text of z-values:
-            zRaw <- substring(txt, zLoc, zLoc + attr(zLoc, "match.length") -
-                                1)
+            zRaw <-
+              substring(txt, zLoc, zLoc + attr(zLoc, "match.length") - 1)
             
             # remove any character before test statistic
             zRaw <- gsub(".?(z|Z)", "Z", zRaw, perl = TRUE)
             
             # remove commas (thousands separators)
-            zRaw <- gsub("(?<=\\d),(?=\\d+\\.)", "", zRaw, perl = TRUE)
+            zRaw <-
+              gsub("(?<=\\d),(?=\\d+\\.)", "", zRaw, perl = TRUE)
             
             # Replace weird codings of a minus sign with actual minus sign:
             # First remove spaces
-            zRaw <- gsub("(?<=\\=)\\s+(?=.*\\,)", "", zRaw, perl = TRUE)
+            zRaw <-
+              gsub("(?<=\\=)\\s+(?=.*\\,)", "", zRaw, perl = TRUE)
             
             # Replace any weird string with a minus sign
             zRaw <-
               gsub("(?<=\\=)\\s?[^\\d\\.]+(?=.*\\,)", " -", zRaw, perl = TRUE)
             
             # Add spaces again:
-            zRaw <- gsub("(?<=\\=)(?=(\\.|\\d))", " ", zRaw, perl = TRUE)
+            zRaw <-
+              gsub("(?<=\\=)(?=(\\.|\\d))", " ", zRaw, perl = TRUE)
             
             # Extract location of numbers:
             nums <-
@@ -606,7 +628,8 @@ statcheck <-
             suppressWarnings(pVals <- as.numeric(pValsChar))
             
             # Extract (in)equality
-            eqLoc <- gregexpr("p\\s?[<>=]", zRaw, ignore.case = TRUE)
+            eqLoc <-
+              gregexpr("p\\s?[<>=]", zRaw, ignore.case = TRUE)
             pEq <- substring(
               zRaw,
               sapply(eqLoc, function(x)
@@ -617,7 +640,8 @@ statcheck <-
             pEq[grepl("ns", zRaw, ignore.case = TRUE)] <- "ns"
             
             # determine number of decimals of p value
-            dec <- attr(regexpr("\\.\\d+", pValsChar), "match.length") - 1
+            dec <-
+              attr(regexpr("\\.\\d+", pValsChar), "match.length") - 1
             dec[dec < 0] <- 0
             
             # Create data frame:
@@ -646,12 +670,14 @@ statcheck <-
           }
         }
         
+        #---------------------------
+        
         # Chis2-values:
         if ("chisq" %in% stat) {
           # Get location of chi values or delta G in text:
           chi2Loc <-
             gregexpr(
-              "((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^trF ]\\s?)|([^trF]2\\s?))2?\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?\\)\\s?[<>=]\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",
+              "((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^trFzQWBn ]\\s?)|([^trFzQWBn ]2\\s?))2?\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?\\)\\s?[<>=]\\s?\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",
               txt,
               ignore.case = TRUE
             )[[1]]
@@ -673,12 +699,14 @@ statcheck <-
                    ignore.case = TRUE)
             
             # remove commas (thousands separators)
-            chi2Raw <- gsub("(?<=\\d),(?=\\d+\\.)", "", chi2Raw, perl = TRUE)
+            chi2Raw <-
+              gsub("(?<=\\d),(?=\\d+\\.)", "", chi2Raw, perl = TRUE)
             
             # bug fix: remove extra opening brackets
             # if a chi2 result is reported between brackets, and the chi is not read by statcheck
             # the opening bracket is translated as the chi symbol, and extracting the numerics goes wrong
-            chi2Raw <- gsub("\\((?=2\\s?\\()", "", chi2Raw, perl = TRUE)
+            chi2Raw <-
+              gsub("\\((?=2\\s?\\()", "", chi2Raw, perl = TRUE)
             
             # Extract location of numbers:
             nums <-
@@ -722,8 +750,7 @@ statcheck <-
               sapply(testEqLoc, function(x)
                 x[1] + attr(x, "match.length")[1] - 1)
             )
-            
-            
+           
             # Extract p-values
             suppressWarnings(pValsChar <-
                                substring(
@@ -736,7 +763,8 @@ statcheck <-
             suppressWarnings(pVals <- as.numeric(pValsChar))
             
             # Extract (in)equality
-            eqLoc <- gregexpr("p\\s?[<>=]", chi2Raw, ignore.case = TRUE)
+            eqLoc <-
+              gregexpr("p\\s?[<>=]", chi2Raw, ignore.case = TRUE)
             pEq <- substring(
               chi2Raw,
               sapply(eqLoc, function(x)
@@ -747,7 +775,8 @@ statcheck <-
             pEq[grepl("ns", chi2Raw, ignore.case = TRUE)] <- "ns"
             
             # determine number of decimals of p value
-            dec <- attr(regexpr("\\.\\d+", pValsChar), "match.length") - 1
+            dec <-
+              attr(regexpr("\\.\\d+", pValsChar), "match.length") - 1
             dec[dec < 0] <- 0
             
             # Create data frame:
@@ -776,6 +805,150 @@ statcheck <-
           }
         }
         
+        #---------------------------
+        
+        # Q-values:
+        if ("Q" %in% stat) {
+          # Get location of Q-values in text:
+          QLoc <-
+            gregexpr(
+              "Q\\s?-?\\s?(w|within|b|between)?\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?[<>=]\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",
+              txt,
+              ignore.case = TRUE
+            )[[1]]
+          
+          if (QLoc[1] != -1) {
+            # Get raw text of t-values:
+            QRaw <-
+              substring(txt, QLoc, QLoc + attr(QLoc, "match.length") - 1)
+            
+            # remove commas (thousands separators)
+            QRaw <- gsub("(?<=\\d),(?=\\d+)", "", QRaw, perl = TRUE)
+            
+            # Replace weird codings of a minus sign with actual minus sign:
+            # First remove spaces
+            QRaw <-
+              gsub("(?<=\\=)\\s+(?=.*\\,)", "", QRaw, perl = TRUE)
+            
+            # Replace any weird string with a minus sign
+            QRaw <-
+              gsub("(?<=\\=)\\s?[^\\d\\.]+(?=.*\\,)", " -", QRaw, perl = TRUE)
+            
+            # Add spaces again:
+            QRaw <-
+              gsub("(?<=\\=)(?=(\\.|\\d))", " ", QRaw, perl = TRUE)
+            
+            # Extract type of Q-test (general, within, or between)
+            QtypeLoc <-
+              gregexpr("Q\\s?-?\\s?(w|within|b|between)?",
+                       QRaw,
+                       ignore.case = TRUE)
+            QtypeRaw <-
+              substring(QRaw,
+                        sapply(QtypeLoc, '[', 1),
+                        sapply(QtypeLoc, function(x)
+                          x[1] + attr(x, "match.length")[1] - 1))
+            
+            Qtype <- rep(NA, length(QtypeRaw))
+            
+            Qtype[grepl("Q\\s?-?\\s?(w|within)", QtypeRaw, ignore.case = TRUE)] <-
+              "Qw"
+            Qtype[grepl("Q\\s?-?\\s?(b|between)", QtypeRaw, ignore.case = TRUE)] <-
+              "Qb"
+            Qtype[is.na(Qtype)] <- "Q"
+            
+            # Extract location of numbers:
+            nums <-
+              gregexpr("(\\-?\\s?\\d*\\.?\\d+\\s?e?-?\\d*)|ns",
+                       QRaw,
+                       ignore.case = TRUE)
+            
+            # Extract df:
+            df <-
+              as.numeric(substring(
+                QRaw,
+                sapply(nums, '[', 1),
+                sapply(nums, function(x)
+                  x[1] + attr(x, "match.length")[1] - 1)
+              ))
+            
+            # Extract Q-values
+            suppressWarnings(QValsChar <-
+                               substring(
+                                 QRaw,
+                                 sapply(nums, '[', 2),
+                                 sapply(nums, function(x)
+                                   x[2] + attr(x, "match.length")[2] - 1)
+                               ))
+            
+            suppressWarnings(QVals <- as.numeric(QValsChar))
+            
+            # Extract number of decimals test statistic
+            testdec <-
+              attr(regexpr("\\.\\d+", QValsChar), "match.length") - 1
+            testdec[testdec < 0] <- 0
+            
+            # Extract (in)equality test statistic
+            testEqLoc <- gregexpr("\\)\\s?[<>=]", QRaw)
+            testEq <- substring(
+              QRaw,
+              sapply(testEqLoc, function(x)
+                x[1] + attr(x, "match.length")[1] - 1),
+              sapply(testEqLoc, function(x)
+                x[1] + attr(x, "match.length")[1] - 1)
+            )
+            
+            # Extract p-values
+            suppressWarnings(pValsChar <-
+                               substring(
+                                 QRaw,
+                                 sapply(nums, '[', 3),
+                                 sapply(nums, function(x)
+                                   x[3] + attr(x, "match.length")[3] - 1)
+                               ))
+            
+            suppressWarnings(pVals <- as.numeric(pValsChar))
+            
+            # Extract (in)equality
+            eqLoc <-
+              gregexpr("p\\s?[<>=]", QRaw, ignore.case = TRUE)
+            pEq <- substring(QRaw,
+                             sapply(eqLoc, function(x)
+                               x[1] + attr(x, "match.length")[1] - 1),
+                             sapply(eqLoc, function(x)
+                               x[1] + attr(x, "match.length")[1] - 1))
+            pEq[grepl("ns", QRaw, ignore.case = TRUE)] <- "ns"
+            
+            # determine number of decimals of p value
+            dec <-
+              attr(regexpr("\\.\\d+", pValsChar), "match.length") - 1
+            dec[dec < 0] <- 0
+            
+            # Create data frame:
+            QRes <- data.frame(
+              Source = names(x)[i],
+              Statistic = Qtype,
+              df1 = NA,
+              df2 = df,
+              Test.Comparison = testEq,
+              Value = QVals,
+              Reported.Comparison = pEq,
+              Reported.P.Value = pVals,
+              Computed = pchisq(QVals, df, lower.tail =
+                                  FALSE),
+              Location = QLoc,
+              Raw = QRaw,
+              stringsAsFactors = FALSE,
+              dec = dec,
+              testdec = testdec,
+              OneTailedInTxt = OneTailedInTxt
+            )
+            
+            # Append, clean and close:
+            Res <- rbind(Res, QRes)
+            rm(QRes)
+          }
+        }
         
         setTxtProgressBar(pb, i)
       }
@@ -900,45 +1073,59 @@ statcheck <-
         if (any(AllTests)) {
           if (pEqualAlphaSig == TRUE) {
             AllTests[equalequal] <-
-              (reported[equalequal] <= alpha & computed[equalequal] > alpha) |
+              (reported[equalequal] <= alpha &
+                 computed[equalequal] > alpha) |
               (reported[equalequal] > alpha &
                  computed[equalequal] <= alpha)
             AllTests[equalsmall] <-
-              reported[equalsmall] <= alpha & computed[equalsmall] > alpha
+              reported[equalsmall] <= alpha &
+              computed[equalsmall] > alpha
             AllTests[equalgreat] <-
-              reported[equalgreat] >= alpha & computed[equalgreat] <= alpha
+              reported[equalgreat] >= alpha &
+              computed[equalgreat] <= alpha
             
             
             AllTests[smallequal] <-
-              reported[smallequal] <= alpha & computed[smallequal] >= alpha
+              reported[smallequal] <= alpha &
+              computed[smallequal] >= alpha
             AllTests[smallsmall] <-
-              reported[smallsmall] <= alpha & computed[smallsmall] >= alpha
+              reported[smallsmall] <= alpha &
+              computed[smallsmall] >= alpha
             
             AllTests[greatequal] <-
-              reported[greatequal] > alpha & computed[greatequal] <= alpha
+              reported[greatequal] > alpha &
+              computed[greatequal] <= alpha
             AllTests[greatgreat] <-
-              reported[greatgreat] >= alpha & computed[greatgreat] <= alpha
+              reported[greatgreat] >= alpha &
+              computed[greatgreat] <= alpha
             
           } else {
             AllTests[equalequal] <-
-              (reported[equalequal] < alpha & computed[equalequal] >= alpha) |
+              (reported[equalequal] < alpha &
+                 computed[equalequal] >= alpha) |
               (reported[equalequal] >= alpha &
                  computed[equalequal] < alpha)
             AllTests[equalsmall] <-
-              reported[equalsmall] < alpha & computed[equalsmall] >= alpha
+              reported[equalsmall] < alpha &
+              computed[equalsmall] >= alpha
             AllTests[equalgreat] <-
-              reported[equalgreat] >= alpha & computed[equalgreat] < alpha
+              reported[equalgreat] >= alpha &
+              computed[equalgreat] < alpha
             
             
             AllTests[smallequal] <-
-              reported[smallequal] < alpha & computed[smallequal] >= alpha
+              reported[smallequal] < alpha &
+              computed[smallequal] >= alpha
             AllTests[smallsmall] <-
-              reported[smallsmall] <= alpha & computed[smallsmall] >= alpha
+              reported[smallsmall] <= alpha &
+              computed[smallsmall] >= alpha
             
             AllTests[greatequal] <-
-              reported[greatequal] >= alpha & computed[greatequal] < alpha
+              reported[greatequal] >= alpha &
+              computed[greatequal] < alpha
             AllTests[greatgreat] <-
-              reported[greatgreat] >= alpha & computed[greatgreat] < alpha
+              reported[greatgreat] >= alpha &
+              computed[greatgreat] < alpha
             
           }
           
@@ -1006,7 +1193,8 @@ statcheck <-
             |
               (
                 grepl("<", comparison) &
-                  reported == .05 & onetail < reported & computed > reported
+                  reported == .05 &
+                  onetail < reported & computed > reported
               ),
             TRUE,
             FALSE
@@ -1027,6 +1215,7 @@ statcheck <-
         # count errors as correct if they'd be correct one-sided
         # and there was a mention of 'one-sided','one-tailed', or 'directional' in the text
         
+        
         if (OneTailedTxt == TRUE) {
           Res1tailed <- Res
           Res1tailed$Computed <- Res1tailed$Computed / 2
@@ -1034,15 +1223,22 @@ statcheck <-
           Res1tailed$Error <- ErrorTest(Res1tailed)
           Res1tailed$DecisionError <- DecisionErrorTest(Res1tailed)
           
-          Res$Error[!((Res$Statistic == "F" |
-                         Res$Statistic == "Chi2") &
-                        Res$df1 > 1) &
-                      Res$OneTailedInTxt == TRUE & Res1tailed$Error == FALSE] <- FALSE
-          Res$DecisionError[!((Res$Statistic == "F" |
-                                 Res$Statistic == "Chi2") &
-                                Res$df1 > 1) &
-                              Res$OneTailedInTxt == TRUE &
-                              Res1tailed$DecisionError == FALSE] <- FALSE
+          Res$Error[!((
+            Res$Statistic == "F" |
+              Res$Statistic == "Chi2" |
+              Res$Statistic == "Q"
+          ) &
+            Res$df1 > 1) &
+            Res$OneTailedInTxt == TRUE & Res1tailed$Error == FALSE] <- FALSE
+          
+          Res$DecisionError[!((
+            Res$Statistic == "F" |
+              Res$Statistic == "Chi2" |
+              Res$Statistic == "Q"
+          ) &
+            Res$df1 > 1) &
+            Res$OneTailedInTxt == TRUE &
+            Res1tailed$DecisionError == FALSE] <- FALSE
           
           
         }
@@ -1059,7 +1255,8 @@ statcheck <-
         for (i in seq_len(nrow(Res))) {
           if (Res[i, ]$Statistic == "F") {
             upP <- pf(lower[i], Res[i, ]$df1, Res[i, ]$df2, lower.tail = FALSE)
-            lowP  <- pf(upper[i], Res[i, ]$df1, Res[i, ]$df2, lower.tail = FALSE)
+            lowP  <-
+              pf(upper[i], Res[i, ]$df1, Res[i, ]$df2, lower.tail = FALSE)
             
           } else if (Res[i, ]$Statistic == "t") {
             if (lower[i] < 0) {
@@ -1070,21 +1267,26 @@ statcheck <-
               lowP  <- pt(-1 * upper[i], Res[i, ]$df2) * 2
             }
             
-          } else if (Res[i, ]$Statistic == "Chi2") {
+          } else if (Res[i, ]$Statistic == "Chi2" |
+                     Res[i, ]$Statistic == "Q" |
+                     Res[i, ]$Statistic == "Qw" | 
+                     Res[i, ]$Statistic == "Qb") {
             upP <- pchisq(lower[i], Res[i, ]$df1, lower.tail = FALSE)
             lowP  <- pchisq(upper[i], Res[i, ]$df1, lower.tail = FALSE)
             
           } else if (Res[i, ]$Statistic == "r") {
             if (lower[i] < 0) {
               lowP <- pmin(pt(r2t(lower[i], Res[i, ]$df2), Res[i, ]$df2) * 2, 1)
-              upP  <- pmin(pt(r2t(upper[i], Res[i, ]$df2), Res[i, ]$df2) * 2, 1)
+              upP  <-
+                pmin(pt(r2t(upper[i], Res[i, ]$df2), Res[i, ]$df2) * 2, 1)
             } else {
               upP <- pmin(pt(-1 * r2t(lower[i], Res[i, ]$df2), Res[i, ]$df2) * 2, 1)
               lowP  <-
                 pmin(pt(-1 * r2t(upper[i], Res[i, ]$df2), Res[i, ]$df2) * 2, 1)
             }
             
-          } else if (Res[i, ]$Statistic == "Z" | Res[i, ]$Statistic == "z") {
+          } else if (Res[i, ]$Statistic == "Z" |
+                     Res[i, ]$Statistic == "z") {
             if (lower[i] < 0) {
               lowP <- pnorm(abs(lower[i]), lower.tail = FALSE) * 2
               upP  <- pnorm(abs(upper[i]), lower.tail = FALSE) * 2
@@ -1114,17 +1316,13 @@ statcheck <-
           if (Res[i, "Reported.Comparison"] == "<") {
             correct_round[i] <-
               ifelse(Res[i, ]$Error == TRUE &
-                       Res$Reported.P.Value[i] > lowP,
-                     TRUE,
-                     FALSE)
+                       Res$Reported.P.Value[i] > lowP, TRUE, FALSE)
           }
           
           if (Res[i, "Reported.Comparison"] == ">") {
             correct_round[i] <-
               ifelse(Res[i, ]$Error == TRUE &
-                       Res$Reported.P.Value[i] < upP,
-                     TRUE,
-                     FALSE)
+                       Res$Reported.P.Value[i] < upP, TRUE, FALSE)
           }
           
           
@@ -1150,7 +1348,8 @@ statcheck <-
         # this happens sometimes when reported= "p=.05" and e.g. computed=.052...
         # this should be counted as correct
         
-        NoErrorDecisionError <- Res$Error == FALSE & Res$DecisionError == TRUE
+        NoErrorDecisionError <-
+          Res$Error == FALSE & Res$DecisionError == TRUE
         Res$DecisionError[NoErrorDecisionError] <- FALSE
         
         ###---------------------------------------------------------------------
@@ -1165,7 +1364,8 @@ statcheck <-
         # p values than statcheck results. For instance in cases when a p value appears to be
         # greater than 1.
         
-        Res_selection <- Res[Res$Source %in% pRes_selection$Source, ]
+        Res_selection <-
+          Res[Res$Source %in% pRes_selection$Source, ]
         APA <-
           by(Res_selection, Res_selection$Source, nrow) / by(pRes_selection, pRes_selection$Source, nrow)
         Res$APAfactor <-
@@ -1246,6 +1446,7 @@ r2t <- function(# Transform r values into t values
   r,
   ### Raw correlation value
   df
-  ### Degrees of freedom (N-1)) {
+  ### Degrees of freedom (N-1)
+  ){
   r / (sqrt((1 - r ^ 2) / df))
   }
