@@ -10,7 +10,7 @@
 
 1. **Self-checks**: you can use `statcheck` to make sure your manuscript doesn't contain copy-paste errors or other inconsistencies before you submit it to a journal.
 2. **Peer review**: editors and reviewers can use `statcheck` to check submitted manuscripts for statistical inconsistencies. They can ask authors for a correction or clarification before publishing a manuscript.
-3. **Research**: `statcheck` can be used to automatically extract statistical test results from articles that can then be analyzed. You can for instance investigate whether you can predict statistical inconsistencies (see e.g., our [preprint](http://osf.io/preprints/psyarxiv/sgbta)), or use it to analyze p-value distributions (see e.g., [Hartgerink et al., 2016](https://peerj.com/articles/1935/)).
+3. **Research**: `statcheck` can be used to automatically extract statistical test results from articles that can then be analyzed. You can for instance investigate whether you can predict statistical inconsistencies (see e.g., [Nuijten et al., 2017](https://www.collabra.org/article/10.1525/collabra.102/)), or use it to analyze p-value distributions (see e.g., [Hartgerink et al., 2016](https://peerj.com/articles/1935/)).
 
 ## How does statcheck work?
 
