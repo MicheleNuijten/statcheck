@@ -1,29 +1,27 @@
-getHTML <- function(
-  x
-  )
-{
-  strings <- lapply(x,function(fileName)readChar(file(fileName), file.info(fileName)$size, useBytes = T))
+getHTML <- function(x){
+  
+  strings <- lapply(x, function(fileName)readChar(file(fileName), file.info(fileName)$size, useBytes = TRUE))
   
   # Remove subscripts (except for p_rep)
-  strings <- lapply(strings,gsub,pattern="<sub>(?!rep).*?</sub>",replacement="",perl=TRUE)
+  strings <- lapply(strings, gsub, pattern = "<sub>(?!rep).*?</sub>", replacement = "", perl = TRUE)
   
   # Remove HTML tags:
-  strings <- lapply(strings,gsub,pattern="<(.|\n)*?>",replacement="")
+  strings <- lapply(strings, gsub, pattern = "<(.|\n)*?>", replacement = "")
   
   # Replace html codes:
-  strings <- lapply(strings,gsub,pattern="&#60;",replacement="<",fixed=TRUE)
-  strings <- lapply(strings,gsub,pattern="&lt;",replacement="<",fixed=TRUE)
-  strings <- lapply(strings,gsub,pattern="&#61;",replacement="=",fixed=TRUE)
-  strings <- lapply(strings,gsub,pattern="&#62;",replacement=">",fixed=TRUE)
-  strings <- lapply(strings,gsub,pattern="&gt;",replacement=">",fixed=TRUE)
-  strings <- lapply(strings,gsub,pattern="&#40;",replacement="(",fixed=TRUE)
-  strings <- lapply(strings,gsub,pattern="&#41;",replacement=")",fixed=TRUE)
-  strings <- lapply(strings,gsub,pattern="&thinsp;",replacement=" ",fixed=TRUE)
-  strings <- lapply(strings,gsub,pattern="&nbsp;",replacement=" ",fixed=TRUE) # these are used in JCPP
-  strings <- lapply(strings,gsub,pattern="\n",replacement="")
-  strings <- lapply(strings,gsub,pattern="\r",replacement="")
-  strings <- lapply(strings,gsub,pattern="\\s+",replacement=" ")
-  strings <- lapply(strings,gsub,pattern="&minus;",replacement="-",fixed=TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#60;", replacement = "<",fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&lt;", replacement = "<",fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#61;", replacement = "=",fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#62;", replacement = ">",fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&gt;", replacement = ">",fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#40;", replacement = "(",fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#41;", replacement = ")",fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&thinsp;", replacement = " ",fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&nbsp;", replacement = " ",fixed = TRUE) # these are used in JCPP
+  strings <- lapply(strings, gsub, pattern = "\n", replacement = "")
+  strings <- lapply(strings, gsub, pattern = "\r", replacement = "")
+  strings <- lapply(strings, gsub, pattern = "\\s+", replacement = " ")
+  strings <- lapply(strings, gsub, pattern = "&minus;", replacement = "-", fixed = TRUE)
   
   return(strings)
 }
@@ -46,26 +44,39 @@ checkHTMLdir <- structure(function(# Extract test statistics from all HTML files
   ## Note that the conversion to plain text and extraction of statistics can result in errors. Some statistical values can be missed, especially if the notation is unconventional. It is recommended to manually check some of the results.
   ##seealso<<
   ## \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkPDFdir}}, \code{\link{checkHTML}}, \code{\link{checkdir}}
-  if (missing(dir)) dir <- tk_choose.dir()
-  if (extension == TRUE) pat = ".html|.htm"
-  if (extension == FALSE) pat = ""
+  if(missing(dir)){
+    dir <- tk_choose.dir()
+  }
   
-  files <- list.files(dir,pattern = pat, full.names = TRUE, recursive = subdir)
+  if(extension == TRUE){
+    pat = ".html|.htm"
+  }
   
-  if(length(files)==0) stop("No HTML found")
+  if(extension == FALSE){
+    pat = ""
+  }
+  
+  files <- list.files(dir, pattern = pat, full.names = TRUE, recursive = subdir)
+  
+  if(length(files) == 0){
+    stop("No HTML found")
+  }
   
   txts <- character(length(files))
   message("Importing HTML files...")
-  pb <- txtProgressBar(max=length(files),style=3)
-  for (i in 1:length(files))
-  {
+  pb <- txtProgressBar(max = length(files), style = 3)
+  
+  for (i in 1:length(files)){
     txts[i] <-  getHTML(files[i])    
     setTxtProgressBar(pb, i)
   }
+  
   close(pb)
-  names(txts) <- gsub(".html","",basename(files))
-  names(txts) <- gsub(".htm","",names(txts))
-  return(statcheck(txts,...))
+  
+  names(txts) <- gsub(".html", "", basename(files))
+  names(txts) <- gsub(".htm", "", names(txts))
+  return(statcheck(txts, ...))
+  
   ##value<<
   ## A data frame containing for each extracted statistic:
   ## \item{Source}{Name of the file of which the statistic is extracted}
@@ -84,7 +95,7 @@ checkHTMLdir <- structure(function(# Extract test statistics from all HTML files
   ## \item{OneTailedInTxt}{Logical. Does the text contain the string "sided", "tailed", and/or "directional"?}
   ## \item{CopyPaste}{Logical. Does the exact string of the extracted raw results occur anywhere else in the article?}
   
-  },ex=function(){
+  }, ex = function(){
   # with this command a menu will pop up from which you can select the directory with HTML articles
   # checkHTMLdir()
 
@@ -109,10 +120,10 @@ checkHTML <- structure(function(# Extract test statistics from HTML file.
   ## \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkPDFdir}}, \code{\link{checkHTMLdir}}, \code{\link{checkdir}}
   if (missing(files)) files <- tk_choose.files()
   
-  txts <-  sapply(files,getHTML)
-  names(txts) <- gsub(".html","",basename(files))
-  names(txts) <- gsub(".htm","",names(txts))
-  return(statcheck(txts,...))
+  txts <-  sapply(files, getHTML)
+  names(txts) <- gsub(".html", "", basename(files))
+  names(txts) <- gsub(".htm", "", names(txts))
+  return(statcheck(txts, ...))
   ##value<<
   ## A data frame containing for each extracted statistic:
   ## \item{Source}{Name of the file of which the statistic is extracted}
@@ -127,7 +138,7 @@ checkHTML <- structure(function(# Extract test statistics from HTML file.
   ## \item{InExactError}{Error in inexactly reported p values as compared to the recalculated p values}
   ## \item{ExactError}{Error in exactly reported p values as compared to the recalculated p values}
   ## \item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
-  },ex=function(){
+  }, ex = function(){
   # given that my HTML file is called "article.html"
 # and I saved it in "C:/mydocuments/articles"
 
