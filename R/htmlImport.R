@@ -23,6 +23,7 @@ getHTML <- function(
   strings <- lapply(strings,gsub,pattern="\n",replacement="")
   strings <- lapply(strings,gsub,pattern="\r",replacement="")
   strings <- lapply(strings,gsub,pattern="\\s+",replacement=" ")
+  strings <- lapply(strings,gsub,pattern="&minus;",replacement="-",fixed=TRUE)
   
   return(strings)
 }
