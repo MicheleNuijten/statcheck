@@ -1,5 +1,0 @@
-Readme for 'statcheck' package.
-
-This package is aimed at extracting statistical values from articles and recomputing the p values. This is useful for both meta analysis as well as checking if the p values are correct.
-
-The 'statcheck' function and related 'checkPDF' and 'checkPDFdir' functions can be used extract statistical references from articles. The original p values are reported but also recomputed. This can be useful for both meta analysis and to see if the reported p values are correct.

@@ -1,0 +1,112 @@
+---
+title: 'Report: statcheck results'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, eval=TRUE, message=FALSE, warning=FALSE)
+```
+
+```{r}
+library(statcheck)
+pack <- sessionInfo()$otherPkgs 
+info_statcheck <- pack[[which(names(pack)=="statcheck")]]
+version <- info_statcheck$Version
+date <- info_statcheck$Date
+year <- strsplit(date,"-")[[1]][1]
+```
+
+*These results were automatically generated with the R package "statcheck" (Epskamp & Nuijten, 2015), version `r version`.*
+
+## Output statcheck
+
+The table below reports the statcheck results of your manuscript. The table lists all Null Hypothesis Significance Tests that are reported according to the APA style, and indicates whether the reported p-value matches a recomputed p-value based on the reported test statistic and degrees of freedom. The first column provides green dots to indicate a consistent result, yellow dots for an inconsistent result not bearing on significance, and red dots to indicate an inconsistent result that bears on significance at the .05 level.
+
+```{r}
+setwd(system.file("rmd", package="statcheck"))
+load("statcheckOutput.RData")
+stat <- statcheckOutput
+
+stat$Consistency[stat$Error==FALSE & stat$DecisionError==FALSE] <- "Consistent"
+stat$Consistency[stat$Error==TRUE & stat$DecisionError==FALSE] <- "**Inconsistency**"
+stat$Consistency[stat$Error==TRUE & stat$DecisionError==TRUE] <- "**Decision Inconsistency**"
+
+stat_sparse <- stat[c("Source","Raw","Computed","Consistency")]
+
+colnames(stat_sparse) <- c("Article","Result As Given In Text","Computed P-Value","Consistency")
+
+##
+
+# create color coding for the errors
+red <- "<span style='color:red; font-size: 20pt'>$\\bullet$</span>"
+yellow <- "<span style='color:orange; font-size: 20pt'>$\\bullet$</span>"
+green <- "<span style='color:green; font-size: 20pt'>$\\bullet$</span>"
+
+Code <- NA
+
+Code[stat_sparse$Consistency == "**Decision Inconsistency**"] <- red
+Code[stat_sparse$Consistency == "**Inconsistency**"] <- yellow
+Code[stat_sparse$Consistency == "Consistent"] <- green
+
+## 
+
+stat_sparse <- cbind(Code,stat_sparse)
+
+knitr::kable(stat_sparse)
+```
+
+
+
+***
+
+## What is statcheck?
+
+statcheck (Epskamp & Nuijten, 2015) is an R package that automatically extracts statistical results from papers and checks the internal consistency of those results.
+
+statcheck roughly works as follows:
+
+1. Convert PDF or HTML to raw text
+2. Use regular expressions to search for APA reported t-tests, F-tests, $\chi^2$-tests, Z-tests, and correlations.
+3. Use reported test statistics and degrees of freedom to recalculate the p-value
+4. Compare the reported p-value with the recalculated p-value
+5. Flag inconsistent results as an Inconsistency
+6. When the reported p-value is significant ($\alpha$ = .05) and the recalculated p-value is not, or vice versa, flag this result as a Decision Inconsistency
+
+statcheck takes into account one-sided testing as follows. If somewhere in the paper the words "one-sided", "one-tailed", or "directional" are mentioned, *and* the reported p-value would have been consistent if it was a one-sided test, statcheck counts it as a one-sided test and does not flag it as inconsistent.
+
+## Interpretation
+
+The variables in the table above can be interpreted as follows.
+
+Variable | Interpretation
+---------|-----------------------------------------------------------------------------
+Code     | Color coding for inconsistencies. Green = Consistent, Yellow = Inconsistency, Red = Decision Inconsistency
+Source   | The name of the file that was checked
+Raw      | The full raw statistical result that was extracted
+Computed | The recomputed p-value based on the reported test statistic and degrees of freedom
+Consistency | Consistent = The reported p-value is consistent; Inconsistency = The reported p-value is not consistent; Decision Inconsistency = The reported p-value is not consistent and bears on significance ($\alpha$ = .05)
+
+## Disclaimer
+
+Please note that statcheck is an automated procedure and does not offer any explanations for detected inconsistencies (e.g., incorrect rounding, erroneous retrieval from computer output, a copy-paste error, or a a typo).
+
+Also, statcheck results can sometimes be inaccurate for various reasons. The most common reasons why a result may be wrongly flagged as an inconsistency are:
+
+* A correction was used (e.g., Bonferroni, Greenhouse-Geisser, etc.)
+* Different words than "one-sided", "one-tailed", or "directional" were used to indicate one-sided testing
+* statcheck read the wrong type of test statistic (e.g., a "t" instead of an "r")
+
+If a result was wrongly marked as an inconsistency (or if an inconsistent result was mistakenly counted as consistent), please do not hesitate to contact the editor.
+
+Beside mistakes in flagging inconsistencies, it is also possible that statcheck fails to extract a result entirely. This happens when a statistical result is reported in a table, or not in line with the APA format.
+
+Also note that in the case of a flagged inconsistency, statcheck assumes that the p-value is the number that is misreported. However, it could well be the case that an inconsistent result is caused by a wrong test statistic or degrees of freedom.
+
+For more information about statcheck and for the PDF of Nuijten et al. (2016) including the validity study, please see <http://mbnuijten.com/statcheck>.
+
+***
+
+## References
+Nuijten, M.B., Hartgerink, C. H. J., van Assen, M. A. L. M., Epskamp, S., & Wicherts, J. M. (2016). The prevalence of statistical reporting errors in psychology (1985-2013). *Behavior Research Methods*, *48 (4)*, 1205-1226..  DOI: 10.3758/s13428-015-0664-2
+
+Epskamp, S., & Nuijten, M. B. (`r year`). statcheck: Extract statistics from articles and recompute p-values. R package version `r version`.
