@@ -28,3 +28,12 @@ The algorithm behind `statcheck` consists of four basic steps:
 For detailed information about installing and using `statcheck`, see the [manual on RPubs](http://rpubs.com/michelenuijten/statcheckmanual).
 
 [statcheck.io](http://statcheck.io/) is a web-based interface for statcheck.
+
+## Main changes in version 1.3.0 compared to 1.2.2
+
+The latest statcheck version includes 2 cool new features:
+
+* **Q-tests**: statcheck is now able to find Q-tests for heterogeneity (in meta-analyses). As always, the Q-tests need to be APA reported. statcheck recognizes general Q-tests, Q-within, and Q-between.
+* **HTML reports**: it is now possible to generate nicely formatted HTML reports with statcheck results with the function `statcheckReport()`.
+
+
