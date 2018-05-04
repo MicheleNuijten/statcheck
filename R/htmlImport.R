@@ -17,7 +17,7 @@ getHTML <- function(x){
   strings <- lapply(strings, gsub, pattern = "&#40;", replacement = "(", fixed = TRUE)
   strings <- lapply(strings, gsub, pattern = "&#41;", replacement = ")", fixed = TRUE)
   strings <- lapply(strings, gsub, pattern = "&thinsp;", replacement = " ", fixed = TRUE)
-  strings <- lapply(strings, gsub, pattern = "&nbsp;", replacement = " ", fixed = TRUE) # these are used in JCPP
+  strings <- lapply(strings, gsub, pattern = "&nbsp;", replacement = " ", fixed = TRUE)
   strings <- lapply(strings, gsub, pattern = "\n", replacement = "")
   strings <- lapply(strings, gsub, pattern = "\r", replacement = "")
   strings <- lapply(strings, gsub, pattern = "\\s+", replacement = " ")
@@ -27,38 +27,31 @@ getHTML <- function(x){
 }
 
 
-checkHTMLdir <- structure(function(# Extract test statistics from all HTML files in a folder.
-  ### Extracts statistical references from a directory with HTML versions of articles. By default a gui window is opened that allows you to choose the directory (using tcltk).
-  dir,
-  ### String indicating the directory to be used.
-  subdir = TRUE,
-  ### Logical indicating whether you also want to check subfolders. Defaults to TRUE
-  extension = TRUE,
-  ### Logical indicating whether the HTML extension should be checked. Defaults to TRUE
-  ...
-  ### Arguments sent to  \code{\link{statcheck}}
-  )
-{
-  ##details<<
-  ## See \code{\link{statcheck}} for more details. Use \code{\link{checkHTML}} to import individual HTML files. 
-  ## Note that the conversion to plain text and extraction of statistics can result in errors. Some statistical values can be missed, especially if the notation is unconventional. It is recommended to manually check some of the results.
-  ##seealso<<
-  ## \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkPDFdir}}, \code{\link{checkHTML}}, \code{\link{checkdir}}
-  if(missing(dir)){
+
+
+checkHTMLdir <- function(dir,
+                         subdir = TRUE,
+                         extension = TRUE,
+                         ...) {
+  if (missing(dir)) {
     dir <- tk_choose.dir()
   }
   
-  if(extension == TRUE){
+  if (extension == TRUE) {
     pat = ".html|.htm"
   }
   
-  if(extension == FALSE){
+  if (extension == FALSE) {
     pat = ""
   }
   
-  files <- list.files(dir, pattern = pat, full.names = TRUE, recursive = subdir)
+  files <-
+    list.files(dir,
+               pattern = pat,
+               full.names = TRUE,
+               recursive = subdir)
   
-  if(length(files) == 0){
+  if (length(files) == 0) {
     stop("No HTML found")
   }
   
@@ -66,8 +59,8 @@ checkHTMLdir <- structure(function(# Extract test statistics from all HTML files
   message("Importing HTML files...")
   pb <- txtProgressBar(max = length(files), style = 3)
   
-  for (i in 1:length(files)){
-    txts[i] <-  getHTML(files[i])    
+  for (i in 1:length(files)) {
+    txts[i] <-  getHTML(files[i])
     setTxtProgressBar(pb, i)
   }
   
@@ -76,72 +69,17 @@ checkHTMLdir <- structure(function(# Extract test statistics from all HTML files
   names(txts) <- gsub(".html", "", basename(files))
   names(txts) <- gsub(".htm", "", names(txts))
   return(statcheck(txts, ...))
-  
-  ##value<<
-  ## A data frame containing for each extracted statistic:
-  ## \item{Source}{Name of the file of which the statistic is extracted}
-  ## \item{Statistic}{Character indicating the statistic that is extracted}
-  ## \item{df1}{First degree of freedom}
-  ## \item{df2}{Second degree of freedom (if applicable)}
-  ## \item{Test.Comparison}{Reported comparison of the test statistic, when importing from pdf this will often not be converted properly}
-  ## \item{Value}{Reported value of the statistic}
-  ## \item{Reported.Comparison}{Reported comparison, when importing from pdf this might not be converted properly}
-  ## \item{Reported.P.Value}{The reported p-value, or NA if the reported value was NS}
-  ## \item{Computed}{The recomputed p-value}
-  ## \item{Raw}{Raw string of the statistical reference that is extracted}
-  ## \item{Error}{The computed p value is not congruent with the reported p value}
-  ## \item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
-  ## \item{OneTail}{Logical. Is it likely that the reported p value resulted from a correction for one-sided testing?}
-  ## \item{OneTailedInTxt}{Logical. Does the text contain the string "sided", "tailed", and/or "directional"?}
-  ## \item{CopyPaste}{Logical. Does the exact string of the extracted raw results occur anywhere else in the article?}
-  
-  }, ex = function(){
-  # with this command a menu will pop up from which you can select the directory with HTML articles
-  # checkHTMLdir()
+}
 
-# you could also specify the directory beforehand
-# for instance:
-# DIR <- "C:/mydocuments/articles"
-# checkHTMLdir(DIR)
-})
-
-checkHTML <- structure(function(# Extract test statistics from HTML file.
-  ### Extracts statistical references from given HTML files.
-  files,
-  ### Vector of strings containing file paths to HTML files to check.
-  ...
-  ### Arguments sent to  \code{\link{statcheck}}.
-  )
+checkHTML <- function(files,
+                      ...)
 {
-  ##details<<
-  ## See \code{\link{statcheck}} for more details. Use \code{\link{checkHTMLdir}} to import al HTML files in a given directory at once. 
-  ## Note that the conversion to plain text and extraction of statistics can result in errors. Some statistical values can be missed, especially if the notation is unconvetional. It is recommended to manually check some of the results.
-  ##seealso<<
-  ## \code{\link{statcheck}}, \code{\link{checkPDF}}, \code{\link{checkPDFdir}}, \code{\link{checkHTMLdir}}, \code{\link{checkdir}}
-  if (missing(files)) files <- tk_choose.files()
+  if (missing(files))
+    files <- tk_choose.files()
   
   txts <-  sapply(files, getHTML)
   names(txts) <- gsub(".html", "", basename(files))
   names(txts) <- gsub(".htm", "", names(txts))
   return(statcheck(txts, ...))
-  ##value<<
-  ## A data frame containing for each extracted statistic:
-  ## \item{Source}{Name of the file of which the statistic is extracted}
-  ## \item{Statistic}{Character indicating the statistic that is extracted}
-  ## \item{df1}{First degree of freedom}
-  ## \item{df2}{Second degree of freedom (if applicable)}
-  ## \item{Value}{Reported value of the statistic}
-  ## \item{Reported.Comparison}{Reported comparison, when importing from pdf this will often not be converted properly}
-  ## \item{Reported.P.Value}{The reported p-value, or NA if the reported value was NS}
-  ## \item{Computed}{The recomputed p-value}
-  ## \item{Raw}{Raw string of the statistical reference that is extracted}
-  ## \item{InExactError}{Error in inexactly reported p values as compared to the recalculated p values}
-  ## \item{ExactError}{Error in exactly reported p values as compared to the recalculated p values}
-  ## \item{DecisionError}{The reported result is significant whereas the recomputed result is not, or vice versa.}
-  }, ex = function(){
-  # given that my HTML file is called "article.html"
-# and I saved it in "C:/mydocuments/articles"
-
-    #checkHTML("C:/mydocuments/articles/article.html")
-})
-
+  
+}

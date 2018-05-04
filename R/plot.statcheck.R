@@ -1,20 +1,10 @@
-plot.statcheck <- function(# Plot method for "statcheck"
-  ### Function for plotting of "statcheck" objects. Reported p values are plotted against recalculated p values, which allows the user to easily spot if articles contain miscalculations of statistical results.
+plot.statcheck <- function(
   x,
-  ### a "statcheck" object. See \code{\link{statcheck}}.
   alpha = .05,
-  ### assumed level of significance in the scanned texts. Defaults to .05.
   APAstyle = TRUE,
-  ### if TRUE, prints plot in APA style
   group = NULL,
-  ### indicate grouping variable to facet plot. Only works when APAstyle==TRUE
   ...
-  ### arguments to be passed to methods, such as graphical parameters (see \code{\link{par}}).
   ){
-  ##details<<
-  ## If APAstyle = FALSE, inconsistencies between the reported and the recalculated p value are indicated with an orange dot. Recalculations of the p value that render a previously non significant result (p >= .5) as significant (p < .05), and vice versa, are considered gross errors, and are indicated with a red dot. Exactly reported p values (i.e. p = ..., as opposed to p < ... or p > ...) are indicated with a diamond.
-  ##seealso<<
-  ## \code{\link{statcheck}}.
   
   if (APAstyle == TRUE) {
     # add this line of code to avoid the NOTE in the R CMD check when building the package
