@@ -24,7 +24,7 @@ summary.statcheck <-
     
     # Results in dataframe
     res <- data.frame(
-      Source = c(unique(x$Source), "Total"),
+      Source = Source,
       pValues = pValues,
       Errors = Errors,
       DecisionErrors = DecisionErrors
