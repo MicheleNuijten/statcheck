@@ -16,7 +16,7 @@ date <- info_statcheck$Date
 year <- strsplit(date,"-")[[1]][1]
 ```
 
-*These results were automatically generated with the R package "statcheck" (Epskamp & Nuijten, 2015), version `r version`.*
+*These results were automatically generated with the R package "statcheck" (Epskamp & Nuijten, `r year`), version `r version`.*
 
 ## Output statcheck
 
@@ -61,16 +61,16 @@ knitr::kable(stat_sparse)
 
 ## What is statcheck?
 
-statcheck (Epskamp & Nuijten, 2015) is an R package that automatically extracts statistical results from papers and checks the internal consistency of those results.
+statcheck (Epskamp & Nuijten, `r year`) is an R package that automatically extracts statistical results from papers and checks the internal consistency of those results.
 
 statcheck roughly works as follows:
 
 1. Convert PDF or HTML to raw text
-2. Use regular expressions to search for APA reported t-tests, F-tests, $\chi^2$-tests, Z-tests, and correlations.
+2. Use regular expressions to search for APA reported t-tests, F-tests, $\chi^2$-tests, Q-tests, Z-tests, and correlations.
 3. Use reported test statistics and degrees of freedom to recalculate the p-value
 4. Compare the reported p-value with the recalculated p-value
 5. Flag inconsistent results as an Inconsistency
-6. When the reported p-value is significant ($\alpha$ = .05) and the recalculated p-value is not, or vice versa, flag this result as a Decision Inconsistency
+6. When the reported p-value is significant ($\alpha$ = .05) and the recalculated p-value is not, or vice versa, flag this result as a Decision Inconsistency (also sometimes identified as a "Gross Inconsistency")
 
 statcheck takes into account one-sided testing as follows. If somewhere in the paper the words "one-sided", "one-tailed", or "directional" are mentioned, *and* the reported p-value would have been consistent if it was a one-sided test, statcheck counts it as a one-sided test and does not flag it as inconsistent.
 
@@ -90,19 +90,9 @@ Consistency | Consistent = The reported p-value is consistent; Inconsistency = T
 
 Please note that statcheck is an automated procedure and does not offer any explanations for detected inconsistencies (e.g., incorrect rounding, erroneous retrieval from computer output, a copy-paste error, or a a typo).
 
-Also, statcheck results can sometimes be inaccurate for various reasons. The most common reasons why a result may be wrongly flagged as an inconsistency are:
-
-* A correction was used (e.g., Bonferroni, Greenhouse-Geisser, etc.)
-* Different words than "one-sided", "one-tailed", or "directional" were used to indicate one-sided testing
-* statcheck read the wrong type of test statistic (e.g., a "t" instead of an "r")
-
-If a result was wrongly marked as an inconsistency (or if an inconsistent result was mistakenly counted as consistent), please do not hesitate to contact the editor.
-
-Beside mistakes in flagging inconsistencies, it is also possible that statcheck fails to extract a result entirely. This happens when a statistical result is reported in a table, or not in line with the APA format.
-
 Also note that in the case of a flagged inconsistency, statcheck assumes that the p-value is the number that is misreported. However, it could well be the case that an inconsistent result is caused by a wrong test statistic or degrees of freedom.
 
-For more information about statcheck and for the PDF of Nuijten et al. (2016) including the validity study, please see <http://mbnuijten.com/statcheck>.
+For more details on what statcheck can and cannot do, and a list of common reasons why statcheck either does not find statistics or flags them as inconsistent, see the manual at <http://rpubs.com/michelenuijten/statcheckmanual>. 
 
 ***
 
