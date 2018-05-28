@@ -16,9 +16,9 @@ Type: \tab Package\cr
 
 Title: \tab Extract statistics from articles and recompute p values\cr
 
-Version: \tab 1.0.0\cr
+Version: \tab 1.3.1\cr
 
-Date: \tab 2014-11-15\cr
+Date: \tab 2018-05-28\cr
 
 Author: \tab Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten
 
@@ -28,9 +28,7 @@ Maintainer: \tab Michele B. Nuijten <m.b.nuijten@uvt.nl>\cr
 
 Depends: \tab 
 
-R (>= 2.14.2),
-
-plyr\cr
+R (>= 2.14.2)\cr
 
 License: \tab GPL-2\cr
 
