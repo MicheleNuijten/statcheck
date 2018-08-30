@@ -1175,7 +1175,6 @@ statcheck <-
             |
               (
                 grepl("<", comparison) &
-                  reported == .05 &
                   onetail < reported & computed > reported
               ),
             TRUE,
