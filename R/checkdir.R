@@ -2,7 +2,7 @@ checkdir <-
   function(dir, subdir = TRUE, ...) {
     if (missing(dir))
       dir <- tk_choose.dir()
-    
+
     pdfs <-
       any(grepl("\\.pdf$", list.files(dir, recursive = subdir), ignore.case =
                   TRUE))
@@ -12,40 +12,19 @@ checkdir <-
         list.files(dir, recursive = subdir),
         ignore.case = TRUE
       ))
-    
-    if (pdfs)
-      pdfres <- checkPDFdir(dir, ...)
-    if (htmls)
-      htmlres <- checkHTMLdir(dir, ...)
-    
-    if (pdfs & htmls) {
-      if (!is.null(pdfres) & !is.null(htmlres))
-        Res <- rbind(pdfres, htmlres)
-      else
-        stop("statcheck did not find any results")
-      
-    } else
-      if (pdfs & !htmls) {
-        if (!is.null(pdfres))
-          Res <- pdfres
-        else
-          stop("statcheck did not find any results")
-      }
-    
-    else
-      if (!pdfs & htmls) {
-        if (!is.null(htmlres))
-          Res <- htmlres
-        else
-          stop("statcheck did not find any results")
-      }
-    
-    else
-      if (!pdfs & !htmls)
+
+    if (!pdfs & !htmls)
         stop("No PDF or HTML found")
-    
-    
+
+    pdfres <- ifelse(pdfs, checkPDFdir(dir, ...), NULL)
+    htmlres <- ifelse(htmls, checkHTMLdir(dir, ...), NULL)
+
+    if (is.null(pdfres) & is.null(htmlres))
+      stop("statcheck did not find any results")
+    else
+      Res <- rbind(pdfres, htmlres)
+
     class(Res) <- c("statcheck", "data.frame")
     return(Res)
-    
+
   }
