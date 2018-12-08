@@ -3,15 +3,10 @@ checkdir <-
     if (missing(dir))
       dir <- tk_choose.dir()
 
-    pdfs <-
-      any(grepl("\\.pdf$", list.files(dir, recursive = subdir), ignore.case =
-                  TRUE))
-    htmls <-
-      any(grepl(
-        "\\.html?$",
-        list.files(dir, recursive = subdir),
-        ignore.case = TRUE
-      ))
+    all_files <- list.files(dir, recursive = subdir)
+
+    pdfs <- any(grepl("\\.pdf$", all_files, ignore.case = TRUE))
+    htmls <- any(grepl("\\.html?$", all_files, ignore.case = TRUE))
 
     if (!pdfs & !htmls)
         stop("No PDF or HTML found")
