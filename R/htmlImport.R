@@ -3,10 +3,10 @@ getHTML <- function(x){
   strings <- lapply(x, function(fileName)readChar(fileName, file.info(fileName)$size, useBytes = TRUE))
 
   # Remove subscripts (except for p_rep)
-  strings <- lapply(strings, gsub, pattern = "<sub>(?!rep).*?</sub>", replacement = "", perl = TRUE)
+  strings <- lapply(strings, gsub, pattern = "<sub>(?!rep).*</sub>", replacement = "", perl = TRUE)
 
   # Remove HTML tags:
-  strings <- lapply(strings, gsub, pattern = "<(.|\n)*?>", replacement = "")
+  strings <- lapply(strings, gsub, pattern = "<.*>", replacement = "")
 
   # Replace html codes:
   strings <- lapply(strings, gsub, pattern = "&#60;", replacement = "<", fixed = TRUE)
@@ -66,8 +66,7 @@ checkHTMLdir <- function(dir,
 
   close(pb)
 
-  names(txts) <- gsub(".html", "", basename(files))
-  names(txts) <- gsub(".htm", "", names(txts))
+  names(txts) <- gsub(".html?$", "", basename(files))
   return(statcheck(txts, ...))
 }
 
@@ -78,8 +77,7 @@ checkHTML <- function(files,
     files <- tk_choose.files()
 
   txts <-  sapply(files, getHTML)
-  names(txts) <- gsub(".html", "", basename(files))
-  names(txts) <- gsub(".htm", "", names(txts))
+  names(txts) <- gsub(".html?$", "", basename(files))
   return(statcheck(txts, ...))
 
 }

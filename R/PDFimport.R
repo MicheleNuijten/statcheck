@@ -23,17 +23,16 @@ checkPDFdir <-
            ...) {
     if (missing(dir))
       dir <- tk_choose.dir()
-    
-    all.files <-
+
+    files <-
       list.files(dir,
-                 pattern = "\\.pdf",
+                 pattern = "\\.pdf$",
                  full.names = TRUE,
                  recursive = subdir)
-    files <- all.files[grepl("\\.pdf$", all.files)]
-    
+
     if (length(files) == 0)
       stop("No PDF found")
-    
+
     txts <- character(length(files))
     message("Importing PDF files...")
     pb <- txtProgressBar(max = length(files), style = 3)
@@ -52,7 +51,7 @@ checkPDF <-
   function(files, ...) {
     if (missing(files))
       files <- tk_choose.files()
-    
+
     txts <-  sapply(files, getPDF)
     names(txts) <-
       gsub("\\.pdf$", "", basename(files), perl = TRUE)
