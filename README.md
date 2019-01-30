@@ -1,6 +1,9 @@
 # statcheck
 
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/statcheck)](https://cran.r-project.org/package=statcheck)
+[![CRAN_Downloads](http://cranlogs.r-pkg.org/badges/statcheck?color=brightgreen)](https://cran.r-project.org/package=stacheck)
+[![CRAN_Downloads_Week](http://cranlogs.r-pkg.org/badges/last-week/statcheck?color=brightgreen)](https://cran.r-project.org/package=stacheck)
+[![CRAN_Downloads_Total](http://cranlogs.r-pkg.org/badges/grand-total/statcheck?color=brightgreen)](https://cran.r-project.org/package=stacheck)
 
 ## What is statcheck?
 
