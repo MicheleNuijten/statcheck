@@ -796,7 +796,7 @@ statcheck <-
             gregexpr(
               "Q\\s?-?\\s?(w|within|b|between)?\\s?\\(\\s?\\d*\\.?\\d+\\s?\\)\\s?[<>=]\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,\\s?(([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*))",
               txt,
-              ignore.case = TRUE
+              ignore.case = FALSE
             )[[1]]
           
           if (QLoc[1] != -1) {
