@@ -24,8 +24,8 @@ test_that("decision errors are also classified as errors",{
   txt1 <- "t(28) = 1.20, p = .03"
   txt2 <- "t(28) = 2.20, p = .30"
 
-  ddpcr::quiet(expect_true(statcheck(txt1)$Error))
-  ddpcr::quiet(expect_true(statcheck(txt2)$Error))
+  expect_true(statcheck(txt1, messages = FALSE)$Error))
+  expect_true(statcheck(txt2, messages = FALSE)$Error))
 })
 
 # test if the following cases are correctly identified as correct -------------
