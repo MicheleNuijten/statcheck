@@ -14,9 +14,9 @@ checkdir <-
       ))
     
     if (pdfs)
-      pdfres <- checkPDFdir(dir, ...)
+      pdfres <- checkPDFdir(dir, subdir, ...)
     if (htmls)
-      htmlres <- checkHTMLdir(dir, ...)
+      htmlres <- checkHTMLdir(dir, subdir, ...)
     
     if (pdfs & htmls) {
       if (!is.null(pdfres) & !is.null(htmlres))
