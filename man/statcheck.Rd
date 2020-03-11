@@ -30,7 +30,7 @@
 
   \item{AllPValues}{Logical. If TRUE, the output will consist of a dataframe with all detected p values, also the ones that were not part of the full results in APA format}
   
-  \item{messages}{Logical. If TRUE, statcheck will print a progress bar while its extracting statistics from text and print messages warning for the potential presence of one-tailed tests or potential other alpha levels.}
+  \item{messages}{Logical. If TRUE, statcheck will print a progress bar while it's extracting statistics from text and print messages warning for the potential presence of one-tailed tests or potential other alpha levels.}
 
 }
 
