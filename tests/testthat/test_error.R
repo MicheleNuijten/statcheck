@@ -1,4 +1,4 @@
-context("check if inconsistencies are correctly classified")
+context("check if inconsistencies/errors are correctly classified")
 
 # test if the following cases are correctly identified as errors --------------
 
