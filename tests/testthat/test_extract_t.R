@@ -6,10 +6,11 @@ context("Check t-tests in string")
 test_that("standard t-tests are retrieved from text", {
   txt1 <- "t(28) = 2.20, p = .03"
   txt2 <- "The effect was very significant, t(28) = 2.20, p = .03."
+  txt3 <- "Both effects were very significant, t(28) = 2.20, p = .03, t(28) = 1.23, p = .04."
   
-  result <- statcheck(c(txt1, txt2))
+  result <- statcheck(c(txt1, txt2, txt3))
   
-  expect_equal(nrow(result), 2)
+  expect_equal(nrow(result), 4)
 })
 
 # variation in spacing
