@@ -2,15 +2,31 @@ context("Extract t-tests from string")
 
 # test if the following t-tests are correctly retrieved ----------------------
 
-# standard t-tests
-test_that("standard t-tests are retrieved from text", {
+# standard t-test
+test_that("t-tests are correctly parsed", {
   txt1 <- "t(28) = 2.20, p = .03"
-  txt2 <- "The effect was very significant, t(28) = 2.20, p = .03."
-  txt3 <- "Both effects were very significant, t(28) = 2.20, p = .03, t(28) = 1.23, p = .04."
   
-  result <- statcheck(c(txt1, txt2, txt3), messages = FALSE)
+  result <- statcheck(txt1, messages = FALSE)
   
-  expect_equal(nrow(result), 4)
+  expect_equal(nrow(result), 1)
+  expect_equal(as.character(result$Statistic), "t")
+  expect_equal(result$df1, NA)
+  expect_equal(result$df2, 28)
+  expect_equal(as.character(result$Test.Comparison), "=")
+  expect_equal(result$Value, 2.2)
+  expect_equal(as.character(result$Reported.Comparison), "=")
+  expect_equal(result$Reported.P.Value, 0.03)
+  expect_equal(as.character(result$Raw), "t(28) = 2.20, p = .03")
+})
+
+# standard t-tests in text
+test_that("t-tests are retrieved from sentences", {
+  txt1 <- "The effect was very significant, t(28) = 2.20, p = .03."
+  txt2 <- "Both effects were very significant, t(28) = 2.20, p = .03, t(28) = 1.23, p = .04."
+  
+  result <- statcheck(c(txt1, txt2), messages = FALSE)
+  
+  expect_equal(nrow(result), 3)
 })
 
 # variation in spacing
@@ -55,6 +71,7 @@ test_that("corrected degrees of freedom in t-tests are retrieved from text", {
   result <- statcheck(txt1, messages = FALSE)
   
   expect_equal(nrow(result), 1)
+  expect_equal(result$df2, 28.1)
 })
 
 # test if the following incorrect t-tests are not retrieved ------------------
