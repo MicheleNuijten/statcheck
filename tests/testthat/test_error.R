@@ -3,7 +3,7 @@ context("check if inconsistencies/errors are correctly classified")
 # test if the following cases are correctly identified as errors --------------
 
 # check classification of regular errors in all types of tests
-test_that("simple inconsistencies are classified as such", {
+test_that("simple errors are classified as such", {
   txt1 <- "t(28) = 2.20, p = .03"
   txt2 <- "F(2, 28) = 2.20, p = .15"
   txt3 <- "r(28) = .22, p = .26"
@@ -24,8 +24,8 @@ test_that("decision errors are also classified as errors",{
   txt1 <- "t(28) = 1.20, p = .03"
   txt2 <- "t(28) = 2.20, p = .30"
 
-  expect_true(statcheck(txt1, messages = FALSE)$Error))
-  expect_true(statcheck(txt2, messages = FALSE)$Error))
+  expect_true(statcheck(txt1, messages = FALSE)$Error)
+  expect_true(statcheck(txt2, messages = FALSE)$Error)
 })
 
 # test if the following cases are correctly identified as correct -------------
