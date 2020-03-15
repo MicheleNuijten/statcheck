@@ -10,7 +10,7 @@
 
     OneTailedTests = FALSE, alpha = 0.05, pEqualAlphaSig = TRUE, pZeroError = TRUE,
 
-    OneTailedTxt = FALSE, AllPValues = FALSE)}
+    OneTailedTxt = FALSE, AllPValues = FALSE, messages = TRUE)}
 
 \arguments{
 
@@ -29,6 +29,8 @@
   \item{OneTailedTxt}{Logical. If TRUE, statcheck searches the text for "one-sided", "one-tailed", and "directional" to identify the possible use of one-sided tests. If one or more of these strings is found in the text AND the result would have been correct if it was a one-sided test, the result is assumed to be indeed one-sided and is counted as correct.}
 
   \item{AllPValues}{Logical. If TRUE, the output will consist of a dataframe with all detected p values, also the ones that were not part of the full results in APA format}
+  
+  \item{messages}{Logical. If TRUE, statcheck will print a progress bar while it's extracting statistics from text and print messages warning for the potential presence of one-tailed tests or potential other alpha levels.}
 
 }
 

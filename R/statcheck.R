@@ -7,7 +7,8 @@ statcheck <-
     pEqualAlphaSig = TRUE,
     pZeroError = TRUE,
     OneTailedTxt = FALSE,
-    AllPValues = FALSE
+    AllPValues = FALSE,
+    messages = TRUE
     ) {
       
       # Create empty data frame for main result:
@@ -53,8 +54,12 @@ statcheck <-
       if (is.null(names(x)))
         names(x) <-  1:length(x)
       
-      message("Extracting statistics...")
-      pb <- txtProgressBar(max = length(x), style = 3)
+      # start progress bar
+      if(messages == TRUE){
+        message("Extracting statistics...")
+        pb <- txtProgressBar(max = length(x), style = 3)
+      }
+      
       for (i in 1:length(x)) {
         txt <- x[i]
         
@@ -932,9 +937,16 @@ statcheck <-
           }
         }
         
-        setTxtProgressBar(pb, i)
+        if(messages == TRUE){
+          setTxtProgressBar(pb, i)
+        }
       }
-      close(pb)
+      
+      # close progressbar
+      if(messages == TRUE){
+        close(pb)
+      }
+      
       Source <- NULL
       Res <- ddply(Res, .(Source), function(x)
         x[order(x$Location), ])
@@ -1149,7 +1161,8 @@ statcheck <-
             c(DecisionErrorAlphas, DecisionErrorTest(Res))
         }
         
-        if (any(DecisionErrorAlphas[!is.na(DecisionErrorAlphas) &
+        if(messages == TRUE & 
+           any(DecisionErrorAlphas[!is.na(DecisionErrorAlphas) &
                                     !is.nan(DecisionErrorAlphas)])) {
           message(
             "\n Check the significance level. \n \n Some of the p value incongruencies are decision errors if the significance level is .1 or .01 instead of the conventional .05. It is recommended to check the actual significance level in the paper or text. Check if the reported p values are a decision error at a different significance level by running statcheck again with 'alpha' set to .1 and/or .01. \n "
@@ -1182,7 +1195,8 @@ statcheck <-
           )
           Res$OneTail <- OneTail
           
-          if (any(OneTail[!is.na(OneTail)] == TRUE &
+          if (messages == TRUE & 
+              any(OneTail[!is.na(OneTail)] == TRUE &
                   OneTailedTxt[!is.na(OneTailedTxt)] == FALSE)) {
             message(
               "\n Check for one tailed tests. \n \n Some of the p value incongruencies might in fact be one tailed tests. It is recommended to check this in the actual paper or text. Check if the p values would also be incongruent if the test is indeed one sided by running statcheck again with 'OneTailedTests' set to TRUE. To see which Sources probably contain a one tailed test, try unique(x$Source[x$OneTail]) (where x is the statcheck output). \n "

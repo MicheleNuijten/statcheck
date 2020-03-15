@@ -1,6 +1,11 @@
 getHTML <- function(x){
   
-  strings <- lapply(x, function(fileName)readChar(file(fileName), file.info(fileName)$size, useBytes = TRUE))
+  strings <- lapply(x, function(fileName){
+    con <- file(fileName)
+    on.exit(close(con))
+    raw_strings <- readChar(con, file.info(fileName)$size, useBytes = TRUE)
+    return(raw_strings)
+    })
   
   # Remove subscripts (except for p_rep)
   strings <- lapply(strings, gsub, pattern = "<sub>(?!rep).*?</sub>", replacement = "", perl = TRUE)
