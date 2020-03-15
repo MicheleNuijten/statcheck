@@ -84,13 +84,6 @@ test_that("incorrect punctuation in t-tests are not retrieved from text", {
   expect_output(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
 })
 
-# not a t-test
-test_that("the word 'test' is not recognized as a t-test in text", {
-  txt1 <- "test(28) = 2.20, p = .03"  
-  
-  expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
-})
-
 # not a p-value
 test_that("tests with 'p-values' larger than 1 are not retrieved from text", {
   txt1 <- "t(28) = 2.20, p = 1.03"
