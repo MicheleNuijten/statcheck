@@ -526,4 +526,7 @@ statcheck <- function(texts,
       return(pRes)
     }
   }
+}
+
+
   
