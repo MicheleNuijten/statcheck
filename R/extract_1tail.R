@@ -1,6 +1,5 @@
 extract_1tail <- function(text){
-  for (i in 1:length(text)) {
-    txt <- text[i]
+  
     
     # search for "one-sided"/"one-tailed"/"directional" in full text to detect one-sided testing
     onesided <-
@@ -15,6 +14,6 @@ extract_1tail <- function(text){
     OneTailedInTxt <- as.logical(onesided)
     
     return(OneTailedInTxt)
-  }
+  
 }
 
