@@ -1,4 +1,4 @@
-extract_1tail <- function(text){
+extract_1tail <- function(txt){
   
     
     # search for "one-sided"/"one-tailed"/"directional" in full text to detect one-sided testing
