@@ -74,8 +74,6 @@ statcheck <- function(texts,
     x[order(x$Location), ])
   
   
-  
-  
   ###---------------------------------------------------------------------
   
   DecisionErrorTest <- function(x, ...) {
@@ -174,7 +172,9 @@ statcheck <- function(texts,
     #-----------------------------------------------
     
     return(AllTests)
-  }###---------------------------------------------------------------------
+  }
+  
+  ###---------------------------------------------------------------------
   
   if (nrow(Res) > 0) {
     # if indicated, count all tests as onesided
@@ -183,7 +183,7 @@ statcheck <- function(texts,
     }
     
     # check for errors
-    Res$Error <- ErrorTest(Res)
+    Res$Error <- ErrorTest(Res, alpha = alpha)
     
     Res$DecisionError <-  DecisionErrorTest(Res)
     
@@ -253,7 +253,7 @@ statcheck <- function(texts,
       Res1tailed <- Res
       Res1tailed$Computed <- Res1tailed$Computed / 2
       
-      Res1tailed$Error <- ErrorTest(Res1tailed)
+      Res1tailed$Error <- ErrorTest(Res1tailed, alpha = alpha)
       Res1tailed$DecisionError <- DecisionErrorTest(Res1tailed)
       
       Res$Error[!((

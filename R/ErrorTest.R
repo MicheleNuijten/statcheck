@@ -1,4 +1,4 @@
-ErrorTest <- function(x, ...) {
+ErrorTest <- function(x, alpha, ...) {
   computed <- as.vector(x$Computed)
   comparison <- as.vector(x$Reported.Comparison)
   reported <-  as.vector(x$Reported.P.Value)
