@@ -27,6 +27,7 @@ test_that("t-tests are retrieved from sentences", {
   result <- statcheck(c(txt1, txt2), messages = FALSE)
   
   expect_equal(nrow(result), 3)
+  expect_equal(as.character(result$Source), c("1", "2", "2"))
 })
 
 # variation in spacing
