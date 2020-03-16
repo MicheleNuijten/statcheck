@@ -1,5 +1,7 @@
 extract_pvals <- function(txt){
   
+  pvalues <- data.frame(NULL)
+  
   # Get location of p-values in text:
   pLoc <-
     gregexpr("([^a-z]ns)|(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*)",
@@ -49,7 +51,8 @@ extract_pvals <- function(txt){
       pvalues[pvalues$Reported.P.Value <= 1 |
                 is.na(pvalues$Reported.P.Value), ]
     
-    return(pvalues)
-    
   }
+  
+  return(pvalues)
+  
 }
