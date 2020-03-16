@@ -14,6 +14,5 @@ extract_1tail <- function(txt){
     OneTailedInTxt <- as.logical(onesided)
     
     return(OneTailedInTxt)
-  
 }
 
