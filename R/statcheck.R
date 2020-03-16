@@ -73,107 +73,6 @@ statcheck <- function(texts,
   Res <- ddply(Res, .(Source), function(x)
     x[order(x$Location), ])
   
-  
-  ###---------------------------------------------------------------------
-  
-  DecisionErrorTest <- function(x, ...) {
-    computed <- x$Computed
-    comparison <- x$Reported.Comparison
-    reported <- x$Reported.P.Value
-    testcomp <-  as.vector(x$Test.Comparison)
-    
-    # replace 'ns' by > alpha
-    reported[comparison == "ns"] <- alpha
-    comparison[comparison == "ns"] <- ">"
-    
-    #-----------------------------------------------
-    
-    equalequal <- testcomp == "=" & comparison == "="
-    equalsmall <- testcomp == "=" & comparison == "<"
-    equalgreat <- testcomp == "=" & comparison == ">"
-    
-    smallequal <- testcomp == "<" & comparison == "="
-    smallsmall <- testcomp == "<" & comparison == "<"
-    smallgreat <- testcomp == "<" & comparison == ">"
-    
-    greatequal <- testcomp == ">" & comparison == "="
-    greatsmall <- testcomp == ">" & comparison == "<"
-    greatgreat <- testcomp == ">" & comparison == ">"
-    
-    AllTests <- grepl("=|<|>", comparison)
-    
-    if (any(AllTests)) {
-      if (pEqualAlphaSig == TRUE) {
-        AllTests[equalequal] <-
-          (reported[equalequal] <= alpha &
-             computed[equalequal] > alpha) |
-          (reported[equalequal] > alpha &
-             computed[equalequal] <= alpha)
-        AllTests[equalsmall] <-
-          reported[equalsmall] <= alpha &
-          computed[equalsmall] > alpha
-        AllTests[equalgreat] <-
-          reported[equalgreat] >= alpha &
-          computed[equalgreat] <= alpha
-        
-        
-        AllTests[smallequal] <-
-          reported[smallequal] <= alpha &
-          computed[smallequal] >= alpha
-        AllTests[smallsmall] <-
-          reported[smallsmall] <= alpha &
-          computed[smallsmall] >= alpha
-        
-        AllTests[greatequal] <-
-          reported[greatequal] > alpha &
-          computed[greatequal] <= alpha
-        AllTests[greatgreat] <-
-          reported[greatgreat] >= alpha &
-          computed[greatgreat] <= alpha
-        
-      } else {
-        AllTests[equalequal] <-
-          (reported[equalequal] < alpha &
-             computed[equalequal] >= alpha) |
-          (reported[equalequal] >= alpha &
-             computed[equalequal] < alpha)
-        AllTests[equalsmall] <-
-          reported[equalsmall] < alpha &
-          computed[equalsmall] >= alpha
-        AllTests[equalgreat] <-
-          reported[equalgreat] >= alpha &
-          computed[equalgreat] < alpha
-        
-        
-        AllTests[smallequal] <-
-          reported[smallequal] < alpha &
-          computed[smallequal] >= alpha
-        AllTests[smallsmall] <-
-          reported[smallsmall] <= alpha &
-          computed[smallsmall] >= alpha
-        
-        AllTests[greatequal] <-
-          reported[greatequal] >= alpha &
-          computed[greatequal] < alpha
-        AllTests[greatgreat] <-
-          reported[greatgreat] >= alpha &
-          computed[greatgreat] < alpha
-        
-      }
-      
-      # these combinations of < & > are logically always correct
-      AllTests[smallgreat] <- FALSE
-      AllTests[greatsmall] <- FALSE
-    }
-    
-    
-    AllTests <- as.logical(AllTests)
-    
-    #-----------------------------------------------
-    
-    return(AllTests)
-  }
-  
   ###---------------------------------------------------------------------
   
   if (nrow(Res) > 0) {
@@ -185,7 +84,7 @@ statcheck <- function(texts,
     # check for errors
     Res$Error <- ErrorTest(Res, alpha = alpha)
     
-    Res$DecisionError <-  DecisionErrorTest(Res)
+    Res$DecisionError <-  DecisionErrorTest(Res, alpha = alpha)
     
     ###---------------------------------------------------------------------
     
@@ -194,9 +93,8 @@ statcheck <- function(texts,
     alphas <- c(.01, .1)
     
     for (a in alphas) {
-      alpha <- a
       DecisionErrorAlphas <-
-        c(DecisionErrorAlphas, DecisionErrorTest(Res))
+        c(DecisionErrorAlphas, DecisionErrorTest(Res, alpha = a))
     }
     
     if(messages == TRUE & 
@@ -254,7 +152,7 @@ statcheck <- function(texts,
       Res1tailed$Computed <- Res1tailed$Computed / 2
       
       Res1tailed$Error <- ErrorTest(Res1tailed, alpha = alpha)
-      Res1tailed$DecisionError <- DecisionErrorTest(Res1tailed)
+      Res1tailed$DecisionError <- DecisionErrorTest(Res1tailed, alpha = alpha)
       
       Res$Error[!((
         Res$Statistic == "F" |
