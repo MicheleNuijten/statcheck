@@ -1,4 +1,8 @@
-check_correct_rounding <- function(Res, OneTailedTests){
+check_correct_rounding <- function(Res, OneTailedTests, alpha){
+  
+  # replace 'ns' by > alpha
+  Res$Reported.P.Value[Res$Reported.Comparison == "ns"] <- alpha
+  Res$Reported.Comparison[Res$Reported.Comparison == "ns"] <- ">"
   
   lower <- Res$Value - (.5 / 10 ^ Res$testdec)
   upper <- Res$Value + (.5 / 10 ^ Res$testdec)
