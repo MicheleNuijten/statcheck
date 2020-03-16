@@ -174,7 +174,6 @@ statcheck <- function(texts,
         Res$OneTailedInTxt == TRUE &
         Res1tailed$DecisionError == FALSE] <- FALSE
       
-      
     }
     
     ###---------------------------------------------------------------------
@@ -187,10 +186,12 @@ statcheck <- function(texts,
       
       correct_round[i] <- check_correct_rounding(Res[i, ], 
                                                  OneTailedTests = OneTailedTests)
-      
     }
     
     CorrectRound <- as.logical(correct_round)
+    
+    Res$Error[CorrectRound] <- FALSE
+    Res$DecisionError[CorrectRound] <- FALSE
     
     ###---------------------------------------------------------------------
     
@@ -236,8 +237,6 @@ statcheck <- function(texts,
     
     ###---------------------------------------------------------------------
     
-    Res$Error[CorrectRound] <- FALSE
-    Res$DecisionError[CorrectRound] <- FALSE
     
     # final data frame
     Res <- data.frame(
