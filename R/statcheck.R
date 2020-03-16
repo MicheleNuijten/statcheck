@@ -87,8 +87,10 @@ statcheck <- function(texts,
     ### print messages ----------------------------------------------------
    
     # check if there could be one-sided tests in the data set
-    Res <- check_presence_1tail(Res,
-                                messages = messages) 
+    if (OneTailedTests == FALSE) {
+      Res <- check_presence_1tail(Res,
+                                  messages = messages) 
+    }
     
     # check if there would also be a decision error if alpha=.01 or .1
     check_alpha_levels(Res, 
@@ -96,36 +98,11 @@ statcheck <- function(texts,
     
     ###---------------------------------------------------------------------
     
-    
     # count errors as correct if they'd be correct one-sided
     # and there was a mention of 'one-sided','one-tailed', or 'directional' in the text
     
-    
     if (OneTailedTxt == TRUE) {
-      Res1tailed <- Res
-      Res1tailed$Computed <- Res1tailed$Computed / 2
-      
-      Res1tailed$Error <- ErrorTest(Res1tailed, alpha = alpha)
-      Res1tailed$DecisionError <- DecisionErrorTest(Res1tailed, alpha = alpha,
-                                                    pEqualAlphaSig = pEqualAlphaSig)
-      
-      Res$Error[!((
-        Res$Statistic == "F" |
-          Res$Statistic == "Chi2" |
-          Res$Statistic == "Q"
-      ) &
-        Res$df1 > 1) &
-        Res$OneTailedInTxt == TRUE & Res1tailed$Error == FALSE] <- FALSE
-      
-      Res$DecisionError[!((
-        Res$Statistic == "F" |
-          Res$Statistic == "Chi2" |
-          Res$Statistic == "Q"
-      ) &
-        Res$df1 > 1) &
-        Res$OneTailedInTxt == TRUE &
-        Res1tailed$DecisionError == FALSE] <- FALSE
-      
+      Res <- correct_4_1tailed(Res, alpha = alpha, pEqualAlphaSig = pEqualAlphaSig)
     }
     
     ###---------------------------------------------------------------------
