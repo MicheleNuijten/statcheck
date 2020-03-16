@@ -1,4 +1,4 @@
-check_presence_1tail <- function(Res, messages, OneTailedTxt) {
+check_presence_1tail <- function(Res, messages) {
   
   computed <- Res$Computed
   comparison <- Res$Reported.Comparison
