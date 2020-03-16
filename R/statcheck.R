@@ -11,10 +11,6 @@ statcheck <- function(texts,
   Res <- data.frame(NULL)
   pRes <- data.frame(NULL)
   
-  if (length(texts) == 0){
-    return(data.frame(NULL))
-  }
-  
   if (is.null(names(texts))){
     names(texts) <-  1:length(texts)
   }
