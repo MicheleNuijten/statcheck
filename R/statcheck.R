@@ -114,7 +114,8 @@ statcheck <- function(texts,
     for (i in seq_len(nrow(Res))) {
       
       correct_round[i] <- check_correct_rounding(Res[i, ], 
-                                                 OneTailedTests = OneTailedTests)
+                                                 OneTailedTests = OneTailedTests,
+                                                 alpha = alpha)
     }
     
     CorrectRound <- as.logical(correct_round)
@@ -148,21 +149,7 @@ statcheck <- function(texts,
     
     # APAfactor: proportion of APA results (that statcheck reads) of total number of p values
     
-    # select only the results of pRes that are from articles with at least 1 statcheck result
-    pRes_selection <- pRes[pRes$Source %in% Res$Source, ]
-    
-    # select only the statcheck results that are from an article with at least one p value
-    # this is relevant, because it sometimes happens that statcheck extracts less p values
-    # p values than statcheck results. For instance in cases when a p value appears to be
-    # greater than 1.
-    
-    Res_selection <-
-      Res[Res$Source %in% pRes_selection$Source, ]
-    APA <-
-      by(Res_selection, Res_selection$Source, nrow) / by(pRes_selection, pRes_selection$Source, nrow)
-    Res$APAfactor <-
-      round(as.numeric(apply(Res, 1, function(x)
-        APA[which(names(APA) == x["Source"])])), 2)
+    Res$APAfactor <- calc_APA_factor(pRes, Res)
     
     ###---------------------------------------------------------------------
     
