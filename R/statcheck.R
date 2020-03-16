@@ -1,12 +1,12 @@
 statcheck <- function(texts,
-                       stat = c("t", "F", "cor", "chisq", "Z", "Q"),
-                       OneTailedTests = FALSE,
-                       alpha = .05,
-                       pEqualAlphaSig = TRUE,
-                       pZeroError = TRUE,
-                       OneTailedTxt = FALSE,
-                       AllPValues = FALSE,
-                       messages = TRUE){
+                      stat = c("t", "F", "cor", "chisq", "Z", "Q"),
+                      OneTailedTests = FALSE,
+                      alpha = .05,
+                      pEqualAlphaSig = TRUE,
+                      pZeroError = TRUE,
+                      OneTailedTxt = FALSE,
+                      AllPValues = FALSE,
+                      messages = TRUE){
   
   Res <- data.frame(NULL)
   pRes <- data.frame(NULL)
@@ -34,7 +34,7 @@ statcheck <- function(texts,
     pvalues <- extract_pvals(txt)
     
     # append and close
-    if(!is.null(pvalues)){
+    if(nrow(pvalues) > 0){
       pvalues$Source <- names(txt)
       
       pRes <- rbind(pRes, pvalues)
@@ -48,7 +48,7 @@ statcheck <- function(texts,
     nhst <- extract_stats(txt)
     
     # append and close
-    if(!is.null(nhst)){
+    if(nrow(nhst) > 0){
       
       nhst$Source <- names(txt)
       nhst$OneTailedInTxt <- extract_1tail(txt)
@@ -73,11 +73,6 @@ statcheck <- function(texts,
   Res <- ddply(Res, .(Source), function(x)
     x[order(x$Location), ])
   
-  if (nrow(Res) > 0) {
-    # remove p values greater than one
-    Res <- Res[Res$Reported.P.Value <= 1 |
-                 is.na(Res$Reported.P.Value), ]
-  }
   
   ###---------------------------------------------------------------------
   
@@ -511,22 +506,21 @@ statcheck <- function(texts,
       OneTailedInTxt = Res$OneTailedInTxt,
       APAfactor = Res$APAfactor
     )
-    
-    # Return ------------------------------------------------------------------
-    
-    if (AllPValues == FALSE) {
-      # Return message when there are no results
-      if (nrow(Res) > 0) {
-        class(Res) <- c("statcheck", "data.frame")
-        return(Res)
-      } else {
-        Res <- cat("statcheck did not find any results\n")
-      }
+  }
+  
+  # Return ------------------------------------------------------------------
+  
+  if (AllPValues == FALSE) {
+    # Return message when there are no results
+    if (nrow(Res) > 0) {
+      class(Res) <- c("statcheck", "data.frame")
+      return(Res)
     } else {
-      return(pRes)
+      cat("statcheck did not find any results\n")
     }
+  } else {
+    return(pRes)
   }
 }
 
 
-  
