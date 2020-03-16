@@ -6,7 +6,7 @@
 
 \description{This function extracts statistics from strings and returns the extracted values, reported p-values and recomputed p-values. The package relies on the program "pdftotext", see the paragraph "Note" for details on the installation.}
 
-\usage{statcheck(x, stat = c("t", "F", "cor", "chisq", "Z", "Q"), 
+\usage{statcheck(texts, stat = c("t", "F", "cor", "chisq", "Z", "Q"), 
 
     OneTailedTests = FALSE, alpha = 0.05, pEqualAlphaSig = TRUE, pZeroError = TRUE,
 
@@ -14,7 +14,7 @@
 
 \arguments{
 
-  \item{x}{A vector of strings.}
+  \item{texts}{A vector of strings.}
 
   \item{stat}{"t" to extract t-values, "F" to extract F-values, "cor" to extract correlations, "chisq"to extract chi-square values, "Z" to extract Z-values, and "Q" to extract Q-values (within, between, or in general).}
 
