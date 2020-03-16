@@ -1,4 +1,4 @@
-DecisionErrorTest <- function(x, alpha, ...) {
+DecisionErrorTest <- function(x, alpha, pEqualAlphaSig, ...) {
   computed <- x$Computed
   comparison <- x$Reported.Comparison
   reported <- x$Reported.P.Value

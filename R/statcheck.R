@@ -84,7 +84,8 @@ statcheck <- function(texts,
     # check for errors
     Res$Error <- ErrorTest(Res, alpha = alpha)
     
-    Res$DecisionError <-  DecisionErrorTest(Res, alpha = alpha)
+    Res$DecisionError <-  DecisionErrorTest(Res, alpha = alpha, 
+                                            pEqualAlphaSig = pEqualAlphaSig)
     
     ###---------------------------------------------------------------------
     
@@ -94,7 +95,8 @@ statcheck <- function(texts,
     
     for (a in alphas) {
       DecisionErrorAlphas <-
-        c(DecisionErrorAlphas, DecisionErrorTest(Res, alpha = a))
+        c(DecisionErrorAlphas, DecisionErrorTest(Res, alpha = a, 
+                                                 pEqualAlphaSig = pEqualAlphaSig))
     }
     
     if(messages == TRUE & 
@@ -152,7 +154,8 @@ statcheck <- function(texts,
       Res1tailed$Computed <- Res1tailed$Computed / 2
       
       Res1tailed$Error <- ErrorTest(Res1tailed, alpha = alpha)
-      Res1tailed$DecisionError <- DecisionErrorTest(Res1tailed, alpha = alpha)
+      Res1tailed$DecisionError <- DecisionErrorTest(Res1tailed, alpha = alpha,
+                                                    pEqualAlphaSig = pEqualAlphaSig)
       
       Res$Error[!((
         Res$Statistic == "F" |
