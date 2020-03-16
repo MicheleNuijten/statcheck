@@ -1,4 +1,4 @@
-Context("Calculate the APA factor")
+context("Calculate the APA factor")
 
 test_that("correct APA factor is calculated", {
   
