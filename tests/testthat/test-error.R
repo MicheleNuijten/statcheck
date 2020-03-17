@@ -92,3 +92,82 @@ test_that("you can adapt whether p = .000 is counted as inconsistent or not", {
   expect_true(statcheck(txt2, messages = FALSE, pZeroError = FALSE)$Error)
 })
 
+# test classifications of (in)exact test statistcs and (in)exact p-values ----
+
+# test statistics exactly reported 
+test_that("cases where t = ... are correctly classified", {
+  
+  # calculate range of correct p-values
+  lowp <- pt(2.25, 28, lower.tail = FALSE)*2
+  upp <- pt(2.15, 28, lower.tail = FALSE)*2
+  
+  # correct
+  txt1 <- "t(28) = 2.20, p = .036" # correct
+  txt2 <- "t(28) = 2.20, p < .08"  # correct
+  txt3 <- "t(28) = 2.20, p > .02"  # correct
+  
+  # error
+  txt4 <- paste("t(28) = 2.20, p >", upp)  # error
+  txt5 <- paste("t(28) = 2.20, p <", lowp) # error
+  
+  txt6 <- "t(28) = 2.20, p = .08"  # error
+  txt7 <- "t(28) = 2.20, p = .02"  # error
+  txt8 <- "t(28) = 2.20, p > .08"  # error
+  txt9 <- "t(28) = 2.20, p < .02"  # error
+  
+  expect_false(statcheck(txt1, messages = FALSE)$Error)
+  expect_false(statcheck(txt2, messages = FALSE)$Error)
+  expect_false(statcheck(txt3, messages = FALSE)$Error)
+  
+  expect_true(statcheck(txt4, messages = FALSE)$Error)
+  expect_true(statcheck(txt5, messages = FALSE)$Error)
+  expect_true(statcheck(txt6, messages = FALSE)$Error)
+  expect_true(statcheck(txt7, messages = FALSE)$Error)
+  expect_true(statcheck(txt8, messages = FALSE)$Error)
+  expect_true(statcheck(txt9, messages = FALSE)$Error)
+})
+
+
+# test statistic reported as <
+test_that("cases where t < ... are correctly classified", {
+  
+  # calculate range of correct p-values
+  lowp <- pt(2.25, 28, lower.tail = FALSE)*2
+  upp <- pt(2.15, 28, lower.tail = FALSE)*2
+  
+  # correct
+  txt1 <- paste("t(28) < 2.20, p >", upp)
+  txt2 <- "t(28) < 2.20, p = .08"
+  txt3 <- "t(28) < 2.20, p > .08"
+  txt4 <- "t(28) < 2.20, p < .08"
+  txt5 <- "t(28) < 2.20, p > .02"
+  
+  # error
+  txt6 <- paste("t(28) < 2.20, p =", lowp)
+  txt7 <- paste("t(28 < 2.20, p <", lowp)
+  txt8 <- "t(28) < 2.20, p < .02"
+  txt9 <- "t(28) < 2.20, p = .02"
+  
+  expect_false(statcheck(txt1, messages = FALSE)$Error)
+  expect_false(statcheck(txt2, messages = FALSE)$Error)
+  expect_false(statcheck(txt3, messages = FALSE)$Error)
+  expect_false(statcheck(txt4, messages = FALSE)$Error)
+  expect_false(statcheck(txt5, messages = FALSE)$Error)
+  
+  expect_true(statcheck(txt6, messages = FALSE)$Error)
+  expect_true(statcheck(txt7, messages = FALSE)$Error)
+  expect_true(statcheck(txt8, messages = FALSE)$Error)
+  expect_true(statcheck(txt9, messages = FALSE)$Error)
+  
+})
+
+
+
+
+
+
+
+
+
+
+
