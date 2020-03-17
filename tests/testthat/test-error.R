@@ -161,6 +161,38 @@ test_that("cases where t < ... are correctly classified", {
   
 })
 
+# test statistic reported as >
+test_that("cases where t > ... are correctly classified", {
+  
+  # calculate range of correct p-values
+  lowp <- pt(2.25, 28, lower.tail = FALSE)*2
+  upp <- pt(2.15, 28, lower.tail = FALSE)*2
+  
+  # correct
+  txt1 <- paste("t(28) > 2.20, p <", upp)
+  txt2 <- "t(28) > 2.20, p = .02"
+  txt3 <- "t(28) > 2.20, p > .02"
+  txt4 <- "t(28) > 2.20, p < .02"
+  txt5 <- "t(28) > 2.20, p < .08"
+  
+  # error
+  txt6 <- paste("t(28) > 2.20, p =", upp)
+  txt7 <- paste("t(28 > 2.20, p <", upp)
+  txt8 <- "t(28) > 2.20, p > .08"
+  txt9 <- "t(28) > 2.20, p = .08"
+  
+  expect_false(statcheck(txt1, messages = FALSE)$Error)
+  expect_false(statcheck(txt2, messages = FALSE)$Error)
+  expect_false(statcheck(txt3, messages = FALSE)$Error)
+  expect_false(statcheck(txt4, messages = FALSE)$Error)
+  expect_false(statcheck(txt5, messages = FALSE)$Error)
+  
+  expect_true(statcheck(txt6, messages = FALSE)$Error)
+  expect_true(statcheck(txt7, messages = FALSE)$Error)
+  expect_true(statcheck(txt8, messages = FALSE)$Error)
+  expect_true(statcheck(txt9, messages = FALSE)$Error)
+  
+})
 
 
 
