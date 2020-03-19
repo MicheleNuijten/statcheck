@@ -8,7 +8,7 @@ compute_p <- function(Statistic, Value, df1, df2){
     
     computed <- pf(Value, df1, df2, lower.tail = FALSE)
     
-  } else if(Statistic == "z"){
+  } else if(Statistic == "Z"){
     
     computed <- pnorm(abs(Value), lower.tail = FALSE) * 2
     
@@ -21,7 +21,8 @@ compute_p <- function(Statistic, Value, df1, df2){
     
     computed <-  pComputed
     
-  } else if(Statistic == "chi2" | Statistic == "Q"){
+  } else if(Statistic == "Chi2" | 
+            Statistic == "Q" | Statistic == "Qb" | Statistic == "Qw"){
     
     computed <- pchisq(Value, df1, lower.tail = FALSE)
     
