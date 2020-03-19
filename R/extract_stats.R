@@ -114,8 +114,7 @@ extract_stats <- function(txt,
         Test.Comparison = testEq,
         Value = tVals,
         Reported.Comparison = pEq,
-        Reported.P.Value = pVals,
-        Computed = pt(-1 * abs(tVals), df) * 2,
+        Reported.P.Value = pVals
         Location = tLoc,
         Raw = tRaw,
         stringsAsFactors = FALSE,
@@ -249,8 +248,7 @@ extract_stats <- function(txt,
         Test.Comparison = testEq,
         Value = FVals,
         Reported.Comparison = pEq,
-        Reported.P.Value = pVals,
-        Computed = pf(FVals, df1, df2, lower.tail = FALSE),
+        Reported.P.Value = pVals
         Location = FLoc,
         Raw = FRaw,
         stringsAsFactors = FALSE,
@@ -365,11 +363,6 @@ extract_stats <- function(txt,
         attr(regexpr("\\.\\d+", pValsChar), "match.length") - 1
       dec[dec < 0] <- 0
       
-      # computed p = NA for correlations reported as >1
-      pComputed <-
-        pmin(pt(-1 * abs(r2t(rVals, df)), df) * 2, 1)
-      pComputed[is.nan(pComputed)] <- NA
-      
       # Create data frame:
       rRes <- data.frame(
         Statistic = "r",
@@ -379,7 +372,6 @@ extract_stats <- function(txt,
         Value = rVals,
         Reported.Comparison = pEq,
         Reported.P.Value = pVals,
-        Computed = pComputed,
         Location = rLoc,
         Raw = rRaw,
         stringsAsFactors = FALSE,
@@ -499,8 +491,6 @@ extract_stats <- function(txt,
         Value = zVals,
         Reported.Comparison = pEq,
         Reported.P.Value = pVals,
-        Computed = pnorm(abs(zVals), lower.tail = FALSE) *
-          2,
         Location = zLoc,
         Raw = zRaw,
         stringsAsFactors = FALSE,
@@ -632,8 +622,6 @@ extract_stats <- function(txt,
         Value = chi2Vals,
         Reported.Comparison = pEq,
         Reported.P.Value = pVals,
-        Computed = pchisq(chi2Vals, df, lower.tail =
-                            FALSE),
         Location = chi2Loc,
         Raw = chi2Raw_inclN,
         stringsAsFactors = FALSE,
@@ -775,8 +763,6 @@ extract_stats <- function(txt,
         Value = QVals,
         Reported.Comparison = pEq,
         Reported.P.Value = pVals,
-        Computed = pchisq(QVals, df, lower.tail =
-                            FALSE),
         Location = QLoc,
         Raw = QRaw,
         stringsAsFactors = FALSE,
