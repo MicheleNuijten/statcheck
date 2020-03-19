@@ -34,11 +34,11 @@ test_that("decision errors are also classified as errors",{
 test_that("correctly rounded p-values are not considered errors", {
   txt1 <- "t(28) = 2, p = .02"
   txt2 <- "t(28) = 2, p = .14"
-  txt3 <- "t(28) = 2.2, p = .03"
+  txt3 <- "t(28) = 2.2, p = .03" # rounded lower bound p-value
   txt4 <- "t(28) = 2.2, p = .04"
   txt5 <- "t(28) = 2.20, p = .036"
   txt6 <- "t(28) = 2.20, p = .037"
-
+  
   expect_false(statcheck(txt1, messages = FALSE)$Error)
   expect_false(statcheck(txt2, messages = FALSE)$Error)
   expect_false(statcheck(txt3, messages = FALSE)$Error)
