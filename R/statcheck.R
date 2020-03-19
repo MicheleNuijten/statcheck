@@ -71,6 +71,17 @@ statcheck <- function(texts,
   
   ###---------------------------------------------------------------------
   
+  Res$Computed <- rep(NA, nrow(Res))
+  
+  for(i in seq_len(nrow(Res))){
+    Res$Computed[i] <- compute_p(Res$Statistic[i],
+                                 Res$Value[i],
+                                 Res$df1[i],
+                                 Res$df2[i])
+  }
+  
+  ###---------------------------------------------------------------------
+  
   if (nrow(Res) > 0) {
     
     # if indicated, count all tests as onesided
