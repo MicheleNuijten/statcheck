@@ -1,37 +1,49 @@
-compute_p <- function(Statistic, Value, df1, df2){
+compute_p <- function(test_type, test_stat, df1, df2, two_tailed){
   
-  if(Statistic == "t"){
+  stopifnot(test_type %in% c("t", "F", "Z", "r", "Chi2", "Q", "Qb", "Qw"))
+  
+  # compute p-values ---------------------------------------------------------
+  
+  if(test_type == "t"){
     
-    computed <- pt(-1 * abs(Value), df2) * 2
+    computed <- pt(-1 * abs(test_stat), df2)
     
-  } else if(Statistic == "F"){
+  } else if(test_type == "F"){
     
-    computed <- pf(Value, df1, df2, lower.tail = FALSE)
+    computed <- pf(test_stat, df1, df2, lower.tail = FALSE)
     
-  } else if(Statistic == "Z"){
+  } else if(test_type == "Z"){
     
-    computed <- pnorm(abs(Value), lower.tail = FALSE) * 2
+    computed <- pnorm(abs(test_stat), lower.tail = FALSE)
     
-  } else if(Statistic == "r"){
+  } else if(test_type == "r"){
     
-    pComputed <-
-      pmin(pt(-1 * abs(r2t(Value, df2)), df2) * 2, 1)
+    t <- r2t(test_stat, df2)
+    computed <- pt(-1 * abs(test_stat), df2)
     
-    pComputed[is.nan(pComputed)] <- NA
+  } else if(test_type == "Chi2" | 
+            test_type == "Q" | test_type == "Qb" | test_type == "Qw"){
     
-    computed <-  pComputed
+    computed <- pchisq(test_stat, df1, lower.tail = FALSE)
     
-  } else if(Statistic == "Chi2" | 
-            Statistic == "Q" | Statistic == "Qb" | Statistic == "Qw"){
-    
-    computed <- pchisq(Value, df1, lower.tail = FALSE)
-    
-  } else {
-    
-    computed <- NA
-      
   }
+  
+  # compute two-tailed ------------------------------------------------------
+  
+  if (!is.na(computed) &
+    (test_type == "t" | test_type == "Z" ) & 
+    two_tailed) {
+    computed <- computed * 2
+  }
+  
+  # return ------------------------------------------------------------------
   
   return(computed)
 }
 
+
+# Function to transform correlations into t-values by use of raw r and degrees of freedom.
+r2t <- function(r, df){
+  t <- r / (sqrt((1 - r^2) / df))
+  return(t)
+}
