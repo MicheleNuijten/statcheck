@@ -67,7 +67,6 @@ statcheck <- function(texts,
   
   # reorder data frame based on the location of the stats in the text
   # instead of grouped by test type
-  Source <- NULL
   Res <- ddply(Res, .(Source), function(x)
     x[order(x$Location), ])
   
