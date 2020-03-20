@@ -75,23 +75,27 @@ statcheck <- function(texts,
   
   if (nrow(Res) > 0) {
     
-    # if indicated, count all tests as onesided
-    if (OneTailedTests == TRUE) {
-      two_tailed <- FALSE
-    } else {
-      two_tailed <- TRUE
-    }
-    
-    # compute upper and lower bound for p-value ------------------------------
+    # compute upper and lower bound of test statistic -----------------------
+    # in order to be able to calculate range of correct p-values 
     
     low_stat <- Res$Value - (.5 / 10 ^ Res$testdec)
     up_stat <- Res$Value + (.5 / 10 ^ Res$testdec)
+    
+    # compute p-values -----------------------------------------------------
     
     Res$Computed <- rep(NA, nrow(Res))
     Res$up_p <- rep(NA, nrow(Res))
     Res$low_p <- rep(NA, nrow(Res))
     
     for(i in seq_len(nrow(Res))){
+      
+      # if indicated, count all tests as one-sided
+      if (OneTailedTests == TRUE) {
+        two_tailed <- FALSE
+      } else {
+        two_tailed <- TRUE
+      }
+      
       Res$Computed[i] <- compute_p(test_type = Res$Statistic[i],
                                    test_stat = Res$Value[i],
                                    df1 = Res$df1[i],
@@ -111,7 +115,7 @@ statcheck <- function(texts,
                                 two_tailed = two_tailed)
     }
     
-   # check for errors --------------------------------------------------
+    # check for errors --------------------------------------------------
     
     Res$Error <- rep(NA, nrow(Res))
     
@@ -131,6 +135,62 @@ statcheck <- function(texts,
                                 alpha = alpha)
     }
     
+    # automated 1-tailed test detection -----------------------------------
+    
+    if(OneTailedTxt == TRUE){
+      
+      # select only results where the phrase "one-tailed", "one-sided" or
+      # "directional" was mentioned in text, and that were an error when
+      # we assumed two-tailed tests
+      Res_check1tail <- Res[Res$OneTailedInTxt == TRUE & Res$Error == TRUE]
+      
+      # for this subset, calculate 1-tailed p-values
+      
+      computed <- rep(NA, nrow(Res_check1tail))
+      low_p <- rep(NA, nrow(Res_check1tail))
+      up_p <- rep(NA, nrow(Res_check1tail))
+      
+      for(i in seq_len(nrow(Res_check1tail))){
+        
+        computed[i] <- compute_p(test_type = Res_check1tail$Statistic[i],
+                                     test_stat = Res_check1tail$Value[i],
+                                     df1 = Res_check1tail$df1[i],
+                                     df2 = Res_check1tail$df2[i],
+                                     two_tailed = FALSE)
+        
+        up_p[i] <- compute_p(test_type = Res_check1tail$Statistic[i],
+                                 test_stat = low_stat[i],
+                                 df1 = Res_check1tail$df1[i],
+                                 df2 = Res_check1tail$df2[i],
+                                 two_tailed = FALSE)
+        
+        low_p[i] <- compute_p(test_type = Res_check1tail$Statistic[i],
+                                  test_stat = up_stat[i],
+                                  df1 = Res_check1tail$df1[i],
+                                  df2 = Res_check1tail$df2[i],
+                                  two_tailed = FALSE)
+      
+        # check whether result would still be an error if 1-tailed
+        Res_check1tail$Error[i] <- 
+          ErrorTest(reported_p = Res_check1tail$Reported.P.Value[i], 
+                    test_type = Res_check1tail$Statistic[i], 
+                    test_stat = Res_check1tail$Value[i],
+                    computed_p = computed[i], 
+                    low_p = low_p[i],
+                    up_p = up_p[i],
+                    df1 = Res_check1tail$df1[i], 
+                    df2 = Res_check1tail$df2[i],
+                    p_comparison = Res_check1tail$Reported.Comparison[i], 
+                    test_comparison = Res_check1tail$Test.Comparison[i], 
+                    p_dec = Res_check1tail$dec[i], 
+                    test_dec = Res_check1tail$testdec[i], 
+                    alpha = alpha)
+      }
+     
+      Res[Res$OneTailedInTxt == TRUE & Res$Error == TRUE]$Error <- Res_check1tail$Error
+       
+    }
+    
     # check for decision errors -------------------------------------------
     
     Res$DecisionError <-  DecisionErrorTest(Res, alpha = alpha, 
@@ -148,16 +208,7 @@ statcheck <- function(texts,
     check_alpha_levels(Res, 
                        pEqualAlphaSig = pEqualAlphaSig, messages = messages)
     
-    ###---------------------------------------------------------------------
-    
-    # count errors as correct if they'd be correct one-sided
-    # and there was a mention of 'one-sided','one-tailed', or 'directional' in the text
-    
-    if (OneTailedTxt == TRUE) {
-      Res <- correct_4_1tailed(Res, alpha = alpha, pEqualAlphaSig = pEqualAlphaSig)
-    }
-    
-    ###---------------------------------------------------------------------
+     ###---------------------------------------------------------------------
     
     # "correct" rounding differences
     # e.g. t=2.3 could be 2.25 to 2.34999999... with its range of p values
