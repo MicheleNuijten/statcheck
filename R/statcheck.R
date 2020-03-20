@@ -122,7 +122,6 @@ statcheck <- function(texts,
       Res$Error[i] <- ErrorTest(reported_p = Res$Reported.P.Value[i], 
                                 test_type = Res$Statistic[i], 
                                 test_stat = Res$Value[i],
-                                computed_p = Res$Computed[i], 
                                 low_p = Res$low_p[i],
                                 up_p = Res$up_p[i],
                                 df1 = Res$df1[i], 
@@ -141,53 +140,48 @@ statcheck <- function(texts,
       # select only results where the phrase "one-tailed", "one-sided" or
       # "directional" was mentioned in text, and that were an error when
       # we assumed two-tailed tests
-      Res_check1tail <- Res[Res$OneTailedInTxt == TRUE & Res$Error == TRUE]
+      Res_check1tail <- Res[Res$OneTailedInTxt == TRUE & Res$Error == TRUE, ]
       
-      # for this subset, calculate 1-tailed p-values
-      
-      computed <- rep(NA, nrow(Res_check1tail))
-      low_p <- rep(NA, nrow(Res_check1tail))
-      up_p <- rep(NA, nrow(Res_check1tail))
-      
-      for(i in seq_len(nrow(Res_check1tail))){
+      if(nrow(Res_check1tail) > 0){
+        # for this subset, calculate 1-tailed p-values
         
-        computed[i] <- compute_p(test_type = Res_check1tail$Statistic[i],
-                                     test_stat = Res_check1tail$Value[i],
-                                     df1 = Res_check1tail$df1[i],
-                                     df2 = Res_check1tail$df2[i],
-                                     two_tailed = FALSE)
+        low_p <- rep(NA, nrow(Res_check1tail))
+        up_p <- rep(NA, nrow(Res_check1tail))
+        Res_check1tail$Error <- rep(NA, nrow(Res_check1tail))
         
-        up_p[i] <- compute_p(test_type = Res_check1tail$Statistic[i],
-                                 test_stat = low_stat[i],
-                                 df1 = Res_check1tail$df1[i],
-                                 df2 = Res_check1tail$df2[i],
-                                 two_tailed = FALSE)
+        for(i in seq_len(nrow(Res_check1tail))){
+          
+          up_p[i] <- compute_p(test_type = Res_check1tail$Statistic[i],
+                               test_stat = low_stat[i],
+                               df1 = Res_check1tail$df1[i],
+                               df2 = Res_check1tail$df2[i],
+                               two_tailed = FALSE)
+          
+          low_p[i] <- compute_p(test_type = Res_check1tail$Statistic[i],
+                                test_stat = up_stat[i],
+                                df1 = Res_check1tail$df1[i],
+                                df2 = Res_check1tail$df2[i],
+                                two_tailed = FALSE)
+          
+          # check whether result would still be an error if 1-tailed
+          Res_check1tail$Error[i] <- 
+            ErrorTest(reported_p = Res_check1tail$Reported.P.Value[i], 
+                      test_type = Res_check1tail$Statistic[i], 
+                      test_stat = Res_check1tail$Value[i],
+                      low_p = low_p[i],
+                      up_p = up_p[i],
+                      df1 = Res_check1tail$df1[i], 
+                      df2 = Res_check1tail$df2[i],
+                      p_comparison = Res_check1tail$Reported.Comparison[i], 
+                      test_comparison = Res_check1tail$Test.Comparison[i], 
+                      p_dec = Res_check1tail$dec[i], 
+                      test_dec = Res_check1tail$testdec[i], 
+                      alpha = alpha)
+        }
         
-        low_p[i] <- compute_p(test_type = Res_check1tail$Statistic[i],
-                                  test_stat = up_stat[i],
-                                  df1 = Res_check1tail$df1[i],
-                                  df2 = Res_check1tail$df2[i],
-                                  two_tailed = FALSE)
-      
-        # check whether result would still be an error if 1-tailed
-        Res_check1tail$Error[i] <- 
-          ErrorTest(reported_p = Res_check1tail$Reported.P.Value[i], 
-                    test_type = Res_check1tail$Statistic[i], 
-                    test_stat = Res_check1tail$Value[i],
-                    computed_p = computed[i], 
-                    low_p = low_p[i],
-                    up_p = up_p[i],
-                    df1 = Res_check1tail$df1[i], 
-                    df2 = Res_check1tail$df2[i],
-                    p_comparison = Res_check1tail$Reported.Comparison[i], 
-                    test_comparison = Res_check1tail$Test.Comparison[i], 
-                    p_dec = Res_check1tail$dec[i], 
-                    test_dec = Res_check1tail$testdec[i], 
-                    alpha = alpha)
+        Res[Res$OneTailedInTxt == TRUE & Res$Error == TRUE]$Error <- Res_check1tail$Error
       }
-     
-      Res[Res$OneTailedInTxt == TRUE & Res$Error == TRUE]$Error <- Res_check1tail$Error
-       
+      
     }
     
     # check for decision errors -------------------------------------------
@@ -197,17 +191,17 @@ statcheck <- function(texts,
     
     ### print messages ----------------------------------------------------
     
-    # check if there could be one-sided tests in the data set
-    if (OneTailedTests == FALSE) {
-      Res <- check_presence_1tail(Res,
-                                  messages = messages) 
-    }
+    # # check if there could be one-sided tests in the data set
+    # if (OneTailedTests == FALSE) {
+    #   Res <- check_presence_1tail(Res,
+    #                               messages = messages) 
+    # }
     
     # check if there would also be a decision error if alpha=.01 or .1
     check_alpha_levels(Res, 
                        pEqualAlphaSig = pEqualAlphaSig, messages = messages)
     
-     ###---------------------------------------------------------------------
+    ###---------------------------------------------------------------------
     
     # p values smaller or equal to zero are errors
     
@@ -252,7 +246,7 @@ statcheck <- function(texts,
       Raw = Res$Raw,
       Error = Res$Error,
       DecisionError = Res$DecisionError,
-      OneTail = Res$OneTail,
+      # OneTail = Res$OneTail,
       OneTailedInTxt = Res$OneTailedInTxt,
       APAfactor = Res$APAfactor
     )
