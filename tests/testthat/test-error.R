@@ -19,6 +19,13 @@ test_that("simple errors are classified as such", {
   expect_true(statcheck(txt6, messages = FALSE)$Error)
 })
 
+# recognize n.s. results and classify them correctly
+test_that("an inconsistent n.s. result is classified as error",{
+  txt <- "t(28) = 2.20, ns"
+  
+  expect_true(statcheck(txt, messages = FALSE)$Error)
+})
+
 # also classify decision errors as errors
 test_that("decision errors are also classified as errors",{
   txt1 <- "t(28) = 1.20, p = .03"
