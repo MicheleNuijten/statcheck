@@ -179,7 +179,7 @@ statcheck <- function(texts,
                       alpha = alpha)
         }
         
-        Res[Res$OneTailedInTxt == TRUE & Res$Error == TRUE]$Error <- Res_check1tail$Error
+        Res[Res$OneTailedInTxt == TRUE & Res$Error == TRUE, ]$Error <- Res_check1tail$Error
       }
       
     }
