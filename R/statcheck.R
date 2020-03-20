@@ -54,10 +54,10 @@ statcheck <- function(texts,
     
     rm(nhst)
     
-  }
-  
-  if(messages == TRUE){
-    setTxtProgressBar(pb, i)
+    if(messages == TRUE){
+      setTxtProgressBar(pb, i)
+    }
+    
   }
   
   # close progressbar
@@ -65,20 +65,11 @@ statcheck <- function(texts,
     close(pb)
   }
   
+  # reorder data frame based on the location of the stats in the text
+  # instead of grouped by test type
   Source <- NULL
   Res <- ddply(Res, .(Source), function(x)
     x[order(x$Location), ])
-  
-  ###---------------------------------------------------------------------
-  
-  Res$Computed <- rep(NA, nrow(Res))
-  
-  for(i in seq_len(nrow(Res))){
-    Res$Computed[i] <- compute_p(Res$Statistic[i],
-                                 Res$Value[i],
-                                 Res$df1[i],
-                                 Res$df2[i])
-  }
   
   ###---------------------------------------------------------------------
   
@@ -86,18 +77,51 @@ statcheck <- function(texts,
     
     # if indicated, count all tests as onesided
     if (OneTailedTests == TRUE) {
-      Res$Computed <- Res$Computed / 2
+      two_tailed <- FALSE
+    } else {
+      two_tailed <- TRUE
     }
     
-    # check for errors --------------------------------------------------
+    # compute upper and lower bound for p-value ------------------------------
+    
+    low_stat <- Res$Value - (.5 / 10 ^ Res$testdec)
+    up_stat <- Res$Value + (.5 / 10 ^ Res$testdec)
+    
+    Res$Computed <- rep(NA, nrow(Res))
+    Res$up_p <- rep(NA, nrow(Res))
+    Res$low_p <- rep(NA, nrow(Res))
+    
+    for(i in seq_len(nrow(Res))){
+      Res$Computed[i] <- compute_p(test_type = Res$Statistic[i],
+                                   test_stat = Res$Value[i],
+                                   df1 = Res$df1[i],
+                                   df2 = Res$df2[i],
+                                   two_tailed = two_tailed)
+      
+      Res$up_p[i] <- compute_p(test_type = Res$Statistic[i],
+                               test_stat = low_stat[i],
+                               df1 = Res$df1[i],
+                               df2 = Res$df2[i],
+                               two_tailed = two_tailed)
+      
+      Res$low_p[i] <- compute_p(test_type = Res$Statistic[i],
+                                test_stat = up_stat[i],
+                                df1 = Res$df1[i],
+                                df2 = Res$df2[i],
+                                two_tailed = two_tailed)
+    }
+    
+   # check for errors --------------------------------------------------
     
     Res$Error <- rep(NA, nrow(Res))
     
     for(i in seq_len(nrow(Res))){
       Res$Error[i] <- ErrorTest(reported_p = Res$Reported.P.Value[i], 
-                                computed_p = Res$Computed[i], 
                                 test_type = Res$Statistic[i], 
                                 test_stat = Res$Value[i],
+                                computed_p = Res$Computed[i], 
+                                low_p = Res$low_p[i],
+                                up_p = Res$up_p[i],
                                 df1 = Res$df1[i], 
                                 df2 = Res$df2[i],
                                 p_comparison = Res$Reported.Comparison[i], 
@@ -107,11 +131,13 @@ statcheck <- function(texts,
                                 alpha = alpha)
     }
     
+    # check for decision errors -------------------------------------------
+    
     Res$DecisionError <-  DecisionErrorTest(Res, alpha = alpha, 
                                             pEqualAlphaSig = pEqualAlphaSig)
     
     ### print messages ----------------------------------------------------
-   
+    
     # check if there could be one-sided tests in the data set
     if (OneTailedTests == FALSE) {
       Res <- check_presence_1tail(Res,
