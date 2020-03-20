@@ -191,12 +191,6 @@ statcheck <- function(texts,
     
     ### print messages ----------------------------------------------------
     
-    # # check if there could be one-sided tests in the data set
-    # if (OneTailedTests == FALSE) {
-    #   Res <- check_presence_1tail(Res,
-    #                               messages = messages) 
-    # }
-    
     # check if there would also be a decision error if alpha=.01 or .1
     check_alpha_levels(Res, 
                        pEqualAlphaSig = pEqualAlphaSig, messages = messages)
