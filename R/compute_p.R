@@ -19,7 +19,7 @@ compute_p <- function(test_type, test_stat, df1, df2, two_tailed){
   } else if(test_type == "r"){
     
     t <- r2t(test_stat, df2)
-    computed <- pt(-1 * abs(test_stat), df2)
+    computed <- pt(-1 * abs(t), df2)
     
   } else if(test_type == "Chi2" | 
             test_type == "Q" | test_type == "Qb" | test_type == "Qw"){
@@ -31,7 +31,7 @@ compute_p <- function(test_type, test_stat, df1, df2, two_tailed){
   # compute two-tailed ------------------------------------------------------
   
   if (!is.na(computed) &
-    (test_type == "t" | test_type == "Z" ) & 
+    (test_type == "t" | test_type == "Z" | test_type == "r") & 
     two_tailed) {
     computed <- computed * 2
   }
