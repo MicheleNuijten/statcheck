@@ -19,11 +19,16 @@ test_that("simple errors are classified as such", {
   expect_true(statcheck(txt6, messages = FALSE)$Error)
 })
 
-# recognize n.s. results and classify them correctly
-test_that("an inconsistent n.s. result is classified as error",{
-  txt <- "t(28) = 2.20, ns"
+# classify inexactly reported p-values correctly
+test_that("inexactly reported p-values are correctly classified",{
+  txt1 <- "t(28) = 2.20, ns"
+  txt2 <- "t(28) = 2.20, p > .05"
+  txt3 <- "t(28) = 2.0, p < .05"
   
-  expect_true(statcheck(txt, messages = FALSE)$Error)
+  expect_true(statcheck(txt1, messages = FALSE)$Error)
+  expect_true(statcheck(txt2, messages = FALSE)$Error)
+  
+  expect_false(statcheck(txt3, messages = FALSE)$Error)
 })
 
 # also classify decision errors as errors
@@ -43,7 +48,6 @@ test_that("correctly rounded p-values are not considered errors", {
   txt2 <- "t(28) = 2, p = .14"
   txt3 <- "t(28) = 2.2, p = .03" # rounded lower bound p-value
   txt4 <- "t(28) = 2.2, p = .04"
-  txt5 <- "t(28) = 2.0, p < .05"
   txt6 <- "t(28) = 2.20, p = .036"
   txt7 <- "t(28) = 2.20, p = .037"
   
@@ -53,7 +57,6 @@ test_that("correctly rounded p-values are not considered errors", {
   expect_false(statcheck(txt4, messages = FALSE)$Error)
   expect_false(statcheck(txt5, messages = FALSE)$Error)
   expect_false(statcheck(txt6, messages = FALSE)$Error)
-  expect_false(statcheck(txt7, messages = FALSE)$Error)
 })
 
 # test if different arguments concerning errors work --------------------------
