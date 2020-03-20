@@ -15,7 +15,7 @@ ErrorTest <- function(reported_p, test_type, test_stat,
     
     if(p_comparison == "="){
       
-      error <- reported_p > up_p | reported_p < low_p
+      error <- reported_p > round(up_p, p_dec) | reported_p < round(low_p, p_dec)
       return(error)
       
     } else if(p_comparison == "<"){
@@ -33,7 +33,7 @@ ErrorTest <- function(reported_p, test_type, test_stat,
   } else if(test_comparison == "<"){
     
     if(p_comparison == "="){
-      error <- reported_p < up_p
+      error <- reported_p < round(up_p, p_dec)
       return(error)
       
     } else if(p_comparison == "<"){
@@ -52,7 +52,7 @@ ErrorTest <- function(reported_p, test_type, test_stat,
     
     if(p_comparison == "="){
       
-      error <- reported_p > low_p
+      error <- reported_p > round(low_p, p_dec)
       return(error)
       
     } else if(p_comparison == "<"){
