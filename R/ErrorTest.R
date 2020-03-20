@@ -2,12 +2,20 @@ ErrorTest <- function(reported_p, test_type, test_stat,
                       low_p, up_p,
                       df1, df2,
                       p_comparison, test_comparison, 
-                      p_dec, test_dec, alpha) {
+                      p_dec, test_dec, 
+                      alpha, pZeroError) {
   
   # replace 'ns' for > alpha -----------------------------------------------
   
   reported_p[p_comparison == "ns"] <- alpha
   p_comparison[p_comparison == "ns"] <- ">"
+  
+  # p values smaller or equal to zero are errors ---------------------------
+  
+  if(pZeroError == TRUE & reported_p <= 0){
+    error <- TRUE
+    return(error)
+  }
   
   # check errors for exact test statistics ---------------------------------
   

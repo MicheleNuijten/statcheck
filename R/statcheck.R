@@ -195,17 +195,7 @@ statcheck <- function(texts,
     check_alpha_levels(Res, 
                        pEqualAlphaSig = pEqualAlphaSig, messages = messages)
     
-    ###---------------------------------------------------------------------
     
-    # p values smaller or equal to zero are errors
-    
-    if (pZeroError == TRUE) {
-      ImpossibleP <- (Res$Reported.P.Value <= 0)
-    } else {
-      ImpossibleP <- (Res$Reported.P.Value < 0)
-    }
-    
-    Res$Error[ImpossibleP] <- TRUE
     
     ###---------------------------------------------------------------------
     
