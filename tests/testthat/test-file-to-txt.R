@@ -21,7 +21,7 @@ test_that("statistics from a pdf are correctly retrieved and parsed", {
   expect_equal(result$DecisionError, c(FALSE, FALSE, FALSE, TRUE))
   
   # check errors with one-tailed test detection
-  expect_equal(result_1tailed$Error, c(FALSE, FALSE, FALSE, TRUE))
+  expect_equal(result_1tailed$Error, c(FALSE, FALSE, FALSE, FALSE))
   expect_equal(result_1tailed$DecisionError, c(FALSE, FALSE, FALSE, FALSE))
 })
 
@@ -43,7 +43,7 @@ test_that("statistics from all pdfs in a folder are correctly retrieved and pars
   expect_equal(result$DecisionError, c(FALSE, FALSE, FALSE, TRUE))
   
   # check errors with one-tailed test detection
-  expect_equal(result_1tailed$Error, c(FALSE, FALSE, FALSE, TRUE))
+  expect_equal(result_1tailed$Error, c(FALSE, FALSE, FALSE, FALSE))
   expect_equal(result_1tailed$DecisionError, c(FALSE, FALSE, FALSE, FALSE))
 })
 
@@ -68,7 +68,7 @@ test_that("statistics from a html are correctly retrieved and parsed", {
   expect_equal(result$DecisionError, c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
 
   # check errors with one-tailed test detection
-  expect_equal(result_1tailed$Error, c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
+  expect_equal(result_1tailed$Error, c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
   expect_equal(result_1tailed$DecisionError, c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
   
 })
@@ -91,7 +91,7 @@ test_that("statistics from all htmls in a folder are correctly retrieved and par
   expect_equal(result$DecisionError, c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
   
   # check errors with one-tailed test detection
-  expect_equal(result_1tailed$Error, c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
+  expect_equal(result_1tailed$Error, c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
   expect_equal(result_1tailed$DecisionError, c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
   
 })
