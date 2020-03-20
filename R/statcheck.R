@@ -89,8 +89,23 @@ statcheck <- function(texts,
       Res$Computed <- Res$Computed / 2
     }
     
-    # check for errors
-    Res$Error <- ErrorTest(Res, alpha = alpha)
+    # check for errors --------------------------------------------------
+    
+    Res$Error <- rep(NA, nrow(Res))
+    
+    for(i in seq_len(nrow(Res))){
+      Res$Error[i] <- ErrorTest(reported_p = Res$Reported.P.Value[i], 
+                                computed_p = Res$Computed[i], 
+                                test_type = Res$Statistic[i], 
+                                test_stat = Res$Value[i],
+                                df1 = Res$df1[i], 
+                                df2 = Res$df2[i],
+                                p_comparison = Res$Reported.Comparison[i], 
+                                test_comparison = Res$Test.Comparison[i], 
+                                p_dec = Res$dec[i], 
+                                test_dec = Res$testdec[i], 
+                                alpha = alpha)
+    }
     
     Res$DecisionError <-  DecisionErrorTest(Res, alpha = alpha, 
                                             pEqualAlphaSig = pEqualAlphaSig)
