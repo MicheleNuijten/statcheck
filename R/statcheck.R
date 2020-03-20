@@ -210,24 +210,6 @@ statcheck <- function(texts,
     
      ###---------------------------------------------------------------------
     
-    # "correct" rounding differences
-    # e.g. t=2.3 could be 2.25 to 2.34999999... with its range of p values
-    correct_round <- numeric()
-    
-    for (i in seq_len(nrow(Res))) {
-      
-      correct_round[i] <- check_correct_rounding(Res[i, ], 
-                                                 OneTailedTests = OneTailedTests,
-                                                 alpha = alpha)
-    }
-    
-    CorrectRound <- as.logical(correct_round)
-    
-    Res$Error[CorrectRound] <- FALSE
-    Res$DecisionError[CorrectRound] <- FALSE
-    
-    ###---------------------------------------------------------------------
-    
     # p values smaller or equal to zero are errors
     
     if (pZeroError == TRUE) {
