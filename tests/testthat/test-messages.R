@@ -31,4 +31,3 @@ test_that("statcheck prints message to warn for different alpha levels", {
 #   expect_message(statcheck(txt1), "Check the significance level.")
 #   expect_message(statcheck(txt1), "Check for one tailed tests.")
 # })
-
