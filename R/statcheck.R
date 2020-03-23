@@ -222,12 +222,6 @@ statcheck <- function(texts,
       
     }
     
-    ### print messages ----------------------------------------------------
-    
-    # check if there would also be a decision error if alpha=.01 or .1
-    check_alpha_levels(Res, 
-                       pEqualAlphaSig = pEqualAlphaSig, messages = messages)
-    
     ###---------------------------------------------------------------------
     
     # APAfactor: proportion of APA results (that statcheck reads) of total number of p values
