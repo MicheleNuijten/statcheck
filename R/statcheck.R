@@ -167,10 +167,10 @@ statcheck <- function(texts,
         
         for(i in seq_len(nrow(Res_check1tail))){
           computed_p[i] <- compute_p(test_type = Res_check1tail$Statistic[i],
-                               test_stat = Res_check1tail$Value[i],
-                               df1 = Res_check1tail$df1[i],
-                               df2 = Res_check1tail$df2[i],
-                               two_tailed = FALSE)
+                                     test_stat = Res_check1tail$Value[i],
+                                     df1 = Res_check1tail$df1[i],
+                                     df2 = Res_check1tail$df2[i],
+                                     two_tailed = FALSE)
           
           up_p[i] <- compute_p(test_type = Res_check1tail$Statistic[i],
                                test_stat = low_stat[i],
@@ -217,7 +217,11 @@ statcheck <- function(texts,
         }
         
         Res[Res$OneTailedInTxt == TRUE & Res$Error == TRUE, ]$Error <- Res_check1tail$Error
-        Res[Res$OneTailedInTxt == TRUE & Res$Error == TRUE, ]$DecisionError <- Res_check1tail$DecisionError
+        
+        # if any errors left, also correct decision errors for one-tailed tests
+        if(nrow(Res[Res$OneTailedInTxt == TRUE & Res$Error == TRUE, ]) > 0){
+          Res[Res$OneTailedInTxt == TRUE & Res$Error == TRUE, ]$DecisionError <- Res_check1tail$DecisionError
+        }
       }
       
     }
