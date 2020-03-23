@@ -2,7 +2,7 @@ DecisionErrorTest <- function(Res,
                               alpha, pEqualAlphaSig){
  
   test_comparison <- Res$Test.Comparison
-  p_comparison <- Res$Comparison
+  p_comparison <- Res$Reported.Comparison
   reported_p <- Res$Reported.P.Value
   computed_p <- Res$Computed
   
