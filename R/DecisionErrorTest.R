@@ -1,7 +1,11 @@
-DecisionErrorTest <- function(reported_p, computed_p,
-                              p_comparison, test_comparison,
+DecisionErrorTest <- function(Res,
                               alpha, pEqualAlphaSig){
  
+  test_comparison <- Res$Test.Comparison
+  p_comparison <- Res$Comparison
+  reported <- Res$Reported.P.Value
+  computed <- Res$Computed
+  
   # replace 'ns' for > alpha -----------------------------------------------
   reported_p[p_comparison == "ns"] <- alpha
   p_comparison[p_comparison == "ns"] <- ">"

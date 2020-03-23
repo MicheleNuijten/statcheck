@@ -136,7 +136,8 @@ statcheck <- function(texts,
     
     # check for decision errors -------------------------------------------
     
-    Res$DecisionError <-  DecisionErrorTest(Res, alpha = alpha, 
+    Res$DecisionError <-  DecisionErrorTest(Res,
+                                            alpha = alpha, 
                                             pEqualAlphaSig = pEqualAlphaSig)
     
     # automated 1-tailed test detection -----------------------------------
