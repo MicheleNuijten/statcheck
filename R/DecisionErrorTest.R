@@ -1,83 +1,139 @@
-DecisionErrorTest <- function(Res,
+DecisionErrorTest <- function(reported_p, computed_p,
+                              test_comparison, p_comparison,
                               alpha, pEqualAlphaSig){
- 
-  test_comparison <- Res$Test.Comparison
-  p_comparison <- Res$Reported.Comparison
-  reported_p <- Res$Reported.P.Value
-  computed_p <- Res$Computed
   
   # replace 'ns' for > alpha -----------------------------------------------
   reported_p[p_comparison == "ns"] <- alpha
   p_comparison[p_comparison == "ns"] <- ">"
   
-  #-----------------------------------------------
+  # check errors for different combinations of <>= -------------------------
   
-  equalequal <- test_comparison == "=" & p_comparison == "="
-  equalsmall <- test_comparison == "=" & p_comparison == "<"
-  equalgreat <- test_comparison == "=" & p_comparison == ">"
-  
-  smallequal <- test_comparison == "<" & p_comparison == "="
-  smallsmall <- test_comparison == "<" & p_comparison == "<"
-  smallgreat <- test_comparison == "<" & p_comparison == ">"
-  
-  greatequal <- test_comparison == ">" & p_comparison == "="
-  greatsmall <- test_comparison == ">" & p_comparison == "<"
-  greatgreat <- test_comparison == ">" & p_comparison == ">"
-  
-  AllTests <- grepl("=|<|>", p_comparison)
-  
-  if (any(AllTests)) {
-    if (pEqualAlphaSig == TRUE) {
-      AllTests[equalequal] <-
-        (reported_p[equalequal] <= alpha & computed_p[equalequal]  > alpha) |
-        (reported_p[equalequal] >  alpha &  computed_p[equalequal] <= alpha)
-      AllTests[equalsmall] <-
-        reported_p[equalsmall] <= alpha & computed_p[equalsmall] > alpha
-      AllTests[equalgreat] <-
-        reported_p[equalgreat] >= alpha & computed_p[equalgreat] <= alpha
+  # treat p = alpha as significant
+  if(pEqualAlphaSig == TRUE){
+    if(test_comparison == "="){
       
+      if(p_comparison == "="){
+        
+        dec_error <- (reported_p <= alpha & computed_p > alpha) |
+          (reported_p > alpha & computed_p <= alpha)
+        
+        return(dec_error)
+        
+      } else if(p_comparison == "<"){
+        
+        dec_error <- reported_p <= alpha & computed_p > alpha
+        return(dec_error)
+        
+      } else if(p_comparison == ">"){
+        
+        dec_error <- reported_p >= alpha & computed_p <= alpha
+        return(dec_error)
+        
+      }
       
-      AllTests[smallequal] <-
-        reported_p[smallequal] <= alpha & computed_p[smallequal] >= alpha
-      AllTests[smallsmall] <-
-        reported_p[smallsmall] <= alpha & computed_p[smallsmall] >= alpha
+    } else if(test_comparison == "<"){
       
-      AllTests[greatequal] <-
-        reported_p[greatequal] > alpha & computed_p[greatequal] <= alpha
-      AllTests[greatgreat] <-
-        reported_p[greatgreat] >= alpha & computed_p[greatgreat] <= alpha
+      if(p_comparison == "="){
+        dec_error <- reported_p <= alpha & computed_p >= alpha
+        return(dec_error)
+        
+      } else if(p_comparison == "<"){
+        
+        dec_error <- reported_p <= alpha & computed_p >= alpha
+        return(dec_error)
+      } 
+      else if(p_comparison == ">"){
+        
+        dec_error <- FALSE
+        return(dec_error)
+        
+      }
       
-    } else {
-      AllTests[equalequal] <-
-        (reported_p[equalequal] <  alpha & computed_p[equalequal] >= alpha) |
-        (reported_p[equalequal] >= alpha & computed_p[equalequal] <  alpha)
-      AllTests[equalsmall] <-
-        reported_p[equalsmall] <= alpha & computed_p[equalsmall] >= alpha
-      AllTests[equalgreat] <-
-        reported_p[equalgreat] >= alpha & computed_p[equalgreat] < alpha
+    } else if(test_comparison == ">"){
       
-      
-      AllTests[smallequal] <-
-        reported_p[smallequal] < alpha & computed_p[smallequal] >= alpha
-      AllTests[smallsmall] <-
-        reported_p[smallsmall] <= alpha & computed_p[smallsmall] >= alpha
-      
-      AllTests[greatequal] <-
-        reported_p[greatequal] >= alpha & computed_p[greatequal] <= alpha
-      AllTests[greatgreat] <-
-        reported_p[greatgreat] >= alpha & computed_p[greatgreat] <= alpha
+      if(p_comparison == "="){
+        
+        dec_error <- reported_p > alpha & computed_p <= alpha
+        return(dec_error)
+        
+      } else if(p_comparison == "<"){
+        
+        dec_error <- FALSE
+        return(dec_error)
+        
+      } else if(p_comparison == ">"){
+        
+        dec_error <- reported_p >= alpha & computed_p <= alpha
+        return(dec_error)
+        
+      }
       
     }
     
-    # these combinations of < & > are logically always correct
-    AllTests[smallgreat] <- FALSE
-    AllTests[greatsmall] <- FALSE
+    return(NA)
+    
+    # treat p = alpha as significant
+  } else if (pEqualAlphaSig == FALSE){
+    
+    if(test_comparison == "="){
+      
+      if(p_comparison == "="){
+        
+        dec_error <- (reported_p < alpha & computed_p >= alpha) |
+          (reported_p >= alpha & computed_p < alpha)
+        return(dec_error)
+        
+      } else if(p_comparison == "<"){
+        
+        dec_error <- reported_p <= alpha & computed_p >= alpha
+        return(dec_error)
+        
+      } else if(p_comparison == ">"){
+        
+        dec_error <- reported_p >= alpha & computed_p < alpha
+        return(dec_error)
+        
+      }
+      
+    } else if(test_comparison == "<"){
+      
+      if(p_comparison == "="){
+        dec_error <- reported_p < alpha & computed_p >= alpha
+        return(dec_error)
+        
+      } else if(p_comparison == "<"){
+        
+        dec_error <- reported_p <= alpha & computed_p >= alpha
+        return(dec_error)
+      } 
+      else if(p_comparison == ">"){
+        
+        dec_error <- FALSE
+        return(dec_error)
+        
+      }
+      
+    } else if(test_comparison == ">"){
+      
+      if(p_comparison == "="){
+        
+        dec_error <- reported_p >= alpha & computed_p <= alpha
+        return(dec_error)
+        
+      } else if(p_comparison == "<"){
+        
+        dec_error <- FALSE
+        return(dec_error)
+        
+      } else if(p_comparison == ">"){
+        
+        dec_error <- reported_p >= alpha & computed_p <= alpha
+        return(dec_error)
+        
+      }
+      
+    }
+    
+    return(NA)
   }
-  
-  
-  AllTests <- as.logical(AllTests)
-  
-  #-----------------------------------------------
-  
-  return(AllTests)
 }

@@ -114,9 +114,10 @@ statcheck <- function(texts,
                                 two_tailed = two_tailed)
     }
     
-    # check for errors --------------------------------------------------
+    # check for errors & decision errors -------------------------------------
     
     Res$Error <- rep(NA, nrow(Res))
+    Res$DecisionError <- rep(NA, nrow(Res))
     
     for(i in seq_len(nrow(Res))){
       Res$Error[i] <- ErrorTest(reported_p = Res$Reported.P.Value[i], 
@@ -132,14 +133,21 @@ statcheck <- function(texts,
                                 test_dec = Res$testdec[i], 
                                 alpha = alpha,
                                 pZeroError = pZeroError)
-    }
-    
-    # check for decision errors -------------------------------------------
-    
-    Res$DecisionError <-  DecisionErrorTest(Res,
-                                            alpha = alpha, 
-                                            pEqualAlphaSig = pEqualAlphaSig)
-    
+      
+      if(Res$Error[i] == FALSE){
+        # a result can only be a decision error if it is also an erro
+        Res$DecisionError[i] <- FALSE
+        
+      } else if(Res$Error[i] == TRUE) {
+        
+        Res$DecisionError[i] <-  DecisionErrorTest(reported_p = Res$Reported.P.Value[i], 
+                                                   computed_p = Res$Computed[i],
+                                                   test_comparison = Res$Test.Comparison[i],
+                                                   p_comparison = Res$Reported.Comparison[i],
+                                                   alpha = alpha, 
+                                                   pEqualAlphaSig = pEqualAlphaSig)
+      }
+    } 
     # automated 1-tailed test detection -----------------------------------
     
     if(OneTailedTxt == TRUE){
@@ -150,13 +158,19 @@ statcheck <- function(texts,
       Res_check1tail <- Res[Res$OneTailedInTxt == TRUE & Res$Error == TRUE, ]
       
       if(nrow(Res_check1tail) > 0){
-        # for this subset, calculate 1-tailed p-values
         
+        # for this subset, calculate 1-tailed p-values ----------------------
+        computed_p <- rep(NA, nrow(Res_check1tail))
         low_p <- rep(NA, nrow(Res_check1tail))
         up_p <- rep(NA, nrow(Res_check1tail))
         Res_check1tail$Error <- rep(NA, nrow(Res_check1tail))
         
         for(i in seq_len(nrow(Res_check1tail))){
+          computed_p[i] <- compute_p(test_type = Res_check1tail$Statistic[i],
+                               test_stat = Res_check1tail$Value[i],
+                               df1 = Res_check1tail$df1[i],
+                               df2 = Res_check1tail$df2[i],
+                               two_tailed = FALSE)
           
           up_p[i] <- compute_p(test_type = Res_check1tail$Statistic[i],
                                test_stat = low_stat[i],
@@ -170,7 +184,7 @@ statcheck <- function(texts,
                                 df2 = Res_check1tail$df2[i],
                                 two_tailed = FALSE)
           
-          # check whether result would still be an error if 1-tailed
+          # check whether result would still be an error if 1-tailed ---------
           Res_check1tail$Error[i] <- 
             ErrorTest(reported_p = Res_check1tail$Reported.P.Value[i], 
                       test_type = Res_check1tail$Statistic[i], 
@@ -185,31 +199,34 @@ statcheck <- function(texts,
                       test_dec = Res_check1tail$testdec[i], 
                       alpha = alpha,
                       pZeroError = pZeroError)
+          
+          if(Res_check1tail$Error[i] == FALSE){
+            # a result can only be a decision error if it is also an erro
+            Res_check1tail$DecisionError[i] <- FALSE
+            
+          } else if(Res_check1tail$Error[i] == TRUE) {
+            
+            Res_check1tail$DecisionError[i] <-  
+              DecisionErrorTest(reported_p = Res_check1tail$Reported.P.Value[i], 
+                                computed_p = Res_check1tail$Computed[i],
+                                test_comparison = Res_check1tail$Test.Comparison[i],
+                                p_comparison = Res_check1tail$Reported.Comparison[i],
+                                alpha = alpha, 
+                                pEqualAlphaSig = pEqualAlphaSig)
+          }
         }
         
         Res[Res$OneTailedInTxt == TRUE & Res$Error == TRUE, ]$Error <- Res_check1tail$Error
+        Res[Res$OneTailedInTxt == TRUE & Res$Error == TRUE, ]$DecisionError <- Res_check1tail$DecisionError
       }
       
     }
-    
     
     ### print messages ----------------------------------------------------
     
     # check if there would also be a decision error if alpha=.01 or .1
     check_alpha_levels(Res, 
                        pEqualAlphaSig = pEqualAlphaSig, messages = messages)
-    
-    
-    
-    ###---------------------------------------------------------------------
-    
-    # p values that are not an error can also not be a decision error
-    # this happens sometimes when reported= "p=.05" and e.g. computed=.052...
-    # this should be counted as correct
-    
-    NoErrorDecisionError <-
-      Res$Error == FALSE & Res$DecisionError == TRUE
-    Res$DecisionError[NoErrorDecisionError] <- FALSE
     
     ###---------------------------------------------------------------------
     
