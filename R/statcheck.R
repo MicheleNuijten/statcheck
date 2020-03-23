@@ -130,8 +130,14 @@ statcheck <- function(texts,
                                 test_comparison = Res$Test.Comparison[i], 
                                 p_dec = Res$dec[i], 
                                 test_dec = Res$testdec[i], 
-                                alpha = alpha)
+                                alpha = alpha,
+                                pZeroError = pZeroError)
     }
+    
+    # check for decision errors -------------------------------------------
+    
+    Res$DecisionError <-  DecisionErrorTest(Res, alpha = alpha, 
+                                            pEqualAlphaSig = pEqualAlphaSig)
     
     # automated 1-tailed test detection -----------------------------------
     
@@ -176,7 +182,8 @@ statcheck <- function(texts,
                       test_comparison = Res_check1tail$Test.Comparison[i], 
                       p_dec = Res_check1tail$dec[i], 
                       test_dec = Res_check1tail$testdec[i], 
-                      alpha = alpha)
+                      alpha = alpha,
+                      pZeroError = pZeroError)
         }
         
         Res[Res$OneTailedInTxt == TRUE & Res$Error == TRUE, ]$Error <- Res_check1tail$Error
@@ -184,10 +191,6 @@ statcheck <- function(texts,
       
     }
     
-    # check for decision errors -------------------------------------------
-    
-    Res$DecisionError <-  DecisionErrorTest(Res, alpha = alpha, 
-                                            pEqualAlphaSig = pEqualAlphaSig)
     
     ### print messages ----------------------------------------------------
     
