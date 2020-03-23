@@ -1,8 +1,5 @@
-DecisionErrorTest <- function(reported_p, test_type, test_stat,
-                              low_p, up_p,
-                              df1, df2,
-                              p_comparison, test_comparison, 
-                              p_dec, test_dec, 
+DecisionErrorTest <- function(reported_p, computed_p,
+                              p_comparison, test_comparison,
                               alpha, pEqualAlphaSig){
  
   # replace 'ns' for > alpha -----------------------------------------------
@@ -11,19 +8,19 @@ DecisionErrorTest <- function(reported_p, test_type, test_stat,
   
   #-----------------------------------------------
   
-  equalequal <- testcomp == "=" & comparison == "="
-  equalsmall <- testcomp == "=" & comparison == "<"
-  equalgreat <- testcomp == "=" & comparison == ">"
+  equalequal <- test_comparison == "=" & p_comparison == "="
+  equalsmall <- test_comparison == "=" & p_comparison == "<"
+  equalgreat <- test_comparison == "=" & p_comparison == ">"
   
-  smallequal <- testcomp == "<" & comparison == "="
-  smallsmall <- testcomp == "<" & comparison == "<"
-  smallgreat <- testcomp == "<" & comparison == ">"
+  smallequal <- test_comparison == "<" & p_comparison == "="
+  smallsmall <- test_comparison == "<" & p_comparison == "<"
+  smallgreat <- test_comparison == "<" & p_comparison == ">"
   
-  greatequal <- testcomp == ">" & comparison == "="
-  greatsmall <- testcomp == ">" & comparison == "<"
-  greatgreat <- testcomp == ">" & comparison == ">"
+  greatequal <- test_comparison == ">" & p_comparison == "="
+  greatsmall <- test_comparison == ">" & p_comparison == "<"
+  greatgreat <- test_comparison == ">" & p_comparison == ">"
   
-  AllTests <- grepl("=|<|>", comparison)
+  AllTests <- grepl("=|<|>", p_comparison)
   
   if (any(AllTests)) {
     if (pEqualAlphaSig == TRUE) {
