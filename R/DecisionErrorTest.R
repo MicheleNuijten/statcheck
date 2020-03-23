@@ -51,7 +51,7 @@ DecisionErrorTest <- function(reported_p, test_type, test_stat,
         (reported[equalequal] <  alpha & computed[equalequal] >= alpha) |
         (reported[equalequal] >= alpha & computed[equalequal] <  alpha)
       AllTests[equalsmall] <-
-        reported[equalsmall] < alpha & computed[equalsmall] >= alpha
+        reported[equalsmall] <= alpha & computed[equalsmall] >= alpha
       AllTests[equalgreat] <-
         reported[equalgreat] >= alpha & computed[equalgreat] < alpha
       
@@ -62,9 +62,9 @@ DecisionErrorTest <- function(reported_p, test_type, test_stat,
         reported[smallsmall] <= alpha & computed[smallsmall] >= alpha
       
       AllTests[greatequal] <-
-        reported[greatequal] >= alpha & computed[greatequal] < alpha
+        reported[greatequal] >= alpha & computed[greatequal] <= alpha
       AllTests[greatgreat] <-
-        reported[greatgreat] >= alpha & computed[greatgreat] < alpha
+        reported[greatgreat] >= alpha & computed[greatgreat] <= alpha
       
     }
     
