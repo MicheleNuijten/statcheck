@@ -17,7 +17,7 @@ ErrorTest <- function(reported_p, test_type, test_stat,
     return(error)
   }
   
-  # check errors for exact test statistics ---------------------------------
+  # check errors for different combinations of <>= -------------------------
   
   if(test_comparison == "="){
     
