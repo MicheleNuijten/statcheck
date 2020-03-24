@@ -230,6 +230,10 @@ statcheck <- function(texts,
       new_DecisionErrors <- Res$DecisionError
       new_DecisionErrors[upForCorrection] <- DecisionErrorAfterCorrection
       
+      # And we also save the recomputed p-values
+      new_pvalues <- Res$Computed
+      new_pvalues[upForCorrection] <- computed_p
+      
       # Now, we can determine the index of cases where something has changed
       gotCorrected <- Res$Error != new_Errors
       
@@ -240,9 +244,9 @@ statcheck <- function(texts,
       Res$Error[gotCorrected] <- new_Errors[gotCorrected]
       Res$DecisionError[gotCorrected] <- new_DecisionErrors[gotCorrected]
       
-      # Here, we will also overwrite the two-tailed p-value with the one-tailed one
-      # Res$Computed[gotCorrected] <- Res$Computed[gotCorrected] / 2
-       
+      # Also overwrite the two-tailed p-values with the one-tailed ones
+      Res$Computed[gotCorrected] <- new_pvalues[gotCorrected]
+
     }
     
     ###---------------------------------------------------------------------

@@ -90,6 +90,11 @@ test_that("automated one-tailed test detection works", {
   expect_false(statcheck(txt3, messages = FALSE, OneTailedTxt = TRUE)$Error)
   expect_false(statcheck(txt4, messages = FALSE, OneTailedTxt = TRUE)$Error)
   expect_false(statcheck(txt5, messages = FALSE, OneTailedTxt = TRUE)$Error)
+  
+  # check that p-values were corrected in these cases
+  p_1tail <- pt(2.20, 28, lower.tail = FALSE)
+  expect_equal(statcheck(c(txt3, txt4, txt5), messages = FALSE, 
+                         OneTailedTxt = TRUE)$Computed, rep(p_1tail, 3))
 })
 
 # pZeroError: check if p = .000 is counted as an inconsistency or not
