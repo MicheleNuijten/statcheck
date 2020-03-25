@@ -73,44 +73,25 @@ statcheck <- function(texts,
   ###---------------------------------------------------------------------
   
   if (nrow(Res) > 0) {
-    # compute upper and lower bound of test statistic -----------------------
-    # in order to be able to calculate range of correct p-values 
-    
-    Res$low_stat <- Res$Value - (.5 / 10 ^ Res$testdec)
-    Res$up_stat <- Res$Value + (.5 / 10 ^ Res$testdec)
     
     # compute p-values -----------------------------------------------------
     
     Res$Computed <- rep(NA, nrow(Res))
-    Res$up_p <- rep(NA, nrow(Res))
-    Res$low_p <- rep(NA, nrow(Res))
+    
+    # if indicated, count all tests as one-sided
+    if (OneTailedTests == TRUE) {
+      two_tailed <- FALSE
+    } else {
+      two_tailed <- TRUE
+    }
     
     for(i in seq_len(nrow(Res))){
-      
-      # if indicated, count all tests as one-sided
-      if (OneTailedTests == TRUE) {
-        two_tailed <- FALSE
-      } else {
-        two_tailed <- TRUE
-      }
       
       Res$Computed[i] <- compute_p(test_type = Res$Statistic[i],
                                    test_stat = Res$Value[i],
                                    df1 = Res$df1[i],
                                    df2 = Res$df2[i],
                                    two_tailed = two_tailed)
-      
-      Res$up_p[i] <- compute_p(test_type = Res$Statistic[i],
-                               test_stat = Res$low_stat[i],
-                               df1 = Res$df1[i],
-                               df2 = Res$df2[i],
-                               two_tailed = two_tailed)
-      
-      Res$low_p[i] <- compute_p(test_type = Res$Statistic[i],
-                                test_stat = Res$up_stat[i],
-                                df1 = Res$df1[i],
-                                df2 = Res$df2[i],
-                                two_tailed = two_tailed)
     }
     
     # check for errors & decision errors -------------------------------------
@@ -122,14 +103,13 @@ statcheck <- function(texts,
       Res$Error[i] <- ErrorTest(reported_p = Res$Reported.P.Value[i], 
                                 test_type = Res$Statistic[i], 
                                 test_stat = Res$Value[i],
-                                low_p = Res$low_p[i],
-                                up_p = Res$up_p[i],
                                 df1 = Res$df1[i], 
                                 df2 = Res$df2[i],
                                 p_comparison = Res$Reported.Comparison[i], 
                                 test_comparison = Res$Test.Comparison[i], 
                                 p_dec = Res$dec[i], 
-                                test_dec = Res$testdec[i], 
+                                test_dec = Res$testdec[i],
+                                two_tailed = two_tailed,
                                 alpha = alpha,
                                 pZeroError = pZeroError)
       
@@ -164,8 +144,6 @@ statcheck <- function(texts,
         
         # for this subset, calculate 1-tailed p-values 
         computed_p                   <- rep(NA, nrow(Res_check1tail))
-        low_p                        <- rep(NA, nrow(Res_check1tail))
-        up_p                         <- rep(NA, nrow(Res_check1tail))
         ErrorAfterCorrection         <- rep(NA, nrow(Res_check1tail))
         DecisionErrorAfterCorrection <- rep(NA, nrow(Res_check1tail))
         
@@ -176,31 +154,18 @@ statcheck <- function(texts,
                                      df2        = Res_check1tail$df2[i],
                                      two_tailed = FALSE)
           
-          up_p[i] <- compute_p(test_type  = Res_check1tail$Statistic[i],
-                               test_stat  = Res$low_stat[i],
-                               df1        = Res_check1tail$df1[i],
-                               df2        = Res_check1tail$df2[i],
-                               two_tailed = FALSE)
-          
-          low_p[i] <- compute_p(test_type  = Res_check1tail$Statistic[i],
-                                test_stat  = Res$up_stat[i],
-                                df1        = Res_check1tail$df1[i],
-                                df2        = Res_check1tail$df2[i],
-                                two_tailed = FALSE)
-          
           # check whether result would still be an error if 1-tailed
           ErrorAfterCorrection[i] <- 
             ErrorTest(reported_p      = Res_check1tail$Reported.P.Value[i], 
                       test_type       = Res_check1tail$Statistic[i], 
                       test_stat       = Res_check1tail$Value[i],
-                      low_p           = low_p[i],
-                      up_p            = up_p[i],
                       df1             = Res_check1tail$df1[i], 
                       df2             = Res_check1tail$df2[i],
                       p_comparison    = Res_check1tail$Reported.Comparison[i], 
                       test_comparison = Res_check1tail$Test.Comparison[i], 
                       p_dec           = Res_check1tail$dec[i], 
                       test_dec        = Res_check1tail$testdec[i], 
+                      two_tailed      = FALSE,
                       alpha           = alpha,
                       pZeroError      = pZeroError)
           
