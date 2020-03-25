@@ -74,10 +74,6 @@ statcheck <- function(texts,
   
   if (nrow(Res) > 0) {
     
-    # compute p-values -----------------------------------------------------
-    
-    Res$Computed <- rep(NA, nrow(Res))
-    
     # if indicated, count all tests as one-sided
     if (OneTailedTests == TRUE) {
       two_tailed <- FALSE
@@ -85,133 +81,36 @@ statcheck <- function(texts,
       two_tailed <- TRUE
     }
     
-    for(i in seq_len(nrow(Res))){
-      
-      Res$Computed[i] <- compute_p(test_type = Res$Statistic[i],
-                                   test_stat = Res$Value[i],
-                                   df1 = Res$df1[i],
-                                   df2 = Res$df2[i],
-                                   two_tailed = two_tailed)
-    }
-    
-    # check for errors & decision errors -------------------------------------
-    
+    # create empty variables to fill out during the loop
+    Res$Computed <- rep(NA, nrow(Res))
     Res$Error <- rep(NA, nrow(Res))
     Res$DecisionError <- rep(NA, nrow(Res))
     
+    # row by row, process the extracted statistics in Res. Specifically,
+    # compute the p-value, check if the result is an error and a decision error,
+    # and if indicated in the options, check & correct for 1-tailed tests
     for(i in seq_len(nrow(Res))){
-      Res$Error[i] <- ErrorTest(reported_p = Res$Reported.P.Value[i], 
-                                test_type = Res$Statistic[i], 
-                                test_stat = Res$Value[i],
-                                df1 = Res$df1[i], 
-                                df2 = Res$df2[i],
-                                p_comparison = Res$Reported.Comparison[i], 
-                                test_comparison = Res$Test.Comparison[i], 
-                                p_dec = Res$dec[i], 
-                                test_dec = Res$testdec[i],
-                                two_tailed = two_tailed,
-                                alpha = alpha,
-                                pZeroError = pZeroError)
-      
-      if(Res$Error[i] == FALSE){
-        # a result can only be a decision error if it is also an erro
-        Res$DecisionError[i] <- FALSE
-        
-      } else if(Res$Error[i] == TRUE) {
-        
-        Res$DecisionError[i] <-  DecisionErrorTest(reported_p = Res$Reported.P.Value[i], 
-                                                   computed_p = Res$Computed[i],
-                                                   test_comparison = Res$Test.Comparison[i],
-                                                   p_comparison = Res$Reported.Comparison[i],
-                                                   alpha = alpha, 
-                                                   pEqualAlphaSig = pEqualAlphaSig)
-      }
-    } 
-    # automated 1-tailed test detection -----------------------------------
     
-    if(OneTailedTxt == TRUE){
+      result <- process_stats(test_type = Res$Statistic[i],
+                              test_stat = Res$Value[i],
+                              df1 = Res$df1[i], 
+                              df2 = Res$df2[i],
+                              reported_p = Res$Reported.P.Value[i],
+                              p_comparison = Res$Reported.Comparison[i],
+                              test_comparison = Res$Test.Comparison[i],
+                              p_dec = Res$dec[i],
+                              test_dec = Res$testdec[i],
+                              OneTailedInTxt = Res$OneTailedInTxt[i],
+                              # options:
+                              two_tailed = two_tailed,
+                              alpha = alpha,
+                              pZeroError = pZeroError,
+                              pEqualAlphaSig = pEqualAlphaSig,
+                              OneTailedTxt = OneTailedTxt)
       
-      # select only results where the phrase "one-tailed", "one-sided" or
-      # "directional" was mentioned in text, and that were an error when
-      # we assumed two-tailed tests
-      upForCorrection <- Res$Error & Res$OneTailedInTxt
-      
-      # only start correction procedure if at least 1 result was selected
-      if (sum(upForCorrection) > 0) {
-        
-        # transport relevant cases to separate data frame
-        Res_check1tail <- Res[upForCorrection, ]
-        
-        # for this subset, calculate 1-tailed p-values 
-        computed_p                   <- rep(NA, nrow(Res_check1tail))
-        ErrorAfterCorrection         <- rep(NA, nrow(Res_check1tail))
-        DecisionErrorAfterCorrection <- rep(NA, nrow(Res_check1tail))
-        
-        for(i in seq_len(nrow(Res_check1tail))){
-          computed_p[i] <- compute_p(test_type  = Res_check1tail$Statistic[i],
-                                     test_stat  = Res_check1tail$Value[i],
-                                     df1        = Res_check1tail$df1[i],
-                                     df2        = Res_check1tail$df2[i],
-                                     two_tailed = FALSE)
-          
-          # check whether result would still be an error if 1-tailed
-          ErrorAfterCorrection[i] <- 
-            ErrorTest(reported_p      = Res_check1tail$Reported.P.Value[i], 
-                      test_type       = Res_check1tail$Statistic[i], 
-                      test_stat       = Res_check1tail$Value[i],
-                      df1             = Res_check1tail$df1[i], 
-                      df2             = Res_check1tail$df2[i],
-                      p_comparison    = Res_check1tail$Reported.Comparison[i], 
-                      test_comparison = Res_check1tail$Test.Comparison[i], 
-                      p_dec           = Res_check1tail$dec[i], 
-                      test_dec        = Res_check1tail$testdec[i], 
-                      two_tailed      = FALSE,
-                      alpha           = alpha,
-                      pZeroError      = pZeroError)
-          
-          # only if a result is still an Error after correction, we will 
-          # determine if a result would also be a DecisionError. 
-          
-          DecisionErrorAfterCorrection[i] <- 
-            ifelse(
-            test = ErrorAfterCorrection[i], 
-            yes = DecisionErrorTest(
-              reported_p = Res_check1tail$Reported.P.Value[i], 
-              computed_p = Res_check1tail$Computed[i],
-              test_comparison = Res_check1tail$Test.Comparison[i],
-              p_comparison = Res_check1tail$Reported.Comparison[i],
-              alpha = alpha, 
-              pEqualAlphaSig = pEqualAlphaSig),
-            no = FALSE)
-        }
-      
-      # Now, we'll make a vector where we overwrite the original Errors that 
-      # were corrected with the actual corrected Error values
-      new_Errors <- Res$Error
-      new_Errors[upForCorrection] <- ErrorAfterCorrection
-      
-      # We do the same for the DecisionErrors
-      new_DecisionErrors <- Res$DecisionError
-      new_DecisionErrors[upForCorrection] <- DecisionErrorAfterCorrection
-      
-      # And we also save the recomputed p-values
-      new_pvalues <- Res$Computed
-      new_pvalues[upForCorrection] <- computed_p
-      
-      # Now, we can determine the index of cases where something has changed
-      gotCorrected <- Res$Error != new_Errors
-      
-      # We want to add this as a column to the data frame
-      Res$isOneTailedCorrected <- gotCorrected
-      
-      # In these cases, we also overwrite the corrected Errors & DecisionErrors
-      Res$Error[gotCorrected] <- new_Errors[gotCorrected]
-      Res$DecisionError[gotCorrected] <- new_DecisionErrors[gotCorrected]
-      
-      # Also overwrite the two-tailed p-values with the one-tailed ones
-      Res$Computed[gotCorrected] <- new_pvalues[gotCorrected]
-    
-      }
+      Res$Computed[i] <- result$computed_p
+      Res$Error[i] <- result$error
+      Res$DecisionError[i] <- result$decision_error
     }
     
     ###---------------------------------------------------------------------
@@ -221,7 +120,6 @@ statcheck <- function(texts,
     Res$APAfactor <- calc_APA_factor(pRes, Res)
     
     ###---------------------------------------------------------------------
-    
     
     # final data frame
     Res <- data.frame(
