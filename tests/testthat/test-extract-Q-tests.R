@@ -55,3 +55,16 @@ test_that("different types of Q-tests are correctly parsed", {
   expect_equal(nrow(result), 6)
   expect_equal(as.vector(result$Statistic), c(rep("Qw", 3), rep("Qb", 3)))
 })
+
+# test if the following 'incorrect' Q-tests are not retrieved ----------------
+test_that("stats that only look like Q-tests are not retrieved", {
+  txt1 <- "q(2) = 2.2, p = .03" # lower case q is a different test
+  txt2 <- "Qs(2) = 2.2, p = .03"
+  
+  expect_output(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
+  
+})
+
+
+
+
