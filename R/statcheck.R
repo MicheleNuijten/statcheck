@@ -219,8 +219,7 @@ statcheck <- function(texts,
               pEqualAlphaSig = pEqualAlphaSig),
             no = FALSE)
         }
-      }
-     
+      
       # Now, we'll make a vector where we overwrite the original Errors that 
       # were corrected with the actual corrected Error values
       new_Errors <- Res$Error
@@ -246,7 +245,8 @@ statcheck <- function(texts,
       
       # Also overwrite the two-tailed p-values with the one-tailed ones
       Res$Computed[gotCorrected] <- new_pvalues[gotCorrected]
-
+    
+      }
     }
     
     ###---------------------------------------------------------------------
