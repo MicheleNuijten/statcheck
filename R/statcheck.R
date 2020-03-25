@@ -121,24 +121,11 @@ statcheck <- function(texts,
     
     ###---------------------------------------------------------------------
     
-    # final data frame
-    Res <- data.frame(
-      Source = Res$Source,
-      Statistic = Res$Statistic,
-      df1 = Res$df1,
-      df2 = Res$df2,
-      Test.Comparison = Res$Test.Comparison,
-      Value = Res$Value,
-      Reported.Comparison = Res$Reported.Comparison,
-      Reported.P.Value = Res$Reported.P.Value,
-      Computed = Res$Computed,
-      Raw = Res$Raw,
-      Error = Res$Error,
-      DecisionError = Res$DecisionError,
-      # OneTail = Res$OneTail,
-      OneTailedInTxt = Res$OneTailedInTxt,
-      APAfactor = Res$APAfactor
-    )
+    # select & reorder columns for final data frame
+    Res <- Res[ , c("Source", "Statistic", "df1", "df2", "Test.Comparison",
+                    "Value", "Reported.Comparison", "Reported.P.Value",
+                    "Computed", "Raw", "Error", "DecisionError", 
+                    "OneTailedInTxt", "APAfactor")]
   }
   
   # Return ------------------------------------------------------------------
