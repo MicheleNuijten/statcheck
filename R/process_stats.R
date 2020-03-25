@@ -13,7 +13,8 @@ process_stats <- function(test_type,
                           alpha,
                           pZeroError,
                           pEqualAlphaSig,
-                          OneTailedTxt){
+                          OneTailedTxt,
+                          OneTailedTests){
   
   # compute p-value ----------------------------------------------------------
   computed_p <- compute_p(test_type = test_type,
@@ -59,7 +60,9 @@ process_stats <- function(test_type,
   # if the phrase one-tailed/one-sided/directional is in the full text,
   # AND if the reported p-value would have been correct if it was a one-
   # tailed test, classify the result as consistent
-  if(OneTailedTxt == TRUE){
+  # don't apply this correction if OneTailedTests == FALSE, because this already
+  # forces statcheck to treat all results as one-tailed tests
+  if(OneTailedTxt == TRUE & OneTailedTests == FALSE){
     
     # select only results where the phrase "one-tailed", "one-sided" or
     # "directional" was mentioned in text, and that were an error when

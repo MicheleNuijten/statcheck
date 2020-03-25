@@ -8,43 +8,62 @@ statcheck <- function(texts,
                       AllPValues = FALSE,
                       messages = TRUE){
   
-  # 
+  # We need empty data frames to store extracted statistics in
+  # One for NHST results (Res) and one for p-values (pRes)
   Res <- data.frame(NULL)
   pRes <- data.frame(NULL)
   
+  # to indicate where the statistics came from, we need a name for the input
+  # texts. In some cases, this is the name of the file the text came from, but
+  # if the text has no name, number them
   if (is.null(names(texts))){
-    names(texts) <-  1:length(texts)
+    names(texts) <-  seq_along(texts)
   }
   
-  # start progress bar
+  # start progress bar. If the argument messages == FALSE, don't print this 
+  # progress bar. This is mainly useful for the unit tests; otherwise hundreds
+  # of progress bars would be printed during testing and that makes the test 
+  # results hard to read
   if(messages == TRUE){
     message("Extracting statistics...")
     pb <- txtProgressBar(max = length(text), style = 3)
   }
   
+  # for each text in the vector of input texts, extract all p-values and all
+  # NHST results
   for (i in seq_along(texts)) {
     txt <- texts[i]
     
-    # p-values ------------------------------------------
+    # extract p-values ------------------------------------------
     
-    # extract all p values to calculate the ratio (statcheck results)/(total # of p values)
+    # extract all p values. This is based on a pretty rough regular expression 
+    # that will extract anything that resembles p =<> .... We need this info 
+    # later on to calculate the APA factor: the ratio (statcheck results)/
+    # (total # of p values). It is also possible to let statcheck return this
+    # dataframe instead of the data frame with NHST results.
     pvalues <- extract_pvals(txt)
     
-    # append and close
+    # append and close:
+    # in each repetition of the loop, the extracted p-values are appended 
+    # to the existing pRes data frame, so it grows in each step
     if(nrow(pvalues) > 0){
       pvalues$Source <- names(txt)
       
       pRes <- rbind(pRes, pvalues)
     }
     
+    # after appending the pvalues dataframe to the main pRes dataframe,
+    # the temporary dataframe pvalues can be removed. 
     rm(pvalues)
     
-    # NHST results ------------------------------------------
+    # extract NHST results ------------------------------------------
     
-    # extract all NHST results
+    # extract all NHST results. This function scrapes the text for all APA 
+    # reported NHST results and parses it so that the separate elements are
+    # returned in one large dataframe
     nhst <- extract_stats(txt)
     
-    # append and close
+    # append and close: same logic as for the pvalues dataframe above
     if(nrow(nhst) > 0){
       
       nhst$Source <- names(txt)
@@ -55,13 +74,14 @@ statcheck <- function(texts,
     
     rm(nhst)
     
+    # update the progress bar
     if(messages == TRUE){
       setTxtProgressBar(pb, i)
     }
     
   }
   
-  # close progressbar
+  # close progress bar
   if(messages == TRUE){
     close(pb)
   }
@@ -75,7 +95,11 @@ statcheck <- function(texts,
   
   if (nrow(Res) > 0) {
     
-    # if indicated, count all tests as one-sided
+    # If the argument OneTailedTests == TRUE, it forces statcheck to treat 
+    # every encountered NHST result as a one-tailed test. Note: this is not the
+    # same as the automated 1-tailed test detection (switched on with the 
+    # argument: OneTailedTxt). The latter works more subtly (see comments in 
+    # process_stats()). 
     if (OneTailedTests == TRUE) {
       two_tailed <- FALSE
     } else {
@@ -107,7 +131,8 @@ statcheck <- function(texts,
                               alpha = alpha,
                               pZeroError = pZeroError,
                               pEqualAlphaSig = pEqualAlphaSig,
-                              OneTailedTxt = OneTailedTxt)
+                              OneTailedTxt = OneTailedTxt,
+                              OneTailedTests = OneTailedTests)
       
       Res$Computed[i] <- result$computed_p
       Res$Error[i] <- result$error
@@ -116,7 +141,8 @@ statcheck <- function(texts,
     
     ###---------------------------------------------------------------------
     
-    # APAfactor: proportion of APA results (that statcheck reads) of total number of p values
+    # APAfactor: proportion of APA results (that statcheck reads) 
+    # in total number of p values
     
     Res$APAfactor <- calc_APA_factor(pRes, Res)
     
