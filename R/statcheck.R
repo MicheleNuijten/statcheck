@@ -8,6 +8,7 @@ statcheck <- function(texts,
                       AllPValues = FALSE,
                       messages = TRUE){
   
+  # 
   Res <- data.frame(NULL)
   pRes <- data.frame(NULL)
   
@@ -21,7 +22,7 @@ statcheck <- function(texts,
     pb <- txtProgressBar(max = length(text), style = 3)
   }
   
-  for (i in 1:length(texts)) {
+  for (i in seq_along(texts)) {
     txt <- texts[i]
     
     # p-values ------------------------------------------
