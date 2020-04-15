@@ -41,6 +41,16 @@ test_that("variations in spelling the Greek letter chi are picked up", {
   expect_equal(nrow(result), 3)
 })
 
+# variation in degrees of freedom
+test_that("different variations in df of chi2 are parsed correctly", {
+  txt1 <- "chi2(28, N = 129) = 2.2, p = .03"
+  
+  result <- statcheck(txt1, messages = FALSE)
+  
+  expect_equal(nrow(result), 1)
+  
+})
+
 # variation in spacing
 test_that("chi2-tests with different spacing are retrieved from text", {
   txt1 <- " chi2 ( 28 ) = 2.20 , p = .03"
