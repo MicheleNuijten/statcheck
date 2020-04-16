@@ -56,22 +56,19 @@ extract_stats <- function(txt, stat){
     
     # extract degrees of freedom
     dfs <- extract_df(raw = nhst_raw[i],
-                      pattern = RGX_DF,
                       test_type = test_type[i])
     
     df_result <- rbind(df_result, dfs)
     
     # extract test comparison and test value 
     
-    test <- extract_test_stats(raw = nhst_raw[i],
-                               pattern = RGX_TEST_VALUE)
+    test <- extract_test_stats(raw = nhst_raw[i])
     
     test_stats <- rbind(test_stats, test)
     
     # extract p-comparison and p-value
     
-    p <- extract_p_value(raw = nhst_raw[i],
-                         pattern = RGX_P_NS)
+    p <- extract_p_value(raw = nhst_raw[i])
     
     pvals <- rbind(pvals, p)
     

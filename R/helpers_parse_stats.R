@@ -31,10 +31,10 @@ extract_pattern <- function(txt, pattern) {
 
 # function to extract dfs from a raw nhst result -------------------------------
 
-extract_df <- function(raw, pattern, test_type){
+extract_df <- function(raw, test_type){
   
   df_raw <- extract_pattern(txt = raw,
-                            pattern = pattern)[[1]]
+                            pattern = RGX_DF)[[1]]
   
   # remove parentheses to only keep numbers
   df <- gsub("\\(|\\)", "", df_raw)
@@ -85,11 +85,8 @@ extract_df <- function(raw, pattern, test_type){
 
 remove_1000_sep <- function(raw){
   
-  # this regex matches commas flanked by digits on both sides
-  regex_thousands_sep <- "(?<=\\d),(?=\\d+)"
-  
   # replace all matches in the raw nhst results with nothing
-  output <- gsub(pattern = regex_thousands_sep,
+  output <- gsub(pattern = RGX_1000_SEP,
                  replacement = "", 
                  x = raw,
                  perl = TRUE) # for the lookaheads & lookbehinds in the regex
@@ -100,19 +97,17 @@ remove_1000_sep <- function(raw){
 
 # function to extract test-values and test comparisons -------------------------
 
-extract_test_stats <- function(raw, pattern){
-  
-  regex_comp <- "[<>=]"
+extract_test_stats <- function(raw){
   
   test_raw <- extract_pattern(txt = raw,
-                              pattern = pattern)
+                              pattern = RGX_TEST_VALUE)
   
   # extract test comparison
   test_comp <- extract_pattern(txt = test_raw,
-                               pattern = regex_comp)
+                               pattern = RGX_COMP)
   
   # remove test comparison to only keep numbers
-  test_value <- gsub(regex_comp, "", test_raw)
+  test_value <- gsub(RGX_COMP, "", test_raw)
   
   # remove thousand separators
   test_value <- remove_1000_sep(test_value)
@@ -130,14 +125,12 @@ extract_test_stats <- function(raw, pattern){
 
 # function to extract p-values and p comparisons -------------------------------
 
-extract_p_value <- function(raw, pattern){
-  
-  regex_comp <- "[<>=]"
+extract_p_value <- function(raw){
   
   p_raw <- extract_pattern(txt = raw,
-                           pattern = pattern)
+                           pattern = RGX_P_NS)
   
-  if(grepl(ns, p_raw, ignore.case = FALSE)){
+  if(grepl(RGX_NS, p_raw, ignore.case = FALSE)){
     
     p_comp <- "ns"
     p_value <- NA
@@ -146,12 +139,12 @@ extract_p_value <- function(raw, pattern){
     
     # extract p-comparison
     p_comp <- extract_pattern(txt = p_raw,
-                              pattern = regex_comp)
+                              pattern = RGX_COMP)
     
     # remove p comparison to only keep numbers
     # split the string on the comparison, that splits the string into a p and
     # the actual value. Only select the second element: the value
-    p_value <- strsplit(p_raw, regex_comp)[[1]][2]
+    p_value <- strsplit(p_raw, RGX_COMP)[[1]][2]
     
     # remove leading/trailing whitespaces 
     p_value <- trimws(p_value, which = "both")
