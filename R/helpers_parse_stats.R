@@ -139,6 +139,7 @@ extract_p_value <- function(raw){
     
     p_comp <- "ns"
     p_value <- NA
+    p_dec <- NA
     
   } else {
     
