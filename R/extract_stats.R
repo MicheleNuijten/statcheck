@@ -31,7 +31,21 @@ extract_stats <- function(txt, stat){
     
     # for each test type, check where the vector with extracted, raw test types
     # matches the regex for each test type, and assign the appropriate category
-    if(grepl(pattern = RGX_T, x = test_raw)){
+    # the order of the classification matters: Q has to be tested first, 
+    # otherwise the regex for t will also match Qwithin and Qbetween, because
+    # both have a t in them. Similarly: first check for Qb, because Qbetween
+    # also has a w in it
+    if (grepl(pattern = RGX_Q, x = test_raw)){
+      
+      # distinguish between Q, Qw, and Qb
+      if(grepl(pattern = RGX_QB, x = test_raw)){
+        test_type[i] <- "Qb"
+      } else if (grepl(pattern = RGX_QW, x = test_raw)){
+        test_type[i] <- "Qw"
+      } else {
+        test_type[i] <- "Q"
+      }
+    } else if(grepl(pattern = RGX_T, x = test_raw)){
       test_type[i] <- "t"
     } else if (grepl(pattern = RGX_F, x = test_raw)){
       test_type[i] <- "F"
@@ -39,17 +53,6 @@ extract_stats <- function(txt, stat){
       test_type[i] <- "r"
     } else if (grepl(pattern = RGX_Z, x = test_raw)){
       test_type[i] <- "Z"
-    } else if (grepl(pattern = RGX_Q, x = test_raw)){
-      
-      # distinguish between Q, Qw, and Qb
-      if(grepl(pattern = RGX_QW, x = test_raw)){
-        test_type[i] <- "Qw"
-      } else if (grepl(pattern = RGX_QB, x = test_raw)){
-        test_type[i] <- "Qb"
-      } else {
-        test_type[i] <- "Q"
-      }
-      
     } else if (grepl(pattern = RGX_CHI2, x = test_raw)){
       test_type[i] <- "Chi2"
     }
