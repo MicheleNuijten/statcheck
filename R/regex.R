@@ -69,3 +69,9 @@ RGX_QB <- "b"
 # separate with an OR sign
 RGX_DF <- paste0("(", RGX_DF_T_R_Q, ")|(", RGX_DF_F, ")|(", RGX_DF_CHI2, ")")
 
+# regex for comparison symbols
+RGX_COMP <- "[<>=]"
+
+# regex for thousands separator
+# this regex matches commas flanked by digits on both sides
+RGX_1000_SEP <- "(?<=\\d),(?=\\d+)"
