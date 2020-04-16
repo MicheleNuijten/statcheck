@@ -53,7 +53,7 @@ extract_df <- function(raw, test_type){
   # - F-tests (two degrees of freedom separated by a comma)
   # - chi2 (can also contain sample size)
   
-  if(test_type %in% c("t", "r", "Q", "Qw", "Qb")){
+  if(test_type %in% c("t", "r")){
     
     df1 <- NA
     df2 <- df
@@ -63,12 +63,12 @@ extract_df <- function(raw, test_type){
     df1 <- df[1]
     df2 <- df[2]
     
-  } else if(test_type == "chi2"){
+  } else if(test_type %in% c("Chi2", "Q", "Qw", "Qb")){
     
     df1 <- df[1]
     df2 <- NA
     
-  } else if(test_type == "z"){
+  } else if(test_type == "Z"){
     
     df1 <- NA
     df2 <- NA
@@ -124,7 +124,8 @@ extract_test_stats <- function(raw){
   
   return(data.frame(test_comp = test_comp,
                     test_value = as.numeric(test_value),
-                    test_dec = test_dec))
+                    test_dec = test_dec,
+                    stringsAsFactors = FALSE))
   
 }
 
@@ -163,6 +164,7 @@ extract_p_value <- function(raw){
   
   return(data.frame(p_comp = p_comp,
                     p_value = as.numeric(p_value),
-                    p_dec = p_dec))
+                    p_dec = p_dec,
+                    stringsAsFactors = FALSE))
   
 }
