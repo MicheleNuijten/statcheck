@@ -118,8 +118,13 @@ extract_test_stats <- function(raw){
   # remove comma at the end of the value
   test_value <- gsub(",$", "", test_value)
   
+  # record the number of decimals of the test statistic
+  test_dec <- attr(regexpr(RGX_DEC, test_value), "match.length") - 1
+  test_dec[test_dec < 0] <- 0
+  
   return(data.frame(test_comp = test_comp,
-                    test_value = as.numeric(test_value)))
+                    test_value = as.numeric(test_value),
+                    test_dec = test_dec))
   
 }
 
@@ -149,9 +154,14 @@ extract_p_value <- function(raw){
     # remove leading/trailing whitespaces 
     p_value <- trimws(p_value, which = "both")
     
+    # record the number of decimals of the p-value
+    p_dec <- attr(regexpr(RGX_DEC, p_value), "match.length") - 1
+    p_dec[p_dec < 0] <- 0
+    
   }
   
   return(data.frame(p_comp = p_comp,
-                    p_value = as.numeric(p_value)))
+                    p_value = as.numeric(p_value),
+                    p_dec = p_dec))
   
 }

@@ -75,3 +75,7 @@ RGX_COMP <- "[<>=]"
 # regex for thousands separator
 # this regex matches commas flanked by digits on both sides
 RGX_1000_SEP <- "(?<=\\d),(?=\\d+)"
+
+# regex for numbers after a point
+# used to determine number of decimals
+RGX_DEC <- "\\.\\d+"

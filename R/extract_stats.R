@@ -82,8 +82,10 @@ extract_stats <- function(txt, stat){
                             df2 = df_result$df2,
                             Test.Comparison = test_stats$test_comp,
                             Value = test_stats$test_value,
+                            testdec = test_stats$test_dec,
                             Reported.Comparison = pvals$p_comp,
-                            Reported.P.Value = pvals$p_value)
+                            Reported.P.Value = pvals$p_value,
+                            dec = pvals$p_dec)
   
   if (nrow(nhst_parsed) > 0) {
   
