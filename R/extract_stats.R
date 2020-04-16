@@ -38,7 +38,7 @@ extract_stats <- function(txt, stat){
     } else if (grepl(pattern = RGX_R, x = test_raw)){
       test_type[i] <- "r"
     } else if (grepl(pattern = RGX_Z, x = test_raw)){
-      test_type[i] <- "z"
+      test_type[i] <- "Z"
     } else if (grepl(pattern = RGX_Q, x = test_raw)){
       
       # distinguish between Q, Qw, and Qb
@@ -51,7 +51,7 @@ extract_stats <- function(txt, stat){
       }
       
     } else if (grepl(pattern = RGX_CHI2, x = test_raw)){
-      test_type[i] <- "chi2"
+      test_type[i] <- "Chi2"
     }
     
     # extract degrees of freedom
@@ -85,7 +85,8 @@ extract_stats <- function(txt, stat){
                             testdec = test_stats$test_dec,
                             Reported.Comparison = pvals$p_comp,
                             Reported.P.Value = pvals$p_value,
-                            dec = pvals$p_dec)
+                            dec = pvals$p_dec,
+                            stringsAsFactors = FALSE)
   
   if (nrow(nhst_parsed) > 0) {
   
@@ -98,8 +99,8 @@ extract_stats <- function(txt, stat){
     types <- as.vector(nhst_parsed$Statistic)
     
     types[types == "r"] <- "cor"
-    types[types == "chi2"] <- "chisq"
-    types[types == "z"] <- "Z"
+    types[types == "Chi2"] <- "chisq"
+    types[types == "Z"] <- "Z"
     types[types == "Qw"| types == "Qb"] <- "Q"
     
     # only return rows where the test_type matches the selected stats
