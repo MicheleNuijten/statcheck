@@ -61,7 +61,8 @@ statcheck <- function(texts,
     # extract all NHST results. This function scrapes the text for all APA 
     # reported NHST results and parses it so that the separate elements are
     # returned in one large dataframe
-    nhst <- extract_stats(txt)
+    nhst <- extract_stats(txt = txt,
+                          stat = stat)
     
     # append and close: same logic as for the pvalues dataframe above
     if(nrow(nhst) > 0){
