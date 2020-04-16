@@ -2,45 +2,45 @@
 # NHST results from text
 
 # test types
-ttest <- "t"
-cor <- "r"
-Qtest <- "Q\\s?-?\\s?(w|within|b|between)?"
-Ftest <- "F"
-chi2 <- "((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^trFzQWBnD ]\\s?)|([^trFzQWBnD ]2\\s?))2?"
-ztest <- "([^a-z]z)"
+RGX_T <- "t"
+RGX_R <- "r"
+RGX_Q <- "Q\\s?-?\\s?(w|within|b|between)?"
+RGX_F <- "F"
+RGX_CHI2 <- "((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^trFzQWBnD ]\\s?)|([^trFzQWBnD ]2\\s?))2?"
+RGX_Z <- "([^a-z]z)"
 
 # degrees of freedom
 # the way dfs are reported differs per test type, except for t, r, and Q, where
 # they are always in the format "(28)". The regex for these tests can therefore
 # be combined
 # z-tests do not have dfs
-df_t_r_Q <- "\\(\\s?\\d*\\.?\\d+\\s?\\)"
-df_F <- "\\(\\s?\\d*\\.?(I|l|\\d+)\\s?,\\s?\\d*\\.?\\d+\\s?\\)"
-df_chi2 <- "\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?\\)"
+RGX_DF_T_R_Q <- "\\(\\s?\\d*\\.?\\d+\\s?\\)"
+RGX_DF_F <- "\\(\\s?\\d*\\.?(I|l|\\d+)\\s?,\\s?\\d*\\.?\\d+\\s?\\)"
+RGX_DF_CHI2 <- "\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?\\)"
 
 # combine test types with the correct type of df
 # put regex between () to create regex groups
-ttest_df <- paste0("(", ttest, "\\s?", df_t_r_Q, ")")
-cor_df <- paste0("(", cor, "\\s?", df_t_r_Q, ")")
-Qtest_df <- paste0("(", Qtest, "\\s?", df_t_r_Q, ")")
-Ftest_df <- paste0("(", Ftest, "\\s?", df_F, ")")
-chi2_df <- paste0("(", chi2, "\\s?", df_chi2, ")")
+RGX_T_DF <- paste0("(", RGX_T, "\\s?", RGX_DF_T_R_Q, ")")
+RGX_R_DF <- paste0("(", RGX_R, "\\s?", RGX_DF_T_R_Q, ")")
+RGX_Q_DF <- paste0("(", RGX_Q, "\\s?", RGX_DF_T_R_Q, ")")
+RGX_F_DF <- paste0("(", RGX_F, "\\s?", RGX_DF_F, ")")
+RGX_CHI2_DF <- paste0("(", RGX_CHI2, "\\s?", RGX_DF_CHI2, ")")
 
-rgx_test_df <- paste0("(", ttest_df, "|", cor_df, "|", Qtest_df, "|", Ftest_df, 
-                      "|", chi2_df, "|", ztest, ")")
+RGX_TEST_DF <- paste0("(", RGX_T_DF, "|", RGX_R_DF, "|", RGX_Q_DF, "|", RGX_F_DF, 
+                      "|", RGX_CHI2_DF, "|", RGX_Z, ")")
 
 # test value
 # this is the same for every type of test
-rgx_test_value <- "[<>=]\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,"
+RGX_TEST_VALUE <- "[<>=]\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,"
 
 # p-values
 # this is the same for every type of test
-ns <- "([^a-z]n\\.?s\\.?)"
-p_val <- "(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*)"
-rgx_p_val_ns <- paste0("(", ns, "|", p_val, ")")
+RGX_NS <- "([^a-z]n\\.?s\\.?)"
+RGX_P <- "(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*)"
+RGX_P_NS <- paste0("(", RGX_NS, "|", RGX_P, ")")
 
 # full result
-nhst <- paste(rgx_test_df, rgx_test_value, rgx_p_val_ns, sep = "\\s?")
+RGX_NHST <- paste(RGX_TEST_DF, RGX_TEST_VALUE, RGX_P_NS, sep = "\\s?")
 
 ################################################################################
 
@@ -51,21 +51,21 @@ nhst <- paste(rgx_test_df, rgx_test_value, rgx_p_val_ns, sep = "\\s?")
 # that should be the test statistic. Also match the regex for a z-test 
 # (because a z-test has no df)
 
-regex_opening_parenthesis <- "(.+?(?=\\())"
-regex_test_type <- paste(ztest, regex_opening_parenthesis, sep = "|")
+RGX_OPEN_BRACKET <- "(.+?(?=\\())"
+RGX_TEST_TYPE <- paste(RGX_Z, RGX_OPEN_BRACKET, sep = "|")
 
 # regex for Q-test
 
 # for the Q-test, we also need to distinguish between Q, Qw, and Qb
 # select all raw_nhst results that seem to have a Q-test in them
 # it suffices to simply search for the letters "w" and "b"
-rgx_Qw <- "w"
-rgx_Qb <- "b"
+RGX_QW <- "w"
+RGX_QB <- "b"
 
 # regex for degrees of freedom
 
 # combine the separate regexes for the different types of dfs
 # in one all-encompassing regex. Group the df-types with parentheses and 
 # separate with an OR sign
-regex_df <- paste0("(", df_t_r_Q, ")|(", df_F, ")|(", df_chi2, ")")
+RGX_DF <- paste0("(", RGX_DF_T_R_Q, ")|(", RGX_DF_F, ")|(", RGX_DF_CHI2, ")")
 

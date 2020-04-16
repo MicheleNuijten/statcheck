@@ -7,7 +7,7 @@ extract_stats <- function(txt, stat){
   nhst_raw <- extract_pattern(txt = txt,
                               # nhst is the regex for nhst results
                               # it came from the regex.R script within the package
-                              pattern = nhst) 
+                              pattern = RGX_NHST) 
   
   # step 2: parse the extracted results ------------------------------------------
   
@@ -25,38 +25,38 @@ extract_stats <- function(txt, stat){
     
     # extract the test types from the nhst results 
     test_raw <- extract_pattern(txt = nhst_raw[i],
-                                pattern = regex_test_type)
+                                pattern = RGX_TEST_TYPE)
     
     # classify the test types in standard classifications
     
     # for each test type, check where the vector with extracted, raw test types
     # matches the regex for each test type, and assign the appropriate category
-    if(grepl(pattern = ttest, x = test_raw)){
+    if(grepl(pattern = RGX_T, x = test_raw)){
       test_type[i] <- "t"
-    } else if (grepl(pattern = Ftest, x = test_raw)){
+    } else if (grepl(pattern = RGX_F, x = test_raw)){
       test_type[i] <- "F"
-    } else if (grepl(pattern = cor, x = test_raw)){
+    } else if (grepl(pattern = RGX_R, x = test_raw)){
       test_type[i] <- "r"
-    } else if (grepl(pattern = ztest, x = test_raw)){
+    } else if (grepl(pattern = RGX_Z, x = test_raw)){
       test_type[i] <- "z"
-    } else if (grepl(pattern = Qtest, x = test_raw)){
+    } else if (grepl(pattern = RGX_Q, x = test_raw)){
       
       # distinguish between Q, Qw, and Qb
-      if(grepl(pattern = rgx_Qw, x = test_raw)){
+      if(grepl(pattern = RGX_QW, x = test_raw)){
         test_type[i] <- "Qw"
-      } else if (grepl(pattern = rgx_Qb, x = test_raw)){
+      } else if (grepl(pattern = RGX_QB, x = test_raw)){
         test_type[i] <- "Qb"
       } else {
         test_type[i] <- "Q"
       }
       
-    } else if (grepl(pattern = chi2, x = test_raw)){
+    } else if (grepl(pattern = RGX_CHI2, x = test_raw)){
       test_type[i] <- "chi2"
     }
     
     # extract degrees of freedom
     dfs <- extract_df(raw = nhst_raw[i],
-                      pattern = regex_df,
+                      pattern = RGX_DF,
                       test_type = test_type[i])
     
     df_result <- rbind(df_result, dfs)
@@ -64,14 +64,14 @@ extract_stats <- function(txt, stat){
     # extract test comparison and test value 
     
     test <- extract_test_stats(raw = nhst_raw[i],
-                               pattern = rgx_test_value)
+                               pattern = RGX_TEST_VALUE)
     
     test_stats <- rbind(test_stats, test)
     
     # extract p-comparison and p-value
     
     p <- extract_p_value(raw = nhst_raw[i],
-                         pattern = rgx_p_val_ns)
+                         pattern = RGX_P_NS)
     
     pvals <- rbind(pvals, p)
     
