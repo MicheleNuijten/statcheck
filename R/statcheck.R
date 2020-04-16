@@ -87,11 +87,6 @@ statcheck <- function(texts,
     close(pb)
   }
   
-  # reorder data frame based on the location of the stats in the text
-  # instead of grouped by test type
-  Res <- ddply(Res, .(Source), function(x)
-    x[order(x$Location), ])
-  
   ###---------------------------------------------------------------------
   
   if (nrow(Res) > 0) {
