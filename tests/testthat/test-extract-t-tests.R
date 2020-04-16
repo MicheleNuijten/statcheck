@@ -92,3 +92,10 @@ test_that("tests with 'p-values' larger than 1 are not retrieved from text", {
   expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
 })
 
+# wrong df
+test_that("t-tests with 2 dfs are not retrieved from text", {
+  txt1 <- "t(2,28) = 2.20, p = .03"
+  
+  expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
+})
+

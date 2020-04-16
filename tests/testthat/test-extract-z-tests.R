@@ -39,3 +39,13 @@ test_that("z-tests with different spacing are retrieved from text", {
   
   expect_equal(nrow(result), 2)
 })
+
+# test if the following incorrect z-tests are not retrieved --------------------
+
+# z test cannot have df
+test_that("a z followed by degrees of freedom is not matched", {
+  txt <- " z(28) = 2.20, p = .03"
+  
+  expect_output(statcheck(txt, messages = FALSE), "did not find any results")
+  
+})
