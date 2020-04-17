@@ -7,7 +7,12 @@ extract_stats <- function(txt, stat){
   nhst_raw <- extract_pattern(txt = txt,
                               # nhst is the regex for nhst results
                               # it came from the regex.R script within the package
-                              pattern = RGX_NHST) 
+                              pattern = RGX_NHST)
+  
+  # if there are no nhst results in the text, return an empty data frame
+  if(is.null(nhst_raw)){
+    return(data.frame(NULL))
+  }
   
   # step 2: parse the extracted results ------------------------------------------
   
@@ -58,10 +63,11 @@ extract_stats <- function(txt, stat){
     }
     
     # extract degrees of freedom
-    dfs <- extract_df(raw = nhst_raw[i],
-                      test_type = test_type[i])
     
-    df_result <- rbind(df_result, dfs)
+      dfs <- extract_df(raw = nhst_raw[i],
+                        test_type = test_type[i])
+      
+      df_result <- rbind(df_result, dfs)
     
     # extract test comparison and test value 
     
