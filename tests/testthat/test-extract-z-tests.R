@@ -10,8 +10,8 @@ test_that("z-tests are correctly parsed", {
   
   expect_equal(nrow(result), 1)
   expect_equal(as.character(result$Statistic), "Z")
-  expect_equal(result$df1, NA)
-  expect_equal(result$df2, NA)
+  expect_true(is.na(result$df1))
+  expect_true(is.na(result$df2))
   expect_equal(as.character(result$Test.Comparison), "=")
   expect_equal(result$Value, 2.2)
   expect_equal(as.character(result$Reported.Comparison), "=")

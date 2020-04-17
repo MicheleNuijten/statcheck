@@ -10,7 +10,7 @@ test_that("t-tests are correctly parsed", {
   
   expect_equal(nrow(result), 1)
   expect_equal(as.character(result$Statistic), "t")
-  expect_equal(result$df1, NA)
+  expect_true(is.na(result$df1))
   expect_equal(result$df2, 28)
   expect_equal(as.character(result$Test.Comparison), "=")
   expect_equal(result$Value, 2.2)
