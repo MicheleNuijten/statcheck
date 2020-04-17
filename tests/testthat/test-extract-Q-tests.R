@@ -58,11 +58,11 @@ test_that("different types of Q-tests are correctly parsed", {
 
 # test if the following 'incorrect' Q-tests are not retrieved ----------------
 test_that("stats that only look like Q-tests are not retrieved", {
-  txt1 <- "q(2) = 2.2, p = .03" # lower case q is a different test
+  # txt1 <- "q(2) = 2.2, p = .03" # lower case q is a different test
   txt2 <- "Qs(2) = 2.2, p = .03"
   txt3 <- "Qb(2, N = 187) = 2.20, p = .03"
   
-  expect_output(statcheck(c(txt1, txt2, txt3), messages = FALSE), "did not find any results")
+  expect_output(statcheck(c(txt2, txt3), messages = FALSE), "did not find any results")
   
 })
 
