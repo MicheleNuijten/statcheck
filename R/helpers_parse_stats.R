@@ -14,6 +14,12 @@ extract_pattern <- function(txt, pattern) {
                          ignore.case = TRUE,
                          perl = TRUE)[[1]] # perl is necessary for lookbehinds
   
+  # if no match is found, return NULL
+  if(string_loc[1] == -1){
+    return(NULL)
+  }
+  
+  # if a match is found:
   # extract the raw text of the regex match:
   # retrieve a 'substring' from the text that starts at string_loc: string_loc
   # is a vector of integers that indicate the location of the first characters of
@@ -33,46 +39,55 @@ extract_pattern <- function(txt, pattern) {
 
 extract_df <- function(raw, test_type){
   
-  df_raw <- extract_pattern(txt = raw,
-                            pattern = RGX_DF)[[1]]
-  
-  # remove parentheses to only keep numbers
-  df <- gsub("\\(|\\)", "", df_raw)
-  
-  # split string on comma to separate df1 and df2 / N
-  # note: there can be no commas as thousand separators in the dfs; statcheck
-  # would not have recognized these in the first place, so we don't have to take
-  # this possibility into account here
-  df <- strsplit(df, ",")[[1]]
-  
-  # remove leading/trailing whitespaces
-  df <- trimws(df, which = "both")
-  
-  # there are three different types of degrees of freedom:
-  # - t-tests, correlations, and Q-tests (a single number between brackets)
-  # - F-tests (two degrees of freedom separated by a comma)
-  # - chi2 (can also contain sample size)
-  
-  if(test_type %in% c("t", "r")){
-    
-    df1 <- NA
-    df2 <- df
-    
-  } else if(test_type == "F"){
-    
-    df1 <- df[1]
-    df2 <- df[2]
-    
-  } else if(test_type %in% c("Chi2", "Q", "Qw", "Qb")){
-    
-    df1 <- df[1]
-    df2 <- NA
-    
-  } else if(test_type == "Z"){
+  # z tests do not have dfs, so return df1 = NA, and df2 = NA for z-tests
+  if(test_type == "Z"){
     
     df1 <- NA
     df2 <- NA
     
+  } else {
+    # for all other test types, extract dfs from the raw nhst result
+    df_raw <- extract_pattern(txt = raw,
+                              pattern = RGX_DF)[[1]]
+    
+    # remove parentheses to only keep numbers
+    df <- gsub("\\(|\\)", "", df_raw)
+    
+    # split string on comma to separate df1 and df2 / N
+    # note: there can be no commas as thousand separators in the dfs; statcheck
+    # would not have recognized these in the first place, so we don't have to take
+    # this possibility into account here
+    df <- strsplit(df, ",")[[1]]
+    
+    # remove leading/trailing whitespaces
+    df <- trimws(df, which = "both")
+    
+    # there are three different types of degrees of freedom:
+    # - t-tests, correlations, and Q-tests (a single number between brackets)
+    # - F-tests (two degrees of freedom separated by a comma)
+    # - chi2 (can also contain sample size)
+    
+    if(test_type %in% c("t", "r")){
+      
+      df1 <- NA
+      df2 <- df
+      
+    } else if(test_type == "F"){
+      
+      df1 <- df[1]
+      df2 <- df[2]
+      
+    } else if(test_type %in% c("Chi2", "Q", "Qw", "Qb")){
+      
+      df1 <- df[1]
+      df2 <- NA
+      
+    } else {
+      
+      df1 <- NA
+      df2 <- NA
+      
+    }
   }
   
   # return dfs as numeric values (to avoid R turning them into factors)
