@@ -85,17 +85,19 @@ extract_stats <- function(txt, stat){
   
   # create final data frame ------------------------------------------------------
   
-  nhst_parsed <- data.frame(Raw = nhst_raw,
-                            Statistic = test_type,
-                            df1 = df_result$df1,
-                            df2 = df_result$df2,
-                            Test.Comparison = test_stats$test_comp,
-                            Value = test_stats$test_value,
-                            testdec = test_stats$test_dec,
-                            Reported.Comparison = pvals$p_comp,
-                            Reported.P.Value = pvals$p_value,
-                            dec = pvals$p_dec,
-                            stringsAsFactors = FALSE)
+  nhst_parsed <- data.frame(
+    # return raw result without leading/trailing whitespaces
+    Raw = trimws(nhst_raw, which = "both"), 
+    Statistic = test_type,
+    df1 = df_result$df1,
+    df2 = df_result$df2,
+    Test.Comparison = test_stats$test_comp,
+    Value = test_stats$test_value,
+    testdec = test_stats$test_dec,
+    Reported.Comparison = pvals$p_comp,
+    Reported.P.Value = pvals$p_value,
+    dec = pvals$p_dec,
+    stringsAsFactors = FALSE)
   
   if (nrow(nhst_parsed) > 0) {
   
