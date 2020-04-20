@@ -79,3 +79,14 @@ RGX_1000_SEP <- "(?<=\\d),(?=\\d+)"
 # regex for numbers after a point
 # used to determine number of decimals
 RGX_DEC <- "\\.\\d+"
+
+# regex for weird symbols that should be a minus sign
+# match potentially a space, followed by one or more characters that are not a 
+# digit, period, or space, followed by a digit or period (using a positive 
+# lookahead)
+RGX_WEIRD_MINUS <- "\\s?[^\\d\\.\\s]+(?=\\d|\\.)"
+
+
+
+
+

@@ -110,6 +110,22 @@ remove_1000_sep <- function(raw){
   
 }
 
+# function to replace weird symbols with a minus sign --------------------------
+
+# sometimes the mathematical symbol for a minus sign is wrongly converted into
+# a strange symbol. Since it is very likely that any weird symbol in front of
+# a test statistic is in fact a minus sign, replace all such weird codings with
+# an actual minus sign
+
+recover_minus_sign <- function(raw){
+  
+  # replace any weird string before the test value with a minus sign
+  return(gsub(RGX_WEIRD_MINUS, " -", raw, perl = TRUE))
+  
+}
+
+
+
 # function to extract test-values and test comparisons -------------------------
 
 extract_test_stats <- function(raw){
@@ -126,6 +142,9 @@ extract_test_stats <- function(raw){
   
   # remove thousand separators
   test_value <- remove_1000_sep(test_value)
+  
+  # replace weird coding before a test value with a minus sign
+  test_value <- recover_minus_sign(test_value)
   
   # remove leading/trailing whitespaces 
   test_value <- trimws(test_value, which = "both")
