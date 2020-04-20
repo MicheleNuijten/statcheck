@@ -16,7 +16,7 @@ test_that("z-tests are correctly parsed", {
   expect_equal(result$Value, 2.2)
   expect_equal(as.character(result$Reported.Comparison), "=")
   expect_equal(result$Reported.P.Value, 0.03)
-  expect_equal(as.character(result$Raw), "Z = 2.20, p = .03")
+  expect_equal(as.character(result$Raw), "z = 2.20, p = .03")
 })
 
 # standard z-tests in text
