@@ -24,18 +24,18 @@ process_stats <- function(test_type,
                           two_tailed = two_tailed)
   
   # check if the result is an error ------------------------------------------
-  error <- ErrorTest(reported_p = reported_p, 
-                     test_type = test_type, 
-                     test_stat = test_stat,
-                     df1 = df1,
-                     df2 = df2,
-                     p_comparison = p_comparison, 
-                     test_comparison = test_comparison, 
-                     p_dec = p_dec, 
-                     test_dec = test_dec,
-                     two_tailed = two_tailed,
-                     alpha = alpha,
-                     pZeroError = pZeroError)
+  error <- error_test(reported_p = reported_p, 
+                      test_type = test_type, 
+                      test_stat = test_stat,
+                      df1 = df1,
+                      df2 = df2,
+                      p_comparison = p_comparison, 
+                      test_comparison = test_comparison, 
+                      p_dec = p_dec, 
+                      test_dec = test_dec,
+                      two_tailed = two_tailed,
+                      alpha = alpha,
+                      pZeroError = pZeroError)
   
   # check if the result is a decision error ----------------------------------
   
@@ -45,12 +45,12 @@ process_stats <- function(test_type,
   } else {
     # only if a result is an error, it makes sense to check if it's also a 
     # decision error
-    decision_error <- DecisionErrorTest(reported_p = reported_p, 
-                                        computed_p = computed_p,
-                                        test_comparison = test_comparison,
-                                        p_comparison = p_comparison,
-                                        alpha = alpha, 
-                                        pEqualAlphaSig = pEqualAlphaSig)
+    decision_error <- decision_error_test(reported_p = reported_p, 
+                                          computed_p = computed_p,
+                                          test_comparison = test_comparison,
+                                          p_comparison = p_comparison,
+                                          alpha = alpha, 
+                                          pEqualAlphaSig = pEqualAlphaSig)
   }
   
   # correct for one-tailed tests in text ------------------------------------
@@ -82,18 +82,18 @@ process_stats <- function(test_type,
       
       # check whether result would still be an error if 1-tailed
       error_1tail <- 
-        ErrorTest(reported_p = reported_p, 
-                  test_type = test_type, 
-                  test_stat = test_stat,
-                  df1 = df1,
-                  df2 = df2,
-                  p_comparison = p_comparison, 
-                  test_comparison = test_comparison, 
-                  p_dec = p_dec, 
-                  test_dec = test_dec,
-                  two_tailed = FALSE,
-                  alpha = alpha,
-                  pZeroError = pZeroError)
+        error_test(reported_p = reported_p, 
+                   test_type = test_type, 
+                   test_stat = test_stat,
+                   df1 = df1,
+                   df2 = df2,
+                   p_comparison = p_comparison, 
+                   test_comparison = test_comparison, 
+                   p_dec = p_dec, 
+                   test_dec = test_dec,
+                   two_tailed = FALSE,
+                   alpha = alpha,
+                   pZeroError = pZeroError)
       
       if(!error_1tail){
         # if a result is not an error, it's automatically also  not a decision error
@@ -102,12 +102,12 @@ process_stats <- function(test_type,
         # only if a result is an error, it makes sense to check if it's also a 
         # decision error
         decision_error_1tail <- 
-          DecisionErrorTest(reported_p = reported_p, 
-                            computed_p = computed_p_1tail,
-                            test_comparison = test_comparison,
-                            p_comparison = p_comparison,
-                            alpha = alpha, 
-                            pEqualAlphaSig = pEqualAlphaSig)
+          decision_error_test(reported_p = reported_p, 
+                              computed_p = computed_p_1tail,
+                              test_comparison = test_comparison,
+                              p_comparison = p_comparison,
+                              alpha = alpha, 
+                              pEqualAlphaSig = pEqualAlphaSig)
       }
       
       # if the 1-tailed p-value is no longer an error, the original values of
@@ -124,6 +124,6 @@ process_stats <- function(test_type,
   result <- data.frame(computed_p = computed_p,
                        error = error,
                        decision_error = decision_error)
- 
+  
   return(result) 
 }

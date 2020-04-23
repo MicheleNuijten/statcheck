@@ -1,4 +1,4 @@
-DecisionErrorTest <- function(reported_p, computed_p,
+decision_error_test <- function(reported_p, computed_p,
                               test_comparison, p_comparison,
                               alpha, pEqualAlphaSig){
   

@@ -1,4 +1,4 @@
-ErrorTest <- function(reported_p, test_type, test_stat,
+error_test <- function(reported_p, test_type, test_stat,
                       df1, df2,
                       p_comparison, test_comparison, 
                       p_dec, test_dec, 
