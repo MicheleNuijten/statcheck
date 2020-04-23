@@ -1,20 +1,9 @@
-process_stats <- function(test_type,
-                          test_stat,
-                          df1, 
-                          df2,
-                          reported_p,
-                          p_comparison,
-                          test_comparison,
-                          p_dec,
-                          test_dec,
+process_stats <- function(test_type, test_stat, df1, df2, reported_p,
+                          p_comparison, test_comparison, p_dec, test_dec,
                           OneTailedInTxt,
                           # options:
-                          two_tailed,
-                          alpha,
-                          pZeroError,
-                          pEqualAlphaSig,
-                          OneTailedTxt,
-                          OneTailedTests){
+                          two_tailed, alpha, pZeroError, pEqualAlphaSig,
+                          OneTailedTxt, OneTailedTests){
   
   # compute p-value ----------------------------------------------------------
   computed_p <- compute_p(test_type = test_type,
