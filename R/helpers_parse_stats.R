@@ -163,37 +163,46 @@ extract_test_stats <- function(raw){
   
 }
 
-# function to extract p-values and p comparisons -------------------------------
+# function to extract and parse p-values --------------------------------------
 
 extract_p_value <- function(raw){
   
   p_raw <- extract_pattern(txt = raw,
                            pattern = RGX_P_NS)
   
-  if(grepl(RGX_NS, p_raw, ignore.case = FALSE)){
+  p_comp <- character()
+  p_value <- numeric()
+  p_dec <- numeric()
+  
+  for(i in seq_along(p_raw)){
     
-    p_comp <- "ns"
-    p_value <- NA
-    p_dec <- NA
-    
-  } else {
-    
-    # extract p-comparison
-    p_comp <- extract_pattern(txt = p_raw,
-                              pattern = RGX_COMP)
-    
-    # remove p comparison to only keep numbers
-    # split the string on the comparison, that splits the string into a p and
-    # the actual value. Only select the second element: the value
-    p_value <- strsplit(p_raw, RGX_COMP)[[1]][2]
-    
-    # remove leading/trailing whitespaces 
-    p_value <- trimws(p_value, which = "both")
-    
-    # record the number of decimals of the p-value
-    p_dec <- attr(regexpr(RGX_DEC, p_value), "match.length") - 1
-    p_dec[p_dec < 0] <- 0
-    
+    if(grepl(RGX_NS, p_raw[i], ignore.case = TRUE)){
+      
+      p_comp[i] <- "ns"
+      p_value[i] <- NA
+      p_dec[i] <- NA
+      
+    } else {
+      
+      # extract p-comparison
+      p_comp[i] <- extract_pattern(txt = p_raw[i],
+                                pattern = RGX_COMP)
+      
+      # remove p comparison to only keep numbers
+      # split the string on the comparison, that splits the string into a p and
+      # the actual value. Only select the second element: the value
+      p_value[i] <- strsplit(p_raw[i], RGX_COMP)[[1]][2]
+      
+      # remove leading/trailing whitespaces 
+      p_value[i] <- trimws(p_value[i], which = "both")
+      
+      # record the number of decimals of the p-value
+      dec <- attr(regexpr(RGX_DEC, p_value[i]), "match.length") - 1
+      dec[dec < 0] <- 0
+      
+      p_dec[i] <- dec
+      
+    }
   }
   
   return(data.frame(p_comp = p_comp,

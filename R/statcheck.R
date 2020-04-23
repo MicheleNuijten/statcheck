@@ -41,13 +41,13 @@ statcheck <- function(texts,
     # later on to calculate the APA factor: the ratio (statcheck results)/
     # (total # of p values). It is also possible to let statcheck return this
     # dataframe instead of the data frame with NHST results.
-    pvalues <- extract_pvals(txt)
+    pvalues <- extract_p_value(txt)
     
     # append and close:
     # in each repetition of the loop, the extracted p-values are appended 
     # to the existing pRes data frame, so it grows in each step
     if(nrow(pvalues) > 0){
-      pvalues$Source <- names(txt)
+      pvalues <- cbind(Source = names(txt), pvalues)
       
       pRes <- rbind(pRes, pvalues)
     }

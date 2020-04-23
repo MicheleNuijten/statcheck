@@ -12,8 +12,8 @@ test_that("p-values are correctly parsed", {
                         AllPValues = TRUE)
   
   expect_equal(nrow(result), 3)
-  expect_equal(as.character(result$Reported.Comparison), c("=", "<", ">"))
-  expect_equal(result$Reported.P.Value, rep(0.05, 3))
+  expect_equal(as.character(result$p_comp), c("=", "<", ">"))
+  expect_equal(result$p_value, rep(0.05, 3))
 })
 
 # non-significant results
@@ -24,8 +24,8 @@ test_that("results reported as ns are correctly parsed", {
                       AllPValues = TRUE)
   
   expect_equal(nrow(result), 1)
-  expect_equal(as.character(result$Reported.Comparison), "ns")
-  expect_true(is.na(result$Reported.P.Value))
+  expect_equal(as.character(result$p_comp), "ns")
+  expect_true(is.na(result$p_value))
 })
 
 # test if the following non p-values are not retrieved ------------------
