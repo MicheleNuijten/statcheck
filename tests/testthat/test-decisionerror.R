@@ -22,18 +22,18 @@ test_that("simple decision errors are classified as such", {
   txt11 <- "Q(28) = 2.20, p = .03"
   txt12 <- "Q(28) = 52.20, p = .06"
   
-  expect_true(statcheck(txt1,  messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt2,  messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt3,  messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt4,  messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt5,  messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt6,  messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt7,  messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt8,  messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt9,  messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt10, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt11, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt12, messages = FALSE)$DecisionError)
+  expect_true(statcheck(txt1,  messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt2,  messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt3,  messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt4,  messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt5,  messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt6,  messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt7,  messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt8,  messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt9,  messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt10, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt11, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt12, messages = FALSE)[[VAR_DEC_ERROR]])
 })
 
 # test if different arguments concerning decision errors work -----------------
@@ -50,14 +50,14 @@ test_that("decision errors are correctly classified when alpha levels are change
   txt5 <- "t(28) = 5.20, p = .02"
   txt6 <- "t(28) = 1.20, p = .005"
   
-  expect_true(statcheck(txt1, messages = FALSE, alpha = .05)$DecisionError)
-  expect_true(statcheck(txt2, messages = FALSE, alpha = .05)$DecisionError)
+  expect_true(statcheck(txt1, messages = FALSE, alpha = .05)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt2, messages = FALSE, alpha = .05)[[VAR_DEC_ERROR]])
   
-  expect_true(statcheck(txt3, messages = FALSE, alpha = .10)$DecisionError)
-  expect_true(statcheck(txt4, messages = FALSE, alpha = .10)$DecisionError)
+  expect_true(statcheck(txt3, messages = FALSE, alpha = .10)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt4, messages = FALSE, alpha = .10)[[VAR_DEC_ERROR]])
   
-  expect_true(statcheck(txt5, messages = FALSE, alpha = .01)$DecisionError)
-  expect_true(statcheck(txt6, messages = FALSE, alpha = .01)$DecisionError)
+  expect_true(statcheck(txt5, messages = FALSE, alpha = .01)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt6, messages = FALSE, alpha = .01)[[VAR_DEC_ERROR]])
 })
 
 # pEqualAlphaSig: should p = .05 be considered significant or not
@@ -66,13 +66,13 @@ test_that("decision errors are correctly classified when argument p = alpha is c
   txt1 <- "t(28) = 2.20, p = .05"
   txt2 <- "t(28) = 2.20, p = .10"
   
-  expect_false(statcheck(txt1, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
   # check pEqualAlphaSig for different alpha
-  expect_false(statcheck(txt2, messages = FALSE, alpha = .10)$DecisionError)
+  expect_false(statcheck(txt2, messages = FALSE, alpha = .10)[[VAR_DEC_ERROR]])
   expect_true(statcheck(txt2, messages = FALSE, pEqualAlphaSig = FALSE, 
-                        alpha = .10)$DecisionError)
+                        alpha = .10)[[VAR_DEC_ERROR]])
 
 })
 
@@ -103,30 +103,30 @@ test_that("cases where t = ..., p = ... are correctly classified", {
   txt9 <- paste0("t(28) = ", t.06, ", p = .06")
   
   # if pEqualSig == TRUE
-  expect_false(statcheck(txt1, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt2a, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt3, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt2a, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt3, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt4, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt5, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt6, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt4, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt5, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt6, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_true(statcheck(txt7, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt8a, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE)$DecisionError)
+  expect_true(statcheck(txt7, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt8a, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE)[[VAR_DEC_ERROR]])
   
   # if pEqualSig == FALSE
-  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_true(statcheck(txt2b, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_true(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt2b, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_true(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt5, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_true(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt5, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_true(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt8b, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_true(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt8b, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
 })
 
 # test statistics exactly reported & p-value < ...
@@ -154,30 +154,30 @@ test_that("cases where t = ..., p < ... are correctly classified", {
   txt9 <- paste0("t(28) = ", t.06, ", p < .06")
   
   # if pEqualSig == TRUE
-  expect_false(statcheck(txt1, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt2a, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt3, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt2a, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt3, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt4, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt5a, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt6, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt4, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt5a, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt6, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt7, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt8a, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt7, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt8a, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE)[[VAR_DEC_ERROR]])
   
   # if pEqualSig == FALSE
-  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_true(statcheck(txt2b, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_true(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt2b, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_true(statcheck(txt5b, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_true(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt5b, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt8b, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt8b, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
 })
 
 # test statistics exactly reported & p-value > ...
@@ -205,30 +205,30 @@ test_that("cases where t = ..., p > ... are correctly classified", {
   txt9 <- paste0("t(28) = ", t.06, ", p > .06")
   
   # if pEqualSig == TRUE
-  expect_false(statcheck(txt1, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt2a, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt3, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt2a, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt3, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_true(statcheck(txt4, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt5a, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt6, messages = FALSE)$DecisionError)
+  expect_true(statcheck(txt4, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt5a, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt6, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_true(statcheck(txt7, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt8a, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE)$DecisionError)
+  expect_true(statcheck(txt7, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt8a, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE)[[VAR_DEC_ERROR]])
   
   # if pEqualSig == FALSE
-  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt2b, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt2b, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_true(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt5b, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_true(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt5b, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_true(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt8b, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_true(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt8b, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
 })
 
 # test statistics < & p-value exactly reported
@@ -253,30 +253,30 @@ test_that("cases where t < ..., p = ... are correctly classified", {
   txt9 <- paste0("t(28) < ", t.06 - .001, ", p = .0600") # approach computed p == .06
   
   # if pEqualSig == TRUE
-  expect_false(statcheck(txt1, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt2, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt3, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt2, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt3, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt4, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt5, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt6, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt4, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt5, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt6, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt7, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt8, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt7, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt8, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE)[[VAR_DEC_ERROR]])
   
   # if pEqualSig == FALSE
-  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_true(statcheck(txt2, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_true(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt2, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt5, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt5, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt8, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt8, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
 })
 
 # test statistics < & p-value <
@@ -301,30 +301,30 @@ test_that("cases where t < ..., p < ... are correctly classified", {
   txt9 <- paste0("t(28) < ", t.06, ", p < .06")
   
   # if pEqualSig == TRUE
-  expect_false(statcheck(txt1, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt2, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt3, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt2, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt3, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt4, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt5, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt6, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt4, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt5, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt6, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt7, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt8, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt7, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt8, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE)[[VAR_DEC_ERROR]])
   
   # if pEqualSig == FALSE
-  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_true(statcheck(txt2, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_true(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt2, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_true(statcheck(txt5, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_true(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt5, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt8, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt8, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
 })
 
 # test statistics < & p-value >
@@ -349,30 +349,30 @@ test_that("cases where t < ..., p > ... are correctly classified", {
   txt9 <- paste0("t(28) < ", t.06, ", p > .06")
   
   # if pEqualSig == TRUE
-  expect_false(statcheck(txt1, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt2, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt3, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt2, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt3, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt4, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt5, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt6, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt4, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt5, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt6, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt7, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt8, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt7, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt8, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE)[[VAR_DEC_ERROR]])
   
   # if pEqualSig == FALSE
-  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt2, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt2, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt5, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt5, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt8, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt8, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
 })
 
 # test statistics > & p-value exactly reported
@@ -397,30 +397,30 @@ test_that("cases where t > ..., p = ... are correctly classified", {
   txt9 <- paste0("t(28) > ", t.06 + .001, ", p = .0600") # approach computed p == .06
   
   # if pEqualSig == TRUE
-  expect_false(statcheck(txt1, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt2, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt3, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt2, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt3, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt4, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt5, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt6, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt4, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt5, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt6, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_true(statcheck(txt7, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt8, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE)$DecisionError)
+  expect_true(statcheck(txt7, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt8, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE)[[VAR_DEC_ERROR]])
   
   # if pEqualSig == FALSE
-  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt2, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt2, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_true(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_true(statcheck(txt5, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_true(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt5, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_true(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_true(statcheck(txt8, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_true(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt8, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
 })
 
 # test statistics > & p-value <
@@ -445,30 +445,30 @@ test_that("cases where t > ..., p < ... are correctly classified", {
   txt9 <- paste0("t(28) > ", t.06 + .001, ", p < .0600") # approach computed p == .06
   
   # if pEqualSig == TRUE
-  expect_false(statcheck(txt1, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt2, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt3, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt2, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt3, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt4, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt5, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt6, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt4, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt5, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt6, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt7, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt8, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt7, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt8, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE)[[VAR_DEC_ERROR]])
   
   # if pEqualSig == FALSE
-  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt2, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt2, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt5, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt5, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_false(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt8, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt8, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
 })
 
 # test statistics > & p-value >
@@ -493,28 +493,29 @@ test_that("cases where t > ..., p > ... are correctly classified", {
   txt9 <- paste0("t(28) > ", t.06 + .001, ", p > .0600") # approach computed p == .06
   
   # if pEqualSig == TRUE
-  expect_false(statcheck(txt1, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt2, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt3, messages = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt2, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt3, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_true(statcheck(txt4, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt5, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt6, messages = FALSE)$DecisionError)
+  expect_true(statcheck(txt4, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt5, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt6, messages = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_true(statcheck(txt7, messages = FALSE)$DecisionError)
-  expect_true(statcheck(txt8, messages = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE)$DecisionError)
+  expect_true(statcheck(txt7, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt8, messages = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE)[[VAR_DEC_ERROR]])
   
   # if pEqualSig == FALSE
-  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt2, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_false(statcheck(txt1, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt2, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt3, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_true(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_true(statcheck(txt5, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_true(statcheck(txt4, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt5, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt6, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
   
-  expect_true(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_true(statcheck(txt8, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
-  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)$DecisionError)
+  expect_true(statcheck(txt7, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_true(statcheck(txt8, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
+  expect_false(statcheck(txt9, messages = FALSE, pEqualAlphaSig = FALSE)[[VAR_DEC_ERROR]])
 })
+

@@ -9,14 +9,14 @@ test_that("chi2-tests are correctly parsed", {
   result <- statcheck(txt1, messages = FALSE)
   
   expect_equal(nrow(result), 1)
-  expect_equal(as.character(result$Statistic), "Chi2")
-  expect_equal(result$df1, 28)
-  expect_true(is.na(result$df2))
-  expect_equal(as.character(result$Test.Comparison), "=")
-  expect_equal(result$Value, 2.2)
-  expect_equal(as.character(result$Reported.Comparison), "=")
-  expect_equal(result$Reported.P.Value, 0.03)
-  expect_equal(as.character(result$Raw), "i2(28) = 2.20, p = .03")
+  expect_equal(as.character(result[[VAR_TYPE]]), "Chi2")
+  expect_equal(result[[VAR_DF1]], 28)
+  expect_true(is.na(result[[VAR_DF2]]))
+  expect_equal(as.character(result[[VAR_TEST_COMPARISON]]), "=")
+  expect_equal(result[[VAR_TEST_VALUE]], 2.2)
+  expect_equal(as.character(result[[VAR_P_COMPARISON]]), "=")
+  expect_equal(result[[VAR_REPORTED_P]], 0.03)
+  expect_equal(as.character(result[[VAR_RAW]]), "i2(28) = 2.20, p = .03")
 })
 
 # standard chi2-tests in text
@@ -27,7 +27,7 @@ test_that("chi2-tests are retrieved from sentences", {
   result <- statcheck(c(txt1, txt2), messages = FALSE)
   
   expect_equal(nrow(result), 3)
-  expect_equal(as.character(result$Source), c("1", "2", "2"))
+  expect_equal(as.character(result[[VAR_SOURCE]]), c("1", "2", "2"))
 })
 
 # variations in extracted "chi"

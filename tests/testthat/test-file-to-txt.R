@@ -13,16 +13,16 @@ test_that("statistics from a pdf are correctly retrieved and parsed", {
   
   # extract 4 tests from paper
   expect_equal(nrow(result), 4)
-  expect_equal(as.character(result$Statistic), c("t", "F", "Chi2", "t"))
-  expect_equal(result$Value, c(2, 12.03, 6.53, 2))
+  expect_equal(as.character(result[[VAR_TYPE]]), c("t", "F", "Chi2", "t"))
+  expect_equal(result[[VAR_TEST_VALUE]], c(2, 12.03, 6.53, 2))
   
   # check errors
-  expect_equal(result$Error, c(FALSE, FALSE, FALSE, TRUE))
-  expect_equal(result$DecisionError, c(FALSE, FALSE, FALSE, TRUE))
+  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE))
+  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE))
   
   # check errors with one-tailed test detection
-  expect_equal(result_1tailed$Error, c(FALSE, FALSE, FALSE, FALSE))
-  expect_equal(result_1tailed$DecisionError, c(FALSE, FALSE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, FALSE))
 })
 
 # pdfs in folder
@@ -35,16 +35,16 @@ test_that("statistics from all pdfs in a folder are correctly retrieved and pars
   
   # extract 4 tests from paper
   expect_equal(nrow(result), 4)
-  expect_equal(as.character(result$Statistic), c("t", "F", "Chi2", "t"))
-  expect_equal(result$Value, c(2, 12.03, 6.53, 2))
+  expect_equal(as.character(result[[VAR_TYPE]]), c("t", "F", "Chi2", "t"))
+  expect_equal(result[[VAR_TEST_VALUE]], c(2, 12.03, 6.53, 2))
   
   # check errors
-  expect_equal(result$Error, c(FALSE, FALSE, FALSE, TRUE))
-  expect_equal(result$DecisionError, c(FALSE, FALSE, FALSE, TRUE))
+  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE))
+  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE))
   
   # check errors with one-tailed test detection
-  expect_equal(result_1tailed$Error, c(FALSE, FALSE, FALSE, FALSE))
-  expect_equal(result_1tailed$DecisionError, c(FALSE, FALSE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, FALSE))
 })
 
 # tests concerning parsing stats from html files ------------------------------
@@ -60,16 +60,16 @@ test_that("statistics from a html are correctly retrieved and parsed", {
   
   # extract 6 tests from paper
   expect_equal(nrow(result), 6)
-  expect_equal(as.character(result$Statistic), c("t", "Chi2", "t", "F", "F", "t"))
-  expect_equal(result$Value, c(-4.93, 6.9, 2, 1.203, 12.03, 2))
+  expect_equal(as.character(result[[VAR_TYPE]]), c("t", "Chi2", "t", "F", "F", "t"))
+  expect_equal(result[[VAR_TEST_VALUE]], c(-4.93, 6.9, 2, 1.203, 12.03, 2))
   
   # check errors
-  expect_equal(result$Error, c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
-  expect_equal(result$DecisionError, c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
+  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
+  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
 
   # check errors with one-tailed test detection
-  expect_equal(result_1tailed$Error, c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
-  expect_equal(result_1tailed$DecisionError, c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
   
 })
 
@@ -83,16 +83,16 @@ test_that("statistics from all htmls in a folder are correctly retrieved and par
   
   # extract 6 tests from paper
   expect_equal(nrow(result), 6)
-  expect_equal(as.character(result$Statistic), c("t", "Chi2", "t", "F", "F", "t"))
-  expect_equal(result$Value, c(-4.93, 6.9, 2, 1.203, 12.03, 2))
+  expect_equal(as.character(result[[VAR_TYPE]]), c("t", "Chi2", "t", "F", "F", "t"))
+  expect_equal(result[[VAR_TEST_VALUE]], c(-4.93, 6.9, 2, 1.203, 12.03, 2))
   
   # check errors
-  expect_equal(result$Error, c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
-  expect_equal(result$DecisionError, c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
+  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
+  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
   
   # check errors with one-tailed test detection
-  expect_equal(result_1tailed$Error, c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
-  expect_equal(result_1tailed$DecisionError, c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
   
 })
 

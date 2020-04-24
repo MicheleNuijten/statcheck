@@ -6,7 +6,7 @@ test_that("p-values for t-tests are correctly calculated", {
   
   result <- statcheck(txt, messages = FALSE)
   
-  expect_equal(result$Computed, computed)
+  expect_equal(result[[VAR_COMPUTED_P]], computed)
 })
 
 
@@ -16,7 +16,7 @@ test_that("p-values for F-tests are correctly calculated", {
   
   result <- statcheck(txt, messages = FALSE)
   
-  expect_equal(result$Computed, computed)
+  expect_equal(result[[VAR_COMPUTED_P]], computed)
 })
 
 test_that("p-values for correlations are correctly calculated", {
@@ -29,7 +29,7 @@ test_that("p-values for correlations are correctly calculated", {
   
   result <- statcheck(txt, messages = FALSE)
   
-  expect_equal(result$Computed, computed)
+  expect_equal(result[[VAR_COMPUTED_P]], computed)
 })
 
 
@@ -39,7 +39,7 @@ test_that("p-values for z-tests are correctly calculated", {
   
   result <- statcheck(txt, messages = FALSE)
   
-  expect_equal(result$Computed, computed)
+  expect_equal(result[[VAR_COMPUTED_P]], computed)
 })
 
 
@@ -49,7 +49,7 @@ test_that("p-values for chi2-tests are correctly calculated", {
   
   result <- statcheck(txt, messages = FALSE)
   
-  expect_equal(result$Computed, computed)
+  expect_equal(result[[VAR_COMPUTED_P]], computed)
 })
 
 
@@ -59,5 +59,5 @@ test_that("p-values for Q-tests are correctly calculated", {
   
   result <- statcheck(txt, messages = FALSE)
   
-  expect_equal(result$Computed, computed)
+  expect_equal(result[[VAR_COMPUTED_P]], computed)
 })

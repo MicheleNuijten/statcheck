@@ -12,8 +12,8 @@ test_that("p-values are correctly parsed", {
                         AllPValues = TRUE)
   
   expect_equal(nrow(result), 3)
-  expect_equal(as.character(result$p_comp), c("=", "<", ">"))
-  expect_equal(result$p_value, rep(0.05, 3))
+  expect_equal(as.character(result[[VAR_P_COMPARISON]]), c("=", "<", ">"))
+  expect_equal(result[[VAR_REPORTED_P]], rep(0.05, 3))
 })
 
 # non-significant results
@@ -24,8 +24,8 @@ test_that("results reported as ns are correctly parsed", {
                       AllPValues = TRUE)
   
   expect_equal(nrow(result), 1)
-  expect_equal(as.character(result$p_comp), "ns")
-  expect_true(is.na(result$p_value))
+  expect_equal(as.character(result[[VAR_P_COMPARISON]]), "ns")
+  expect_true(is.na(result[[VAR_REPORTED_P]]))
 })
 
 # test if the following non p-values are not retrieved ------------------
@@ -34,9 +34,7 @@ test_that("results reported as ns are correctly parsed", {
 test_that("page numbers are not extracted", {
   txt1 <- "see p. 01"
   
-  result <- statcheck(txt1, messages = FALSE,
-                      AllPValues = TRUE)
-  
-  expect_equal(nrow(result), 0)
+  expect_output(statcheck(txt1, messages = FALSE,
+                          AllPValues = TRUE), "did not find any p-values")
 })
   

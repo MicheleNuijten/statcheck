@@ -9,8 +9,8 @@ test_that("correct APA factor is calculated", {
   result2 <- statcheck(txt2, messages = FALSE)
   result12 <- statcheck(c(txt1, txt2), messages = FALSE)
   
-  expect_equal(result1$APAfactor, .5)
-  expect_equal(result2$APAfactor, 1)
-  expect_equal(result12$APAfactor, c(.5, 1))
+  expect_equal(result1[[VAR_APAFACTOR]], .5)
+  expect_equal(result2[[VAR_APAFACTOR]], 1)
+  expect_equal(result12[[VAR_APAFACTOR]], c(.5, 1))
     
 })
