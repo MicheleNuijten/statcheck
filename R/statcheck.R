@@ -111,7 +111,7 @@ statcheck <- function(texts,
     # compute the p-value, check if the result is an error and a decision error,
     # and if indicated in the options, check & correct for 1-tailed tests
     for(i in seq_len(nrow(Res))){
-    
+      
       result <- process_stats(test_type = Res$Statistic[i],
                               test_stat = Res$Value[i],
                               df1 = Res$df1[i], 
@@ -149,11 +149,19 @@ statcheck <- function(texts,
                     "Value", "Reported.Comparison", "Reported.P.Value",
                     "Computed", "Raw", "Error", "DecisionError", 
                     "OneTailedInTxt", "APAfactor")]
+    
+    # rename columns based on the variable names in the script constants.R
+    colnames(Res) <- c(VAR_SOURCE, VAR_TYPE, VAR_DF1, VAR_DF2, 
+                       VAR_TEST_COMPARISON, VAR_TEST_VALUE, VAR_P_COMPARISON,
+                       VAR_REPORTED_P, VAR_COMPUTED_P, VAR_RAW, VAR_ERROR, 
+                       VAR_DEC_ERROR, VAR_1TAILTXT, VAR_APAFACTOR)
+    
   }
   
   # Return ------------------------------------------------------------------
   
   if (AllPValues == FALSE) {
+    
     # Return message when there are no results
     if (nrow(Res) > 0) {
       class(Res) <- c("statcheck", "data.frame")
@@ -161,9 +169,22 @@ statcheck <- function(texts,
     } else {
       cat("statcheck did not find any results\n")
     }
+    
   } else {
-    return(pRes)
+    
+    if(nrow(pRes) > 0) {
+      # rename columns based on the variable names in the script constants.R
+      # first make sure that the columns are in the right order before renaming
+      pRes <- pRes[, c("Source", "p_comp", "p_value", "p_dec")]
+      colnames(pRes) <- c(VAR_SOURCE, VAR_P_COMPARISON, VAR_REPORTED_P, VAR_P_DEC)
+      
+      return(pRes)
+    } else {
+      cat("statcheck did not find any p-values\n")
+    }
+    
   }
+  
 }
 
 
