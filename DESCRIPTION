@@ -1,16 +1,30 @@
 Package: statcheck
-Type: Package
-Title: Extract Statistics from Articles and Recompute p Values
-Version: 1.3.2
-Date: 2020-03-15
-Author: Sacha Epskamp <mail@sachaepskamp.com> & Michele B. Nuijten
-    <m.b.nuijten@uvt.nl>
-Maintainer: Michele B. Nuijten <m.b.nuijten@uvt.nl>
+Title: Extract Statistics from Articles and Recompute P-Values
+Version: 1.4.0
+Date: 2020-04-28
+Authors@R: c(
+    person("Michele B.", "Nuijten", email = "m.b.nuijten@uvt.nl", 
+           role = c("aut", "cre")),
+    person("Sacha", "Epskamp", email = "mail@sachaepskamp.com", role = "aut"),
+    person("Sean", "Rife", role = "ctb"),
+    person("John", "Sakaluk", role = "ctb"),
+    person("Paul", "van der Laken", role = "ctb")
+  )
+Description: The package 'statcheck' can search text (e.g., scientific articles)
+    for Null Hypothesis Significance Test (NHST) results. Based on the reported test
+    statistic and degrees of freedom, statcheck recalculates the p-value and checks
+    whether the reported p-value matches the computed one. More details on what 
+    statcheck can and cannot do can be found in the online manual: 
+    <https://rpubs.com/michelenuijten/statcheckmanual>
 Depends: R (>= 2.14.2)
-Imports: plyr, ggplot2, rmarkdown
-Description: Extract statistics from articles and recompute p values.
-License: GPL-2
-LazyLoad: yes
-ByteCompile: yes
+License: GPL-3
+Imports: 
+    plyr, 
+    ggplot2, 
+    rmarkdown
 Suggests: 
     testthat
+LazyLoad: yes
+ByteCompile: yes
+Encoding: UTF-8
+RoxygenNote: 7.1.0
