@@ -21,3 +21,8 @@ VAR_APAFACTOR <- "apa_factor"
 
 # additional variables to return
 VAR_P_DEC <- "p_decimals"
+
+# additional variables in summary function
+VAR_NR_PVALUES <- "nr_p_values"
+VAR_NR_ERRORS <- "nr_errors"
+VAR_NR_DEC_ERRORS <- "nr_decision_errors"
