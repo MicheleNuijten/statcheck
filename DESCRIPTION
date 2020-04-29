@@ -15,7 +15,7 @@ Description: The package 'statcheck' can search text (e.g., scientific articles)
     statistic and degrees of freedom, statcheck recalculates the p-value and checks
     whether the reported p-value matches the computed one. More details on what 
     statcheck can and cannot do can be found in the online manual: 
-    <https://rpubs.com/michelenuijten/statcheckmanual>
+    <https://rpubs.com/michelenuijten/statcheckmanual>.
 Depends: R (>= 2.14.2)
 License: GPL-3
 Imports: 
