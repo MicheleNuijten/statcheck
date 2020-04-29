@@ -1,3 +1,116 @@
+#' Extract statistics and recompute p-values
+#' 
+#' \code{statcheck} extracts Null Hypothesis Significance (NHST) results from 
+#' strings and returns the extracted values, reported p-values and recomputed 
+#' p-values. 
+#' 
+#' 
+#' \code{statcheck} roughly works in three steps.
+#' 
+#' \strong{1. Scan text for statistical results}
+#' 
+#' \code{statcheck} uses regular expressions to recognizes statistical results 
+#' from t-tests, F-tests, \eqn{\chi2}-tests, Z-tests, Q-tests, and correlations. 
+#' statcheck can only recognize these results if the results are reported 
+#' exactly according to the APA guidelines:
+#' \itemize{
+#'     \item \emph{t}(df) = value, \emph{p} = value
+#'     \item \emph{F}(df1, df2) = value, \emph{p} = value
+#'     \item \emph{r}(df) = value, p = value
+#'     \item \emph{\eqn{\chi2}} (df, N = value) = value, \emph{p} = value 
+#'     (N is optional)
+#'     \item \emph{Z} = value, \emph{p} = value
+#'     \item \emph{Q}(df) = value, \emph{p} = value (statcheck can distinguish
+#'     between Q, Qw / Q-within, and Qb / Q-between)
+#' }
+#' \code{statcheck} takes into account that test statistics and p values may be 
+#' exactly (=) or inexactly (< or >) reported. Different spacing has also been 
+#' taken into account.
+#' 
+#' \strong{2. Recompute p-value}
+#' 
+#' \code{statcheck} uses the reported test statistic and degrees of freedom to
+#' recompute the p-value. By default, the recomputed p-value is two-sided
+#' 
+#' \strong{3. Compare reported and recomputed p-value}
+#' 
+#' This comparison takes into account how the results were reported, e.g., 
+#' p < .05 is treated differently than p = .05. Incongruent p values are marked 
+#' as an \code{error}. If the reported result is significant and the recomputed 
+#' result is not, or vice versa, the result is marked as a 
+#' \code{decision_error}.
+#' 
+#' Correct rounding is taken into account. For instance, a reported t-value of 
+#' 2.35 could correspond to an actual value of 2.345 to 2.354 with a range of 
+#' p-values that can slightly deviate from the recomputed p-value. 
+#' \code{statcheck} will not count cases like this as errors.
+#' 
+#' Note that when \code{statcheck} flags an \code{error} or 
+#' \code{decision_error}, it implicitly assumes that the p-value is the 
+#' inconsistent value, but it could just as well be the case that the test 
+#' statistic or degrees of freedom contain a reporting error. \code{statcheck}
+#' merely detects wether a set of numbers is consistent with each other.
+#' 
+#' @seealso
+#' For more details, see the 
+#' \href{https://rpubs.com/michelenuijten/statcheckmanual}{online manual}.
+#' 
+#' @param texts A vector of strings.
+#' @param stat Specify which test types you want to extract. "t" to extract 
+#' t-values, "F" to extract F-values, "cor" to extract correlations, "chisq"to 
+#' extract \eqn{\chi2} values, "Z" to extract Z-values, and "Q" to extract 
+#' Q-values. Using \code{c()} you can specify multiple tests. Defaults to all
+#' tests.
+#' @param OneTailedTests Logical. Do you want to assume that all reported tests 
+#' are one-tailed (TRUE) or two-tailed (FALSE, default)?
+#' @param alpha Assumed level of significance in the scanned texts. Defaults to 
+#' .05.
+#' @param pEqualAlphaSig Logical. If TRUE, statcheck counts p <= alpha as
+#' significant (default), if FALSE, statcheck counts p < alpha as significant.
+#' @param pZeroError Logical. If TRUE, statcheck counts p = .000 as an error 
+#' (because a p-value is never exactly zero, and should be reported as < .001), 
+#' if FALSE, statcheck does not count p = .000 automatically as an error.
+#' @param OneTailedTxt Logical. If TRUE, statcheck searches the text for 
+#' "one-sided", "one-tailed", and "directional" to identify the possible use of 
+#' one-sided tests. If one or more of these strings is found in the text AND the 
+#' result would have been correct if it was a one-sided test, the result is 
+#' assumed to be indeed one-sided and is counted as correct.
+#' @param AllPValues Logical. If TRUE, the output will consist of a dataframe 
+#' with all detected p values, also the ones that were not part of the full 
+#' results in APA format.
+#' @param messages Logical. If TRUE, statcheck will print a progress bar while 
+#' it's extracting statistics from text.
+#' 
+#' @return A data frame containing for each extracted statistic:
+#' \describe{
+#'     \item{source}{Name of the file of which the statistic is extracted}
+#'     \item{test_type}{Character indicating the statistic that is extracted}
+#'     \item{df1}{First degree of freedom (if applicable)}
+#'     \item{df2}{Second degree of freedom}
+#'     \item{test_comp}{Reported comparison of the test statistic, when 
+#'     importing from pdf this will often not be converted properly}
+#'     \item{test_value}{Reported value of the statistic}
+#'     \item{p_comp}{Reported comparison, when importing from pdf this might not 
+#'     be converted properly}
+#'     \item{reported_p}{The reported p-value, or NA if the reported value was 
+#'     n.s.}
+#'     \item{computed_p}{The recomputed p-value}
+#'     \item{raw}{Raw string of the statistical reference that is extracted}
+#'     \item{error}{The computed p value is not congruent with the reported 
+#'     p-value}
+#'     \item{decision_error}{The reported result is significant whereas the 
+#'     recomputed result is not, or vice versa.}
+#'     \item{one_tailed_in_txt}{Logical. Does the text contain the string 
+#'     "sided", "tailed", and/or "directional"?}
+#'     \item{apa_factor}{What proportion of all detected p-values was part of a 
+#'     fully APA reported result?}
+#' }
+#' 
+#' @examples 
+#' txt <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"
+#' statcheck(txt)
+
+
 statcheck <- function(texts,
                       stat = c("t", "F", "cor", "chisq", "Z", "Q"),
                       OneTailedTests = FALSE,
@@ -182,9 +295,7 @@ statcheck <- function(texts,
     } else {
       cat("statcheck did not find any p-values\n")
     }
-    
   }
-  
 }
 
 
