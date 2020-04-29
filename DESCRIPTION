@@ -1,7 +1,7 @@
 Package: statcheck
 Title: Extract Statistics from Articles and Recompute P-Values
 Version: 1.4.0
-Date: 2020-04-28
+Date: 2020-04-29
 Authors@R: c(
     person("Michele B.", "Nuijten", email = "m.b.nuijten@uvt.nl", 
            role = c("aut", "cre")),
