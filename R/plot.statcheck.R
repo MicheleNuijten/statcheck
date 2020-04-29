@@ -36,6 +36,12 @@
 #' # class "statcheck"
 #' plot(result)
 #' 
+#' @importFrom ggplot2 theme theme_bw element_blank element_line ggplot aes 
+#' geom_point geom_vline geom_hline geom_abline annotate scale_x_continuous
+#' scale_y_continuous scale_color_manual facet_grid
+#' @importFrom rlang .data
+#' @importFrom graphics plot.default points abline text par legend
+#' 
 #' @export
 
 plot.statcheck <- function(
@@ -138,8 +144,8 @@ plot.statcheck <- function(
       #color to the Type variable created earlier. Environment command allows apatheme to
       #be applied later because of bug when creating functions with ggplot2
       p <- ggplot(x,
-                  aes(y = .data[[VAR_COMPUTED_P]],
-                      x = .data[[VAR_REPORTED_P]],
+                  aes(y = rlang::.data[[VAR_COMPUTED_P]],
+                      x = rlang::.data[[VAR_REPORTED_P]],
                       col = Type),
                   environment = environment())
       
@@ -180,7 +186,7 @@ plot.statcheck <- function(
           ),
           values = c("grey80", "black", "grey50")
         ) +
-        facet_grid(as.formula(paste(group, "~ ."))) +
+        facet_grid(stats::as.formula(paste(group, "~ ."))) +
         apatheme
     }
     

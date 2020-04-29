@@ -19,8 +19,10 @@ Description: The package 'statcheck' can search text (e.g., scientific articles)
 Depends: R (>= 2.14.2)
 License: GPL-3
 Imports: 
+    tcltk,
     plyr, 
     ggplot2, 
+    rlang,
     rmarkdown
 Suggests: 
     testthat

@@ -4,7 +4,7 @@
 checkdir <-
   function(dir, subdir = TRUE, ...) {
     if (missing(dir))
-      dir <- tk_choose.dir()
+      dir <- tcltk::tk_choose.dir()
     
     pdfs <-
       any(grepl("\\.pdf$", list.files(dir, recursive = subdir), ignore.case =

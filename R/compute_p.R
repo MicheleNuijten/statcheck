@@ -6,25 +6,25 @@ compute_p <- function(test_type, test_stat, df1, df2, two_tailed){
   
   if(test_type == "t"){
     
-    computed <- pt(-1 * abs(test_stat), df2)
+    computed <- stats::pt(-1 * abs(test_stat), df2)
     
   } else if(test_type == "F"){
     
-    computed <- pf(test_stat, df1, df2, lower.tail = FALSE)
+    computed <- stats::pf(test_stat, df1, df2, lower.tail = FALSE)
     
   } else if(test_type == "Z"){
     
-    computed <- pnorm(abs(test_stat), lower.tail = FALSE)
+    computed <- stats::pnorm(abs(test_stat), lower.tail = FALSE)
     
   } else if(test_type == "r"){
     
     t <- r2t(test_stat, df2)
-    computed <- pt(-1 * abs(t), df2)
+    computed <- stats::pt(-1 * abs(t), df2)
     
   } else if(test_type == "Chi2" | 
             test_type == "Q" | test_type == "Qb" | test_type == "Qw"){
     
-    computed <- pchisq(test_stat, df1, lower.tail = FALSE)
+    computed <- stats::pchisq(test_stat, df1, lower.tail = FALSE)
     
   }
   

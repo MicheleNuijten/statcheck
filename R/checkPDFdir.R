@@ -6,7 +6,7 @@ checkPDFdir <-
            subdir = TRUE,
            ...) {
     if (missing(dir))
-      dir <- tk_choose.dir()
+      dir <- tcltk::tk_choose.dir()
     
     all.files <-
       list.files(dir,
@@ -20,11 +20,11 @@ checkPDFdir <-
     
     txts <- character(length(files))
     message("Importing PDF files...")
-    pb <- txtProgressBar(max = length(files), style = 3)
+    pb <- utils::txtProgressBar(max = length(files), style = 3)
     for (i in 1:length(files))
     {
       txts[i] <-  getPDF(files[i])
-      setTxtProgressBar(pb, i)
+      utils::setTxtProgressBar(pb, i)
     }
     close(pb)
     names(txts) <- gsub("\\.pdf$", "", basename(files))

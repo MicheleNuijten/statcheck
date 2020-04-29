@@ -5,7 +5,7 @@ checkHTML <- function(files,
                       ...)
 {
   if (missing(files))
-    files <- tk_choose.files()
+    files <- tcltk::tk_choose.files()
   
   txts <-  sapply(files, getHTML)
   names(txts) <- gsub(".html", "", basename(files))

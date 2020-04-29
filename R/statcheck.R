@@ -141,7 +141,7 @@ statcheck <- function(texts,
   # results hard to read
   if(messages == TRUE){
     message("Extracting statistics...")
-    pb <- txtProgressBar(max = length(text), style = 3)
+    pb <- utils::txtProgressBar(max = length(text), style = 3)
   }
   
   # for each text in the vector of input texts, extract all p-values and all
@@ -192,7 +192,7 @@ statcheck <- function(texts,
     
     # update the progress bar
     if(messages == TRUE){
-      setTxtProgressBar(pb, i)
+      utils::setTxtProgressBar(pb, i)
     }
     
   }

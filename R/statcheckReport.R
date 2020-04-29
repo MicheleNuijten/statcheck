@@ -56,7 +56,7 @@ statcheckReport <-
     # run the markdown/knitr script
     statcheckReport_template <-
       system.file("rmd/statcheckReport_template.Rmd", package = "statcheck")
-    render(statcheckReport_template)
+    rmarkdown::render(statcheckReport_template)
     
     # save/move the file in/to the specified output directory
     curDir <- system.file("rmd", package = "statcheck")

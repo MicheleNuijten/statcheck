@@ -39,8 +39,8 @@ identify.statcheck <-
     # replace 'ns' for > alpha
     reported[x[[VAR_P_COMPARISON]] == "ns"] <- alpha
     
-    plot(x, APAstyle = FALSE, ...) # makes use of the plot.statcheck() function
-    ID <- identify(reported, computed)
+    plot.statcheck(x, APAstyle = FALSE, ...) 
+    ID <- graphics::identify(reported, computed)
     
     res <- x[ID,]
     class(res) <- c("statcheck", "data.frame")
