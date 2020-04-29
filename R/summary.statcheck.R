@@ -1,3 +1,25 @@
+#' Summary method for statcheck
+#' 
+#' Gives the summaries for a \code{statcheck} object.
+#' 
+#' @param object a \code{statcheck} object.
+#' @param ... additional arguments affecting the summary produced.
+#' 
+#' @return A data frame containing for each source of statistics:
+#' \describe{
+#'     \item{source}{Name of the file/origin of which the statistics are 
+#'     extracted}
+#'     \item{nr_p_values}{The number of extracted reported p values per article}
+#'     \item{nr_errors}{The number of errors per article}
+#'     \item{nr_decision_errors}{The number of decision errors per article}
+#' }
+#' 
+#' @examples 
+#' txt <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"
+#' stat <- statcheck(txt)
+#' summary(stat)
+
+
 summary.statcheck <-
   function(object, ...) {
     x <- object
