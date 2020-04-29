@@ -1,3 +1,5 @@
+#' @rdname checkdirs
+
 checkdir <-
   function(dir, subdir = TRUE, ...) {
     if (missing(dir))
