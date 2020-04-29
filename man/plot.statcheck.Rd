@@ -48,6 +48,7 @@ result <- statcheck(txt)
 # "result". R will know what kind of plot to make, because "result" is of 
 # class "statcheck"
 plot(result)
+
 }
 \seealso{
 \code{\link{statcheck}}

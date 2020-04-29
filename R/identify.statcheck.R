@@ -26,6 +26,8 @@
 #' # a dataframe with information on the selected points will appear
 #' 
 #' }
+#' 
+#' @export
 
 identify.statcheck <-
   function(x,

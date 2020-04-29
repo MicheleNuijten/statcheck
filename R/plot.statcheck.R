@@ -35,6 +35,8 @@
 #' # "result". R will know what kind of plot to make, because "result" is of 
 #' # class "statcheck"
 #' plot(result)
+#' 
+#' @export
 
 plot.statcheck <- function(
   x,

@@ -51,4 +51,5 @@ statcheckReport(stat, outputFileName="statcheckHTMLReport",
 # "C:/mydocuments/results" under the name "statcheckHTMLReport.html".
 
 }
+
 }

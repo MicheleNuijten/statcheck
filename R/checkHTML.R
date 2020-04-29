@@ -1,4 +1,5 @@
 #' @rdname checkfiles
+#' @export
 
 checkHTML <- function(files,
                       ...)

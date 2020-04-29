@@ -1,4 +1,5 @@
 #' @rdname checkdirs
+#' @export
 
 checkPDFdir <-
   function(dir,

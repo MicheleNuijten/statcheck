@@ -132,6 +132,7 @@ merely detects wether a set of numbers is consistent with each other.
 \examples{
 txt <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"
 statcheck(txt)
+
 }
 \seealso{
 For more details, see the 

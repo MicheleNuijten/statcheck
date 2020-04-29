@@ -38,6 +38,8 @@
 #' # "C:/mydocuments/results" under the name "statcheckHTMLReport.html".
 #' 
 #' }
+#' 
+#' @export
 
 statcheckReport <-
   function(statcheckOutput,

@@ -18,6 +18,8 @@
 #' txt <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"
 #' stat <- statcheck(txt)
 #' summary(stat)
+#' 
+#' @export
 
 
 summary.statcheck <-

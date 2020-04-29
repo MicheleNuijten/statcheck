@@ -1,4 +1,5 @@
 #' @rdname checkfiles
+#' @export
 
 checkPDF <-
   function(files, ...) {

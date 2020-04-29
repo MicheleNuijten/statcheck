@@ -1,4 +1,5 @@
 #' @rdname checkdirs
+#' @export
 
 checkdir <-
   function(dir, subdir = TRUE, ...) {
