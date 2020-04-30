@@ -1,3 +1,5 @@
+# HTML TO TXT ------------------------------------------------------------------
+
 getHTML <- function(x){
   
   strings <- lapply(x, function(fileName){
@@ -5,7 +7,7 @@ getHTML <- function(x){
     on.exit(close(con))
     raw_strings <- readChar(con, file.info(fileName)$size, useBytes = TRUE)
     return(raw_strings)
-    })
+  })
   
   # Remove subscripts (except for p_rep)
   strings <- lapply(strings, gsub, pattern = "<sub>(?!rep).*?</sub>", replacement = "", perl = TRUE)
@@ -31,60 +33,23 @@ getHTML <- function(x){
   return(strings)
 }
 
-
-
-
-checkHTMLdir <- function(dir,
-                         subdir = TRUE,
-                         extension = TRUE,
-                         ...) {
-  if (missing(dir)) {
-    dir <- tk_choose.dir()
+# PDF TO TXT -------------------------------------------------------------------
+getPDF <- function(x){
+  
+  txtfiles <- character(length(x))
+  for (i in 1:length(x)){
+    
+    system(paste('pdftotext -q -enc "ASCII7" "', x[i], '"', sep = ""))
+    if (file.exists(gsub("\\.pdf$", "\\.txt", x[i]))) {
+      fileName <- gsub("\\.pdf$", "\\.txt", x[i])
+      txtfiles[i] <- readChar(fileName, file.info(fileName)$size)
+      
+    } else{
+      
+      warning(paste("Failure in file", x[i]))
+      txtfiles[i] <- ""
+      
+    }
   }
-  
-  if (extension == TRUE) {
-    pat = ".html|.htm"
-  }
-  
-  if (extension == FALSE) {
-    pat = ""
-  }
-  
-  files <-
-    list.files(dir,
-               pattern = pat,
-               full.names = TRUE,
-               recursive = subdir)
-  
-  if (length(files) == 0) {
-    stop("No HTML found")
-  }
-  
-  txts <- character(length(files))
-  message("Importing HTML files...")
-  pb <- txtProgressBar(max = length(files), style = 3)
-  
-  for (i in 1:length(files)) {
-    txts[i] <-  getHTML(files[i])
-    setTxtProgressBar(pb, i)
-  }
-  
-  close(pb)
-  
-  names(txts) <- gsub(".html", "", basename(files))
-  names(txts) <- gsub(".htm", "", names(txts))
-  return(statcheck(txts, ...))
-}
-
-checkHTML <- function(files,
-                      ...)
-{
-  if (missing(files))
-    files <- tk_choose.files()
-  
-  txts <-  sapply(files, getHTML)
-  names(txts) <- gsub(".html", "", basename(files))
-  names(txts) <- gsub(".htm", "", names(txts))
-  return(statcheck(txts, ...))
-  
+  return(txtfiles)
 }
