@@ -43,9 +43,11 @@ test_that("F-tests with different spacing are retrieved from text", {
 # variations in the degrees of freedom
 test_that("corrected degrees of freedom in F-tests are retrieved from text", {
   txt1 <- "F(2.1, 28.1) = 2.20, p = .03"
+  txt2 <- "F(l, 76) = 23.95, p <.001" # this wrong notation happens occasionally in articles
   
-  result <- statcheck(txt1, messages = FALSE)
+  result <- statcheck(c(txt1, txt2), messages = FALSE)
   
-  expect_equal(nrow(result), 1)
-  expect_equal(result[[VAR_DF2]], 28.1)
+  expect_equal(nrow(result), 2)
+  expect_equal(result[[VAR_DF1]], c(2.1, 1))
+  expect_equal(result[[VAR_DF2]], c(28.1, 76))
 })
