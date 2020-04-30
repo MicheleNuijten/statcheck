@@ -40,6 +40,15 @@ test_that("z-tests with different spacing are retrieved from text", {
   expect_equal(nrow(result), 2)
 })
 
+# variation in capitalization
+test_that("upper case z-tests are retrieved from text", {
+  txt <- " Z = 2.20 , p = .03"
+  
+  result <- statcheck(txt, messages = FALSE)
+  
+  expect_equal(nrow(result), 1)
+})
+
 # test if the following incorrect z-tests are not retrieved --------------------
 
 # z test cannot have df

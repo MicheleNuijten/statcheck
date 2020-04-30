@@ -7,7 +7,7 @@ RGX_R <- "r"
 RGX_Q <- "Q\\s?-?\\s?(w|within|b|between)?"
 RGX_F <- "F"
 RGX_CHI2 <- "((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^trFzQWBnD ]\\s?)|([^trFzQWBnD ]2\\s?))2?"
-RGX_Z <- "([^a-z]z)"
+RGX_Z <- "([^a-z](z|Z))"
 
 # degrees of freedom
 # the way dfs are reported differs per test type, except for t, r, and Q, where
