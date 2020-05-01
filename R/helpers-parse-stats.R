@@ -138,12 +138,18 @@ recover_minus_sign <- function(raw){
 
 extract_test_stats <- function(raw){
   
+  # first select the test type, df, and test value
+  # this will remove anything between the test value and p-value that could
+  # otherwise be mistaken for another test value
+  test_raw <- extract_pattern(txt = raw,
+                              pattern = RGX_TEST_DF_VALUE)
+
   # remove N = ... from chi-square tests
   # otherwise, these sample sizes will wrongly be classified as test statistics
-  raw_noN <- gsub(RGX_DF_CHI2, "", raw)
+  test_raw_noN <- gsub(RGX_DF_CHI2, "", test_raw)
   
   # extract test comparison and test value
-  test_raw <- extract_pattern(txt = raw_noN,
+  test_raw <- extract_pattern(txt = test_raw_noN,
                               pattern = RGX_TEST_VALUE)
   
   # extract test comparison

@@ -1,13 +1,20 @@
-extract_stats <- function(txt, stat){
+extract_stats <- function(txt, apa_style, stat){
   
   # step 1: extract all NHST results from text -----------------------------------
+  
+  # specify whether to search for APA NHST results or also to include non-APA
+  if(apa_style == TRUE){
+    rgx_nhst <- RGX_NHST
+  } else {
+    rgx_nhst <- RGX_NHST_NONAPA
+  }
   
   # if there are x NHST results in a text, this returns a character vector of 
   # length x
   nhst_raw <- extract_pattern(txt = txt,
                               # nhst is the regex for nhst results
                               # it came from the regex.R script within the package
-                              pattern = RGX_NHST)
+                              pattern = rgx_nhst)
   
   # if there are no nhst results in the text, return an empty data frame
   if(is.null(nhst_raw)){
