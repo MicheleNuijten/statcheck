@@ -6,6 +6,8 @@ in APA style. The specific deviations from APA style that statcheck recognizes
 are:
     * F-tests with MSE values reported between the test statistic and p-value:
     "F(2,25) = 11.37, MSE = 236, p < .01"
+    * Square and curly braces around degrees of freedom:
+    "F[2, 28] = 2.2, p = .03", or "t{28} = 2.2, p = .03"
 
 # statcheck 1.4.0
 <!---searched in commits on statcheck repo: `committer-date:2020-03-15..2020-04-30` --->

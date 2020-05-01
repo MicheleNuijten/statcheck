@@ -10,7 +10,8 @@ RGX_T <- "t"
 RGX_R <- "r"
 RGX_Q <- "Q\\s?-?\\s?(w|within|b|between)?"
 RGX_F <- "F"
-RGX_CHI2 <- "((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^trFzQWBnD ]\\s?)|([^trFzQWBnD ]2\\s?))2?"
+RGX_CHI2 <- 
+  "((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^trFzQWBnD ]\\s?)|([^trFzQWBnD ]2\\s?))2?"
 RGX_Z <- "([^a-z](z|Z))"
 
 # degrees of freedom ---------------------------------
@@ -19,9 +20,22 @@ RGX_Z <- "([^a-z](z|Z))"
 # they are always in the format "(28)". The regex for these tests can therefore
 # be combined
 # z-tests do not have dfs
-RGX_DF_T_R_Q <- "\\(\\s?\\d*\\.?\\d+\\s?\\)"
-RGX_DF_F <- "\\(\\s?\\d*\\.?(I|l|\\d+)\\s?,\\s?\\d*\\.?\\d+\\s?\\)"
-RGX_DF_CHI2 <- "\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?\\)"
+
+# regex for parentheses
+# make this flexible to allow replacement with other bracket types for non-APA 
+RGX_PRTS_1 <- "\\("
+RGX_PRTS_2 <- "\\)"
+
+# combine into full df regexes
+RGX_DF_T_R_Q <- 
+  paste0(RGX_PRTS_1, "\\s?\\d*\\.?\\d+\\s?", RGX_PRTS_2)
+RGX_DF_F <- 
+  paste0(RGX_PRTS_1,"\\s?\\d*\\.?(I|l|\\d+)\\s?,\\s?\\d*\\.?\\d+\\s?", 
+         RGX_PRTS_2)
+RGX_DF_CHI2 <- 
+  paste0(RGX_PRTS_1, 
+         "\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?", 
+         RGX_PRTS_2)
 
 # combine test types with the correct type of df -----
 # put regex between () to create regex groups
@@ -117,10 +131,40 @@ RGX_MSE <- "MSE"
 RGX_F_MSE <- paste(RGX_F_DF, RGX_TEST_VALUE, RGX_MSE, RGX_TEST_VALUE, RGX_P_NS, 
                    sep = "\\s?")
 
+# Square or curly brackets ----------------------------
 
+# regex for square or curly brackets
+RGX_BRACK_1 <- "(\\[|\\{)"
+RGX_BRACK_2 <- "(\\]|\\})"
+
+# combine into full df regexes
+RGX_DF_T_R_Q_BRACK <- 
+  paste0(RGX_BRACK_1, "\\s?\\d*\\.?\\d+\\s?", RGX_BRACK_2)
+RGX_DF_F_BRACK <- 
+  paste0(RGX_BRACK_1,"\\s?\\d*\\.?(I|l|\\d+)\\s?,\\s?\\d*\\.?\\d+\\s?", 
+         RGX_BRACK_2)
+RGX_DF_CHI2_BRACK <- 
+  paste0(RGX_BRACK_1, 
+         "\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?", 
+         RGX_BRACK_2)
+
+# combine test types with the correct type of df -----
+# put regex between () to create regex groups
+RGX_T_DF_BRACK <- paste0("(", RGX_T, "\\s?", RGX_DF_T_R_Q_BRACK, ")")
+RGX_R_DF_BRACK <- paste0("(", RGX_R, "\\s?", RGX_DF_T_R_Q_BRACK, ")")
+RGX_Q_DF_BRACK <- paste0("(", RGX_Q, "\\s?", RGX_DF_T_R_Q_BRACK, ")")
+RGX_F_DF_BRACK <- paste0("(", RGX_F, "\\s?", RGX_DF_F_BRACK, ")")
+RGX_CHI2_DF_BRACK <- paste0("(", RGX_CHI2, "\\s?", RGX_DF_CHI2_BRACK, ")")
+
+RGX_TEST_DF_BRACK <- paste0("(", RGX_T_DF_BRACK, "|", RGX_R_DF_BRACK, "|", RGX_Q_DF_BRACK, "|", 
+                      RGX_F_DF_BRACK, "|", RGX_CHI2_DF_BRACK, ")")
+
+RGX_TEST_DF_VALUE_BRACK <- paste(RGX_TEST_DF_BRACK, RGX_TEST_VALUE, sep = "\\s?")
+
+RGX_NHST_BRACK <- paste(RGX_TEST_DF_VALUE_BRACK, RGX_P_NS, sep = "\\s?")
 
 ### Combine all non-apa regexes with the apa regex -----------------------------
 
 # This creates a complete regex that matches everything statcheck recognizes 
 
-RGX_NHST_NONAPA <- paste0("(", RGX_NHST, "|", RGX_F_MSE, ")")
+RGX_NHST_NONAPA <- paste0("(", RGX_NHST, "|", RGX_F_MSE, "|", RGX_NHST_BRACK, ")")

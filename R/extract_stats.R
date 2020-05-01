@@ -21,7 +21,14 @@ extract_stats <- function(txt, apa_style, stat){
     return(data.frame(NULL))
   }
   
-  # step 2: parse the extracted results ------------------------------------------
+  # step 2: clean non-apa results ----------------------------------------------
+  
+  # when non-apa results are extracted, it needs to be "translated" in the apa
+  # equivalent, to enable parsing of the result
+  nhst_clean <- clean_non_apa(nhst_raw)
+  
+  
+  # step 3: parse the extracted results ----------------------------------------
   
   # empty vectors and data frames to store results in
   # where relevant, force the output to be of type "character"
@@ -33,10 +40,10 @@ extract_stats <- function(txt, apa_style, stat){
   # loop over all extracted, raw nhst results
   # each nhst result is parsed individually, in the order that they were extracted
   # from the text
-  for(i in seq_along(nhst_raw)){
+  for(i in seq_along(nhst_clean)){
     
     # extract the test types from the nhst results 
-    test_raw <- extract_pattern(txt = nhst_raw[i],
+    test_raw <- extract_pattern(txt = nhst_clean[i],
                                 pattern = RGX_TEST_TYPE)
     
     # classify the test types in standard classifications
@@ -71,20 +78,20 @@ extract_stats <- function(txt, apa_style, stat){
     
     # extract degrees of freedom
     
-      dfs <- extract_df(raw = nhst_raw[i],
+      dfs <- extract_df(raw = nhst_clean[i],
                         test_type = test_type[i])
       
       df_result <- rbind(df_result, dfs)
     
     # extract test comparison and test value 
     
-    test <- extract_test_stats(raw = nhst_raw[i])
+    test <- extract_test_stats(raw = nhst_clean[i])
     
     test_stats <- rbind(test_stats, test)
     
     # extract p-comparison and p-value
     
-    p <- extract_p_value(raw = nhst_raw[i])
+    p <- extract_p_value(raw = nhst_clean[i])
     
     pvals <- rbind(pvals, p)
     
