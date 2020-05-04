@@ -149,6 +149,7 @@ RGX_DF_CHI2_BRACK <-
          RGX_BRACK_2)
 
 # combine test types with the correct type of df -----
+
 # put regex between () to create regex groups
 RGX_T_DF_BRACK <- paste0("(", RGX_T, "\\s?", RGX_DF_T_R_Q_BRACK, ")")
 RGX_R_DF_BRACK <- paste0("(", RGX_R, "\\s?", RGX_DF_T_R_Q_BRACK, ")")
@@ -167,4 +168,4 @@ RGX_NHST_BRACK <- paste(RGX_TEST_DF_VALUE_BRACK, RGX_P_NS, sep = "\\s?")
 
 # This creates a complete regex that matches everything statcheck recognizes 
 
-RGX_NHST_NONAPA <- paste0("(", RGX_NHST, "|", RGX_F_MSE, "|", RGX_NHST_BRACK, ")")
+RGX_NHST_NONAPA <- paste0("(", RGX_NHST, "|", RGX_F_MSE, "|", RGX_NHST_BRACK,")")
