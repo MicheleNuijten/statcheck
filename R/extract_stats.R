@@ -46,6 +46,27 @@ extract_stats <- function(txt, apa_style, stat){
     test_raw <- extract_pattern(txt = nhst_clean[i],
                                 pattern = RGX_TEST_TYPE)
     
+    # workaround for wrongly converted chi2 between parentheses:
+    # in some very specific cases, chi2 tests can cause this function to break
+    # if a chi2 is reported between parentheses "(X2(1) = 2.2, p < .05)", and 
+    # the X symbol is not converted, the following text is read: "(2(1) = 2.2, p
+    # < .05)". If this happens, 2 tests are extracted: " ", and "(2)", causing
+    # an error
+    # to solve this, only consider as a test_raw a string that matches the RGX
+    # for chi2
+    if(length(test_raw) > 1){
+      
+      chi2_matches <- grepl(RGX_CHI2, test_raw)
+      
+      # if one test_raw matches chi2, consider that test_raw
+      if(sum(chi2_matches == 1)){
+        test_raw <- test_raw[chi2_matches]
+      } else {
+        # if either more or none of the test_raws match chi2, skip this step
+        next
+      }
+    }
+    
     # classify the test types in standard classifications
     
     # for each test type, check where the vector with extracted, raw test types

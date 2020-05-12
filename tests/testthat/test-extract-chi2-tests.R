@@ -61,3 +61,18 @@ test_that("chi2-tests with different spacing are retrieved from text", {
   
   expect_equal(nrow(result), 2)
 })
+
+# chi-square between parentheses
+test_that("chi2 test between parentheses are correctly parsed", {
+  
+  # here the X was not converted. Example from Jesse, A., & Mitterer, H. (2011). 
+  # Pointing gestures do not influence the perception of lexical stress. In 
+  # Twelfth Annual Conference of the International Speech Communication 
+  # Association.
+  txt <- " (2(1)=0.03, p=.86" 
+  
+  result <- statcheck(txt, messages = FALSE)
+  
+  expect_equal(nrow(result), 1)
+  
+})
