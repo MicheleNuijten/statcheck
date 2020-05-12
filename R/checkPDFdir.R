@@ -4,6 +4,7 @@
 checkPDFdir <-
   function(dir,
            subdir = TRUE,
+           method = c("xpdf", "pdftools"),
            ...) {
     if (missing(dir))
       dir <- tcltk::tk_choose.dir()
@@ -23,7 +24,7 @@ checkPDFdir <-
     pb <- utils::txtProgressBar(max = length(files), style = 3)
     for (i in 1:length(files))
     {
-      txts[i] <-  getPDF(files[i])
+      txts[i] <-  getPDF(files[i], method = method)
       utils::setTxtProgressBar(pb, i)
     }
     close(pb)
