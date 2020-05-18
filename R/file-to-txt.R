@@ -45,26 +45,26 @@ getPDF <- function(x, method){
     txtfiles <- stringi::stri_enc_toutf32(txtfiles) 
     
     # Replace known weird characters
-    
-    # substitute double solidous (UTF-32 Decimal 11005) with equal sign (UTF-32 
-    # Decimal 61) [issue in JPSP, JEP, APA journals]
-    txtfiles <- lapply(txtfiles, gsub, pattern = "11005", 
-                       replacement = "61", fixed = TRUE) 
-    
-    # substitute U+2B0D (C++ \u2b0d; UTF-32 Decimal 11021) with equal less than 
-    # sign (UTF-32 Decimal 60) [issue in JPSP, JEP, APA journals]
-    txtfiles <- lapply(txtfiles, gsub, pattern = "11021", 
-                       replacement = "60", fixed = TRUE) 
-    
-    # substitute U+2AFA (UTF-32 Decimal 11002) with HYPHEN-MINUS sign (UTF-32 
-    # Decimal 45) [issue in JPSP, APA journals]
-    txtfiles <- lapply(txtfiles, gsub, pattern = "11002", 
-                       replacement = "45", fixed = TRUE) 
-    
-    # substitute U+2439 (C++ \u2439; UTF-32 Decimal 9273) with small greek chi 
-    # (UTF-32 Decimal 967) [APA journals]
-    txtfiles <- lapply(txtfiles, gsub, pattern = "9273", 
-                       replacement = "967", fixed = TRUE) 
+
+    # substitute double solidous (UTF-32 Decimal 11005) with equal sign (UTF-32
+    # Decimal 61) [issue in APA journals]
+    txtfiles <- lapply(txtfiles, gsub, pattern = "11005",
+                       replacement = "61", fixed = TRUE)
+
+    # substitute U+2B0D (C++ \u2b0d; UTF-32 Decimal 11021) with equal less than
+    # sign (UTF-32 Decimal 60) [issue in APA journals]
+    txtfiles <- lapply(txtfiles, gsub, pattern = "11021",
+                       replacement = "60", fixed = TRUE)
+
+    # substitute U+2AFA (UTF-32 Decimal 11002) with HYPHEN-MINUS sign (UTF-32
+    # Decimal 45) [issue in APA journals]
+    txtfiles <- lapply(txtfiles, gsub, pattern = "11002",
+                       replacement = "45", fixed = TRUE)
+
+    # substitute U+2439 (C++ \u2439; UTF-32 Decimal 9273) with small greek chi
+    # (UTF-32 Decimal 967) [issue in APA journals]
+    txtfiles <- lapply(txtfiles, gsub, pattern = "9273",
+                       replacement = "967", fixed = TRUE)
     
     # Revert to UTF-8 encoding
     txtfiles <- stringi::stri_enc_fromutf32(txtfiles)
