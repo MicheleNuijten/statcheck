@@ -125,3 +125,45 @@ test_that("stats from all pdfs and htmls in a folder are correctly retrieved
 })
 
 # tests concerning pdf encoding ----------------------------------------------
+
+# stats from mausbach et al. 2012, health psych (apa journal)
+test_that("all stats from apa pdf are extracted with pdftools", {
+  
+  # reference file with manually extracted statistics
+  manual <- read.csv(
+    system.file("test_materials/mausbach_manual.csv", package = "statcheck"), 
+    header = TRUE)
+  
+  # 1 extracted statistic is not included because of an error in the conversion 
+  # from raw text to text in columns. This seems to be due to the pdf itself,
+  # not an error in the pdf_columns function. For some reason, there are not
+  # enough whitespaces between some sentences in different columns when 
+  # converting.
+  
+  reference <- manual[-which(manual$test_value == -1.34), ]
+  
+  # in this pdf, =, <, and - are wrongly encoded
+  # the method pdftools function in statcheck should be able to deal with this
+  pdf_file <- system.file("test_materials/mausbach.pdf", package = "statcheck")
+  result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
+  
+  # reshuffle rows in result
+  # this is necessary because of the same error in restoring the columns in the 
+  # pdf as mentioned above. One sentence (with a result) is moved to an 
+  # incorrect place in the document
+  result_ordered <- result[c(2:8, 1, 9:28), ]
+  
+  # compare results statcheck with manually extracted stats
+  expect_equal(nrow(reference), nrow(result_ordered))
+  expect_equal(reference$test_value, result_ordered$test_value)
+  
+})
+
+
+
+
+
+
+
+
+
