@@ -129,6 +129,16 @@ test_that("stats from all pdfs and htmls in a folder are correctly retrieved
 # stats from mausbach et al. 2012, health psych (apa journal)
 test_that("all stats from apa pdf are extracted with pdftools", {
   
+  # SKIP IF ARTICLE IS NOT AVAILABLE
+  # THE ARTICLE CANNOT BE UPLOADED TO GITHUB/CRAN BECAUSE OF COPYRIGHT 
+  # RESTRICTIONS
+  pdf_file <- system.file("test_materials/mausbach.pdf", package = "statcheck") 
+  
+  if(pdf_file == ""){
+    skip("pdf article not available for testing, because of copyright 
+         restrictions")
+  }
+  
   # reference file with manually extracted statistics
   manual <- read.csv(
     system.file("test_materials/mausbach_manual.csv", package = "statcheck"), 
@@ -144,7 +154,6 @@ test_that("all stats from apa pdf are extracted with pdftools", {
   
   # in this pdf, =, <, and - are wrongly encoded
   # the method pdftools function in statcheck should be able to deal with this
-  pdf_file <- system.file("test_materials/mausbach.pdf", package = "statcheck")
   result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
   
   # reshuffle rows in result
