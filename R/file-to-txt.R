@@ -86,6 +86,16 @@ getPDF <- function(x, method){
                        pattern = RGX_B_SMALLER,
                        replacement = "<", perl = TRUE)
     
+    # substitute the letter "N" in a NHST result for a ">", for the same reason 
+    # as above. [issue in Elsevier journal: JESP]
+    txtfiles <- lapply(txtfiles, gsub, 
+                       # don't match a b preceded by =<>, because the b itself 
+                       # should be the comparison sign.
+                       # only match a b followed by a number, that gives further
+                       # proof that the b is in fact the comparison sign.
+                       pattern = RGX_N_LARGER,
+                       replacement = ">", perl = TRUE)
+    
     
     # Arrange text according to paper column layout
     txtfiles <- pdf_columns(txtfiles)

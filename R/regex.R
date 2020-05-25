@@ -130,6 +130,10 @@ RGX_DF1_I_L <- "I|l"
 # this regex is used in file-to-txt.R to replace it
 RGX_B_SMALLER <- "(?<![=<>])b(?=\\s?\\.?\\d)"
 
+# in some JESP articles, a > is translated with a N
+# this regex is used in file-to-txt.R to replace it
+RGX_N_LARGER <- "(?<![=<>])N(?=\\s?\\.?\\d)"
+
 ################################################################################
 ######################### REGEXES FOR NON-APA STYLE ############################
 ################################################################################
