@@ -66,8 +66,26 @@ getPDF <- function(x, method){
     txtfiles <- lapply(txtfiles, gsub, pattern = "9273",
                        replacement = "967", fixed = TRUE)
     
+    # substitute 1/4 (UTF-32 decimal 188) with equal sign (UTF-32 Decimal 61);
+    # [issue in Elsevier journal: Journal of Environmental Psychology]
+    txtfiles <- lapply(txtfiles, gsub, pattern = "188",
+                       replacement = "61", fixed = TRUE)
+    
     # Revert to UTF-8 encoding
     txtfiles <- stringi::stri_enc_fromutf32(txtfiles)
+    
+    # substitute the letter "b" in a NHST result for a "<". This is not feasible
+    # in utf32 encoding, because making a regex that only substitutes the b in
+    # a statistical result instead of ALL b's in the paper is very hard in 
+    # utf32 encoding. [issue in Elsevier journal: JESP]
+    txtfiles <- lapply(txtfiles, gsub, 
+                       # don't match a b preceded by =<>, because the b itself 
+                       # should be the comparison sign.
+                       # only match a b followed by a number, that gives further
+                       # proof that the b is in fact the comparison sign.
+                       pattern = RGX_B_SMALLER,
+                       replacement = "<", perl = TRUE)
+    
     
     # Arrange text according to paper column layout
     txtfiles <- pdf_columns(txtfiles)
