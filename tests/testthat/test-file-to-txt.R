@@ -6,7 +6,7 @@ context("Check if statistics from an article are correctly retrieved & parsed")
 test_that("statistics from a pdf are correctly retrieved and parsed", {
   
   pdf_file <- 
-    system.file("test_materials/NuijtenEtAl_2016_ReportingErrorsPsychology.pdf",
+    system.file("test_materials/test_dir/NuijtenEtAl_2016_ReportingErrorsPsychology.pdf",
                           package = "statcheck")
   
   result <- checkPDF(pdf_file, messages = FALSE)
@@ -29,7 +29,7 @@ test_that("statistics from a pdf are correctly retrieved and parsed", {
 # pdfs in folder
 test_that("stats from all pdfs in a folder are correctly retrieved & parsed", {
   
-  pdf_folder <- system.file("test_materials", package = "statcheck")
+  pdf_folder <- system.file("test_materials/test_dir", package = "statcheck")
   
   result <- checkPDFdir(pdf_folder, messages = FALSE, subdir = FALSE)
   result_1tailed <- checkPDFdir(pdf_folder, messages = FALSE, subdir = FALSE, 
@@ -55,7 +55,7 @@ test_that("stats from all pdfs in a folder are correctly retrieved & parsed", {
 test_that("statistics from a html are correctly retrieved and parsed", {
   
   html_file <- system.file(
-    "test_materials/NuijtenEtAl_2016_ReportingErrorsPsychology.html",
+    "test_materials/test_dir/NuijtenEtAl_2016_ReportingErrorsPsychology.html",
     package = "statcheck")
   
   result <- checkHTML(html_file, messages = FALSE)
@@ -83,7 +83,7 @@ test_that("statistics from a html are correctly retrieved and parsed", {
 # htmls in folder
 test_that("stats from all htmls in a folder are correctly retrieved & parsed", {
   
-  html_dir <- system.file("test_materials", package = "statcheck")
+  html_dir <- system.file("test_materials/test_dir", package = "statcheck")
   
   result <- checkHTMLdir(html_dir, messages = FALSE, subdir = FALSE)
   result_1tailed <- checkHTMLdir(html_dir, messages = FALSE, subdir = FALSE, 
@@ -114,7 +114,7 @@ test_that("stats from all htmls in a folder are correctly retrieved & parsed", {
 test_that("stats from all pdfs and htmls in a folder are correctly retrieved 
           & parsed", {
   
-  dir <- system.file("test_materials", package = "statcheck")
+  dir <- system.file("test_materials/test_dir", package = "statcheck")
   
   result <- checkdir(dir, subdir = FALSE, messages = FALSE)
   result_1tailed <- checkdir(dir, messages = FALSE, subdir = FALSE, 
@@ -169,9 +169,72 @@ test_that("all stats from apa pdf are extracted with pdftools", {
 })
 
 
+# stats from costa et al. 2018, jrnl environmental psych (elsevier journal)
+test_that("all stats from elsevier pdf are extracted with pdftools", {
+  
+  # SKIP IF ARTICLE IS NOT AVAILABLE
+  # THE ARTICLE CANNOT BE UPLOADED TO GITHUB/CRAN BECAUSE OF COPYRIGHT 
+  # RESTRICTIONS
+  pdf_file <- system.file("test_materials/costa.pdf", package = "statcheck") 
+  
+  if(pdf_file == ""){
+    skip("pdf article not available for testing, because of copyright 
+         restrictions")
+  }
+  
+  # reference file with manually extracted statistics
+  manual <- read.csv(
+    system.file("test_materials/costa_manual.csv", package = "statcheck"), 
+    header = TRUE)
 
+  result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
 
+  # 3 results in the pdf have incorrect (non-APA) spacing: 
+  # t(191) = 8.22, p < . 001
+  # t(191) = 9.54, p <. 001
+  # t(191) = 4.55, p < . 001
+  # remove these from the manual reference for better comparison
+  
+  reference <- manual[-c(2, 3, 8), ]
+  
+  # compare results statcheck with manually extracted stats
+  expect_equal(nrow(reference), nrow(result))
+  expect_equal(reference$test_value, result$test_value)
+  
+})
 
+# read the letters b and N in a NHST result as < and >
+test_that("b and N in a NHST result are read as < and >", {
+  
+  # SKIP IF ARTICLE IS NOT AVAILABLE
+  # THE ARTICLE CANNOT BE UPLOADED TO GITHUB/CRAN BECAUSE OF COPYRIGHT 
+  # RESTRICTIONS
+  pdf_file <- system.file("test_materials/todd.pdf", package = "statcheck") 
+  
+  if(pdf_file == ""){
+    skip("pdf article not available for testing, because of copyright 
+         restrictions")
+  }
+ 
+  # reference file with manually extracted statistics
+  manual <- read.csv(
+    system.file("test_materials/todd_manual.csv", package = "statcheck"), 
+    header = TRUE)
+  
+  # 3 results are non apa
+  # Fs(1, 248)b1.16, psN.28
+  # Fs(5, 670)b1.46, psN.20.
+  # Fs(1, 702)b1.55, psN.21
+  # remove from manual reference
+  reference <- manual[-c(9, 18, 20), ]
+  
+  result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
+ 
+  # compare results statcheck with manually extracted stats
+  expect_equal(nrow(reference), nrow(result))
+  expect_equal(reference$test_value, result$test_value)
+  
+})
 
 
 
