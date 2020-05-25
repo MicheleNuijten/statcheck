@@ -42,3 +42,13 @@ test_that("semi-colons instead of commas are extracted and parsed",{
    
    
 })
+
+
+test_that("incorrect spacing is still extracted and parsed", {
+  txt1 <-  "t(191) = 8.22, p < . 001"
+  txt2 <- "t(191) = 9.54, p <. 001"
+  
+})
+
+
+
