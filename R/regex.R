@@ -129,15 +129,15 @@ RGX_DF1_I_L <- "I|l"
 # regex for b as < ------------------------------------
 # in some JESP articles, a < is translated with a b
 # this regex is used in file-to-txt.R to replace it
-RGX_B_SMALLER <- "(?<![=<>])b(?=\\s?-?\\.?\\d)"
+RGX_B_SMALLER <- "(?<![=<>])b(?=\\s?-?\\s?\\.?\\d)"
 
 # in some JESP articles, a > is translated with a N
 # this regex is used in file-to-txt.R to replace it
-RGX_N_LARGER <- "(?<![=<>])N(?=\\s?-?\\.?\\d)"
+RGX_N_LARGER <- "(?<![=<>])N(?=\\s?-?\\s?\\.?\\d)"
 
 # in the journal of consumer research, a = is translated with a p
 # this regex is used in file-to-txt.R to replace it
-RGX_P_EQUAL <- "(?<!(,\\s)|,)p(?=\\s?-?\\.?\\d)"
+RGX_P_EQUAL <- "(?<!(,\\s)|,)p(?=\\s?-?\\s?\\.?\\d)"
 
 ################################################################################
 ######################### REGEXES FOR NON-APA STYLE ############################
