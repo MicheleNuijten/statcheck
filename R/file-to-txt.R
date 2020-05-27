@@ -50,10 +50,20 @@ getPDF <- function(x, method){
     # Decimal 61) [issue in APA journals]
     txtfiles <- lapply(txtfiles, gsub, pattern = "11005",
                        replacement = "61", fixed = TRUE)
+    
+    # substitute 1/4 (UTF-32 decimal 188) with equal sign (UTF-32 Decimal 61);
+    # [issue in Elsevier journal: Journal of Environmental Psychology]
+    txtfiles <- lapply(txtfiles, gsub, pattern = "188",
+                       replacement = "61", fixed = TRUE)
 
-    # substitute U+2B0D (C++ \u2b0d; UTF-32 Decimal 11021) with equal less than
+    # substitute U+2B0D (C++ \u2b0d; UTF-32 Decimal 11021) with less than
     # sign (UTF-32 Decimal 60) [issue in APA journals]
     txtfiles <- lapply(txtfiles, gsub, pattern = "11021",
+                       replacement = "60", fixed = TRUE)
+    
+    # substitute ! (UTF-32 decimal 33) with less than sign (UTF-32 Decimal 60);
+    # [issue in Oxford journal: Journal of Consumer Research]
+    txtfiles <- lapply(txtfiles, gsub, pattern = "33",
                        replacement = "60", fixed = TRUE)
 
     # substitute U+2AFA (UTF-32 Decimal 11002) with HYPHEN-MINUS sign (UTF-32
@@ -65,11 +75,6 @@ getPDF <- function(x, method){
     # (UTF-32 Decimal 967) [issue in APA journals]
     txtfiles <- lapply(txtfiles, gsub, pattern = "9273",
                        replacement = "967", fixed = TRUE)
-    
-    # substitute 1/4 (UTF-32 decimal 188) with equal sign (UTF-32 Decimal 61);
-    # [issue in Elsevier journal: Journal of Environmental Psychology]
-    txtfiles <- lapply(txtfiles, gsub, pattern = "188",
-                       replacement = "61", fixed = TRUE)
     
     # Revert to UTF-8 encoding
     txtfiles <- stringi::stri_enc_fromutf32(txtfiles)
@@ -89,12 +94,22 @@ getPDF <- function(x, method){
     # substitute the letter "N" in a NHST result for a ">", for the same reason 
     # as above. [issue in Elsevier journal: JESP]
     txtfiles <- lapply(txtfiles, gsub, 
-                       # don't match a b preceded by =<>, because the b itself 
+                       # don't match a N preceded by =<>, because the N itself 
                        # should be the comparison sign.
-                       # only match a b followed by a number, that gives further
-                       # proof that the b is in fact the comparison sign.
+                       # only match a N followed by a number, that gives further
+                       # proof that the N is in fact the comparison sign.
                        pattern = RGX_N_LARGER,
                        replacement = ">", perl = TRUE)
+    
+    # substitute the letter "p" that should be a "=". [issue in Oxford journal:
+    # journal of consumer research]
+    txtfiles <- lapply(txtfiles, gsub, 
+                       # don't match a p preceded by a "," or a ",\\s", because 
+                       # that is the actual p-value.
+                       # only match a p followed by a number, that gives further
+                       # proof that the p is in fact the comparison sign.
+                       pattern = RGX_P_EQUAL,
+                       replacement = "=", perl = TRUE)
     
     
     # Arrange text according to paper column layout

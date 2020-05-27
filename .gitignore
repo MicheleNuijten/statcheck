@@ -1,10 +1,16 @@
+# R project files
 .Rproj.user
 .Rhistory
 .RData
 statcheck.Rproj
+
+# test materials
+# can't share because of copyright restrictions
 mausbach.pdf
 mausbach_manual.csv
 costa.pdf
 costa_manual.csv
 todd.pdf
 todd_manual.csv
+zhang.pdf
+zhang_manual.csv

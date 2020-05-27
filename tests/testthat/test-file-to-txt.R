@@ -237,5 +237,42 @@ test_that("b and N in a NHST result are read as < and >", {
 })
 
 
-
+# read p and ! as = and <
+test_that("p and ! in a NHST result are read as = and <", {
+  
+  # SKIP IF ARTICLE IS NOT AVAILABLE
+  # THE ARTICLE CANNOT BE UPLOADED TO GITHUB/CRAN BECAUSE OF COPYRIGHT 
+  # RESTRICTIONS
+  pdf_file <- system.file("test_materials/zhang.pdf", package = "statcheck") 
+  
+  if(pdf_file == ""){
+    skip("pdf article not available for testing, because of copyright 
+         restrictions")
+  }
+  
+  # reference file with manually extracted statistics
+  manual <- read.csv(
+    system.file("test_materials/zhang_manual.csv", package = "statcheck"), 
+    header = TRUE)
+  
+  # 4 results are not read for unclear reasons
+  # all similar results are read, nothing went wrong with the columns,
+  # and there is no weird spacing etc.
+  
+  # x2 (1, N p 3,479) p 3.67, p p .05
+  # F(1, 43) p 4.17, p ! .05 
+  # t(42) p 3.19, p ! .01
+  # F(1, 82) p 6.29, p p .01
+  
+  # 1 result was reported in non-apa style
+  # t(43) p \0011.19, NS
+  reference <- manual[-c(8, 31, 38, 41, 44),]
+  
+  result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
+  
+  # compare results statcheck with manually extracted stats
+  expect_equal(nrow(reference), nrow(result))
+  expect_equal(reference$test_value, result$test_value)
+  
+})
 
