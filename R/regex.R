@@ -115,6 +115,7 @@ RGX_DEC <- "\\.\\d+"
 # digit, period, or space, followed by a digit or period (using a positive 
 # lookahead)
 RGX_WEIRD_MINUS <- "\\s?[^\\d\\.\\s]+(?=\\d|\\.)"
+RGX_MINUS_SPACE <- "-\\s"
 
 # regex for weird df1 in F-tests ----------------------
 # for some reason, typesetting in articles sometimes goes wrong with 
@@ -128,11 +129,15 @@ RGX_DF1_I_L <- "I|l"
 # regex for b as < ------------------------------------
 # in some JESP articles, a < is translated with a b
 # this regex is used in file-to-txt.R to replace it
-RGX_B_SMALLER <- "(?<![=<>])b(?=\\s?\\.?\\d)"
+RGX_B_SMALLER <- "(?<![=<>])b(?=\\s?-?\\.?\\d)"
 
 # in some JESP articles, a > is translated with a N
 # this regex is used in file-to-txt.R to replace it
-RGX_N_LARGER <- "(?<![=<>])N(?=\\s?\\.?\\d)"
+RGX_N_LARGER <- "(?<![=<>])N(?=\\s?-?\\.?\\d)"
+
+# in the journal of consumer research, a = is translated with a p
+# this regex is used in file-to-txt.R to replace it
+RGX_P_EQUAL <- "(?<!(,\\s)|,)p(?=\\s?-?\\.?\\d)"
 
 ################################################################################
 ######################### REGEXES FOR NON-APA STYLE ############################

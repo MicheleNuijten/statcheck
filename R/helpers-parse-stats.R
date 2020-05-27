@@ -128,7 +128,10 @@ remove_1000_sep <- function(raw){
 recover_minus_sign <- function(raw){
   
   # replace any weird string before the test value with a minus sign
-  return(gsub(RGX_WEIRD_MINUS, " -", raw, perl = TRUE))
+  minus_replaced <- gsub(RGX_WEIRD_MINUS, " -", raw, perl = TRUE)
+  
+  # remove a space in between a minus sign and the numeric value
+  space_removed <- gsub(RGX_MINUS_SPACE, "-", minus_replaced, perl = TRUE)
   
 }
 

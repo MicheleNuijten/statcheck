@@ -34,10 +34,11 @@ test_that("t-tests are retrieved from sentences", {
 test_that("t-tests with different spacing are retrieved from text", {
   txt1 <- " t ( 28 ) = 2.20 , p = .03"
   txt2 <- "t(28)=2.20,p=.03"
+  txt3 <- "t(43) = - 2.57, p < .05"
   
-  result <- statcheck(c(txt1, txt2), messages = FALSE)
+  result <- statcheck(c(txt1, txt2, txt3), messages = FALSE)
   
-  expect_equal(nrow(result), 2)
+  expect_equal(nrow(result), 3)
 })
 
 # variations test statistic
