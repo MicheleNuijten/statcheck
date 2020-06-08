@@ -76,3 +76,4 @@ test_that("chi2 test between parentheses are correctly parsed", {
   expect_equal(nrow(result), 1)
   
 })
+
