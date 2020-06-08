@@ -16,7 +16,7 @@ test_that("chi2-tests are correctly parsed", {
   expect_equal(result[[VAR_TEST_VALUE]], 2.2)
   expect_equal(as.character(result[[VAR_P_COMPARISON]]), "=")
   expect_equal(result[[VAR_REPORTED_P]], 0.03)
-  expect_equal(as.character(result[[VAR_RAW]]), "i2(28) = 2.20, p = .03")
+  expect_equal(as.character(result[[VAR_RAW]]), "2(28) = 2.20, p = .03")
 })
 
 # standard chi2-tests in text
@@ -76,4 +76,15 @@ test_that("chi2 test between parentheses are correctly parsed", {
   expect_equal(nrow(result), 1)
   
 })
+
+# test if the following 'incorrect' chi2-tests are not retrieved --------------
+
+# do not extract things that look like chi2 but aren't
+test_that("results that only look like chi2 are not retrieved", {
+  txt1 <- "t  (28) = 2.2, p < .05"
+  
+  expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
+  
+})
+
 
