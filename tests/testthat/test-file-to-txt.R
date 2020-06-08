@@ -290,9 +290,8 @@ test_that("cases with unusual spacing don't cause errors", {
   xpdf <- checkPDF(pdf_file, method = "xpdf", messages = FALSE)
   pdftools <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
   
-  # compare results statcheck with manually extracted stats
-  expect_equal(nrow(reference), nrow(result))
-  expect_equal(reference$test_value, result$test_value)
+  expect_equal(nrow(xpdf), 6)
+  expect_equal(nrow(pdftools), 12)
   
 })
 
