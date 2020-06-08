@@ -99,10 +99,10 @@ extract_stats <- function(txt, apa_style, stat){
     
     # extract degrees of freedom
     
-      dfs <- extract_df(raw = nhst_clean[i],
-                        test_type = test_type[i])
-      
-      df_result <- rbind(df_result, dfs)
+    dfs <- extract_df(raw = nhst_clean[i],
+                      test_type = test_type[i])
+    
+    df_result <- rbind(df_result, dfs)
     
     # extract test comparison and test value 
     
@@ -122,7 +122,7 @@ extract_stats <- function(txt, apa_style, stat){
   
   nhst_parsed <- data.frame(
     # return raw result without leading/trailing whitespaces
-    Raw = trimws(nhst_raw, which = "both"), 
+    Raw = trimws(nhst_raw, which = "both"),
     Statistic = test_type,
     df1 = df_result$df1,
     df2 = df_result$df2,
@@ -135,7 +135,7 @@ extract_stats <- function(txt, apa_style, stat){
     stringsAsFactors = FALSE)
   
   if (nrow(nhst_parsed) > 0) {
-  
+    
     # remove p values greater than one
     nhst_parsed <- nhst_parsed[nhst_parsed$Reported.P.Value <= 1 |
                                  is.na(nhst_parsed$Reported.P.Value), ]
