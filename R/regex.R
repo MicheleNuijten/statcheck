@@ -10,8 +10,14 @@ RGX_T <- "t"
 RGX_R <- "r"
 RGX_Q <- "Q\\s?-?\\s?(w|within|b|between)?"
 RGX_F <- "F"
-RGX_CHI2 <- 
-  "((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^trFzQWBnD ]\\s?)|([^trFzQWBnD ]2\\s?))2?"
+# match any character that is not trF..., followed by maybe a space and maybe a 2
+# don't match t, R, F, z, Q because these are different tests
+# W, B, n, D, s all matched other cases that weren't chi2
+RGX_CHI2 <- "([^trFzQWBnDs]\\s?2?)"
+
+"(\\s[^trFzQWBnD ]\\s?)"
+"(   [^trFzQWBnD ]2\\s?))2?"
+
 RGX_Z <- "([^a-z](z|Z))"
 
 # degrees of freedom ---------------------------------
