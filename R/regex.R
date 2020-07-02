@@ -10,15 +10,18 @@ RGX_T <- "t"
 RGX_R <- "r"
 RGX_Q <- "Q\\s?-?\\s?(w|within|b|between)?"
 RGX_F <- "F"
-# match any character that is not trF..., followed by maybe a space and maybe a 2
-# don't match t, R, F, z, Q because these are different tests
-# W, B, n, D, s all matched other cases that weren't chi2
-RGX_CHI2 <- "([^trFzQWBnDs]\\s?2?)"
-
-"(\\s[^trFzQWBnD ]\\s?)"
-"(   [^trFzQWBnD ]2\\s?))2?"
-
 RGX_Z <- "([^a-z](z|Z))"
+
+# For chi2, the regex is a bit more complicated, because the actual greek letter
+# is often not converted correctly
+# match any character that is not preceded by trF... (using a neg lookbehind)
+# followed by maybe a space and maybe a 2. Don't match t, R, F, z, Q because 
+# these are different tests
+# W, B, n, D, s, U all matched other cases that weren't chi2
+# exclude these cases both in lower and upper case
+# also don't extract multiple spaces, otherwise t  () = ... would be recognized
+# as chi2
+RGX_CHI2 <- "((?<![tTrRfFzZqQwWbBnNdDsSuU\\s])\\s?2?)"
 
 # degrees of freedom ---------------------------------
 
@@ -68,8 +71,8 @@ RGX_TEST_DF_VALUE <- paste(RGX_TEST_DF, RGX_TEST_VALUE, sep = "\\s?")
 # p-values --------------------------------------------
 
 # this is the same for every type of test
-RGX_NS <- "([^a-z]n\\.?s\\.?)"
-RGX_P <- "(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*)"
+RGX_NS <- "([^a-zA-Z](n|N)\\.?(s|S)\\.?)"
+RGX_P <- "(p\\s?[<>=]\\s?\\d?\\.\\d+(e-?\\d*)?)"
 RGX_P_NS <- paste0("(", RGX_NS, "|", RGX_P, ")")
 
 # full result ----------------------------------------

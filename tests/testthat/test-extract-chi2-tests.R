@@ -82,8 +82,9 @@ test_that("chi2 test between parentheses are correctly parsed", {
 # do not extract things that look like chi2 but aren't
 test_that("results that only look like chi2 are not retrieved", {
   txt1 <- "t  (28) = 2.2, p < .05"
+  txt2 <- "U(65) = 499.0, p = 0.55" # non-parametric Mann-Whitney U-test
   
-  expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
+  expect_output(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
   
 })
 
