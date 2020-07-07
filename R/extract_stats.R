@@ -94,14 +94,16 @@ extract_stats <- function(txt, apa_style, stat){
         test_type[i] <- "r"
       } else if (grepl(pattern = RGX_Z, x = test_raw)){
         test_type[i] <- "Z"
-      } else if (grepl(pattern = RGX_CHI2, x = test_raw, perl = TRUE)){
+      } else if (grepl(pattern = RGX_CHI2, x = test_raw, 
+                       perl = TRUE)){
         test_type[i] <- "Chi2"
       }
     } else {
       # if test_raw == NULL, chances are that the result is a chi2
       # check if the nhst_raw matches the regex for chi2 and manually
       # add test type
-      if(grepl(pattern = RGX_CHI2_DF, x = nhst_clean[i], perl = TRUE)){
+      if(grepl(pattern = RGX_CHI2_DF, x = nhst_clean[i], 
+               perl = TRUE)){
         test_type[i] <- "Chi2"
       }
     }
