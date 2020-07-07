@@ -10,8 +10,7 @@ extract_pattern <- function(txt, pattern) {
   # if there are multiple matches in the text, gregexpr will flag them all
   # the output is in list format, but the relevant information is all in [[1]]
   string_loc <- gregexpr(pattern = pattern, 
-                         text = txt, 
-                         ignore.case = TRUE,
+                         text = txt,
                          perl = TRUE)[[1]] # perl is necessary for lookbehinds
   
   # if no match is found, return NULL
@@ -198,7 +197,7 @@ extract_p_value <- function(raw){
   
   for(i in seq_along(p_raw)){
     
-    if(grepl(RGX_NS, p_raw[i], ignore.case = TRUE)){
+    if(grepl(RGX_NS, p_raw[i])){
       
       p_comp[i] <- "ns"
       p_value[i] <- NA
