@@ -152,6 +152,10 @@ extract_stats <- function(txt, apa_style, stat){
     nhst_parsed <- nhst_parsed[nhst_parsed$Reported.P.Value <= 1 |
                                  is.na(nhst_parsed$Reported.P.Value), ]
     
+    # remove correlations greater than one
+    nhst_parsed <- nhst_parsed[!(nhst_parsed$Statistic == "r" &
+                                 nhst_parsed$Value > 1), ]
+    
     # only return selected stats
     # to that end, rename test-types to match argument stat
     types <- as.vector(nhst_parsed$Statistic)

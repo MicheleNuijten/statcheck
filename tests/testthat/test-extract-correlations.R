@@ -39,3 +39,19 @@ test_that("correlations with different spacing are retrieved from text", {
   
   expect_equal(nrow(result), 2)
 })
+
+# test if the following incorrect correlations are not retrieved -------------
+
+# correlations > 1 are not retrieved
+test_that("'correlations' > 1 are not retrieved", {
+  txt <- "r(16) = 26.05, p = .10"
+  
+  expect_output(statcheck(txt, messages = FALSE), "did not find any results")
+})
+
+# subscripts ending on r are not recognized as correlations
+test_that("subscripts ending on r are not recognized as correlations", {
+  txt <- "QError(16) = .26, p = .10"
+  
+  expect_output(statcheck(txt, messages = FALSE), "did not find any results")
+})
