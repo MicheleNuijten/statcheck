@@ -114,3 +114,9 @@ test_that("t-tests with 2 dfs are not retrieved from text", {
   expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
 })
 
+# t as a subscript of another test
+test_that("subscript t is not recognized as a t-test", {
+  txt <- "Qt(26) = 252.78, p < .001"
+  
+  expect_output(statcheck(txt, messages = FALSE), "did not find any results")
+})
