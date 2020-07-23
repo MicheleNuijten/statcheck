@@ -6,11 +6,21 @@
 ################################################################################
 
 # test types -----------------------------------------
-RGX_T <- "t"
-RGX_R <- "r"
-RGX_Q <- "Q\\s?-?\\s?(w|within|b|between)?"
-RGX_F <- "F"
-RGX_Z <- "([^a-z](z|Z))"
+
+# start of string
+# only extract test statistics when they are the start of the "word"
+# e.g., do extract t(14) = ..., but not Qt(14) = ... (the latter would be
+# wrongly read as a t-test, whereas the t is only a subscript)
+# use a negative lookbehind to only match test statistics not directly preceded
+# by a letter (but do match test stats preceded by spaces or punctuation signs)
+RGX_START <- "(?<![a-zA-Z])"
+
+RGX_T <- paste0(RGX_START, "t")
+RGX_R <- paste0(RGX_START, "r")
+# (?i) = case insensitive mode
+RGX_Q <- paste0(RGX_START, "Q\\s?-?\\s?(?i)(w|within|b|between)?") 
+RGX_F <- paste0(RGX_START, "F")
+RGX_Z <- paste0(RGX_START, "(?i)z")
 
 # For chi2, the regex is a bit more complicated, because the actual greek letter
 # is often not converted correctly
@@ -97,8 +107,8 @@ RGX_TEST_TYPE <- paste(RGX_Z, RGX_OPEN_BRACKET, sep = "|")
 # for the Q-test, we also need to distinguish between Q, Qw, and Qb
 # select all raw_nhst results that seem to have a Q-test in them
 # it suffices to simply search for the letters "w" and "b"
-RGX_QW <- "w"
-RGX_QB <- "b"
+RGX_QW <- "(?i)w"
+RGX_QB <- "(?i)b"
 
 # regex for degrees of freedom ------------------------
 
@@ -130,6 +140,16 @@ RGX_MINUS_SPACE <- "-\\s"
 # for some reason, typesetting in articles sometimes goes wrong with 
 # F-tests and when df1 == 1, it gets typeset as the letter l or I 
 RGX_DF1_I_L <- "I|l"
+
+# regex for non-ascii quotation marks in html files ---
+# this regex needs a workaround using iconv(), because the quotation marks
+# we need to remove are non-ascii characters and it is not allowed to have
+# non-ascii characters in the code of an R package. The function iconv() below
+# returns the non-ascii quotation marks
+RGX_DOUBLE_QUOTE_LEFT <- iconv("\u0093", from = "utf8", to = "latin1")
+RGX_DOUBLE_QUOTE_RIGHT <- iconv("\u0094", from = "utf8", to = "latin1")
+RGX_DOUBLE_QUOTES <- paste0("(", RGX_DOUBLE_QUOTE_LEFT, "|", 
+                            RGX_DOUBLE_QUOTE_RIGHT, ")")
 
 ################################################################################
 ###################### REGEXES FOR WEIRD PDF ENCODING ##########################
