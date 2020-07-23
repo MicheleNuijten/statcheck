@@ -9,21 +9,33 @@ test_that("statistics from a pdf are correctly retrieved and parsed", {
     system.file("test_materials/test_dir/NuijtenEtAl_2016_ReportingErrorsPsychology.pdf",
                           package = "statcheck")
   
+  # xpdf
+  
   result <- checkPDF(pdf_file, messages = FALSE)
   result_1tailed <- checkPDF(pdf_file, messages = FALSE, OneTailedTxt = TRUE)
   
-  # extract 5 tests from paper
-  expect_equal(nrow(result), 5)
-  expect_equal(as.character(result[[VAR_TYPE]]), c("Chi2", "t", "F", "Chi2", "t"))
-  expect_equal(result[[VAR_TEST_VALUE]], c(6.9, 2, 12.03, 6.53, 2))
+  # extract 4 tests from paper
+  # note: 1 APA F-test is not extracted with xpdf, because it's surrounded by
+  # quotation marks, that xpdf transforms into the letter B, turning the result
+  # into "BF(2, 56) = 12.03, p < .001^". The B makes that statcheck doesn't 
+  # recognize F as the start of a statistic. This problem does not occur with
+  # pdftools (see test below)
+  expect_equal(nrow(result), 4)
+  expect_equal(as.character(result[[VAR_TYPE]]), c("Chi2", "t", "Chi2", "t"))
+  expect_equal(result[[VAR_TEST_VALUE]], c(6.9, 2, 6.53, 2))
   
   # check errors
-  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, FALSE, TRUE))
-  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, FALSE, TRUE))
+  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE))
+  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE))
   
   # check errors with one-tailed test detection
-  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, FALSE, FALSE))
-  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, FALSE))
+  
+  # pdftools
+  result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
+  expect_equal(nrow(result), 5)
+  
 })
 
 # pdfs in folder
@@ -35,18 +47,25 @@ test_that("stats from all pdfs in a folder are correctly retrieved & parsed", {
   result_1tailed <- checkPDFdir(pdf_folder, messages = FALSE, subdir = FALSE, 
                                 OneTailedTxt = TRUE)
   
-  # extract 5 tests from paper
-  expect_equal(nrow(result), 5)
-  expect_equal(as.character(result[[VAR_TYPE]]), c("Chi2", "t", "F", "Chi2", "t"))
-  expect_equal(result[[VAR_TEST_VALUE]], c(6.9, 2, 12.03, 6.53, 2))
+  # extract 4 tests from paper
+  expect_equal(nrow(result), 4)
+  expect_equal(as.character(result[[VAR_TYPE]]), c("Chi2", "t", "Chi2", "t"))
+  expect_equal(result[[VAR_TEST_VALUE]], c(6.9, 2, 6.53, 2))
   
   # check errors
-  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, FALSE, TRUE))
-  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, FALSE, TRUE))
+  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE))
+  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE))
   
   # check errors with one-tailed test detection
-  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, FALSE, FALSE))
-  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, FALSE))
+  
+  # extract 5 tests when pdftools is used (pdftools doesn't wrongly convert
+  # quotation marks around F test)
+  result_pdftools <- checkPDFdir(pdf_folder, method = "pdftools", 
+                                 messages = FALSE, subdir = FALSE)
+  expect_equal(nrow(result_pdftools), 5)
+  
 })
 
 # tests concerning parsing stats from html files ------------------------------
@@ -63,20 +82,16 @@ test_that("statistics from a html are correctly retrieved and parsed", {
   
   # extract 6 tests from paper
   expect_equal(nrow(result), 6)
-  expect_equal(as.character(result[[VAR_TYPE]]), 
-               c("t", "Chi2", "t", "F", "F", "t"))
+  expect_equal(as.character(result[[VAR_TYPE]]), c("t", "Chi2", "t", "F", "F", "t"))
   expect_equal(result[[VAR_TEST_VALUE]], c(-4.93, 6.9, 2, 1.203, 12.03, 2))
   
   # check errors
   expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
-  expect_equal(result[[VAR_DEC_ERROR]], 
-               c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
-
+  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
+  
   # check errors with one-tailed test detection
-  expect_equal(result_1tailed[[VAR_ERROR]], 
-               c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
-  expect_equal(result_1tailed[[VAR_DEC_ERROR]], 
-               c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
   
 })
 
@@ -91,20 +106,16 @@ test_that("stats from all htmls in a folder are correctly retrieved & parsed", {
   
   # extract 6 tests from paper
   expect_equal(nrow(result), 6)
-  expect_equal(as.character(result[[VAR_TYPE]]), 
-               c("t", "Chi2", "t", "F", "F", "t"))
+  expect_equal(as.character(result[[VAR_TYPE]]), c("t", "Chi2", "t", "F", "F", "t"))
   expect_equal(result[[VAR_TEST_VALUE]], c(-4.93, 6.9, 2, 1.203, 12.03, 2))
   
   # check errors
   expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
-  expect_equal(result[[VAR_DEC_ERROR]], 
-               c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
+  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
   
   # check errors with one-tailed test detection
-  expect_equal(result_1tailed[[VAR_ERROR]], 
-               c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
-  expect_equal(result_1tailed[[VAR_DEC_ERROR]], 
-               c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
   
 })
 
@@ -119,7 +130,9 @@ test_that("stats from all pdfs and htmls in a folder are correctly retrieved
   result <- checkdir(dir, subdir = FALSE, messages = FALSE)
   
   # extract 10 tests from papers
-  expect_equal(nrow(result), 11)
+  # one test (delta G) isn't detected in the html because it's in a table
+  # and the table isn't saved in the html file
+  expect_equal(nrow(result), 10)
 })
 
 # tests concerning pdf encoding ----------------------------------------------
@@ -295,3 +308,35 @@ test_that("cases with unusual spacing don't cause errors", {
   
 })
 
+
+# don't read QError as a correlation or QT as t-test
+test_that("subscripts are not read as test statistics", {
+  
+  # SKIP IF ARTICLE IS NOT AVAILABLE
+  # THE ARTICLE CANNOT BE UPLOADED TO GITHUB/CRAN BECAUSE OF COPYRIGHT 
+  # RESTRICTIONS
+  pdf_file <- system.file("test_materials/aloe.pdf", package = "statcheck") 
+  
+  if(pdf_file == ""){
+    skip("pdf article not available for testing, because of copyright 
+         restrictions")
+  }
+  
+  # reference file with manually extracted statistics
+  manual <- read.csv(
+    system.file("test_materials/aloe_manual.csv", package = "statcheck"), 
+    header = TRUE)
+  
+  # 4 QT and 1 QError are extracted manually, but can't be detected by statcheck
+  # 1 test has two line breaks in the result: "QBetween(1) = 14.59, p =\r\n.0001"
+  # 2 tests were reported in a table incompletely
+  # remove these cases
+  reference <- manual[-c(1, 2, 3, 8, 10, 13, 24), ]
+  
+  result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
+  
+  # compare results statcheck with manually extracted stats
+  expect_equal(nrow(reference), nrow(result))
+  expect_equal(reference$test_value, result$test_value)
+  
+})
