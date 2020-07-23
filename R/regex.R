@@ -6,13 +6,32 @@
 ################################################################################
 
 # test types -----------------------------------------
-RGX_T <- "t"
-RGX_R <- "r"
-RGX_Q <- "Q\\s?-?\\s?(w|within|b|between)?"
-RGX_F <- "F"
-RGX_CHI2 <- 
-  "((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^trFzQWBnD ]\\s?)|([^trFzQWBnD ]2\\s?))2?"
-RGX_Z <- "([^a-z](z|Z))"
+
+# start of string
+# only extract test statistics when they are the start of the "word"
+# e.g., do extract t(14) = ..., but not Qt(14) = ... (the latter would be
+# wrongly read as a t-test, whereas the t is only a subscript)
+# use a negative lookbehind to only match test statistics not directly preceded
+# by a letter (but do match test stats preceded by spaces or punctuation signs)
+RGX_START <- "(?<![a-zA-Z])"
+
+RGX_T <- paste0(RGX_START, "t")
+RGX_R <- paste0(RGX_START, "r")
+# (?i) = case insensitive mode
+RGX_Q <- paste0(RGX_START, "Q\\s?-?\\s?(?i)(w|within|b|between)?") 
+RGX_F <- paste0(RGX_START, "F")
+RGX_Z <- paste0(RGX_START, "(?i)z")
+
+# For chi2, the regex is a bit more complicated, because the actual greek letter
+# is often not converted correctly
+# match any character that is not preceded by trF... (using a neg lookbehind)
+# followed by maybe a space and maybe a 2. Don't match t, R, F, z, Q because 
+# these are different tests
+# W, B, n, D, s, U all matched other cases that weren't chi2
+# exclude these cases both in lower and upper case
+# also don't extract multiple spaces, otherwise t  () = ... would be recognized
+# as chi2
+RGX_CHI2 <- "((?<![tTrRfFzZqQwWbBnNdDsSuU\\s])\\s?2?)"
 
 # degrees of freedom ---------------------------------
 
@@ -62,8 +81,8 @@ RGX_TEST_DF_VALUE <- paste(RGX_TEST_DF, RGX_TEST_VALUE, sep = "\\s?")
 # p-values --------------------------------------------
 
 # this is the same for every type of test
-RGX_NS <- "([^a-z]n\\.?s\\.?)"
-RGX_P <- "(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*)"
+RGX_NS <- "([^a-zA-Z](n|N)\\.?(s|S)\\.?)"
+RGX_P <- "(p\\s?[<>=]\\s?\\d?\\.\\d+(e-?\\d*)?)"
 RGX_P_NS <- paste0("(", RGX_NS, "|", RGX_P, ")")
 
 # full result ----------------------------------------
@@ -88,8 +107,8 @@ RGX_TEST_TYPE <- paste(RGX_Z, RGX_OPEN_BRACKET, sep = "|")
 # for the Q-test, we also need to distinguish between Q, Qw, and Qb
 # select all raw_nhst results that seem to have a Q-test in them
 # it suffices to simply search for the letters "w" and "b"
-RGX_QW <- "w"
-RGX_QB <- "b"
+RGX_QW <- "(?i)w"
+RGX_QB <- "(?i)b"
 
 # regex for degrees of freedom ------------------------
 
@@ -115,11 +134,30 @@ RGX_DEC <- "\\.\\d+"
 # digit, period, or space, followed by a digit or period (using a positive 
 # lookahead)
 RGX_WEIRD_MINUS <- "\\s?[^\\d\\.\\s]+(?=\\d|\\.)"
+RGX_MINUS_SPACE <- "-\\s"
 
 # regex for weird df1 in F-tests ----------------------
 # for some reason, typesetting in articles sometimes goes wrong with 
 # F-tests and when df1 == 1, it gets typeset as the letter l or I 
 RGX_DF1_I_L <- "I|l"
+
+
+################################################################################
+###################### REGEXES FOR WEIRD PDF ENCODING ##########################
+################################################################################
+
+# regex for b as < ------------------------------------
+# in some JESP articles, a < is translated with a b
+# this regex is used in file-to-txt.R to replace it
+RGX_B_SMALLER <- "(?<![=<>])b(?=\\s?-?\\s?\\.?\\d)"
+
+# in some JESP articles, a > is translated with a N
+# this regex is used in file-to-txt.R to replace it
+RGX_N_LARGER <- "(?<![=<>])N(?=\\s?-?\\s?\\.?\\d)"
+
+# in the journal of consumer research, a = is translated with a p
+# this regex is used in file-to-txt.R to replace it
+RGX_P_EQUAL <- "(?<!(,\\s)|,)p(?=\\s?-?\\s?\\.?\\d)"
 
 ################################################################################
 ######################### REGEXES FOR NON-APA STYLE ############################

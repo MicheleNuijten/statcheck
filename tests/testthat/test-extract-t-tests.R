@@ -34,10 +34,11 @@ test_that("t-tests are retrieved from sentences", {
 test_that("t-tests with different spacing are retrieved from text", {
   txt1 <- " t ( 28 ) = 2.20 , p = .03"
   txt2 <- "t(28)=2.20,p=.03"
+  txt3 <- "t(43) = - 2.57, p < .05"
   
-  result <- statcheck(c(txt1, txt2), messages = FALSE)
+  result <- statcheck(c(txt1, txt2, txt3), messages = FALSE)
   
-  expect_equal(nrow(result), 2)
+  expect_equal(nrow(result), 3)
 })
 
 # variations test statistic
@@ -57,12 +58,19 @@ test_that("variations in the p-value are retrieved from text", {
   txt1 <- "t(28) = 2.20, p = 0.03"
   txt2 <- "t(28) = 2.20, p < .03"
   txt3 <- "t(28) = 2.20, p > .03"
+  
   txt4 <- "t(28) = 2.20, ns"
-  txt5 <- "t(28) = 2.20, p = .5e-3"
+  txt5 <- "t(28) = 2.20, n.s."
+  txt6 <- "t(28) = 2.20, NS"
+  txt7 <- "t(28) = 2.20, N.S."
   
-  result <- statcheck(c(txt1, txt2, txt3, txt4, txt5), messages = FALSE)
+  txt8 <- "t(28) = 2.20, p = .5e-3"
+  txt9 <- "t(28) = 2.20, p = .5--here follows another sentence"
   
-  expect_equal(nrow(result), 5)
+  result <- statcheck(c(txt1, txt2, txt3, txt4, txt5, 
+                        txt6, txt7, txt8, txt9), messages = FALSE)
+  
+  expect_equal(nrow(result), 9)
 })
 
 # corrected degrees of freedom
@@ -85,6 +93,13 @@ test_that("incorrect punctuation in t-tests are not retrieved from text", {
   expect_output(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
 })
 
+# capital T
+test_that("capital T is not extracted as t-test", {
+  txt1 <- "T(28) = 2.2, p = .05"
+  
+  expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
+})
+
 # not a p-value
 test_that("tests with 'p-values' larger than 1 are not retrieved from text", {
   txt1 <- "t(28) = 2.20, p = 1.03"
@@ -99,3 +114,9 @@ test_that("t-tests with 2 dfs are not retrieved from text", {
   expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
 })
 
+# t as a subscript of another test
+test_that("subscript t is not recognized as a t-test", {
+  txt <- "Qt(26) = 252.78, p < .001"
+  
+  expect_output(statcheck(txt, messages = FALSE), "did not find any results")
+})
