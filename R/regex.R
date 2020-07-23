@@ -141,15 +141,6 @@ RGX_MINUS_SPACE <- "-\\s"
 # F-tests and when df1 == 1, it gets typeset as the letter l or I 
 RGX_DF1_I_L <- "I|l"
 
-# regex for non-ascii quotation marks in html files ---
-# this regex needs a workaround using iconv(), because the quotation marks
-# we need to remove are non-ascii characters and it is not allowed to have
-# non-ascii characters in the code of an R package. The function iconv() below
-# returns the non-ascii quotation marks
-RGX_DOUBLE_QUOTE_LEFT <- iconv("\u0093", from = "utf8", to = "latin1")
-RGX_DOUBLE_QUOTE_RIGHT <- iconv("\u0094", from = "utf8", to = "latin1")
-RGX_DOUBLE_QUOTES <- paste0("(", RGX_DOUBLE_QUOTE_LEFT, "|", 
-                            RGX_DOUBLE_QUOTE_RIGHT, ")")
 
 ################################################################################
 ###################### REGEXES FOR WEIRD PDF ENCODING ##########################
