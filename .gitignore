@@ -6,16 +6,9 @@ statcheck.Rproj
 
 # test materials
 # can't share because of copyright restrictions
-aloe.pdf
-aloe.txt
-aloe_manual.csv
-costa.pdf
-costa_manual.csv
-mausbach.pdf
-mausbach_manual.csv
-sandoval.pdf
-sandoval.txt
-todd.pdf
-todd_manual.csv
-zhang.pdf
-zhang_manual.csv
+aloe*
+costa*
+mausbach*
+sandoval*
+todd*
+zhang*
