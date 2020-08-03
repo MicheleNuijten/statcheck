@@ -45,16 +45,18 @@ RGX_CHI2 <- "((?<![tTrRfFzZqQwWbBnNdDsSuU\\s])\\s?2?)"
 RGX_PRTS_1 <- "\\("
 RGX_PRTS_2 <- "\\)"
 
+# regex for df themselves
+RGX_DF_T_R_Q_NRS <- "\\s?\\d*\\.?\\d+\\s?"
+RGX_DF_F_NRS <- "\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?"
+RGX_DF_CHI2_NRS <- "\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?"
+
 # combine into full df regexes
 RGX_DF_T_R_Q <- 
-  paste0(RGX_PRTS_1, "\\s?\\d*\\.?\\d+\\s?", RGX_PRTS_2)
+  paste0(RGX_PRTS_1, RGX_DF_T_R_Q_NRS, RGX_PRTS_2)
 RGX_DF_F <- 
-  paste0(RGX_PRTS_1,"\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?", 
-         RGX_PRTS_2)
+  paste0(RGX_PRTS_1,RGX_DF_F_NRS, RGX_PRTS_2)
 RGX_DF_CHI2 <- 
-  paste0(RGX_PRTS_1, 
-         "\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?", 
-         RGX_PRTS_2)
+  paste0(RGX_PRTS_1, RGX_DF_CHI2_NRS, RGX_PRTS_2)
 
 # combine test types with the correct type of df -----
 # put regex between () to create regex groups
@@ -176,14 +178,11 @@ RGX_BRACK_2 <- "(\\]|\\})"
 
 # combine into full df regexes
 RGX_DF_T_R_Q_BRACK <- 
-  paste0(RGX_BRACK_1, "\\s?\\d*\\.?\\d+\\s?", RGX_BRACK_2)
+  paste0(RGX_BRACK_1, RGX_DF_T_R_Q_NRS, RGX_BRACK_2)
 RGX_DF_F_BRACK <- 
-  paste0(RGX_BRACK_1,"\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?", 
-         RGX_BRACK_2)
+  paste0(RGX_BRACK_1, RGX_DF_F_NRS, RGX_BRACK_2)
 RGX_DF_CHI2_BRACK <- 
-  paste0(RGX_BRACK_1, 
-         "\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?", 
-         RGX_BRACK_2)
+  paste0(RGX_BRACK_1, RGX_DF_CHI2_NRS, RGX_BRACK_2)
 
 # combine test types with the correct type of df -----
 
