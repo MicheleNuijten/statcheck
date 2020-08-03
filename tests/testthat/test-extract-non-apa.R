@@ -49,6 +49,13 @@ test_that("semi-colons instead of commas are extracted and parsed", {
    
 })
 
+test_that("DF in degrees of freedom and semi-colons are extracted and parsed", {
+  txt1 <- "chi2(DF = 2) = 45.1; p < 0.001"
+  txt2 <- "F(DF = 3, 1115) = 7.7; p < 0.001"
+  
+  
+})
+
 
 test_that("correlations with N instead of df are extracted and parsed", {
   txt1 <- "r(N=95)=.41, p < .001"
