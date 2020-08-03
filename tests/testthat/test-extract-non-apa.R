@@ -37,10 +37,28 @@ test_that("df between square and curly brackets are extracted and parsed",{
 })
 
 
-test_that("semi-colons instead of commas are extracted and parsed",{
+test_that("DF in degrees of freedom is extracted and parsed", {
+  txt1 <- "chi2(DF = 2) = 45.1, p < 0.001"
+  txt2 <- "F(DF = 3, 1115) = 7.7, p < 0.001"
+  
+  
+})
+
+test_that("semi-colons instead of commas are extracted and parsed", {
    txt1 <- "t(28) = 2.2; p = .03"
    
    
+})
+
+
+test_that("correlations with N instead of df are extracted and parsed", {
+  txt1 <- "r(N=95)=.41, p < .001"
+  
+})
+
+test_that("df as subscripts are extracted and parsed", {
+  txt1 <- "F2,486 = 19.354, p < .001"
+  
 })
 
 
@@ -51,9 +69,9 @@ test_that("incorrect spacing is still extracted and parsed", {
 })
 
 
-
 test_that("F tests with 'subscripts' extracted and parsed", {
   txt1 <-  "F1(1, 73) = 5.41, MSE = 454009, p = .023"
   txt2 <- "F2(1, 62) = 15.760, MSE = 212146, p < .001"
   
 })
+
