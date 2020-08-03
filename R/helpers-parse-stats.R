@@ -73,14 +73,6 @@ extract_df <- function(raw, test_type){
       
     } else if(test_type == "F"){
       
-      # for some reason, typesetting in articles sometimes goes wrong with 
-      # F-tests and when df1 == 1, it gets typeset as the letter l or I 
-      # If this happens, replace the l or I with a 1
-      
-      if(grepl(RGX_DF1_I_L, df[1])){
-        df[1] <- 1
-      }
-      
       df1 <- df[1]
       df2 <- df[2]
       

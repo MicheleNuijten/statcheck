@@ -177,10 +177,8 @@ RGX_BRACK_2 <- "(\\]|\\})"
 # combine into full df regexes
 RGX_DF_T_R_Q_BRACK <- 
   paste0(RGX_BRACK_1, "\\s?\\d*\\.?\\d+\\s?", RGX_BRACK_2)
-# for some reason, typesetting in articles sometimes goes wrong with 
-# F-tests and when df1 == 1, it gets typeset as the letter l or I 
 RGX_DF_F_BRACK <- 
-  paste0(RGX_BRACK_1,"\\s?\\d*\\.?(I|l|\\d+)\\s?,\\s?\\d*\\.?\\d+\\s?", 
+  paste0(RGX_BRACK_1,"\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?", 
          RGX_BRACK_2)
 RGX_DF_CHI2_BRACK <- 
   paste0(RGX_BRACK_1, 

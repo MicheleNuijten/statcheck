@@ -36,7 +36,6 @@ test_that("df between square and curly brackets are extracted and parsed",{
                 "did not find any results")
 })
 
-
 test_that("DF in degrees of freedom is extracted and parsed", {
   txt1 <- "chi2(DF = 2) = 45.1, p < 0.001"
   txt2 <- "F(DF = 3, 1115) = 7.7, p < 0.001"
