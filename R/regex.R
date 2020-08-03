@@ -49,7 +49,7 @@ RGX_PRTS_2 <- "\\)"
 RGX_DF_T_R_Q <- 
   paste0(RGX_PRTS_1, "\\s?\\d*\\.?\\d+\\s?", RGX_PRTS_2)
 RGX_DF_F <- 
-  paste0(RGX_PRTS_1,"\\s?\\d*\\.?(I|l|\\d+)\\s?,\\s?\\d*\\.?\\d+\\s?", 
+  paste0(RGX_PRTS_1,"\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?", 
          RGX_PRTS_2)
 RGX_DF_CHI2 <- 
   paste0(RGX_PRTS_1, 
@@ -136,12 +136,6 @@ RGX_DEC <- "\\.\\d+"
 RGX_WEIRD_MINUS <- "\\s?[^\\d\\.\\s]+(?=\\d|\\.)"
 RGX_MINUS_SPACE <- "-\\s"
 
-# regex for weird df1 in F-tests ----------------------
-# for some reason, typesetting in articles sometimes goes wrong with 
-# F-tests and when df1 == 1, it gets typeset as the letter l or I 
-RGX_DF1_I_L <- "I|l"
-
-
 ################################################################################
 ###################### REGEXES FOR WEIRD PDF ENCODING ##########################
 ################################################################################
@@ -178,6 +172,8 @@ RGX_BRACK_2 <- "(\\]|\\})"
 # combine into full df regexes
 RGX_DF_T_R_Q_BRACK <- 
   paste0(RGX_BRACK_1, "\\s?\\d*\\.?\\d+\\s?", RGX_BRACK_2)
+# for some reason, typesetting in articles sometimes goes wrong with 
+# F-tests and when df1 == 1, it gets typeset as the letter l or I 
 RGX_DF_F_BRACK <- 
   paste0(RGX_BRACK_1,"\\s?\\d*\\.?(I|l|\\d+)\\s?,\\s?\\d*\\.?\\d+\\s?", 
          RGX_BRACK_2)
