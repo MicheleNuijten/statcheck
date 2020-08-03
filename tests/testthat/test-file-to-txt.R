@@ -34,7 +34,9 @@ test_that("statistics from a pdf are correctly retrieved and parsed", {
   
   # pdftools
   result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
-  expect_equal(nrow(result), 5)
+  expect_equal(nrow(result), 7)
+  expect_equal(as.character(result[[VAR_TYPE]]), 
+               c("t", "Chi2", "t", "F", "F", "Chi2", "t"))
   
 })
 
@@ -64,7 +66,9 @@ test_that("stats from all pdfs in a folder are correctly retrieved & parsed", {
   # quotation marks around F test)
   result_pdftools <- checkPDFdir(pdf_folder, method = "pdftools", 
                                  messages = FALSE, subdir = FALSE)
-  expect_equal(nrow(result_pdftools), 5)
+  expect_equal(nrow(result_pdftools), 7)
+  expect_equal(as.character(result_pdftools[[VAR_TYPE]]), 
+               c("t", "Chi2", "t", "F", "F", "Chi2", "t"))
   
 })
 

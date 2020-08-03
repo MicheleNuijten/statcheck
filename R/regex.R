@@ -140,7 +140,6 @@ RGX_MINUS_SPACE <- "-\\s"
 ###################### REGEXES FOR WEIRD PDF ENCODING ##########################
 ################################################################################
 
-# regex for b as < ------------------------------------
 # in some JESP articles, a < is translated with a b
 # this regex is used in file-to-txt.R to replace it
 RGX_B_SMALLER <- "(?<![=<>])b(?=\\s?-?\\s?\\.?\\d)"
@@ -152,6 +151,12 @@ RGX_N_LARGER <- "(?<![=<>])N(?=\\s?-?\\s?\\.?\\d)"
 # in the journal of consumer research, a = is translated with a p
 # this regex is used in file-to-txt.R to replace it
 RGX_P_EQUAL <- "(?<!(,\\s)|,)p(?=\\s?-?\\s?\\.?\\d)"
+
+# in the Nuijten et al. 2016 article, quotes are translated as B
+# this means that tests between quotes are not detected, because
+# statcheck can only find tests if there are not preceded by other
+# letters. Find upper case B followed by a test statistic
+RGX_B_QUOTE <- "B(?=(t|F|r|Q|z|Z))"
 
 ################################################################################
 ######################### REGEXES FOR NON-APA STYLE ############################

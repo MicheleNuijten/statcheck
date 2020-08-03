@@ -111,6 +111,13 @@ getPDF <- function(x, method){
                        pattern = RGX_P_EQUAL,
                        replacement = "=", perl = TRUE)
     
+    # substitute the letter "B" that should be a '"'. [issue in BRM]
+    txtfiles <- lapply(txtfiles, gsub, 
+                       # only match a B followed by a letter that could indicate
+                       # a test statistic
+                       pattern = RGX_B_QUOTE,
+                       replacement = '"', perl = TRUE)
+    
     
     # Arrange text according to paper column layout
     txtfiles <- pdf_columns(txtfiles)
