@@ -18,21 +18,22 @@ test_that("F with MSE is extracted and parsed",{
 })
 
 
-test_that("df between square and curly brackets are extracted and parsed",{
+test_that("df between square, curly, or no brackets are extracted and parsed",{
   txt1 <- "t[28] = 2.2, p = .03"
   txt2 <- "F[2, 28] = 2.2, p = .03"
   txt3 <- "t{28} = 2.2, p = .03"
   txt4 <- "F{2, 28} = 2.2, p = .03"
+  txt5 <- "F2,28 = 2.2, p = .03" # df in subscript
   
-  result <- statcheck(c(txt1, txt2, txt3, txt4), apa_style = FALSE, 
+  result <- statcheck(c(txt1, txt2, txt3, txt4, txt5), apa_style = FALSE, 
                       messages = FALSE)
   
-  expect_equal(nrow(result), 4)
-  expect_equal(result[[VAR_DF1]], c(NA, 2, NA, 2))
-  expect_equal(result[[VAR_DF2]], rep(28, 4))
+  expect_equal(nrow(result), 5)
+  expect_equal(result[[VAR_DF1]], c(NA, 2, NA, 2, 2))
+  expect_equal(result[[VAR_DF2]], rep(28, 5))
   
   # don't extract these results when apa_style is TRUE
-  expect_output(statcheck(c(txt1, txt2, txt3, txt4), messages = FALSE), 
+  expect_output(statcheck(c(txt1, txt2, txt3, txt4, txt5), messages = FALSE), 
                 "did not find any results")
 })
 
