@@ -47,10 +47,18 @@ RGX_PRTS_2 <- "\\)"
 
 # regex for df themselves
 RGX_DF_T_R_Q_NRS <- "\\s?\\d*\\.?\\d+\\s?"
-RGX_DF_F_NRS <- "\\s?\\d*\\.?\\d+\\s?,\\s?\\d*\\.?\\d+\\s?"
-RGX_DF_CHI2_NRS <- "\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?"
 
-# combine into full df regexes
+RGX_DF_SEP <- ","
+
+RGX_DF1_F_NRS <- "\\s?\\d*\\.?\\d+\\s?"
+RGX_DF2_F_NRS <- "\\s?\\d*\\.?\\d+\\s?"
+RGX_DF_F_NRS <- paste0(RGX_DF1_F_NRS, RGX_DF_SEP, RGX_DF2_F_NRS)
+
+RGX_DF1_CHI2_NRS <- "\\s?\\d*\\.?\\d+\\s?"
+RGX_DFN_CHI2_NRS <- "\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?"
+RGX_DF_CHI2_NRS <- paste0(RGX_DF1_CHI2_NRS, "(", RGX_DF_SEP, RGX_DFN_CHI2_NRS, ")?")
+
+# combine into full df regexes with parentheses
 RGX_DF_T_R_Q <- 
   paste0(RGX_PRTS_1, RGX_DF_T_R_Q_NRS, RGX_PRTS_2)
 RGX_DF_F <- 
@@ -164,37 +172,80 @@ RGX_B_QUOTE <- "B(?=(t|F|r|Q|z|Z))"
 ######################### REGEXES FOR NON-APA STYLE ############################
 ################################################################################
 
-# F with MSE ------------------------------------------
+# 1. Regexes for test types -----------------------------
 
-RGX_MSE <- "MSE"
-RGX_F_MSE <- paste(RGX_F_DF, RGX_TEST_VALUE, RGX_MSE, RGX_TEST_VALUE, RGX_P_NS, 
-                   sep = "\\s?")
+# No systematic deviations from apa in test stat (type)
+# Keep regexes for apa test statistics as defined above:
+# RGX_T
+# RGX_R
+# RGX_Q
+# RGX_F
+# RGX_Z
+# RGX_CHI2
 
-# Square or curly brackets ----------------------------
+# 2. Regexes for degrees of freedom --------------------
 
-# regex for square or curly brackets
-RGX_BRACK_1 <- "(\\[|\\{)"
-RGX_BRACK_2 <- "(\\]|\\})"
+# regex for normal, square, curly, or no brackets
+# define curly and square separately, because these need to be replaced when
+# cleaning non-apa results
+RGX_SQ_CURLY1 <- "\\[|\\{"
+RGX_SQ_CURLY2 <- "\\]|\\}"
 
-# combine into full df regexes
+RGX_BRACK_1 <- paste0("(\\(|", RGX_SQ_CURLY1, ")?")
+RGX_BRACK_2 <- paste0("(\\)|", RGX_SQ_CURLY2, ")?")
+
+# regex for "DF" in degrees of freedom
+# matches cases such as t(DF = 29) = ...
+RGX_DF_TXT <- "(DF\\s?=\\s?)?"
+
+# regex for df themselves
+# keep apa regexes for df of t, r, Q as defined above
+# RGX_DF_T_R_Q_NRS
+
+# For df of F and chi2, also allow for ; to separate dfs
+RGX_DF_COMMA_SEMICOLON <- "(,|;)"
+
+RGX_DF_F_NRS_NONAPA <- paste0(RGX_DF1_F_NRS, RGX_DF_COMMA_SEMICOLON, RGX_DF2_F_NRS)
+RGX_DF_CHI2_NRS_NONAPA <- paste0(RGX_DF1_CHI2_NRS, "(", RGX_DF_COMMA_SEMICOLON, 
+                          RGX_DFN_CHI2_NRS, ")?")
+
+# Combine into full df regexes
 RGX_DF_T_R_Q_BRACK <- 
-  paste0(RGX_BRACK_1, RGX_DF_T_R_Q_NRS, RGX_BRACK_2)
+  paste0(RGX_BRACK_1, RGX_DF_TXT, RGX_DF_T_R_Q_NRS, RGX_BRACK_2)
 RGX_DF_F_BRACK <- 
-  paste0(RGX_BRACK_1, RGX_DF_F_NRS, RGX_BRACK_2)
+  paste0(RGX_BRACK_1, RGX_DF_TXT, RGX_DF_F_NRS_NONAPA, RGX_BRACK_2)
 RGX_DF_CHI2_BRACK <- 
-  paste0(RGX_BRACK_1, RGX_DF_CHI2_NRS, RGX_BRACK_2)
+  paste0(RGX_BRACK_1, RGX_DF_TXT, RGX_DF_CHI2_NRS_NONAPA, RGX_BRACK_2)
 
-# combine test types with the correct type of df -----
-
-# put regex between () to create regex groups
+# Put regex between () to create regex groups
 RGX_T_DF_BRACK <- paste0("(", RGX_T, "\\s?", RGX_DF_T_R_Q_BRACK, ")")
 RGX_R_DF_BRACK <- paste0("(", RGX_R, "\\s?", RGX_DF_T_R_Q_BRACK, ")")
 RGX_Q_DF_BRACK <- paste0("(", RGX_Q, "\\s?", RGX_DF_T_R_Q_BRACK, ")")
 RGX_F_DF_BRACK <- paste0("(", RGX_F, "\\s?", RGX_DF_F_BRACK, ")")
 RGX_CHI2_DF_BRACK <- paste0("(", RGX_CHI2, "\\s?", RGX_DF_CHI2_BRACK, ")")
 
-RGX_TEST_DF_BRACK <- paste0("(", RGX_T_DF_BRACK, "|", RGX_R_DF_BRACK, "|", RGX_Q_DF_BRACK, "|", 
-                      RGX_F_DF_BRACK, "|", RGX_CHI2_DF_BRACK, ")")
+RGX_TEST_DF_BRACK <- paste0("(", 
+                            RGX_T_DF_BRACK, "|", RGX_R_DF_BRACK, "|", 
+                            RGX_Q_DF_BRACK, "|", RGX_F_DF_BRACK, "|", 
+                            RGX_CHI2_DF_BRACK, 
+                            ")")
+
+# 4. Regexes for test statistics (values) --------------
+
+
+
+
+###################################
+
+
+# F with MSE ------------------------------------------
+
+RGX_MSE <- "MSE"
+RGX_F_MSE <- paste(RGX_F_DF, RGX_TEST_VALUE, RGX_MSE, RGX_TEST_VALUE, RGX_P_NS, 
+                   sep = "\\s?")
+
+# combine test types with the correct type of df -----
+
 
 RGX_TEST_DF_VALUE_BRACK <- paste(RGX_TEST_DF_BRACK, RGX_TEST_VALUE, sep = "\\s?")
 
