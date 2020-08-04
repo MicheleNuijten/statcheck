@@ -41,6 +41,16 @@ test_that("DF in degrees of freedom is extracted and parsed", {
   txt1 <- "chi2(DF = 2) = 45.1, p < 0.001"
   txt2 <- "F(DF = 3, 1115) = 7.7, p < 0.001"
   
+  result <- statcheck(c(txt1, txt2), apa_style = FALSE, 
+                      messages = FALSE)
+  
+  expect_equal(nrow(result), 2)
+  expect_equal(result[[VAR_DF1]], c(2, 3))
+  expect_equal(result[[VAR_DF2]], c(NA, 1115))
+  
+  # don't extract these results when apa_style is TRUE
+  expect_output(statcheck(c(txt1, txt2), messages = FALSE), 
+                "did not find any results")
   
 })
 
