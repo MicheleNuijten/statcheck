@@ -1,8 +1,10 @@
 clean_non_apa <- function(nhst_raw){
   
   # replace square or curly brackets with parentheses
-  nhst_raw_prts1 <- gsub(pattern = RGX_BRACK_1, replacement = RGX_PRTS_1, nhst_raw)
-  nhst_raw_prts12 <- gsub(pattern = RGX_BRACK_2, replacement = RGX_PRTS_2, nhst_raw_prts1)
+  nhst_clean <- gsub(pattern = RGX_SQ_CURLY1, replacement = RGX_PRTS_1, 
+                         nhst_raw)
+  nhst_clean <- gsub(pattern = RGX_SQ_CURLY2, replacement = RGX_PRTS_2, 
+                     nhst_clean)
   
-  return(nhst_raw_prts12)
+  return(nhst_clean)
 }
