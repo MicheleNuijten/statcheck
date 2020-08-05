@@ -48,15 +48,15 @@ RGX_PRTS_2 <- "\\)"
 # regex for df themselves
 RGX_DF_T_R_Q_NRS <- "\\s?\\d*\\.?\\d+\\s?"
 
-RGX_DF_SEP <- ","
+RGX_SEP <- ","
 
 RGX_DF1_F_NRS <- "\\s?\\d*\\.?\\d+\\s?"
 RGX_DF2_F_NRS <- "\\s?\\d*\\.?\\d+\\s?"
-RGX_DF_F_NRS <- paste0(RGX_DF1_F_NRS, RGX_DF_SEP, RGX_DF2_F_NRS)
+RGX_DF_F_NRS <- paste0(RGX_DF1_F_NRS, RGX_SEP, RGX_DF2_F_NRS)
 
 RGX_DF1_CHI2_NRS <- "\\s?\\d*\\.?\\d+\\s?"
 RGX_DFN_CHI2_NRS <- "\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?"
-RGX_DF_CHI2_NRS <- paste0(RGX_DF1_CHI2_NRS, "(", RGX_DF_SEP, RGX_DFN_CHI2_NRS, ")?")
+RGX_DF_CHI2_NRS <- paste0(RGX_DF1_CHI2_NRS, "(", RGX_SEP, RGX_DFN_CHI2_NRS, ")?")
 
 # combine into full df regexes with parentheses
 RGX_DF_T_R_Q <- 
@@ -82,11 +82,11 @@ RGX_TEST_DF <- paste0("(", RGX_T_DF, "|", RGX_R_DF, "|", RGX_Q_DF, "|",
 # this is the same for every type of test
 # the snippet [^a-z\\d]{0,3} searches for weird symbols that could indicate a
 # minus sign
-RGX_TEST_VALUE <- "[<>=]\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,"
+RGX_TEST_VALUE <- "[<>=]\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?"
 
 # combine test type, df, value ------------------------
 
-RGX_TEST_DF_VALUE <- paste(RGX_TEST_DF, RGX_TEST_VALUE, sep = "\\s?")
+RGX_TEST_DF_VALUE <- paste0(RGX_TEST_DF, "\\s?", RGX_TEST_VALUE, RGX_SEP)
 
 # p-values --------------------------------------------
 
@@ -203,10 +203,10 @@ RGX_DF_TXT <- "(DF\\s?=\\s?)?"
 # RGX_DF_T_R_Q_NRS
 
 # For df of F and chi2, also allow for ; to separate dfs
-RGX_DF_COMMA_SEMICOLON <- "(,|;)"
+RGX_SEP_NONAPA <- "(,|;)"
 
-RGX_DF_F_NRS_NONAPA <- paste0(RGX_DF1_F_NRS, RGX_DF_COMMA_SEMICOLON, RGX_DF2_F_NRS)
-RGX_DF_CHI2_NRS_NONAPA <- paste0(RGX_DF1_CHI2_NRS, "(", RGX_DF_COMMA_SEMICOLON, 
+RGX_DF_F_NRS_NONAPA <- paste0(RGX_DF1_F_NRS, RGX_SEP_NONAPA, RGX_DF2_F_NRS)
+RGX_DF_CHI2_NRS_NONAPA <- paste0(RGX_DF1_CHI2_NRS, "(", RGX_SEP_NONAPA, 
                           RGX_DFN_CHI2_NRS, ")?")
 
 # Combine into full df regexes
@@ -224,35 +224,32 @@ RGX_Q_DF_BRACK <- paste0("(", RGX_Q, "\\s?", RGX_DF_T_R_Q_BRACK, ")")
 RGX_F_DF_BRACK <- paste0("(", RGX_F, "\\s?", RGX_DF_F_BRACK, ")")
 RGX_CHI2_DF_BRACK <- paste0("(", RGX_CHI2, "\\s?", RGX_DF_CHI2_BRACK, ")")
 
+# combine all combinations of test type and df into 1 regex
 RGX_TEST_DF_BRACK <- paste0("(", 
                             RGX_T_DF_BRACK, "|", RGX_R_DF_BRACK, "|", 
                             RGX_Q_DF_BRACK, "|", RGX_F_DF_BRACK, "|", 
                             RGX_CHI2_DF_BRACK, 
                             ")")
 
-# 4. Regexes for test statistics (values) --------------
+# 3. Regexes for test statistics (values) --------------
 
+# No systematic deviations from apa in test value
+# Keep regexes for apa test values as defined above:
+# RGX_TEST_VALUE
 
+# 4. Regexes for p-values ------------------------------
 
+# No systematic deviations from apa in p-value
+# Keep regexes for apa p-values as defined above:
+# RGX_P_NS
 
-###################################
+# 5. Combining full regex -----------------------------
 
+# recognize MSE in between test statistic and p-value. 
+# effectively, just search for the letters MSE followed by numbers
+# for the numbers we can use the same regex as for the test values
+# add a ? at the end: also match stats without MSE in it
+RGX_MSE <- paste0("(MSE\\s?", RGX_TEST_VALUE, RGX_SEP_NONAPA, ")?")
 
-# F with MSE ------------------------------------------
-
-RGX_MSE <- "MSE"
-RGX_F_MSE <- paste(RGX_F_DF, RGX_TEST_VALUE, RGX_MSE, RGX_TEST_VALUE, RGX_P_NS, 
-                   sep = "\\s?")
-
-# combine test types with the correct type of df -----
-
-
-RGX_TEST_DF_VALUE_BRACK <- paste(RGX_TEST_DF_BRACK, RGX_TEST_VALUE, sep = "\\s?")
-
-RGX_NHST_BRACK <- paste(RGX_TEST_DF_VALUE_BRACK, RGX_P_NS, sep = "\\s?")
-
-### Combine all non-apa regexes with the apa regex -----------------------------
-
-# This creates a complete regex that matches everything statcheck recognizes 
-
-RGX_NHST_NONAPA <- paste0("(", RGX_NHST, "|", RGX_F_MSE, "|", RGX_NHST_BRACK,")")
+RGX_NHST_NONAPA <- paste(RGX_TEST_DF_BRACK, RGX_TEST_VALUE, RGX_SEP_NONAPA,
+                         RGX_MSE, RGX_P_NS, sep = "\\s?")
