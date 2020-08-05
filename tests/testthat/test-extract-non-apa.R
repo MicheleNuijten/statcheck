@@ -24,17 +24,18 @@ test_that("df between square, curly, or no brackets are extracted and parsed",{
   txt3 <- "t{28} = 2.2, p = .03"
   txt4 <- "F{2, 28} = 2.2, p = .03"
   txt5 <- "F2,28 = 2.2, p = .03" # df in subscript
+  txt6 <- "t28 = 2.2, p = .03"
   
-  result <- statcheck(c(txt1, txt2, txt3, txt4, txt5), apa_style = FALSE, 
+  result <- statcheck(c(txt1, txt2, txt3, txt4, txt5, txt6), apa_style = FALSE, 
                       messages = FALSE)
   
-  expect_equal(nrow(result), 5)
-  expect_equal(result[[VAR_DF1]], c(NA, 2, NA, 2, 2))
-  expect_equal(result[[VAR_DF2]], rep(28, 5))
+  expect_equal(nrow(result), 6)
+  expect_equal(result[[VAR_DF1]], c(NA, 2, NA, 2, 2, NA))
+  expect_equal(result[[VAR_DF2]], rep(28, 6))
   
   # don't extract these results when apa_style is TRUE
-  expect_output(statcheck(c(txt1, txt2, txt3, txt4, txt5), messages = FALSE), 
-                "did not find any results")
+  expect_output(statcheck(c(txt1, txt2, txt3, txt4, txt5, txt6), 
+                          messages = FALSE), "did not find any results")
 })
 
 test_that("DF in degrees of freedom is extracted and parsed", {
