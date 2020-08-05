@@ -57,7 +57,14 @@ test_that("DF in degrees of freedom is extracted and parsed", {
 
 test_that("semi-colons instead of commas are extracted and parsed", {
    txt1 <- "t(28) = 2.2; p = .03"
+  
+   result <- statcheck(txt1, apa_style = FALSE, messages = FALSE)
    
+   expect_equal(nrow(result), 1)
+   
+   # don't extract these results when apa_style is TRUE
+   expect_output(statcheck(txt1, messages = FALSE), 
+                 "did not find any results")
    
 })
 

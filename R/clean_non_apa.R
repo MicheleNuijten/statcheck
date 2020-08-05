@@ -11,11 +11,18 @@ clean_non_apa <- function(nhst_raw){
   # "regex groups"
   # next, locate a digit followed by a comparison sign, and put a closing 
   # parenthesis between these two groups
-  nhst_clean <- gsub("^([a-zA-Z]\\s?)(\\d)", "\\1\\(\\2", nhst_clean)
-  nhst_clean <- gsub("(\\d)(\\s?[=<>])", "\\1\\)\\2", nhst_clean)
+  nhst_clean <- gsub(pattern = "^([a-zA-Z]\\s?)(\\d)", 
+                     replacement = "\\1\\(\\2", 
+                     nhst_clean)
+  nhst_clean <- gsub(pattern = "(\\d)(\\s?[=<>])", 
+                     replacement = "\\1\\)\\2", 
+                     nhst_clean)
   
   # remove "DF = " from degrees of freedom
   nhst_clean <- gsub(pattern = RGX_DF_TXT, replacement = "", nhst_clean)
+  
+  # replace semi-colons with commas
+  nhst_clean <- gsub(pattern = ";", replacement = ",", nhst_clean)
   
   return(nhst_clean)
 }
