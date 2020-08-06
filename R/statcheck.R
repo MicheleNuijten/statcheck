@@ -162,12 +162,12 @@ statcheck <- function(texts,
     # later on to calculate the APA factor: the ratio (statcheck results)/
     # (total # of p values). It is also possible to let statcheck return this
     # dataframe instead of the data frame with NHST results.
-    pvalues <- extract_p_value(txt)
+    pvalues <- detect_p_values(txt, apa_style = apa_style)
     
     # append and close:
     # in each repetition of the loop, the extracted p-values are appended 
     # to the existing pRes data frame, so it grows in each step
-    if(nrow(pvalues) > 0){
+    if(length(pvalues) > 0){
       pvalues <- cbind(Source = names(txt), pvalues)
       
       pRes <- rbind(pRes, pvalues)
@@ -295,12 +295,18 @@ statcheck <- function(texts,
   } else {
     
     if(nrow(pRes) > 0) {
+      # first clean then parse p-values using one of the helper functions
+      pvalues_clean <- clean_non_apa(pRes$pvalues)
+      pvalues_parsed <- extract_p_value(pvalues_clean)
+      pvalues_tot <- cbind(Source = pRes$Source, pvalues_parsed)
+      
       # rename columns based on the variable names in the script constants.R
       # first make sure that the columns are in the right order before renaming
-      pRes <- pRes[, c("Source", "p_comp", "p_value", "p_dec")]
-      colnames(pRes) <- c(VAR_SOURCE, VAR_P_COMPARISON, VAR_REPORTED_P, VAR_P_DEC)
+      pvalues_tot <- pvalues_tot[, c("Source", "p_comp", "p_value", "p_dec")]
+      colnames(pvalues_tot) <- c(VAR_SOURCE, VAR_P_COMPARISON, VAR_REPORTED_P, 
+                                 VAR_P_DEC)
       
-      return(pRes)
+      return(pvalues_tot)
     } else {
       cat("statcheck did not find any p-values\n")
     }
