@@ -17,7 +17,6 @@ test_that("F with MSE is extracted and parsed",{
   
 })
 
-
 test_that("df between square, curly, or no brackets are extracted and parsed",{
   txt1 <- "t[28] = 2.2, p = .03"
   txt2 <- "F[2, 28] = 2.2, p = .03"
@@ -84,16 +83,31 @@ test_that("DF in degrees of freedom and semi-colons are extracted and parsed", {
   
 })
 
-
 test_that("correlations with N instead of df are extracted and parsed", {
   txt1 <- "r(N=95)=.41, p < .001"
   
+  result <- statcheck(txt1, apa_style = FALSE, messages = FALSE)
+  
+  expect_equal(nrow(result), 1)
+  
+  # don't extract these results when apa_style is TRUE
+  expect_output(statcheck(txt1, messages = FALSE), 
+                "did not find any results")
+  
 })
-
 
 test_that("incorrect spacing is still extracted and parsed", {
   txt1 <-  "t(191) = 8.22, p < . 001"
   txt2 <- "t(191) = 9.54, p <. 001"
+  
+  result <- statcheck(c(txt1, txt2), apa_style = FALSE, messages = FALSE)
+  
+  expect_equal(nrow(result), 2)
+  
+  # don't extract these results when apa_style is TRUE
+  expect_output(statcheck(c(txt1, txt2), messages = FALSE), 
+                "did not find any results")
+  
   
 })
 
