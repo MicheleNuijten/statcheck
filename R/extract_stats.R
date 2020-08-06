@@ -117,7 +117,8 @@ extract_stats <- function(txt, apa_style, stat){
     
     # extract test comparison and test value 
     
-    test <- extract_test_stats(raw = nhst_clean[i])
+    test <- extract_test_stats(raw = nhst_clean[i], 
+                               apa_style = apa_style)
     
     test_stats <- rbind(test_stats, test)
     
