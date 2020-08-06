@@ -1,8 +1,15 @@
 clean_non_apa <- function(nhst_raw){
   
+  # remove all spaces
+  # the parsing functions can handle no spaces, but it would be too complicated
+  # to take into account every possible number of spaces, so removing them
+  # all is easiest
+  nhst_clean <- gsub(pattern = "\\s+", replacement = "",
+                     nhst_raw)
+  
   # replace square or curly brackets with parentheses
   nhst_clean <- gsub(pattern = RGX_SQ_CURLY1, replacement = RGX_PRTS_1, 
-                         nhst_raw)
+                     nhst_clean)
   nhst_clean <- gsub(pattern = RGX_SQ_CURLY2, replacement = RGX_PRTS_2, 
                      nhst_clean)
   
@@ -11,10 +18,10 @@ clean_non_apa <- function(nhst_raw){
   # "regex groups"
   # next, locate a digit followed by a comparison sign, and put a closing 
   # parenthesis between these two groups
-  nhst_clean <- gsub(pattern = "^([a-zA-Z]\\s?)(\\d)", 
+  nhst_clean <- gsub(pattern = "^([a-zA-Z])(\\d)", 
                      replacement = "\\1\\(\\2", 
                      nhst_clean)
-  nhst_clean <- gsub(pattern = "(\\d)(\\s?[=<>])", 
+  nhst_clean <- gsub(pattern = "(\\d)([=<>])", 
                      replacement = "\\1\\)\\2", 
                      nhst_clean)
   
