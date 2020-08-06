@@ -34,17 +34,47 @@ extract_pattern <- function(txt, pattern) {
   return(string)
 }
 
+# function to detect the number of p-values in a text --------------------------
+
+detect_p_values <- function(txt, apa_style){
+  
+  if(apa_style == TRUE){
+    rgx_p_ns <- RGX_P_NS
+  } else {
+    rgx_p_ns <- RGX_P_NS_NONAPA
+  }
+  
+  p_raw <- extract_pattern(txt = txt,
+                           pattern = rgx_p_ns)
+  
+}
+
 # function to extract dfs from a raw nhst result -------------------------------
 
 extract_df <- function(raw, test_type){
   
-  # z tests do not have dfs, so return df1 = NA, and df2 = NA for z-tests
   if(test_type == "Z"){
+    # z tests do not have dfs, so return df1 = NA, and df2 = NA for z-tests
     
     df1 <- NA
     df2 <- NA
     
-  } else {
+  } else if(test_type == "r" & grepl(RGX_DFN_R_NRS, raw)){
+    # if correlations report N instead of df, transform to df
+    
+    # extract full string with N
+    dfn <- extract_pattern(txt = raw,
+                           pattern = RGX_DFN_R_NRS)[[1]]
+    
+    # only extract numbers
+    n <- as.numeric(extract_pattern(txt = dfn,
+                         pattern = "\\d+"))
+    
+    # convert into df (df = n-2) and save as output
+    df1 <- NA
+    df2 <- n-2
+    
+  } else { 
     # for all other test types, extract dfs from the raw nhst result
     df_raw <- extract_pattern(txt = raw,
                               pattern = RGX_DF)[[1]]
@@ -130,17 +160,29 @@ recover_minus_sign <- function(raw){
 
 # function to extract test-values and test comparisons -------------------------
 
-extract_test_stats <- function(raw){
+extract_test_stats <- function(raw, apa_style){
+  
+  # specify whether to search for APA NHST results or also to include non-APA
+  if(apa_style == TRUE){
+    rgx_test_df_value <- RGX_TEST_DF_VALUE
+  } else {
+    rgx_test_df_value <- RGX_TEST_DF_BRACK_VALUE
+  }
   
   # first select the test type, df, and test value
   # this will remove anything between the test value and p-value that could
   # otherwise be mistaken for another test value
   test_raw <- extract_pattern(txt = raw,
-                              pattern = RGX_TEST_DF_VALUE)
+                              pattern = rgx_test_df_value)
 
   # remove N = ... from chi-square tests
   # otherwise, these sample sizes will wrongly be classified as test statistics
   test_raw_noN <- gsub(RGX_DF_CHI2, "", test_raw)
+  
+  # remove N = from correlations
+  # this is only relevant when apa_style == FALSE
+  # otherwise r(N=...) wouldn't even be extracted
+  test_raw_noN <- gsub(RGX_DFN_R_NRS, "", test_raw)
   
   # extract test comparison and test value
   test_raw <- extract_pattern(txt = test_raw_noN,
@@ -189,7 +231,7 @@ extract_p_value <- function(raw){
   
   for(i in seq_along(p_raw)){
     
-    if(grepl(RGX_NS, p_raw[i])){
+    if(grepl(RGX_NS, p_raw[i], perl = TRUE)){
       
       p_comp[i] <- "ns"
       p_value[i] <- NA
