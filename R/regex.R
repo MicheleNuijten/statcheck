@@ -122,12 +122,6 @@ RGX_TEST_TYPE <- paste(RGX_Z, RGX_OPEN_BRACKET, sep = "|")
 RGX_QW <- "(?i)w"
 RGX_QB <- "(?i)b"
 
-# when identifying test type, we also need to match just the number "2"
-# in detecting NHST results in the full text, we can't allow "just" a 2, it
-# needs to be preceded by another character that is not a certain letter (e.g., 
-# a t or an F). When the NHSTs are already extracted, 
-RGX_CHI2_2 <- paste0("(", RGX_CHI2, "|2)")
-
 # regex for degrees of freedom ------------------------
 
 # combine the separate regexes for the different types of dfs

@@ -94,7 +94,7 @@ extract_stats <- function(txt, apa_style, stat){
         test_type[i] <- "r"
       } else if (grepl(pattern = RGX_Z, x = test_raw, perl = TRUE)){
         test_type[i] <- "Z"
-      } else if (grepl(pattern = RGX_CHI2_2, x = test_raw, perl = TRUE)){
+      } else if (grepl(pattern = RGX_CHI2, x = test_raw, perl = TRUE)){
         test_type[i] <- "Chi2"
       }
     } else {
