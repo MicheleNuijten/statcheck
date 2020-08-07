@@ -111,13 +111,15 @@ test_that("incorrect spacing is still extracted and parsed", {
   expect_output(statcheck(c(txt1, txt2), messages = FALSE), 
                 "did not find any results")
   
-  
 })
 
 
-test_that("F tests with 'subscripts' extracted and parsed", {
+test_that("Tests with 'subscripts' extracted and parsed", {
   txt1 <-  "F1(1, 73) = 5.41, MSE = 454009, p = .023"
   txt2 <- "F2(1, 62) = 15.760, MSE = 212146, p < .001"
+  txt3 <- "t2(39) = 41.2, p > .01"
+  
+  
   
 })
 

@@ -14,23 +14,24 @@ test_that("statistics from a pdf are correctly retrieved and parsed", {
   result <- checkPDF(pdf_file, messages = FALSE)
   result_1tailed <- checkPDF(pdf_file, messages = FALSE, OneTailedTxt = TRUE)
   
-  # extract 4 tests from paper
+  # extract 3 tests from paper
   # note: 1 APA F-test is not extracted with xpdf, because it's surrounded by
   # quotation marks, that xpdf transforms into the letter B, turning the result
   # into "BF(2, 56) = 12.03, p < .001^". The B makes that statcheck doesn't 
-  # recognize F as the start of a statistic. This problem does not occur with
-  # pdftools (see test below)
-  expect_equal(nrow(result), 4)
-  expect_equal(as.character(result[[VAR_TYPE]]), c("Chi2", "t", "Chi2", "t"))
-  expect_equal(result[[VAR_TEST_VALUE]], c(6.9, 2, 6.53, 2))
+  # recognize F as the start of a statistic. The same holds for a chi2 test
+  # between quotation marks. This problem does not occur with pdftools (see test 
+  # below)
+  expect_equal(nrow(result), 3)
+  expect_equal(as.character(result[[VAR_TYPE]]), c("t", "Chi2", "t"))
+  expect_equal(result[[VAR_TEST_VALUE]], c(2, 6.53, 2))
   
   # check errors
-  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE))
-  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE))
+  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, TRUE))
+  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, TRUE))
   
   # check errors with one-tailed test detection
-  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, FALSE))
-  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE))
   
   # pdftools
   result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
@@ -49,20 +50,20 @@ test_that("stats from all pdfs in a folder are correctly retrieved & parsed", {
   result_1tailed <- checkPDFdir(pdf_folder, messages = FALSE, subdir = FALSE, 
                                 OneTailedTxt = TRUE)
   
-  # extract 4 tests from paper
-  expect_equal(nrow(result), 4)
-  expect_equal(as.character(result[[VAR_TYPE]]), c("Chi2", "t", "Chi2", "t"))
-  expect_equal(result[[VAR_TEST_VALUE]], c(6.9, 2, 6.53, 2))
+  # extract 3 tests from paper
+  expect_equal(nrow(result), 3)
+  expect_equal(as.character(result[[VAR_TYPE]]), c("t", "Chi2", "t"))
+  expect_equal(result[[VAR_TEST_VALUE]], c(2, 6.53, 2))
   
   # check errors
-  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE))
-  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE))
+  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, TRUE))
+  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, TRUE))
   
   # check errors with one-tailed test detection
-  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, FALSE))
-  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE))
   
-  # extract 5 tests when pdftools is used (pdftools doesn't wrongly convert
+  # extract 7 tests when pdftools is used (pdftools doesn't wrongly convert
   # quotation marks around F test)
   result_pdftools <- checkPDFdir(pdf_folder, method = "pdftools", 
                                  messages = FALSE, subdir = FALSE)
@@ -133,10 +134,8 @@ test_that("stats from all pdfs and htmls in a folder are correctly retrieved
   
   result <- checkdir(dir, subdir = FALSE, messages = FALSE)
   
-  # extract 10 tests from papers
-  # one test (delta G) isn't detected in the html because it's in a table
-  # and the table isn't saved in the html file
-  expect_equal(nrow(result), 10)
+  # extract 9 tests from papers
+  expect_equal(nrow(result), 9)
 })
 
 # tests concerning pdf encoding ----------------------------------------------
@@ -344,3 +343,4 @@ test_that("subscripts are not read as test statistics", {
   expect_equal(reference$test_value, result$test_value)
   
 })
+

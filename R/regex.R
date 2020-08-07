@@ -24,14 +24,16 @@ RGX_Z <- paste0(RGX_START, "(?i)z")
 
 # For chi2, the regex is a bit more complicated, because the actual greek letter
 # is often not converted correctly
-# match any character that is not preceded by trF... (using a neg lookbehind)
-# followed by maybe a space and maybe a 2. Don't match t, R, F, z, Q because 
-# these are different tests
-# W, B, n, D, s, U all matched other cases that weren't chi2
-# exclude these cases both in lower and upper case
-# also don't extract multiple spaces, otherwise t  () = ... would be recognized
-# as chi2
-RGX_CHI2 <- "((?<![tTrRfFzZqQwWbBnNdDsSuU\\s])\\s?2?)"
+# for the greek letter, match literally typed:
+  # chi
+  # x or X
+  # G 
+# or match
+  # any non-word character that is not a space (captures weird encoding)
+# or match
+  # a single 2
+# followed by maybe a 2, maybe surrounded by spaces
+RGX_CHI2 <- "((chi|x|X|G)|[^\\w\\s]|^2)\\s?2?\\s?"
 
 # degrees of freedom ---------------------------------
 
@@ -119,6 +121,12 @@ RGX_TEST_TYPE <- paste(RGX_Z, RGX_OPEN_BRACKET, sep = "|")
 # it suffices to simply search for the letters "w" and "b"
 RGX_QW <- "(?i)w"
 RGX_QB <- "(?i)b"
+
+# when identifying test type, we also need to match just the number "2"
+# in detecting NHST results in the full text, we can't allow "just" a 2, it
+# needs to be preceded by another character that is not a certain letter (e.g., 
+# a t or an F). When the NHSTs are already extracted, 
+RGX_CHI2_2 <- paste0("(", RGX_CHI2, "|2)")
 
 # regex for degrees of freedom ------------------------
 

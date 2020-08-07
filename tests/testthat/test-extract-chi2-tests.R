@@ -16,7 +16,7 @@ test_that("chi2-tests are correctly parsed", {
   expect_equal(result[[VAR_TEST_VALUE]], 2.2)
   expect_equal(as.character(result[[VAR_P_COMPARISON]]), "=")
   expect_equal(result[[VAR_REPORTED_P]], 0.03)
-  expect_equal(as.character(result[[VAR_RAW]]), "2(28) = 2.20, p = .03")
+  expect_equal(as.character(result[[VAR_RAW]]), "chi2(28) = 2.20, p = .03")
 })
 
 # standard chi2-tests in text
@@ -34,11 +34,12 @@ test_that("chi2-tests are retrieved from sentences", {
 test_that("variations in spelling the Greek letter chi are picked up", {
   txt1 <- "X2(28) = 2.20, p = .03"
   txt2 <- "x2(28) = 2.20, p = .03"
-  txt3 <- "chi_2(28) = 2.20, p = .03"
+  txt3 <- "chi-2(28) = 2.20, p = .03"
+  txt4 <- "chi^2(28) = 2.20, p = .03"
   
-  result <- statcheck(c(txt1, txt2, txt3), messages = FALSE)
+  result <- statcheck(c(txt1, txt2, txt3, txt4), messages = FALSE)
   
-  expect_equal(nrow(result), 3)
+  expect_equal(nrow(result), 4)
 })
 
 # variation in degrees of freedom
@@ -81,10 +82,12 @@ test_that("chi2 test between parentheses are correctly parsed", {
 
 # do not extract things that look like chi2 but aren't
 test_that("results that only look like chi2 are not retrieved", {
-  txt1 <- "t  (28) = 2.2, p < .05"
+  txt1 <- "t  (28) = 2.2, p < .05"  # accidental extra space interpreted as chi2
   txt2 <- "U(65) = 499.0, p = 0.55" # non-parametric Mann-Whitney U-test
+  txt3 <- "t2(39) = 41.2, p > .01"  # subscript 2 may seem like chi2
   
-  expect_output(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
+  expect_output(statcheck(c(txt1, txt2, txt3), messages = FALSE), 
+                "did not find any results")
   
 })
 
