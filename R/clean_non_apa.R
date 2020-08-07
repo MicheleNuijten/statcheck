@@ -14,13 +14,14 @@ clean_non_apa <- function(nhst_raw){
                      nhst_clean)
   
   # add parentheses around degrees of freedom that were in subscripts
-  # locate a letter followed by a digit and put a parentheses between these 2 
-  # "regex groups"
+  # locate a letter followed by a digit but *not* followed by a parenthesis 
+  # (chi2(..)) and put a parentheses between these 2 "regex groups"
   # next, locate a digit followed by a comparison sign, and put a closing 
   # parenthesis between these two groups
-  nhst_clean <- gsub(pattern = "^([a-zA-Z])(\\d)", 
+  nhst_clean <- gsub(pattern = "^([a-zA-Z])(\\d\\s?(?!\\())", 
                      replacement = "\\1\\(\\2", 
-                     nhst_clean)
+                     nhst_clean,
+                     perl = TRUE)
   nhst_clean <- gsub(pattern = "(\\d)([=<>])", 
                      replacement = "\\1\\)\\2", 
                      nhst_clean)
