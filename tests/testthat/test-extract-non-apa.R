@@ -99,10 +99,13 @@ test_that("correlations with N instead of df are extracted and parsed", {
 test_that("incorrect spacing is still extracted and parsed", {
   txt1 <-  "t(191) = 8.22, p < . 001"
   txt2 <- "t(191) = 9.54, p <. 001"
+  txt3 <- "t  (191  ) = 9.   42,p<.01"
+  txt4 <- "z  =1. 94, p  <. 05"
   
-  result <- statcheck(c(txt1, txt2), apa_style = FALSE, messages = FALSE)
+  result <- statcheck(c(txt1, txt2, txt3, txt4), 
+                      apa_style = FALSE, messages = FALSE)
   
-  expect_equal(nrow(result), 2)
+  expect_equal(nrow(result), 4)
   
   # don't extract these results when apa_style is TRUE
   expect_output(statcheck(c(txt1, txt2), messages = FALSE), 
