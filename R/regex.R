@@ -213,7 +213,7 @@ RGX_BRACK_CHI2_2 <- paste0("(\\)|", RGX_SQ_CURLY2, ")")
 
 # regex for "DF" in degrees of freedom
 # matches cases such as t(DF = 29) = ...
-RGX_DF_TXT <- "(DF\\s*=\\s*)?"
+RGX_DF_TXT <- "((df|DF)\\s*=\\s*)?"
 
 # regex for df themselves
 
