@@ -32,8 +32,8 @@ RGX_Z <- paste0(RGX_START, "(?i)z")
   # any non-word character that is not a space (captures weird encoding)
 # or match
   # a single 2
-# followed by maybe a 2, maybe surrounded by spaces
-RGX_CHI2 <- "((chi|x|X|G)|[^\\w\\s]|^2)\\s?2?\\s?"
+# followed by maybe a 2, maybe preceded by spaces
+RGX_CHI2 <- "((chi|x|X|G)|[^\\w\\s]|^2)\\s?2?"
 
 # degrees of freedom ---------------------------------
 
@@ -200,6 +200,15 @@ RGX_SQ_CURLY2 <- "\\]|\\}"
 RGX_BRACK_1 <- paste0("(\\(|", RGX_SQ_CURLY1, ")?")
 RGX_BRACK_2 <- paste0("(\\)|", RGX_SQ_CURLY2, ")?")
 
+# define separate brackets for chi2, because these dfs are only matched when
+# they're in between some type of brackets. If numbers after the "chi" are
+# also matched without brackets (the same as with other tests, when dfs are
+# reported as subscripts), the "2" of "chi2" is considered as df when no other
+# dfs are reported (e.g., "X2 = 93.3, p < .01")
+
+RGX_BRACK_CHI2_1 <- paste0("(\\(|", RGX_SQ_CURLY1, ")")
+RGX_BRACK_CHI2_2 <- paste0("(\\)|", RGX_SQ_CURLY2, ")")
+
 # regex for "DF" in degrees of freedom
 # matches cases such as t(DF = 29) = ...
 RGX_DF_TXT <- "(DF\\s*=\\s*)?"
@@ -238,7 +247,7 @@ RGX_DF_T_Q_BRACK <-
 RGX_DF_F_BRACK <- 
   paste0(RGX_BRACK_1, RGX_DF_TXT, RGX_DF_F_NRS_NONAPA, RGX_BRACK_2)
 RGX_DF_CHI2_BRACK <- 
-  paste0(RGX_BRACK_1, RGX_DF_TXT, RGX_DF_CHI2_NRS_NONAPA, RGX_BRACK_2)
+  paste0(RGX_BRACK_CHI2_1, RGX_DF_TXT, RGX_DF_CHI2_NRS_NONAPA, RGX_BRACK_CHI2_2)
 
 # Put regex between () to create regex groups
 RGX_T_DF_BRACK <- paste0("(", RGX_T, "\\s*", RGX_DF_T_Q_BRACK, ")")

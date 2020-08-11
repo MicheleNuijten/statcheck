@@ -85,10 +85,23 @@ test_that("results that only look like chi2 are not retrieved", {
   txt1 <- "t  (28) = 2.2, p < .05"  # accidental extra space interpreted as chi2
   txt2 <- "U(65) = 499.0, p = 0.55" # non-parametric Mann-Whitney U-test
   txt3 <- "t2(39) = 41.2, p > .01"  # subscript 2 may seem like chi2
-  
+ 
   expect_output(statcheck(c(txt1, txt2, txt3), messages = FALSE), 
                 "did not find any results")
   
 })
 
 
+test_that("chi2 without df is not extracted", {
+  txt1 <- "X2 = 93.3, p < .01"
+  txt2 <- "*2 = 93.3, p < .01"
+  
+  # don't extract these results when apa_style is TRUE
+  expect_output(statcheck(c(txt1, txt2), messages = FALSE), 
+                "did not find any results")
+  
+  # don't extract these results when apa_style is FALSE
+  expect_output(statcheck(c(txt1, txt2), 
+                          apa_style = FALSE, messages = FALSE), 
+                "did not find any results")
+})
