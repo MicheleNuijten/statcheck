@@ -30,6 +30,18 @@ test_that("chi2-tests are retrieved from sentences", {
   expect_equal(as.character(result[[VAR_SOURCE]]), c("1", "2", "2"))
 })
 
+# tests that are chi2 distributed
+test_that("tests that are chi2 distributed are extracted", {
+  txt1 <- "G2(28) = 2.20, p = .04"
+  txt2 <- "Dx2(28) = 2.20, p = .04" # delta chi2
+  
+  result <- statcheck(c(txt1, txt2), messages = FALSE)
+  
+  expect_equal(nrow(result), 2)
+  expect_equal(result[[VAR_TYPE]], c("Chi2", "Chi2"))
+  
+})
+
 # variations in extracted "chi"
 test_that("variations in spelling the Greek letter chi are picked up", {
   txt1 <- "X2(28) = 2.20, p = .03"

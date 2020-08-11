@@ -33,7 +33,7 @@ RGX_Z <- paste0(RGX_START, "(?i)z")
 # or match
   # a single 2
 # followed by maybe a 2, maybe preceded by spaces
-RGX_CHI2 <- "((chi|x|X|G)|[^\\w\\s]|^2)\\s?2?"
+RGX_CHI2 <- "(D?(chi|x|X|G)|[^\\w\\s]|^2)\\s?2?"
 
 # degrees of freedom ---------------------------------
 
