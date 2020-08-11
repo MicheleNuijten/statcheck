@@ -47,6 +47,8 @@ detect_p_values <- function(txt, apa_style){
   p_raw <- extract_pattern(txt = txt,
                            pattern = rgx_p_ns)
   
+  return(p_raw)
+  
 }
 
 # function to extract dfs from a raw nhst result -------------------------------
