@@ -120,3 +120,20 @@ test_that("subscript t is not recognized as a t-test", {
   
   expect_output(statcheck(txt, messages = FALSE), "did not find any results")
 })
+
+# don't extract <= etc.
+test_that("subscript t is not recognized as a t-test", {
+  txt1 <- "t(26) <= 252.78, p < .001"
+  txt2 <- "t(26) = 252.78, p <= .001"
+  txt3 <- "t(26) >= 252.78, p <= .001"
+  
+  # don't extract anything when apa = TRUE
+  expect_output(statcheck(c(txt1, txt2, txt3), 
+                          apa_style = TRUE, messages = FALSE), 
+                "did not find any results")
+  
+  # also don't extract anything when apa = FALSE
+  expect_output(statcheck(c(txt1, txt2, txt3), 
+                          apa_style = FALSE, messages = FALSE), 
+                "did not find any results")
+})

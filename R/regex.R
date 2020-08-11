@@ -83,8 +83,9 @@ RGX_TEST_DF <- paste0("(", RGX_T_DF, "|", RGX_R_DF, "|", RGX_Q_DF, "|",
 
 # this is the same for every type of test
 # the snippet [^a-z\\d]{0,3} searches for weird symbols that could indicate a
-# minus sign
-RGX_TEST_VALUE <- "[<>=]\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?"
+# minus sign. Don't search for <>= again, otherwise cases like <= .1 would be
+# extracted as well, and these can't be parsed
+RGX_TEST_VALUE <- "[<>=]\\s?[^a-z\\d<>=]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?"
 
 # combine test type, df, value ------------------------
 
@@ -268,7 +269,7 @@ RGX_TEST_DF_BRACK <- paste0("(",
 # add spaces to test value regex
 
 RGX_TEST_VALUE_NONAPA <- 
-  "[<>=]\\s*[^a-z\\d]{0,3}\\s*\\d*\\s*,?\\s*\\d*\\s*\\.?\\s*\\d+\\s*"
+  "[<>=]\\s*[^a-z\\d<>=]{0,3}\\s*\\d*\\s*,?\\s*\\d*\\s*\\.?\\s*\\d+\\s*"
 
 RGX_TEST_DF_BRACK_VALUE <- paste(RGX_TEST_DF_BRACK, RGX_TEST_VALUE_NONAPA, 
                                  sep = "\\s*")
