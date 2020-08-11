@@ -33,6 +33,13 @@ clean_non_apa <- function(nhst_raw){
   # replace semi-colons with commas
   nhst_clean <- gsub(pattern = ";", replacement = ",", nhst_clean)
   
+  # remove extra periods in result: match any period(s) followed by digits, 
+  # again followed by a period
+  # e.g., "t(102)=.1.84,p=.068" should become "t(102)=1.84,p=.068"
+  nhst_clean <- gsub(pattern = "\\.+(?=\\d+\\.)", replacement = "", nhst_clean,
+                     perl = TRUE)
+  
+  
   return(nhst_clean)
 }
 

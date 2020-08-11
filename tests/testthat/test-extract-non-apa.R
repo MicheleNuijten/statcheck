@@ -67,7 +67,7 @@ test_that("semi-colons instead of commas are extracted and parsed", {
    
 })
 
-test_that("DF in degrees of freedom and semi-colons are extracted and parsed", {
+test_that("DF in degrees of freedom AND semi-colons are extracted and parsed", {
   txt1 <- "chi2(DF = 2) = 45.1; p < 0.001"
   txt2 <- "F(DF = 3, 1115) = 7.7; p < 0.001"
   
@@ -113,8 +113,19 @@ test_that("incorrect spacing is still extracted and parsed", {
   
 })
 
+test_that("incorrect punctuation in test is extracted and parsed", {
+  txt1 <- "t(102)=.1.84,p=.068"
+  txt2 <- "t(102)=..1.84,p=.068"
+  
+  result <- statcheck(c(txt1, txt2), 
+                      apa_style = FALSE, messages = FALSE)
+  
+  expect_equal(nrow(result), 2)
+  
+})
 
-test_that("Tests with 'subscripts' extracted and parsed", {
+
+test_that("tests with 'subscripts' extracted and parsed", {
   txt1 <-  "F1(1, 73) = 5.41, MSE = 454009, p = .023"
   txt2 <- "F2(1, 62) = 15.760, MSE = 212146, p < .001"
   txt3 <- "t2(39) = 41.2, p > .01"
