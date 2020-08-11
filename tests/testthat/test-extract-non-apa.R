@@ -125,6 +125,19 @@ test_that("incorrect punctuation in test is extracted and parsed", {
 })
 
 
+test_that("tests with superfluous comparison signs are not extracted", {
+  txt1 <- "x2 = (1) = .52, p > .05"
+  txt2 <- "t = (13) = .52, p > .05"
+  
+  # don't extract these results when apa_style is TRUE or FALSE
+  expect_output(statcheck(c(txt1, txt2), messages = FALSE), 
+                "did not find any results")
+  
+  expect_output(statcheck(c(txt1, txt2), apa_style = FALSE, messages = FALSE), 
+                "did not find any results")
+})
+
+
 test_that("tests with 'subscripts' extracted and parsed", {
   txt1 <-  "F1(1, 73) = 5.41, MSE = 454009, p = .023"
   txt2 <- "F2(1, 62) = 15.760, MSE = 212146, p < .001"

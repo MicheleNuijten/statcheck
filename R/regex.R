@@ -30,10 +30,11 @@ RGX_Z <- paste0(RGX_START, "(?i)z")
   # G 
 # or match
   # any non-word character that is not a space (captures weird encoding)
+  # here, don't match <>=
 # or match
   # a single 2
 # followed by maybe a 2, maybe preceded by spaces
-RGX_CHI2 <- "(D?(chi|x|X|G)|[^\\w\\s]|^2)\\s?2?"
+RGX_CHI2 <- "(D?(chi|x|X|G)|[^\\w\\s<>=]|^2)\\s?2?"
 
 # degrees of freedom ---------------------------------
 
