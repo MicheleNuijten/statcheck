@@ -261,8 +261,14 @@ statcheck <- function(texts,
     
     # APAfactor: proportion of APA results (that statcheck reads) 
     # in total number of p values
+    # don't calculate if apa_style == FALSE, because then we didn't determine
+    # how many results were in APA style. We just scraped everything we could.
     
-    Res$APAfactor <- calc_APA_factor(pRes, Res)
+    if(apa_style == TRUE){
+      Res$APAfactor <- calc_APA_factor(pRes, Res)
+    } else {
+      Res$APAfactor <- rep(NA, nrow(Res))
+    }
     
     ###---------------------------------------------------------------------
     
