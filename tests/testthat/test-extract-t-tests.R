@@ -31,13 +31,14 @@ test_that("t-tests are retrieved from sentences", {
 })
 
 # variation in spacing
-test_that("t-tests with different spacing are retrieved from text", {
+test_that("t-tests with different spacing and casing are retrieved from text", {
   txt1 <- " t ( 28 ) = 2.20 , p = .03"
   txt2 <- "t(28)=2.20,p=.03"
+  txt3 <- "T(26) = 252.78, p < .001"
   
-  result <- statcheck(c(txt1, txt2), messages = FALSE)
+  result <- statcheck(c(txt1, txt2, txt3), messages = FALSE)
   
-  expect_equal(nrow(result), 2)
+  expect_equal(nrow(result), 3)
 })
 
 # variations test statistic
@@ -95,13 +96,6 @@ test_that("tests with 'p-values' larger than 1 are not retrieved from text", {
 # wrong df
 test_that("t-tests with 2 dfs are not retrieved from text", {
   txt1 <- "t(2,28) = 2.20, p = .03"
-  
-  expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
-})
-
-# capital t
-test_that("t-tests with capital T are not retrieved from text", {
-  txt1 <- "T(26) = 252.78, p < .001"
   
   expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
 })
