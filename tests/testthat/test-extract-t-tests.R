@@ -99,3 +99,9 @@ test_that("t-tests with 2 dfs are not retrieved from text", {
   expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
 })
 
+# capital t
+test_that("t-tests with capital T are not retrieved from text", {
+  txt1 <- "T(26) = 252.78, p < .001"
+  
+  expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
+})
