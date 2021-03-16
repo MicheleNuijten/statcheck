@@ -3,6 +3,7 @@ output: github_document
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- after editing README.Rmd, run devtools::build_readme() -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -16,7 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/statcheck)](https://cran.r-project.org/package=statcheck)
-[![CRAN_Downloads_Total](http://cranlogs.r-pkg.org/badges/grand-total/statcheck?color=brightgreen)](https://cran.r-project.org/package=stacheck)
+[![CRAN_Downloads_Total](http://cranlogs.r-pkg.org/badges/grand-total/statcheck?color=brightgreen)](https://cran.r-project.org/package=statcheck)
 <!-- badges: end -->
 
 ## What is statcheck?

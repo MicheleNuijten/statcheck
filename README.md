@@ -1,13 +1,15 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+<!-- after editing README.Rmd, run devtools::build_readme() -->
+
 # statcheck <a href='http://statcheck.io'><img src='man/figures/logo.jpg' align="right" height="100" /></a>
 
 <!-- badges: start -->
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/statcheck)](https://cran.r-project.org/package=statcheck)
-[![CRAN\_Downloads\_Total](http://cranlogs.r-pkg.org/badges/grand-total/statcheck?color=brightgreen)](https://cran.r-project.org/package=stacheck)
+[![CRAN\_Downloads\_Total](http://cranlogs.r-pkg.org/badges/grand-total/statcheck?color=brightgreen)](https://cran.r-project.org/package=statcheck)
 <!-- badges: end -->
 
 ## What is statcheck?
