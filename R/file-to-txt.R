@@ -42,7 +42,13 @@ getPDF <- function(x){
     system(paste('pdftotext -q -enc "ASCII7" "', x[i], '"', sep = ""))
     if (file.exists(gsub("\\.pdf$", "\\.txt", x[i]))) {
       fileName <- gsub("\\.pdf$", "\\.txt", x[i])
-      txtfiles[i] <- readChar(fileName, file.info(fileName)$size)
+      strings <- readChar(fileName, file.info(fileName)$size)
+      
+      # remove carriage returns and new lines
+      strings <- gsub(x = strings, pattern = "[\r\n]", replacement = "")
+      
+      # save result in vector
+      txtfiles[i] <- strings
       
     } else{
       
@@ -51,5 +57,6 @@ getPDF <- function(x){
       
     }
   }
+  
   return(txtfiles)
 }
