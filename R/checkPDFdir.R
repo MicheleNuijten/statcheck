@@ -21,12 +21,15 @@ checkPDFdir <-
     txts <- character(length(files))
     message("Importing PDF files...")
     pb <- utils::txtProgressBar(max = length(files), style = 3)
-    for (i in 1:length(files))
-    {
+    
+    for (i in 1:length(files)){
       txts[i] <-  getPDF(files[i])
       utils::setTxtProgressBar(pb, i)
     }
+    
     close(pb)
+    
     names(txts) <- gsub("\\.pdf$", "", basename(files))
+    
     return(statcheck(txts, ...))
   }
