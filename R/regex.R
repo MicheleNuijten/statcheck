@@ -2,10 +2,10 @@
 # NHST results from text
 
 # test types
-RGX_T <- "t"
+RGX_T <- "(t|T)"
 RGX_R <- "r"
 RGX_Q <- "Q\\s?-?\\s?(w|within|b|between)?"
-RGX_F <- "F"
+RGX_F <- "(F|f)"
 RGX_CHI2 <- "((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^trFzQWBnD ]\\s?)|([^trFzQWBnD ]2\\s?))2?"
 RGX_Z <- "([^a-z](z|Z))"
 
