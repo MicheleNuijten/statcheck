@@ -186,6 +186,7 @@ statcheck <- function(texts,
       nhst$OneTailedInTxt <- extract_1tail(txt)
       
       Res <- rbind(Res, nhst)
+      rownames(Res) <- NULL # to avoid having duplicated row names (1, 1, 2 etc.)
     }
     
     rm(nhst)
