@@ -105,6 +105,13 @@ extract_stats <- function(txt, stat){
     nhst_parsed <- nhst_parsed[nhst_parsed$Reported.P.Value <= 1 |
                                  is.na(nhst_parsed$Reported.P.Value), ]
     
+    # remove correlations greater than one
+    # reason: there is a risk that statcheck simply misread this stat
+    # this means that statcheck will not flag such incorrect correlations,
+    # which you could also consider a disadvantage
+    nhst_parsed <- nhst_parsed[!(nhst_parsed$Statistic == "r" & 
+                                 nhst_parsed$Value > 1), ]
+    
     # only return selected stats
     # to that end, rename test-types to match argument stat
     types <- as.vector(nhst_parsed$Statistic)
