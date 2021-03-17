@@ -5,7 +5,7 @@ context("Check if statistics from an article are correctly retrieved and parsed"
 # individual pdf files
 test_that("statistics from a pdf are correctly retrieved and parsed", {
   
-  pdf_file <- system.file("test_materials/NuijtenEtAl_2016_ReportingErrorsPsychology.pdf",
+  pdf_file <- system.file("test_materials/nuijten.pdf",
                           package = "statcheck")
   
   result <- checkPDF(pdf_file, messages = FALSE)
@@ -49,8 +49,8 @@ test_that("statistics from all pdfs in a folder are correctly retrieved and pars
 # individual html files
 test_that("statistics from a html are correctly retrieved and parsed", {
   
-  html_file <- system.file("test_materials/NuijtenEtAl_2016_ReportingErrorsPsychology.html",
-                          package = "statcheck")
+  html_file <- system.file("test_materials/nuijten.html",
+                           package = "statcheck")
   
   result <- checkHTML(html_file, messages = FALSE)
   result_1tailed <- checkHTML(html_file, messages = FALSE, OneTailedTxt = TRUE)
@@ -63,7 +63,7 @@ test_that("statistics from a html are correctly retrieved and parsed", {
   # check errors
   expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
   expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
-
+  
   # check errors with one-tailed test detection
   expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
   expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE))
@@ -101,7 +101,7 @@ test_that("statistics from all pdfs and htmls in a folder are correctly retrieve
   dir <- system.file("test_materials", package = "statcheck")
   
   result <- checkdir(dir, subdir = FALSE, messages = FALSE)
- 
+  
   # extract 59 tests (6 from html and 53 from pdf)
   expect_equal(nrow(result), 59)
 })
