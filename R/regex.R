@@ -31,8 +31,10 @@ RGX_TEST_DF <- paste0("(", RGX_T_DF, "|", RGX_R_DF, "|", RGX_Q_DF, "|", RGX_F_DF
 
 # test value
 # this is the same for every type of test
+# the part "[^a-zA-Z\\d\\.]{0,3}" is to extract punctuation marks that could 
+# signal a weirdly encoded minus sign
 # note that impossible values such as r > 1 are excluded at a later stage
-RGX_TEST_VALUE <- "[<>=]\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,"
+RGX_TEST_VALUE <- "[<>=]\\s?[^a-zA-Z\\d\\.]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,"
 
 # p-values
 # this is the same for every type of test
