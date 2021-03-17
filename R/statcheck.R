@@ -135,6 +135,7 @@ statcheck <- function(texts,
     names(texts) <-  seq_along(texts)
   }
   
+  
   # start progress bar. If the argument messages == FALSE, don't print this 
   # progress bar. This is mainly useful for the unit tests; otherwise hundreds
   # of progress bars would be printed during testing and that makes the test 
