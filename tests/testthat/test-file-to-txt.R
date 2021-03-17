@@ -12,17 +12,23 @@ test_that("statistics from a pdf are correctly retrieved and parsed", {
   result_1tailed <- checkPDF(pdf_file, messages = FALSE, OneTailedTxt = TRUE)
   
   # extract 4 tests from paper
-  expect_equal(nrow(result), 4)
-  expect_equal(as.character(result[[VAR_TYPE]]), c("t", "F", "Chi2", "t"))
-  expect_equal(result[[VAR_TEST_VALUE]], c(2, 12.03, 6.53, 2))
+  expect_equal(nrow(result), 8)
+  expect_equal(as.character(result[[VAR_TYPE]]), c("t", "Chi2", "t", "F",
+                                                   "F", "F", "Chi2", "t"))
+  expect_equal(result[[VAR_TEST_VALUE]], c(-4.93, 6.9, 2, 1.203,
+                                           12.03, 23.95, 6.53, 2))
   
   # check errors
-  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE))
-  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE))
+  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE,
+                                      FALSE, FALSE, FALSE, TRUE))
+  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE,
+                                          FALSE, FALSE, FALSE, TRUE))
   
   # check errors with one-tailed test detection
-  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, FALSE))
-  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE,
+                                              FALSE, FALSE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE,
+                                                  FALSE, FALSE, FALSE, FALSE))
 })
 
 # pdfs in folder
@@ -31,20 +37,11 @@ test_that("statistics from all pdfs in a folder are correctly retrieved and pars
   pdf_folder <- system.file("test_materials", package = "statcheck")
   
   result <- checkPDFdir(pdf_folder, messages = FALSE, subdir = FALSE)
-  result_1tailed <- checkPDFdir(pdf_folder, messages = FALSE, subdir = FALSE, OneTailedTxt = TRUE)
   
-  # extract 4 tests from paper
-  expect_equal(nrow(result), 4)
-  expect_equal(as.character(result[[VAR_TYPE]]), c("t", "F", "Chi2", "t"))
-  expect_equal(result[[VAR_TEST_VALUE]], c(2, 12.03, 6.53, 2))
+  # extract 53 tests from 4 papers
+  expect_equal(nrow(result), 53)
+  expect_equal(length(unique(result[[VAR_SOURCE]])), 4)
   
-  # check errors
-  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE))
-  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE))
-  
-  # check errors with one-tailed test detection
-  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, FALSE))
-  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, FALSE))
 })
 
 # tests concerning parsing stats from html files ------------------------------
@@ -104,9 +101,8 @@ test_that("statistics from all pdfs and htmls in a folder are correctly retrieve
   dir <- system.file("test_materials", package = "statcheck")
   
   result <- checkdir(dir, subdir = FALSE, messages = FALSE)
-  result_1tailed <- checkdir(dir, messages = FALSE, subdir = FALSE, OneTailedTxt = TRUE)
-  
-  # extract 10 tests from papers
-  expect_equal(nrow(result), 10)
+ 
+  # extract 59 tests (6 from html and 53 from pdf)
+  expect_equal(nrow(result), 59)
 })
 
