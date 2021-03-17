@@ -31,15 +31,13 @@ test_that("t-tests are retrieved from sentences", {
 })
 
 # variation in spacing
-test_that("t-tests with different spacing and casing are retrieved from text", {
+test_that("t-tests with different spacing are retrieved from text", {
   txt1 <- " t ( 28 ) = 2.20 , p = .03"
   txt2 <- "t(28)=2.20,p=.03"
-  txt3 <- "T(28) = 2.20, p = .03"
-  txt4 <- "t\r\n(28) = 2.20, p = .03" # carriage returns & line breaks
   
-  result <- statcheck(c(txt1, txt2, txt3, txt4), messages = FALSE)
+  result <- statcheck(c(txt1, txt2), messages = FALSE)
   
-  expect_equal(nrow(result), 4)
+  expect_equal(nrow(result), 2)
 })
 
 # variations test statistic
@@ -85,6 +83,12 @@ test_that("incorrect punctuation in t-tests are not retrieved from text", {
   txt2 <- "t[28] = 2.20, p = .03"
   
   expect_output(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
+})
+
+test_that("capital t's are not retrieved from text", {
+  txt1 <- "T(28) = 2.20, p = .03"
+  
+  expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
 })
 
 # not a p-value
