@@ -2,11 +2,11 @@
 # NHST results from text
 
 # test types
-RGX_T <- "(t|T)"
+RGX_T <- "t"
 RGX_R <- "r"
-RGX_Q <- "Q\\s?-?\\s?(w|within|b|between)?"
-RGX_F <- "(F|f)"
-RGX_CHI2 <- "((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^trFzQWBnD ]\\s?)|([^trFzQWBnD ]2\\s?))2?"
+RGX_Q <- "Q\\s?-?\\s?(w|W|(w|W)ithin|b|B|(b|B)etween)?"
+RGX_F <- "F"
+RGX_CHI2 <- "((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^trFzQWnD ]\\s?)|([^trFzQWnD ]2\\s?))2?"
 RGX_Z <- "([^a-z](z|Z))"
 
 # degrees of freedom
@@ -31,6 +31,7 @@ RGX_TEST_DF <- paste0("(", RGX_T_DF, "|", RGX_R_DF, "|", RGX_Q_DF, "|", RGX_F_DF
 
 # test value
 # this is the same for every type of test
+# note that impossible values such as r > 1 are excluded at a later stage
 RGX_TEST_VALUE <- "[<>=]\\s?[^a-z\\d]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,"
 
 # p-values
