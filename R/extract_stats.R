@@ -7,7 +7,10 @@ extract_stats <- function(txt, stat){
   nhst_raw <- extract_pattern(txt = txt,
                               # nhst is the regex for nhst results
                               # it came from the regex.R script within the package
-                              pattern = RGX_NHST)
+                              pattern = RGX_NHST,
+                              # don't ignore case here: we only want to extract
+                              # stats reported in a specific way (e.g., t, not T)
+                              ignore.case = FALSE) 
   
   # if there are no nhst results in the text, return an empty data frame
   if(is.null(nhst_raw)){
