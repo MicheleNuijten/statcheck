@@ -5,7 +5,7 @@ context("Check if statistics from an article are correctly retrieved and parsed"
 # individual pdf files
 test_that("statistics from a pdf are correctly retrieved and parsed", {
   
-  pdf_file <- system.file("test_materials/NuijtenEtAl_2016_ReportingErrorsPsychology.pdf",
+  pdf_file <- system.file("test_materials/nuijten.pdf",
                           package = "statcheck")
   
   result <- checkPDF(pdf_file, messages = FALSE)
@@ -49,7 +49,7 @@ test_that("statistics from all pdfs in a folder are correctly retrieved and pars
 # individual html files
 test_that("statistics from a html are correctly retrieved and parsed", {
   
-  html_file <- system.file("test_materials/NuijtenEtAl_2016_ReportingErrorsPsychology.html",
+  html_file <- system.file("test_materials/nuijten.html",
                           package = "statcheck")
   
   result <- checkHTML(html_file, messages = FALSE)
