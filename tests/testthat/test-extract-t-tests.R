@@ -46,6 +46,7 @@ test_that("variations in the t-statistic are retrieved from text", {
   txt2 <- "t(28) = 2,000.20, p = .03"
   txt3 <- "t(28) < 2.20, p = .03"
   txt4 <- "t(28) > 2.20, p = .03"
+  txt5 <- "t(28) = %^&2.20, p = .03" # read as -2.20
   
   result <- statcheck(c(txt1, txt2, txt3, txt4), messages = FALSE)
   
@@ -81,6 +82,7 @@ test_that("corrected degrees of freedom in t-tests are retrieved from text", {
 test_that("incorrect punctuation in t-tests are not retrieved from text", {
   txt1 <- "t(28) = 2.20; p = .03"
   txt2 <- "t[28] = 2.20, p = .03"
+  txt3 <- "t(28) = .2.20, p = .03"
   
   expect_output(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
 })
