@@ -130,9 +130,11 @@ statcheck <- function(texts,
   
   # to indicate where the statistics came from, we need a name for the input
   # texts. In some cases, this is the name of the file the text came from, but
-  # if the text has no name, number them
+  # if the text has no name, number them with leading zeros
   if (is.null(names(texts))){
-    names(texts) <-  seq_along(texts)
+    number_names <- seq_along(texts)
+    max_length <- ceiling(log10(max(number_names)))
+    names(texts) <- formatC(number_names, width = max_length, format = "d", flag = "0")
   }
   
   
