@@ -21,17 +21,29 @@ error_test <- function(reported_p, test_type, test_stat,
   
   # Compute the p-values that belong to the upper and lower bound of the test
   # statistic. This is the range of p-values that would be correct.
-  up_p <- compute_p(test_type = test_type,
+  p1 <- compute_p(test_type = test_type,
                     test_stat = low_stat,
                     df1 = df1,
                     df2 = df2,
                     two_tailed = two_tailed)
   
-  low_p <- compute_p(test_type = test_type,
+  p2 <- compute_p(test_type = test_type,
                      test_stat = up_stat,
                      df1 = df1,
                      df2 = df2,
                      two_tailed = two_tailed)
+  
+  # classify the two p-values as upper and lower bounds. This differs depending
+  # on whether the test statistic is positive or negative. Classification can
+  # simply be done by checking which p-value is the largest one, and treating 
+  # that one as the upper-bound and vice versa.
+  if(p1 > p2){
+    up_p <- p1
+    low_p <- p2
+  } else {
+    low_p <- p1
+    up_p <- p2
+  }
   
   # p values smaller or equal to zero are errors ---------------------------
   

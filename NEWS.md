@@ -1,21 +1,50 @@
+# Current working version
+
+## Major updates
+* Statcheck now has an option to also extract NHST results that are NOT reported 
+in APA style. The specific deviations from APA style that statcheck recognizes 
+are:
+    * F-tests with MSE values reported between the test statistic and p-value:
+    "F(2,25) = 11.37, MSE = 236, p < .01"
+    * Square and curly braces around degrees of freedom:
+    "F[2, 28] = 2.2, p = .03", or "t{28} = 2.2, p = .03"
+
 # statcheck 1.4.0
 <!---searched in commits on statcheck repo: `committer-date:2020-03-15..2020-04-30` --->
 
 ## Major external changes
-* The variable names from the output of `statcheck()` have changed to increase consistency in style and naming. This means that the variable names in the output of `checkPDF()`, `checkHTML()`, `checkdir()`, `checkPDFdir()`, and `checkHTMLdir()` have also changed.
+* The variable names from the output of `statcheck()` have changed to increase 
+consistency in style and naming. This means that the variable names in the 
+output of `checkPDF()`, `checkHTML()`, `checkdir()`, `checkPDFdir()`, and 
+`checkHTMLdir()` have also changed.
 
 ## Major internal changes
-There have been major updates to the internal structure of statcheck. Some of the most notable are:
+There have been major updates to the internal structure of statcheck. Some of 
+the most notable are:
 
-* The main `statcheck()` function has been significantly shortened by summarizing a lot of repeating actions into general functions, and by moving functions from within `statcheck()` to their own scripts.
-* Combine the regular expressions for all separate tests into one main regex and write generic functions to parse the extracted NHST results. In the previous version, a lot of the regexes overlapped, and many actions were performed multiple times throughout the code, which made the script inefficient and error-prone
-* Update the way that errors and decision_errors are determined. Now, checking for correct rounding is done within the error function, instead of in a separate function
-* Calculate one-tailed p-values more sophisticatedly: instead of simply doing p/2, statcheck now actually calculates a one-tailed p-value based on the surface under one tail of the appropriate distribution. This ensures that for one-tailed p-values, correct rounding is also taken into account
+* The main `statcheck()` function has been significantly shortened by 
+summarizing a lot of repeating actions into general functions, and by moving 
+functions from within `statcheck()` to their own scripts.
+* Combine the regular expressions for all separate tests into one main regex and 
+write generic functions to parse the extracted NHST results. In the previous 
+version, a lot of the regexes overlapped, and many actions were performed 
+multiple times throughout the code, which made the script inefficient and 
+error-prone
+* Update the way that errors and decision_errors are determined. Now, checking 
+for correct rounding is done within the error function, instead of in a separate 
+function
+* Calculate one-tailed p-values more sophisticatedly: instead of simply doing 
+p/2, statcheck now actually calculates a one-tailed p-value based on the surface 
+under one tail of the appropriate distribution. This ensures that for one-tailed 
+p-values, correct rounding is also taken into account
 * All documentation and the NAMESPACE are now generated with roxygen2
-* The variable names in the output are now based on a file with constants. This makes it easier to update the names in a later stage if necessary, without having to go through every script
+* The variable names in the output are now based on a file with constants. This 
+makes it easier to update the names in a later stage if necessary, without 
+having to go through every script
 
 ## Small updates
-* Don't show a message to warn for the potential presence of one-tailed tests and other significance levels. This text was mainly distracting.
+* Don't show a message to warn for the potential presence of one-tailed tests 
+and other significance levels. This text was mainly distracting.
 
 ## Bug fixes
 
@@ -24,17 +53,21 @@ There have been major updates to the internal structure of statcheck. Some of th
 
 ## Updates
 * Added unit tests for all main statcheck functions
-* Make it possible to suppress progress bars and other messages when running statcheck
+* Make it possible to suppress progress bars and other messages when running 
+statcheck
 
 ## Small updates
-* In `checkdir()`, add an argument to specify whether or not to also search subdirectories.
+* In `checkdir()`, add an argument to specify whether or not to also search 
+subdirectories.
 * Take case into account for Q-tests, so 
 
 ## Bug fixes
 * Close connection after reading html file
-* In inexactly reported p-values, statcheck only recognized possible one-tailed tests in p < .05, not other numbers. Unclear why. Fixed.
+* In inexactly reported p-values, statcheck only recognized possible one-tailed 
+tests in p < .05, not other numbers. Unclear why. Fixed.
 * Don't recognize Kolmogorov-Smirnov test statistic D as a chi-square
-* Take case into account for Q-tests to avoid wrongly considering Cohen's q as a heterogeneity test.
+* Take case into account for Q-tests to avoid wrongly considering Cohen's q as a 
+heterogeneity test.
 
 # statcheck 1.3.1
 <!---searched in commits on statcheck repo: `committer-date:2018-04-05..2018-05-28` --->
@@ -50,25 +83,36 @@ There have been major updates to the internal structure of statcheck. Some of th
 <!---searched in commits on statcheck repo: `committer-date:2016-12-20..2018-04-05` --->
 
 ## New features
-* **Q-tests**: statcheck is now able to find Q-tests for heterogeneity (in meta-analyses). As always, the Q-tests need to be APA reported. statcheck recognizes general Q-tests, Q-within, and Q-between.
-* **HTML reports**: it is now possible to generate nicely formatted HTML reports with statcheck results with the function `statcheckReport()`.
+* **Q-tests**: statcheck is now able to find Q-tests for heterogeneity (in 
+meta-analyses). As always, the Q-tests need to be APA reported. statcheck 
+recognizes general Q-tests, Q-within, and Q-between.
+* **HTML reports**: it is now possible to generate nicely formatted HTML reports 
+with statcheck results with the function `statcheckReport()`.
 
 ## Small updates
 * Formatted code to improve readability
-* Removed text for the help files from the R scripts (the help files are not created automatically anymore, and having all this text in between the R code decreased readability)
+* Removed text for the help files from the R scripts (the help files are not 
+created automatically anymore, and having all this text in between the R code 
+decreased readability)
 
 ## Bug fixes
-* Fixed mistake in error coding. statcheck flagged cases such as "F(1, 138) < 1, p = .812" as inconsistent, and opposite cases as consistent, but it should be the other way around.
-* Changed PDF import function so that statcheck can now also handle files saved with double file extensions (e.g., myfile.pdf.pdf or myfile.html.pdf). HT to Nick Brown for pointing out this problem.
+* Fixed mistake in error coding. statcheck flagged cases such as "F(1, 138) < 1, 
+p = .812" as inconsistent, and opposite cases as consistent, but it should be 
+the other way around.
+* Changed PDF import function so that statcheck can now also handle files saved 
+with double file extensions (e.g., myfile.pdf.pdf or myfile.html.pdf). HT to 
+Nick Brown for pointing out this problem.
 * Summary function now gives back the Source names instead of Source numbers
 * Recognize minus signs in HTML coded as `&minus`
-* Fixed bug in `summary.statcheck()` so that it gives back the number of articles instead of the article name
+* Fixed bug in `summary.statcheck()` so that it gives back the number of 
+articles instead of the article name
 
 # statcheck 1.2.3
 <!---searched in commits on statcheck repo: `committer-date:2016-08-17..2016-12-20` --->
 
 ## Bug fixes
-* statcheck flagged cases such as "F(1, 138) < 1, p = .812" as inconsistent, and opposite cases as consistent, but it should be the other way around.
+* statcheck flagged cases such as "F(1, 138) < 1, p = .812" as inconsistent, and 
+opposite cases as consistent, but it should be the other way around.
 * Fix issue with reading html in a Linux environment by using `useBytes = TRUE`
 
 # statcheck 1.2.2
@@ -92,14 +136,23 @@ There have been major updates to the internal structure of statcheck. Some of th
 * Make it optional to count p = .000 as an Error
 
 ## Small updates
-* Adapted plot function based on John Sakaluk's code. statcheck can now plot in APA style.
-* Removed CopyPaste test; this function checked if the same string of results was reported multiple times in a paper or text and flagged it as a possible copy-paste error. However, this function wasn't very useful and therefore removed.
-* Added axis limits to plot function so they won't get cut off when the re are no p-values > .5.
+* Adapted plot function based on John Sakaluk's code. statcheck can now plot in 
+APA style.
+* Removed CopyPaste test; this function checked if the same string of results 
+was reported multiple times in a paper or text and flagged it as a possible 
+copy-paste error. However, this function wasn't very useful and therefore 
+removed.
+* Added axis limits to plot function so they won't get cut off when the re are 
+no p-values > .5.
 
 ## Bug fixes
-* Updated regex for chi-square, so that it doesn't match t, F, or r with a subscript
-* statcheck sometimes read t-tests in old PDFs as correlations, resulting in correlations >1. This caused an Error in statcheck, but is now ignored.
-* In old PDFs "F(1, X) = Y" gets converted by pdftotext to "F(l, X) = Y". If this happens, convert "l" back into a "1". Thanks to Erika Salomon for pointing this out to me.
+* Updated regex for chi-square, so that it doesn't match t, F, or r with a 
+subscript
+* statcheck sometimes read t-tests in old PDFs as correlations, resulting in 
+correlations >1. This caused an Error in statcheck, but is now ignored.
+* In old PDFs "F(1, X) = Y" gets converted by pdftotext to "F(l, X) = Y". If 
+this happens, convert "l" back into a "1". Thanks to Erika Salomon for pointing 
+this out to me.
 
 # statcheck 1.0.2
 <!---searched in commits on statcheck repo: `committer-date:2014-07-01..2015-11-12` --->
@@ -111,12 +164,14 @@ There have been major updates to the internal structure of statcheck. Some of th
 ## Small updates
 * Improve search for subscripts in html
 * Also find chi2 with thousand separators in N
-* In the automated one-tailed test, search more specifically of "*one*-sided"", instead of "sided", etc.
+* In the automated one-tailed test, search more specifically of "*one*-sided"", 
+instead of "sided", etc.
 * Also plot ns statistics
 
 ## Bug fixes
 * Fixed bugs in determining correct rounding
-* If a result is not an error, it can also not be a decision error (this happened in some cases when reported p = .05)
+* If a result is not an error, it can also not be a decision error (this 
+happened in some cases when reported p = .05)
 
 # statcheck 1.0.0
 <!---searched in commits on statcheck repo: `committer-date:2012-07-30..2014-07-01` --->

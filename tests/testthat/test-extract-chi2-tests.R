@@ -16,7 +16,7 @@ test_that("chi2-tests are correctly parsed", {
   expect_equal(result[[VAR_TEST_VALUE]], 2.2)
   expect_equal(as.character(result[[VAR_P_COMPARISON]]), "=")
   expect_equal(result[[VAR_REPORTED_P]], 0.03)
-  expect_equal(as.character(result[[VAR_RAW]]), "i2(28) = 2.20, p = .03")
+  expect_equal(as.character(result[[VAR_RAW]]), "chi2(28) = 2.20, p = .03")
 })
 
 # standard chi2-tests in text
@@ -30,15 +30,28 @@ test_that("chi2-tests are retrieved from sentences", {
   expect_equal(as.character(result[[VAR_SOURCE]]), c("1", "2", "2"))
 })
 
+# tests that are chi2 distributed
+test_that("tests that are chi2 distributed are extracted", {
+  txt1 <- "G2(28) = 2.20, p = .04"
+  txt2 <- "Dx2(28) = 2.20, p = .04" # delta chi2
+  
+  result <- statcheck(c(txt1, txt2), messages = FALSE)
+  
+  expect_equal(nrow(result), 2)
+  expect_equal(result[[VAR_TYPE]], c("Chi2", "Chi2"))
+  
+})
+
 # variations in extracted "chi"
 test_that("variations in spelling the Greek letter chi are picked up", {
   txt1 <- "X2(28) = 2.20, p = .03"
   txt2 <- "x2(28) = 2.20, p = .03"
-  txt3 <- "chi_2(28) = 2.20, p = .03"
+  txt3 <- "chi-2(28) = 2.20, p = .03"
+  txt4 <- "chi^2(28) = 2.20, p = .03"
   
-  result <- statcheck(c(txt1, txt2, txt3), messages = FALSE)
+  result <- statcheck(c(txt1, txt2, txt3, txt4), messages = FALSE)
   
-  expect_equal(nrow(result), 3)
+  expect_equal(nrow(result), 4)
 })
 
 # variation in degrees of freedom
@@ -60,4 +73,47 @@ test_that("chi2-tests with different spacing are retrieved from text", {
   result <- statcheck(c(txt1, txt2), messages = FALSE)
   
   expect_equal(nrow(result), 2)
+})
+
+# chi-square between parentheses
+test_that("chi2 test between parentheses are correctly parsed", {
+  
+  # here the X was not converted. Example from Jesse, A., & Mitterer, H. (2011). 
+  # Pointing gestures do not influence the perception of lexical stress. In 
+  # Twelfth Annual Conference of the International Speech Communication 
+  # Association.
+  txt <- " (2(1)=0.03, p=.86" 
+  
+  result <- statcheck(txt, messages = FALSE)
+  
+  expect_equal(nrow(result), 1)
+  
+})
+
+# test if the following 'incorrect' chi2-tests are not retrieved --------------
+
+# do not extract things that look like chi2 but aren't
+test_that("results that only look like chi2 are not retrieved", {
+  txt1 <- "t  (28) = 2.2, p < .05"  # accidental extra space interpreted as chi2
+  txt2 <- "U(65) = 499.0, p = 0.55" # non-parametric Mann-Whitney U-test
+  txt3 <- "t2(39) = 41.2, p > .01"  # subscript 2 may seem like chi2
+ 
+  expect_output(statcheck(c(txt1, txt2, txt3), messages = FALSE), 
+                "did not find any results")
+  
+})
+
+
+test_that("chi2 without df is not extracted", {
+  txt1 <- "X2 = 93.3, p < .01"
+  txt2 <- "*2 = 93.3, p < .01"
+  
+  # don't extract these results when apa_style is TRUE
+  expect_output(statcheck(c(txt1, txt2), messages = FALSE), 
+                "did not find any results")
+  
+  # don't extract these results when apa_style is FALSE
+  expect_output(statcheck(c(txt1, txt2), 
+                          apa_style = FALSE, messages = FALSE), 
+                "did not find any results")
 })

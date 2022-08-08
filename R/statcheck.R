@@ -56,13 +56,16 @@
 #' \href{https://rpubs.com/michelenuijten/statcheckmanual}{online manual}.
 #' 
 #' @param texts A vector of strings.
-#' @param stat Specify which test types you want to extract. "t" to extract 
-#' t-values, "F" to extract F-values, "cor" to extract correlations, "chisq"to 
-#' extract \eqn{\chi2} values, "Z" to extract Z-values, and "Q" to extract 
-#' Q-values. Using \code{c()} you can specify multiple tests. Defaults to all
-#' tests.
-#' @param OneTailedTests Logical. Do you want to assume that all reported tests 
-#' are one-tailed (TRUE) or two-tailed (FALSE, default)?
+#' @param OneTailedTxt Logical. If TRUE, statcheck searches the text for 
+#' "one-sided", "one-tailed", and "directional" to identify the possible use of 
+#' one-sided tests. If one or more of these strings is found in the text AND the 
+#' result would have been correct if it was a one-sided test, the result is 
+#' assumed to be indeed one-sided and is counted as correct.
+#' @param apa_style Logical. Should statcheck only extract NHST results reported
+#' exactly in APA style? Defaults to TRUE. If FALSE, statcheck will also search 
+#' for a non-exhaustive set of variations on APA style (e.g., degrees of freedom
+#' reported between square brackets instead of parentheses, semi-colons instead
+#' of commas, etc.).
 #' @param alpha Assumed level of significance in the scanned texts. Defaults to 
 #' .05.
 #' @param pEqualAlphaSig Logical. If TRUE, statcheck counts p <= alpha as
@@ -70,11 +73,13 @@
 #' @param pZeroError Logical. If TRUE, statcheck counts p = .000 as an error 
 #' (because a p-value is never exactly zero, and should be reported as < .001), 
 #' if FALSE, statcheck does not count p = .000 automatically as an error.
-#' @param OneTailedTxt Logical. If TRUE, statcheck searches the text for 
-#' "one-sided", "one-tailed", and "directional" to identify the possible use of 
-#' one-sided tests. If one or more of these strings is found in the text AND the 
-#' result would have been correct if it was a one-sided test, the result is 
-#' assumed to be indeed one-sided and is counted as correct.
+#' @param stat Specify which test types you want to extract. "t" to extract 
+#' t-values, "F" to extract F-values, "cor" to extract correlations, "chisq"to 
+#' extract \eqn{\chi2} values, "Z" to extract Z-values, and "Q" to extract 
+#' Q-values. Using \code{c()} you can specify multiple tests. Defaults to all
+#' tests.
+#' @param OneTailedTests Logical. Do you want to assume that all reported tests 
+#' are one-tailed (TRUE) or two-tailed (FALSE, default)? 
 #' @param AllPValues Logical. If TRUE, the output will consist of a dataframe 
 #' with all detected p values, also the ones that were not part of the full 
 #' results in APA format.
@@ -114,12 +119,13 @@
 
 
 statcheck <- function(texts,
-                      stat = c("t", "F", "cor", "chisq", "Z", "Q"),
-                      OneTailedTests = FALSE,
+                      OneTailedTxt = FALSE,
+                      apa_style = TRUE,
                       alpha = .05,
                       pEqualAlphaSig = TRUE,
                       pZeroError = TRUE,
-                      OneTailedTxt = FALSE,
+                      stat = c("t", "F", "cor", "chisq", "Z", "Q"),
+                      OneTailedTests = FALSE,
                       AllPValues = FALSE,
                       messages = TRUE){
   
@@ -157,12 +163,12 @@ statcheck <- function(texts,
     # later on to calculate the APA factor: the ratio (statcheck results)/
     # (total # of p values). It is also possible to let statcheck return this
     # dataframe instead of the data frame with NHST results.
-    pvalues <- extract_p_value(txt)
+    pvalues <- detect_p_values(txt, apa_style = apa_style)
     
     # append and close:
     # in each repetition of the loop, the extracted p-values are appended 
     # to the existing pRes data frame, so it grows in each step
-    if(nrow(pvalues) > 0){
+    if(length(pvalues) > 0){
       pvalues <- cbind(Source = names(txt), pvalues)
       
       pRes <- rbind(pRes, pvalues)
@@ -178,6 +184,7 @@ statcheck <- function(texts,
     # reported NHST results and parses it so that the separate elements are
     # returned in one large dataframe
     nhst <- extract_stats(txt = txt,
+                          apa_style = apa_style,
                           stat = stat)
     
     # append and close: same logic as for the pvalues dataframe above
@@ -256,8 +263,14 @@ statcheck <- function(texts,
     
     # APAfactor: proportion of APA results (that statcheck reads) 
     # in total number of p values
+    # don't calculate if apa_style == FALSE, because then we didn't determine
+    # how many results were in APA style. We just scraped everything we could.
     
-    Res$APAfactor <- calc_APA_factor(pRes, Res)
+    if(apa_style == TRUE){
+      Res$APAfactor <- calc_APA_factor(pRes, Res)
+    } else {
+      Res$APAfactor <- rep(NA, nrow(Res))
+    }
     
     ###---------------------------------------------------------------------
     
@@ -290,12 +303,18 @@ statcheck <- function(texts,
   } else {
     
     if(nrow(pRes) > 0) {
+      # first clean then parse p-values using one of the helper functions
+      pvalues_clean <- clean_non_apa(pRes$pvalues)
+      pvalues_parsed <- extract_p_value(pvalues_clean)
+      pvalues_tot <- cbind(Source = pRes$Source, pvalues_parsed)
+      
       # rename columns based on the variable names in the script constants.R
       # first make sure that the columns are in the right order before renaming
-      pRes <- pRes[, c("Source", "p_comp", "p_value", "p_dec")]
-      colnames(pRes) <- c(VAR_SOURCE, VAR_P_COMPARISON, VAR_REPORTED_P, VAR_P_DEC)
+      pvalues_tot <- pvalues_tot[, c("Source", "p_comp", "p_value", "p_dec")]
+      colnames(pvalues_tot) <- c(VAR_SOURCE, VAR_P_COMPARISON, VAR_REPORTED_P, 
+                                 VAR_P_DEC)
       
-      return(pRes)
+      return(pvalues_tot)
     } else {
       cat("statcheck did not find any p-values\n")
     }

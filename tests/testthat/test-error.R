@@ -59,6 +59,26 @@ test_that("correctly rounded p-values are not considered errors", {
   expect_false(statcheck(txt6, messages = FALSE)[[VAR_ERROR]])
 })
 
+# correct rounding of p-value in negative test statistics
+test_that("correctly rounded p-values of negative tests are not errors", {
+  txt1 <- "t(229.88) = -1.41, p = .160"
+  txt2 <- "t(112.23) = -2.02, p = .046"
+  txt3 <- "t(112.01) = -2.03, p = .045"
+  txt4 <- "t(253.82) = -1.63, p = .104"
+  txt5 <- "t(124.76) = -1.40, p = .165"
+  txt6 <- "t(234.28) = -1.09, p = .277"
+  txt7 <- "t(263.15) = -2.30, p = .022"
+  
+  expect_false(statcheck(txt1, messages = FALSE)[[VAR_ERROR]])
+  expect_false(statcheck(txt2, messages = FALSE)[[VAR_ERROR]])
+  expect_false(statcheck(txt3, messages = FALSE)[[VAR_ERROR]])
+  expect_false(statcheck(txt4, messages = FALSE)[[VAR_ERROR]])
+  expect_false(statcheck(txt5, messages = FALSE)[[VAR_ERROR]])
+  expect_false(statcheck(txt6, messages = FALSE)[[VAR_ERROR]])
+  expect_false(statcheck(txt7, messages = FALSE)[[VAR_ERROR]])
+  
+})
+
 # test if different arguments concerning errors work --------------------------
 
 # OneTailedTests: assume all tests are one-tailed
