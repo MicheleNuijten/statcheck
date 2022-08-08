@@ -3,14 +3,15 @@
 
 # function to extract snippets of text from a string ---------------------------
 
-extract_pattern <- function(txt, pattern) {
+extract_pattern <- function(txt, pattern, ignore.case = TRUE) {
   
   # extract the locations of the matches in the text:
   # gregexpr returns the position of every match in a string
   # if there are multiple matches in the text, gregexpr will flag them all
   # the output is in list format, but the relevant information is all in [[1]]
   string_loc <- gregexpr(pattern = pattern, 
-                         text = txt,
+                         text = txt, 
+                         ignore.case = ignore.case,
                          perl = TRUE)[[1]] # perl is necessary for lookbehinds
   
   # if no match is found, return NULL

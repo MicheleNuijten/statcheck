@@ -46,6 +46,8 @@ having to go through every script
 * Don't show a message to warn for the potential presence of one-tailed tests 
 and other significance levels. This text was mainly distracting.
 
+## Bug fixes
+
 # statcheck 1.3.2
 <!---searched in commits on statcheck repo: `committer-date:2018-05-28..2020-03-15` --->
 

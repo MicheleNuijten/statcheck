@@ -1,14 +1,15 @@
 Package: statcheck
 Title: Extract Statistics from Articles and Recompute P-Values
 Version: 1.4.0
-Date: 2020-04-29
+Date: 2021-03-17
 Authors@R: c(
     person("Michele B.", "Nuijten", email = "m.b.nuijten@uvt.nl", 
            role = c("aut", "cre")),
     person("Sacha", "Epskamp", email = "mail@sachaepskamp.com", role = "aut"),
     person("Sean", "Rife", role = "ctb"),
     person("John", "Sakaluk", role = "ctb"),
-    person("Paul", "van der Laken", role = "ctb")
+    person("Paul", "van der Laken", role = "ctb"),
+    person("Chris", "Hartgerink", email = "chris@libscie.org", role = "ctb", comment = c(ORCID = "0000-0003-1050-6809"))
   )
 Description: The package 'statcheck' can search text (e.g., scientific articles)
     for Null Hypothesis Significance Test (NHST) results. Based on the reported test

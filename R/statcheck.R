@@ -141,6 +141,7 @@ statcheck <- function(texts,
     names(texts) <-  seq_along(texts)
   }
   
+  
   # start progress bar. If the argument messages == FALSE, don't print this 
   # progress bar. This is mainly useful for the unit tests; otherwise hundreds
   # of progress bars would be printed during testing and that makes the test 
@@ -193,6 +194,7 @@ statcheck <- function(texts,
       nhst$OneTailedInTxt <- extract_1tail(txt)
       
       Res <- rbind(Res, nhst)
+      rownames(Res) <- NULL # to avoid having duplicated row names (1, 1, 2 etc.)
     }
     
     rm(nhst)

@@ -14,7 +14,11 @@ extract_stats <- function(txt, apa_style, stat){
   nhst_raw <- extract_pattern(txt = txt,
                               # nhst is the regex for nhst results
                               # it came from the regex.R script within the package
-                              pattern = rgx_nhst)
+                              pattern = rgx_nhst,
+                              # don't ignore case here: we only want to extract
+                              # stats reported in a specific way (e.g., t, not T)
+                              ignore.case = FALSE)
+
   
   # if there are no nhst results in the text, return an empty data frame
   if(is.null(nhst_raw)){
@@ -153,7 +157,10 @@ extract_stats <- function(txt, apa_style, stat){
                                  is.na(nhst_parsed$Reported.P.Value), ]
     
     # remove correlations greater than one
-    nhst_parsed <- nhst_parsed[!(nhst_parsed$Statistic == "r" &
+    # reason: there is a risk that statcheck simply misread this stat
+    # this means that statcheck will not flag such incorrect correlations,
+    # which you could also consider a disadvantage
+    nhst_parsed <- nhst_parsed[!(nhst_parsed$Statistic == "r" & 
                                  nhst_parsed$Value > 1), ]
     
     # only return selected stats
