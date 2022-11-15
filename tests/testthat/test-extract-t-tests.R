@@ -48,9 +48,9 @@ test_that("variations in the t-statistic are retrieved from text", {
   txt4 <- "t(28) > 2.20, p = .03"
   txt5 <- "t(28) = %^&2.20, p = .03" # read as -2.20
   
-  result <- statcheck(c(txt1, txt2, txt3, txt4), messages = FALSE)
+  result <- statcheck(c(txt1, txt2, txt3, txt4, txt5), messages = FALSE)
   
-  expect_equal(nrow(result), 4)
+  expect_equal(nrow(result), 5)
 })
 
 # variations p-value
@@ -106,3 +106,11 @@ test_that("t-tests with 2 dfs are not retrieved from text", {
   
   expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
 })
+
+# weird encoding in minus sign followed by space
+test_that("t-values with a weird minus sign and a space do not result in errors", {
+    txt1 <- " t(553) = − 4.46, p < .0001" # this is an em dash or something
+    
+    expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
+})
+

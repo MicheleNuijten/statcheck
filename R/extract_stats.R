@@ -115,6 +115,12 @@ extract_stats <- function(txt, stat){
     nhst_parsed <- nhst_parsed[!(nhst_parsed$Statistic == "r" & 
                                  nhst_parsed$Value > 1), ]
     
+    # remove rows with missing test values
+    # reason: this can happen when a test statistic has a weird minus and a 
+    # space in front of it. statcheck can't convert the weird minus in that case
+    # and would otherwise break down
+    nhst_parsed <- nhst_parsed[!is.na(nhst_parsed$Value), ]
+    
     # only return selected stats
     # to that end, rename test-types to match argument stat
     types <- as.vector(nhst_parsed$Statistic)
