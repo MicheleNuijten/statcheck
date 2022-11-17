@@ -42,10 +42,11 @@ test_that("correlations with different spacing are retrieved from text", {
 
 # test if the following incorrect correlations are not retrieved ------------------
 
-# do not extract correlations larger than 1
-test_that("correlations with different spacing are retrieved from text", {
+# do not extract correlations larger than 1 or smaller than -1
+test_that("correlations with impossible values are ignored", {
   txt1 <- "r(16) = 26.05, p = .10"
+  txt2 <- "r(28) = −59, p = .0008"
   
-  expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
+  expect_output(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
   
 })
