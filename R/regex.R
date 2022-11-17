@@ -6,7 +6,7 @@ RGX_T <- "t"
 RGX_R <- "r"
 RGX_Q <- "Q\\s?-?\\s?(w|W|(w|W)ithin|b|B|(b|B)etween)?"
 RGX_F <- "F"
-RGX_CHI2 <- "((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^trFzQWnD ]\\s?)|([^trFzQWnD ]2\\s?))2?"
+RGX_CHI2 <- "((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^trFzZQWnD ]\\s?)|([^trFzZQWnD ]2\\s?))2?"
 RGX_Z <- "([^a-z](z|Z))"
 
 # degrees of freedom
