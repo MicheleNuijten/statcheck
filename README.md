@@ -1,15 +1,13 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 <!-- after editing README.Rmd, run devtools::build_readme() -->
 
 # statcheck <a href='http://statcheck.io'><img src='man/figures/logo.jpg' align="right" height="100" /></a>
 
 <!-- badges: start -->
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/statcheck)](https://cran.r-project.org/package=statcheck)
-[![CRAN\_Downloads\_Total](http://cranlogs.r-pkg.org/badges/grand-total/statcheck?color=brightgreen)](https://cran.r-project.org/package=statcheck)
+[![](https://www.r-pkg.org/badges/version/statcheck?color=green)](https://cran.r-project.org/package=statcheck)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/statcheck?color=green)](https://cran.r-project.org/package=statcheck)
 <!-- badges: end -->
 
 ## What is statcheck?
@@ -32,9 +30,9 @@ inconsistencies.
 3.  **Research**: `statcheck` can be used to automatically extract
     statistical test results from articles that can then be analyzed.
     You can for instance investigate whether you can predict statistical
-    inconsistencies (see e.g., [Nuijten et
-    al., 2017](https://www.collabra.org/article/10.1525/collabra.102/)),
-    or use it to analyze p-value distributions (see e.g., [Hartgerink et
+    inconsistencies (see e.g., [Nuijten et al.,
+    2017](https://www.collabra.org/article/10.1525/collabra.102/)), or
+    use it to analyze p-value distributions (see e.g., [Hartgerink et
     al., 2016](https://peerj.com/articles/1935/)).
 
 ## How does statcheck work?
@@ -44,9 +42,11 @@ The algorithm behind `statcheck` consists of four basic steps:
 1.  **Convert** pdf and html articles to plain text files.
 2.  **Search** the text for instances of NHST results. Specifically,
     `statcheck` can recognize *t*-tests, *F*-tests, correlations,
-    *z*-tests, \(\chi^2\) -tests, and Q-tests (from meta-analyses) if
-    they are reported completely (test statistic, degrees of freedom,
-    and *p*-value) and in APA style.
+    *z*-tests,
+    ![\chi^2](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cchi%5E2 "\chi^2")
+    -tests, and Q-tests (from meta-analyses) if they are reported
+    completely (test statistic, degrees of freedom, and *p*-value) and
+    in APA style.
 3.  **Recompute** the *p*-value using the reported test statistic and
     degrees of freedom.
 4.  **Compare** the reported and recomputed *p*-value. If the reported
