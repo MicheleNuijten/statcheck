@@ -2,7 +2,7 @@
 #' @export
 
 checkPDF <-
-  function(files, ...) {
+  function(files, method, ...) {
     if (missing(files))
       files <- tcltk::tk_choose.files()
     
