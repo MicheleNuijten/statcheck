@@ -13,11 +13,19 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r echo=FALSE, results="hide", message=FALSE}
+library("badger")
+```
+
 # statcheck <a href='http://statcheck.io'><img src='man/figures/logo.jpg' align="right" height="100" /></a>
 
 <!-- badges: start -->
-[![CRAN status](https://www.r-pkg.org/badges/version/statcheck)](https://cran.r-project.org/package=statcheck)
-[![CRAN_Downloads_Total](http://cranlogs.r-pkg.org/badges/grand-total/statcheck?color=brightgreen)](https://cran.r-project.org/package=statcheck)
+```{r, echo = FALSE, results='asis'}
+cat(
+	badge_cran_release("statcheck", "green"),
+	badge_cran_download("statcheck", "grand-total", "green")
+)
+```
 <!-- badges: end -->
 
 ## What is statcheck?
