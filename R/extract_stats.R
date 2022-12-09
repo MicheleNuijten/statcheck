@@ -108,12 +108,19 @@ extract_stats <- function(txt, stat){
     nhst_parsed <- nhst_parsed[nhst_parsed$Reported.P.Value <= 1 |
                                  is.na(nhst_parsed$Reported.P.Value), ]
     
-    # remove correlations greater than one
+    # remove correlations greater than one or smaller than -1
     # reason: there is a risk that statcheck simply misread this stat
     # this means that statcheck will not flag such incorrect correlations,
     # which you could also consider a disadvantage
     nhst_parsed <- nhst_parsed[!(nhst_parsed$Statistic == "r" & 
-                                 nhst_parsed$Value > 1), ]
+                                 (nhst_parsed$Value > 1|
+                                   nhst_parsed$Value < -1)), ]
+    
+    # remove rows with missing test values
+    # reason: this can happen when a test statistic has a weird minus and a 
+    # space in front of it. statcheck can't convert the weird minus in that case
+    # and would otherwise break down
+    nhst_parsed <- nhst_parsed[!is.na(nhst_parsed$Value), ]
     
     # only return selected stats
     # to that end, rename test-types to match argument stat

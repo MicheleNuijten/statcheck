@@ -169,8 +169,14 @@ extract_test_stats <- function(raw){
   test_dec <- attr(regexpr(RGX_DEC, test_value), "match.length") - 1
   test_dec[test_dec < 0] <- 0
   
+  # make test_value numeric; suppress warnings (these could arive if the test
+  # value is unusual, e.g., a weird minus followed by a space can't be made
+  # numeric)
+  # note: this needs to happen AFTER extracting the nr of decimals
+  test_value <- suppressWarnings(as.numeric(test_value))
+  
   return(data.frame(test_comp = test_comp,
-                    test_value = as.numeric(test_value),
+                    test_value = test_value,
                     test_dec = test_dec,
                     stringsAsFactors = FALSE))
   
