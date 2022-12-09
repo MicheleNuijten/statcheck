@@ -5,6 +5,8 @@ context("Check if statistics from an article are correctly retrieved & parsed")
 # individual pdf files
 test_that("statistics from a pdf are correctly retrieved and parsed", {
   
+  # load the pdf file of Nuijten et al. 2016
+  # https://doi.org/10.3758/s13428-015-0664-2
   pdf_file <- system.file("test_materials/nuijten.pdf",
                           package = "statcheck")
   
@@ -33,6 +35,7 @@ test_that("statistics from a pdf are correctly retrieved and parsed", {
   expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE,
                                                   FALSE, FALSE, FALSE, FALSE))
   # pdftools
+  
   result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
   expect_equal(nrow(result), 8)
   expect_equal(as.character(result[[VAR_TYPE]]), c("t", "Chi2", "t", "F",
@@ -47,6 +50,9 @@ test_that("statistics from a pdf are correctly retrieved and parsed", {
 # pdfs in folder
 test_that("stats from all pdfs in a folder are correctly retrieved & parsed", {
   
+  # this folder contains the following articles
+  # Nuijten et al. 2016; https://doi.org/10.3758/s13428-015-0664-2
+  # 
   pdf_folder <- system.file("test_materials/test_dir", package = "statcheck")
   
   result <- checkPDFdir(pdf_folder, messages = FALSE, subdir = FALSE)
