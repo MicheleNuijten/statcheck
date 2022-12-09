@@ -15,13 +15,6 @@ test_that("statistics from a pdf are correctly retrieved and parsed", {
                              OneTailedTxt = TRUE)
   
   # extract 8 tests from paper
-  # note from development version (might not be relevant anymore): 1 APA F-test is 
-  # not extracted with xpdf, because it's surrounded by
-  # quotation marks, that xpdf transforms into the letter B, turning the result
-  # into "BF(2, 56) = 12.03, p < .001^". The B makes that statcheck doesn't 
-  # recognize F as the start of a statistic. The same holds for a chi2 test
-  # between quotation marks. This problem does not occur with pdftools (see test 
-  # below)
   expect_equal(nrow(result), 8)
   expect_equal(as.character(result[[VAR_TYPE]]), c("t", "Chi2", "t", "F",
                                                    "F", "F", "Chi2", "t"))
@@ -41,14 +34,13 @@ test_that("statistics from a pdf are correctly retrieved and parsed", {
                                                   FALSE, FALSE, FALSE, FALSE))
   # pdftools
   result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
-  expect_equal(nrow(result), 7)
-  expect_equal(as.character(result[[VAR_TYPE]]), 
-               c("t", "Chi2", "t", "F", "F", "Chi2", "t"))
+  expect_equal(nrow(result), 8)
+  expect_equal(as.character(result[[VAR_TYPE]]), c("t", "Chi2", "t", "F",
+                                                   "F", "F", "Chi2", "t"))
   
   # pdftools should also run if method is not specified
   result <- checkPDF(pdf_file, messages = FALSE)
-  expect_equal(nrow(result), 7)
-  
+  expect_equal(nrow(result), 8)
   
 })
 
