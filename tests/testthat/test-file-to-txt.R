@@ -3,14 +3,60 @@ context("Check if statistics from an article are correctly retrieved & parsed")
 # tests concerning parsing stats from pdf files ------------------------------
 
 # individual pdf files
-test_that("statistics from a pdf are correctly retrieved and parsed", {
+
+# pdftools
+test_that("pdftools correctly retrieves and parses statistics from a pdf", {
   
   # load the pdf file of Nuijten et al. 2016
   # https://doi.org/10.3758/s13428-015-0664-2
   pdf_file <- system.file("test_materials/nuijten.pdf",
                           package = "statcheck")
   
-  # xpdf
+  result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
+  result_1tailed <- checkPDF(pdf_file, method = "pdftools", messages = FALSE,
+                            OneTailedTxt = TRUE)
+  
+  # extract 8 tests from paper
+  expect_equal(nrow(result), 8)
+  expect_equal(as.character(result[[VAR_TYPE]]), c("t", "Chi2", "t", "F",
+                                                   "F", "F", "Chi2", "t"))
+  expect_equal(result[[VAR_TEST_VALUE]], c(-4.93, 6.9, 2, 1.203,
+                                           12.03, 23.95, 6.53, 2))
+  
+  # check errors
+  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE,
+                                      FALSE, FALSE, FALSE, TRUE))
+  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE,
+                                          FALSE, FALSE, FALSE, TRUE))
+  
+  # check errors with one-tailed test detection
+  expect_equal(result_1tailed[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE,
+                                              FALSE, FALSE, FALSE, FALSE))
+  expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE,
+                                                  FALSE, FALSE, FALSE, FALSE))
+ 
+})
+
+test_that("pdftools is called if method is not specified", {
+  
+  # load the pdf file of Nuijten et al. 2016
+  # https://doi.org/10.3758/s13428-015-0664-2
+  pdf_file <- system.file("test_materials/nuijten.pdf",
+                          package = "statcheck")
+  
+  result <- checkPDF(pdf_file, messages = FALSE)
+  expect_equal(nrow(result), 8)
+  
+})
+
+# xpdf
+
+test_that("xpdf correctly retrieves and parses statistics from a pdf", {
+  
+  # load the pdf file of Nuijten et al. 2016
+  # https://doi.org/10.3758/s13428-015-0664-2
+  pdf_file <- system.file("test_materials/nuijten.pdf",
+                          package = "statcheck")
   
   result <- checkPDF(pdf_file, method = "xpdf", messages = FALSE)
   result_1tailed <- checkPDF(pdf_file, method = "xpdf", messages = FALSE, 
@@ -34,32 +80,20 @@ test_that("statistics from a pdf are correctly retrieved and parsed", {
                                               FALSE, FALSE, FALSE, FALSE))
   expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE,
                                                   FALSE, FALSE, FALSE, FALSE))
-  # pdftools
-  
-  result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
-  expect_equal(nrow(result), 8)
-  expect_equal(as.character(result[[VAR_TYPE]]), c("t", "Chi2", "t", "F",
-                                                   "F", "F", "Chi2", "t"))
-  
-  # pdftools should also run if method is not specified
-  result <- checkPDF(pdf_file, messages = FALSE)
-  expect_equal(nrow(result), 8)
-  
 })
 
 # pdfs in folder
 test_that("stats from all pdfs in a folder are correctly retrieved & parsed", {
   
-  # this folder contains the following articles
-  # Nuijten et al. 2016; https://doi.org/10.3758/s13428-015-0664-2
-  # 
+  # this folder contains 4 "fake" pdf papers and 3 "fake" html/htm papers
+  # one of the pdf papers doesn't contain any stats
   pdf_folder <- system.file("test_materials/test_dir", package = "statcheck")
   
   result <- checkPDFdir(pdf_folder, messages = FALSE, subdir = FALSE)
   
-  # extract 53 tests from 4 papers
-  expect_equal(nrow(result), 53)
-  expect_equal(length(unique(result[[VAR_SOURCE]])), 4)
+  # extract 11 tests from 3 papers
+  expect_equal(nrow(result), 11)
+  expect_equal(length(unique(result[[VAR_SOURCE]])), 3)
   
 })
 
