@@ -14,7 +14,7 @@ test_that("pdftools correctly retrieves and parses statistics from a pdf", {
   
   result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
   result_1tailed <- checkPDF(pdf_file, method = "pdftools", messages = FALSE,
-                            OneTailedTxt = TRUE)
+                             OneTailedTxt = TRUE)
   
   # extract 8 tests from paper
   expect_equal(nrow(result), 8)
@@ -34,7 +34,7 @@ test_that("pdftools correctly retrieves and parses statistics from a pdf", {
                                               FALSE, FALSE, FALSE, FALSE))
   expect_equal(result_1tailed[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE,
                                                   FALSE, FALSE, FALSE, FALSE))
- 
+  
 })
 
 test_that("pdftools is called if method is not specified", {
@@ -130,20 +130,9 @@ test_that("stats from all htmls in a folder are correctly retrieved & parsed", {
   
   result <- checkHTMLdir(html_dir, messages = FALSE, subdir = FALSE)
   
-  result_1tailed <- checkHTMLdir(html_dir, messages = FALSE, subdir = FALSE, 
-                                 OneTailedTxt = TRUE)
-  
-  # extract 6 tests from paper
-  expect_equal(nrow(result), 6)
-  expect_equal(as.character(result[[VAR_TYPE]]), c("t", "Chi2", "t", "F", "F", "t"))
-  expect_equal(result[[VAR_TEST_VALUE]], c(-4.93, 6.9, 2, 1.203, 12.03, 2))
-  
-  # check errors
-  expect_equal(result[[VAR_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
-  expect_equal(result[[VAR_DEC_ERROR]], c(FALSE, FALSE, FALSE, TRUE, FALSE, TRUE))
-  
-  # extract 6+33 tests from papers 
-  expect_equal(nrow(result), 39)
+  # extract 11 tests from 3 papers
+  expect_equal(nrow(result), 11)
+  expect_equal(length(unique(result[[VAR_SOURCE]])), 3)
   
 })
 
@@ -157,8 +146,9 @@ test_that("stats from all pdfs and htmls in a folder are correctly retrieved
             
             result <- checkdir(dir, subdir = FALSE, messages = FALSE)
             
-            # extract 92 tests (39 from html and 53 from pdf)
-            expect_equal(nrow(result), 92)
+            # extract 2*11 tests from 2*3 papers
+            expect_equal(nrow(result), 22)
+            expect_equal(length(unique(result[[VAR_SOURCE]])), 6)
           })
 
 # tests concerning pdf encoding ----------------------------------------------
