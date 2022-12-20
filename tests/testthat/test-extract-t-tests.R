@@ -114,3 +114,10 @@ test_that("t-values with a weird minus sign and a space do not result in errors"
     expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
 })
 
+# multiple comparison signs 
+test_that("t-values with multiple comparison signs are not retrieved", {
+  txt1 <- "t(38) >= 2.25, p = .03"
+  txt2 <- "t(38) = 2.25, p >= .03"
+  
+  expect_output(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
+})
