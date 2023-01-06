@@ -182,8 +182,8 @@ test_that("cases where t < ... are correctly classified", {
   expect_false(statcheck(txt5, messages = FALSE)[[VAR_ERROR]])
   
   expect_true(statcheck(txt6, messages = FALSE)[[VAR_ERROR]])
-  #expect_true(statcheck(txt7, messages = FALSE)[[VAR_ERROR]]) # fail
-  #expect_true(statcheck(txt8, messages = FALSE)[[VAR_ERROR]]) # fail
+  expect_true(statcheck(txt7, messages = FALSE)[[VAR_ERROR]])
+  expect_true(statcheck(txt8, messages = FALSE)[[VAR_ERROR]])
   expect_true(statcheck(txt9, messages = FALSE)[[VAR_ERROR]])
   
 })
@@ -214,9 +214,9 @@ test_that("cases where t > ... are correctly classified", {
   expect_false(statcheck(txt4, messages = FALSE)[[VAR_ERROR]])
   expect_false(statcheck(txt5, messages = FALSE)[[VAR_ERROR]])
   
-  #expect_true(statcheck(txt6, messages = FALSE)[[VAR_ERROR]]) # fail
-  #expect_true(statcheck(txt7, messages = FALSE)[[VAR_ERROR]]) # fail
-  #expect_true(statcheck(txt8, messages = FALSE)[[VAR_ERROR]]) # fail
+  expect_true(statcheck(txt6, messages = FALSE)[[VAR_ERROR]]) 
+  expect_true(statcheck(txt7, messages = FALSE)[[VAR_ERROR]]) 
+  expect_true(statcheck(txt8, messages = FALSE)[[VAR_ERROR]]) 
   expect_true(statcheck(txt9, messages = FALSE)[[VAR_ERROR]])
   
 })
