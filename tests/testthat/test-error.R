@@ -19,6 +19,16 @@ test_that("simple errors are classified as such", {
   expect_true(statcheck(txt6, messages = FALSE)[[VAR_ERROR]])
 })
 
+# classify p-values of negative test statistics correctly
+test_that("p-values of negative tests are correctly classified", {
+  txt1 <- " Z = -2.42, p = 0.016" # no error
+  txt2 <- "t(28) = -2.20, p = .03" # error
+  
+  expect_false(statcheck(txt1, messages = FALSE)[[VAR_ERROR]])
+  expect_true(statcheck(txt2, messages = FALSE)[[VAR_ERROR]])
+  
+})
+
 # classify inexactly reported p-values correctly
 test_that("inexactly reported p-values are correctly classified",{
   txt1 <- "t(28) = 2.20, ns"
