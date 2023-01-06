@@ -1,11 +1,12 @@
 Package: statcheck
 Title: Extract Statistics from Articles and Recompute P-Values
 Version: 1.4.0
-Date: 2022-12-09
+Date: 2023-01-06
 Authors@R: c(
     person("Michele B.", "Nuijten", email = "m.b.nuijten@uvt.nl", 
            role = c("aut", "cre")),
     person("Sacha", "Epskamp", email = "mail@sachaepskamp.com", role = "aut"),
+    person("Willem", "Sleegers", role = "ctb"),
     person("Sean", "Rife", role = "ctb"),
     person("John", "Sakaluk", role = "ctb"),
     person("Paul", "van der Laken", role = "ctb"),
