@@ -37,9 +37,14 @@ getHTML <- function(x){
   
   strings <- lapply(strings, gsub, pattern = "&thinsp;", replacement = " ", fixed = TRUE)
   strings <- lapply(strings, gsub, pattern = "&nbsp;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&nnbsp;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#8239;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#x202F;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "\\s+", replacement = " ")
+  
   strings <- lapply(strings, gsub, pattern = "\n", replacement = "")
   strings <- lapply(strings, gsub, pattern = "\r", replacement = "")
-  strings <- lapply(strings, gsub, pattern = "\\s+", replacement = " ")
+  
   
   strings <- lapply(strings, gsub, pattern = "&minus;", replacement = "-", fixed = TRUE)
   strings <- lapply(strings, gsub, pattern = "&#x02212;", replacement = "-", fixed = TRUE)
