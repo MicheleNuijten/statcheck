@@ -1,0 +1,12 @@
+pdf_filename,paper_id,journal,year,coder_initials,raw_result,page,test_type,df1,df2,test_comparison,test_value,p_comparison,p,extract,remarks
+Costa_JournEnvPsych_2018_PkRz,PkRz,Journal of Environmental Psychology,2018,MN,"t(196) ¼ 38.73, p < .001, h2 ¼ .88",57,t,,196,"""=""",38.73,"""<""",0.01,0,"""="" copied as 1/4. - copied as square"
+Costa_JournEnvPsych_2018_PkRz,PkRz,Journal of Environmental Psychology,2018,MS,"t(191) ¼ 8.22, p < . 001, h2 ¼ .26",61,t,,191,"""=""",8.22,"""<""",0.001,0,
+Costa_JournEnvPsych_2018_PkRz,PkRz,Journal of Environmental Psychology,2018,MS,"t(191) ¼ 9.54, p < . 001, h2 ¼ .32",61,t,,191,"""=""",-9.54,"""<""",0.001,0,
+Costa_JournEnvPsych_2018_PkRz,PkRz,Journal of Environmental Psychology,2018,MS,"t(191) ¼ 7.79, p < .001, h2 ¼ .24",61,t,,191,"""=""",-7.79,"""<""",0.001,0,
+Costa_JournEnvPsych_2018_PkRz,PkRz,Journal of Environmental Psychology,2018,MN,"F(1, 186) ¼ 5.73, p ¼ .01, h2 ¼ .03",61,F,1,186,"""=""",5.73,"""=""",0.01,0,
+Costa_JournEnvPsych_2018_PkRz,PkRz,Journal of Environmental Psychology,2018,MS,"t(191) ¼ 10.40, p < .001, h2 ¼ .36",62,t,,191,"""=""",10.4,"""<""",0.001,0,
+Costa_JournEnvPsych_2018_PkRz,PkRz,Journal of Environmental Psychology,2018,MS,"F(1, 186) ¼ 5.51, p ¼ .02, h2 ¼ .03",62,F,1,186,"""=""",5.51,"""=""",0.02,0,
+Costa_JournEnvPsych_2018_PkRz,PkRz,Journal of Environmental Psychology,2018,MS,"t(191) ¼ 4.55, p < . 001, h2 ¼ .10",62,t,,191,"""=""",4.55,"""<""",0.001,0,
+Costa_JournEnvPsych_2018_PkRz,PkRz,Journal of Environmental Psychology,2018,MN,"F(1,18) ¼ 12.34, p ¼ .002,",65,F,1,18,"""=""",12.34,"""=""",0.002,0,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,0,
