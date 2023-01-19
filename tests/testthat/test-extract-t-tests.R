@@ -78,6 +78,11 @@ test_that("corrected degrees of freedom in t-tests are retrieved from text", {
 
 # test if the following incorrect t-tests are not retrieved ------------------
 
+# no test found
+test_that("statcheck doesn't throw an error when input is missing", {
+  expect_output(statcheck(NA, messages = FALSE), "did not find any results")
+})
+
 # punctuation
 test_that("incorrect punctuation in t-tests are not retrieved from text", {
   txt1 <- "t(28) = 2.20; p = .03"
