@@ -15,6 +15,8 @@ There have been major updates to the internal structure of statcheck. Some of th
 * All documentation and the NAMESPACE are now generated with roxygen2
 * The variable names in the output are now based on a file with constants. This makes it easier to update the names in a later stage if necessary, without having to go through every script
 
+An overview of all internal functions and how they relate to each other can be found in the file `man/figures/overview_functions.pdf`. In this file, you'll also find a schematic overview of which results will be counted as an inconsistency or a decision inconsistency.
+
 ## Small updates
 * Don't show a message to warn for the potential presence of one-tailed tests and other significance levels. This text was mainly distracting.
 * When numbering unnamed sources, add leading zeros to allow for ordering of the data frame
