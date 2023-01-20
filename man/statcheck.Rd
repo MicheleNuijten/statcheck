@@ -127,7 +127,7 @@ Note that when \code{statcheck} flags an \code{error} or
 \code{decision_error}, it implicitly assumes that the p-value is the 
 inconsistent value, but it could just as well be the case that the test 
 statistic or degrees of freedom contain a reporting error. \code{statcheck}
-merely detects whether a set of numbers is consistent with each other.
+merely detects wether a set of numbers is consistent with each other.
 }
 \examples{
 txt <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"

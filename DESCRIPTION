@@ -20,8 +20,7 @@ Authors@R: c(
     person("Steve", "Haroz", role = "ctb", 
             comment = c(ORCID = "0000-0002-2725-9173"))
   )
-Description: You can use this package as a "spellchecker" for statistics. It 
-  checks whether your p-values match their accompanying test statistic and 
+Description: A "spellchecker" for statistics. It checks whether your p-values match their accompanying test statistic and 
   degrees of freedom. statcheck searches for null-hypothesis significance test 
   (NHST) in APA style (e.g., t(28) = 2.2, p < .05). It recalculates the p-value 
   using the reported test statistic and degrees of freedom. If the reported and 
