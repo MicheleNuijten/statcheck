@@ -23,6 +23,7 @@ There have been major updates to the internal structure of statcheck. Some of th
 * extract punctuation that could signal a wrongly encoded minus sign
 * added additional html encodings of mathematical symbols
 * ignore result when test value == NA
+* don't throw an error when input is NA (e.g.: statcheck(NA))
 * test results with multiple comparison signs are no longer extracted (e.g.: "t(38) >= 2.25, p = .03")
 
 # statcheck 1.3.2
