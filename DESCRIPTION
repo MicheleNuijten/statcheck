@@ -10,8 +10,8 @@ Authors@R: c(
     person("Sean", "Rife", role = "ctb"),
     person("John", "Sakaluk", role = "ctb"),
     person("Paul", "van der Laken", role = "ctb"),
-    person("Chris", "Hartgerink", email = "chris@libscie.org", role = "ctb", comment = c(ORCID = "0000-0003-1050-6809"),
-    person("Steve", "Haroz", role = "ctb"))
+    person("Chris", "Hartgerink", role = "ctb"),
+    person("Steve", "Haroz", role = "ctb")
   )
 Description: The package 'statcheck' can search text (e.g., scientific articles)
     for Null Hypothesis Significance Test (NHST) results. Based on the reported test
