@@ -3,6 +3,7 @@
 README.Rmd
 .gitignore
 .Rhistory
+cran-comments.md
 
 aloe*
 chung*
