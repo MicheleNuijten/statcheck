@@ -17,7 +17,8 @@ There have been major updates to the internal structure of statcheck. Some of th
 
 ## Small updates
 * Don't show a message to warn for the potential presence of one-tailed tests and other significance levels. This text was mainly distracting.
-* When numbering unnamed sources, add leading zeros to allow for ordering of the data frame 
+* When numbering unnamed sources, add leading zeros to allow for ordering of the data frame
+* Include file extension in source name (mainly useful if there are different file types with the same file name; those might give different results)
 
 ## Bug fixes
 * accurately take correct rounding into account with negative test statistics
