@@ -24,10 +24,9 @@ whether a reported NHST result is internally consistent or not.
     \item \strong{Research}: statcheck can be used to automatically extract 
     statistical test results from articles that can then be analyzed. You can 
     for instance investigate whether you can predict statistical 
-    inconsistencies (see e.g., 
-    \href{https://doi.org/10.1525/collabra.102}{Nuijten et al., 2017}), 
+    inconsistencies (see e.g., Nuijten et al., 2017 <doi:10.1525/collabra.102>), 
     or use it to analyze p-value distributions (see e.g., 
-    \href{https://peerj.com/articles/1935/}{Hartgerink et al., 2016}).
+    Hartgerink et al., 2016 <doi:10.7717/peerj.1935>).
 }
 }
 \section{Using statcheck on a string of text}{
