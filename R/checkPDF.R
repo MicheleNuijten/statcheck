@@ -7,7 +7,6 @@ checkPDF <-
       files <- tcltk::tk_choose.files()
     
     txts <-  sapply(files, getPDF)
-    names(txts) <-
-      gsub("\\.pdf$", "", basename(files), perl = TRUE)
+    names(txts) <-  basename(files)
     return(statcheck(txts, ...))
   }
