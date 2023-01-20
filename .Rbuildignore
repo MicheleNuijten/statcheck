@@ -1,3 +1,14 @@
 ^\.Rproj\.user$
 ^.*\.Rproj$
 README.Rmd
+.gitignore
+.Rhistory
+
+aloe*
+chung*
+costa*
+mausbach*
+nuijten*
+sandoval*
+todd*
+zhang*
