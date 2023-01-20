@@ -23,14 +23,21 @@ library("badger")
 ```{r, echo = FALSE, results='asis'}
 cat(
 	badge_cran_release("statcheck", "green"),
-	badge_cran_download("statcheck", "grand-total", "green")
+	badge_cran_download("statcheck", "grand-total", "green"),
+	badge_github_version("statcheck", "yellow")
 )
 ```
 <!-- badges: end -->
 
 ## What is statcheck?
 
-`statcheck` is a free, open source R package that can be used to automatically extract statistical null-hypothesis significant testing (NHST) results from articles and recompute the *p*-values based on the reported test statistic and degrees of freedom to detect possible inconsistencies. 
+`statcheck` is a "spellchecker" for statistics. It checks whether your *p*-values match their accompanying test statistic and degrees of freedom.
+
+`statcheck` searches for null-hypothesis significance test (NHST) in APA style (e.g., *t*(28) = 2.2, *p* < .05). It recalculates the p-value using the reported test statistic and degrees of freedom. If the reported and computed p-values don't match, `statcheck` will flag the result as an error. 
+
+![](man/figures/infograph.png)
+
+## What can I use statcheck for?
 
 `statcheck` is mainly useful for:
 
