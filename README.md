@@ -8,7 +8,7 @@
 
 [![](https://www.r-pkg.org/badges/version/statcheck?color=green)](https://cran.r-project.org/package=statcheck)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/statcheck?color=green)](https://cran.r-project.org/package=statcheck)
-[![](https://img.shields.io/badge/devel%20version-1.4.0-yellow.svg)](https://github.com/statcheck)
+[![](https://img.shields.io/badge/devel%20version-1.4.0-yellow.svg)](https://github.com/MicheleNuijten/statcheck)
 <!-- badges: end -->
 
 ## What is statcheck?
@@ -40,9 +40,9 @@ result as an error.
     statistical test results from articles that can then be analyzed.
     You can for instance investigate whether you can predict statistical
     inconsistencies (see e.g., [Nuijten et al.,
-    2017](https://www.collabra.org/article/10.1525/collabra.102/)), or
-    use it to analyze p-value distributions (see e.g., [Hartgerink et
-    al., 2016](https://peerj.com/articles/1935/)).
+    2017](https://doi.org/10.1525/collabra.102)), or use it to analyze
+    p-value distributions (see e.g., [Hartgerink et al.,
+    2016](https://peerj.com/articles/1935/)).
 
 ## How does statcheck work?
 
