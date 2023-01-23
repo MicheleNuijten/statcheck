@@ -16,10 +16,9 @@
 #'     \item \strong{Research}: statcheck can be used to automatically extract 
 #'     statistical test results from articles that can then be analyzed. You can 
 #'     for instance investigate whether you can predict statistical 
-#'     inconsistencies (see e.g., 
-#'     \href{https://www.collabra.org/article/10.1525/collabra.102/}{Nuijten et al., 2017}), 
+#'     inconsistencies (see e.g., Nuijten et al., 2017 <doi:10.1525/collabra.102>), 
 #'     or use it to analyze p-value distributions (see e.g., 
-#'     \href{https://peerj.com/articles/1935/}{Hartgerink et al., 2016}).
+#'     Hartgerink et al., 2016 <doi:10.7717/peerj.1935>).
 #' }
 #' 
 #' @section Using statcheck on a string of text:
@@ -68,6 +67,11 @@
 #' Van Assen, M. A. L. M. (2016). Distributions of p-values smaller than .05 in 
 #' psychology: What is going on? \emph{PeerJ}, \emph{4}, e1935. 
 #' doi: 10.7717/peerj.1935
+#' 
+#' Nuijten, M. B., Borghuis, J., Veldkamp, C. L. S., Dominguez-Alvarez, L., Van 
+#' Assen, M. A. L. M., & Wicherts, J. M. (2017).  Journal data sharing policies 
+#' and statistical reporting inconsistencies in psychology. 
+#' \emph{Collabra: Psychology}, \emph{3}(1), 1-22. doi: 10.1525/collabra.102.
 #' 
 #' Nuijten, M. B., Van Assen, M. A. L. M., Hartgerink, C. H. J., Epskamp, S., & 
 #' Wicherts, J. M. (2017). The validity of the tool "statcheck" in discovering 

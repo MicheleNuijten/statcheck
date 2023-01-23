@@ -16,8 +16,17 @@ error_test <- function(reported_p, test_type, test_stat,
   # to that end, compute the upper and lower bound of the test statistic
   # based on the number of decimals that it was reported with. E.g., 
   # a t-value of 2.0 could have been rounded from anywhere between 1.95-2.05.
-  low_stat <- test_stat - (.5 / 10 ^ test_dec)
-  up_stat <- test_stat + (.5 / 10 ^ test_dec)
+  
+  if(test_stat >= 0){
+    
+    low_stat <- test_stat - (.5 / 10 ^ test_dec)
+    up_stat <- test_stat + (.5 / 10 ^ test_dec)
+  
+    # switch around for negative test statistics
+    } else if (test_stat < 0){
+    low_stat <- test_stat + (.5 / 10 ^ test_dec)
+    up_stat <- test_stat - (.5 / 10 ^ test_dec)
+  }
   
   # Compute the p-values that belong to the upper and lower bound of the test
   # statistic. This is the range of p-values that would be correct.

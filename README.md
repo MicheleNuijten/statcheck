@@ -8,15 +8,24 @@
 
 [![](https://www.r-pkg.org/badges/version/statcheck?color=green)](https://cran.r-project.org/package=statcheck)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/statcheck?color=green)](https://cran.r-project.org/package=statcheck)
+[![](https://img.shields.io/badge/devel%20version-1.4.0-yellow.svg)](https://github.com/MicheleNuijten/statcheck)
 <!-- badges: end -->
 
 ## What is statcheck?
 
-`statcheck` is a free, open source R package that can be used to
-automatically extract statistical null-hypothesis significant testing
-(NHST) results from articles and recompute the *p*-values based on the
-reported test statistic and degrees of freedom to detect possible
-inconsistencies.
+`statcheck` is a “spellchecker” for statistics. It checks whether your
+*p*-values match their accompanying test statistic and degrees of
+freedom.
+
+`statcheck` searches for null-hypothesis significance test (NHST) in APA
+style (e.g., *t*(28) = 2.2, *p* \< .05). It recalculates the p-value
+using the reported test statistic and degrees of freedom. If the
+reported and computed p-values don’t match, `statcheck` will flag the
+result as an error.
+
+![](man/figures/infograph.png)
+
+## What can I use statcheck for?
 
 `statcheck` is mainly useful for:
 
@@ -31,9 +40,9 @@ inconsistencies.
     statistical test results from articles that can then be analyzed.
     You can for instance investigate whether you can predict statistical
     inconsistencies (see e.g., [Nuijten et al.,
-    2017](https://www.collabra.org/article/10.1525/collabra.102/)), or
-    use it to analyze p-value distributions (see e.g., [Hartgerink et
-    al., 2016](https://peerj.com/articles/1935/)).
+    2017](https://doi.org/10.1525/collabra.102)), or use it to analyze
+    p-value distributions (see e.g., [Hartgerink et al.,
+    2016](https://peerj.com/articles/1935/)).
 
 ## How does statcheck work?
 
@@ -42,11 +51,9 @@ The algorithm behind `statcheck` consists of four basic steps:
 1.  **Convert** pdf and html articles to plain text files.
 2.  **Search** the text for instances of NHST results. Specifically,
     `statcheck` can recognize *t*-tests, *F*-tests, correlations,
-    *z*-tests,
-    ![\chi^2](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cchi%5E2 "\chi^2")
-    -tests, and Q-tests (from meta-analyses) if they are reported
-    completely (test statistic, degrees of freedom, and *p*-value) and
-    in APA style.
+    *z*-tests, $\chi^2$ -tests, and Q-tests (from meta-analyses) if they
+    are reported completely (test statistic, degrees of freedom, and
+    *p*-value) and in APA style.
 3.  **Recompute** the *p*-value using the reported test statistic and
     degrees of freedom.
 4.  **Compare** the reported and recomputed *p*-value. If the reported

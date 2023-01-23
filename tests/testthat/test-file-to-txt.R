@@ -8,6 +8,9 @@ test_that("statistics from a pdf are correctly retrieved and parsed", {
   pdf_file <- system.file("test_materials/nuijten.pdf",
                           package = "statcheck")
   
+  # skip test if file is not available
+  if(pdf_file == "") skip("Test file not available.")
+  
   result <- checkPDF(pdf_file, messages = FALSE)
   result_1tailed <- checkPDF(pdf_file, messages = FALSE, OneTailedTxt = TRUE)
   
@@ -36,6 +39,9 @@ test_that("statistics from all pdfs in a folder are correctly retrieved and pars
   
   pdf_folder <- system.file("test_materials", package = "statcheck")
   
+  # skip test if files are not available
+  if(!any(grepl(".pdf", list.files(pdf_folder)))) skip("Test files not available.")
+  
   result <- checkPDFdir(pdf_folder, messages = FALSE, subdir = FALSE)
   
   # extract 53 tests from 4 papers
@@ -51,6 +57,9 @@ test_that("statistics from a html are correctly retrieved and parsed", {
   
   html_file <- system.file("test_materials/nuijten.html",
                           package = "statcheck")
+  
+  # skip test if file is not available
+  if(html_file == "") skip("Test file not available.")
 
   result <- checkHTML(html_file, messages = FALSE)
   result_1tailed <- checkHTML(html_file, messages = FALSE, OneTailedTxt = TRUE)
@@ -75,6 +84,9 @@ test_that("statistics from all htmls in a folder are correctly retrieved and par
   
   html_dir <- system.file("test_materials", package = "statcheck")
   
+  # skip test if files are not available
+  if(!any(grepl(".htm*", list.files(html_dir)))) skip("Test files not available.")
+  
   result <- checkHTMLdir(html_dir, messages = FALSE, subdir = FALSE)
   
   # extract 6+33 tests from papers 
@@ -88,6 +100,9 @@ test_that("statistics from all htmls in a folder are correctly retrieved and par
 test_that("statistics from all pdfs and htmls in a folder are correctly retrieved and parsed", {
   
   dir <- system.file("test_materials", package = "statcheck")
+  
+  # skip test if files are not available
+  if(!any(grepl(".htm*|.pdf", list.files(dir)))) skip("Test files not available.")
   
   result <- checkdir(dir, subdir = FALSE, messages = FALSE)
   

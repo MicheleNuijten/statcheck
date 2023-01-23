@@ -14,10 +14,11 @@ extract_pattern <- function(txt, pattern, ignore.case = TRUE) {
                          ignore.case = ignore.case,
                          perl = TRUE)[[1]] # perl is necessary for lookbehinds
   
-  # if no match is found, return NULL
-  if(string_loc[1] == -1){
+  # if no match is found, or result is a missing value, return NULL
+  if(string_loc[1] == -1 | is.na(string_loc[1])){
     return(NULL)
   }
+  
   
   # if a match is found:
   # extract the raw text of the regex match:

@@ -76,13 +76,28 @@ extract_stats <- function(txt, stat){
     
     test <- extract_test_stats(raw = nhst_raw[i])
     
-    test_stats <- rbind(test_stats, test)
+    # ignore any cases with more than 1 test comparison (e.g., z >= 2)
+    if(nrow(test) > 1){
+      test <- data.frame(test_comp = NA,
+                         test_value = NA,
+                         test_dec = NA)
+    } 
+    
+    test_stats <- rbind(test_stats, test)  
     
     # extract p-comparison and p-value
     
     p <- extract_p_value(raw = nhst_raw[i])
     
+    # ignore any cases with more than 1 test comparison (e.g., p >= .01)
+    if(nrow(p) > 1){
+      p <- data.frame(p_comp = NA,
+                      p_value = NA,
+                      p_dec = NA)
+    }
+    
     pvals <- rbind(pvals, p)
+    
     
   }
   
@@ -121,6 +136,12 @@ extract_stats <- function(txt, stat){
     # space in front of it. statcheck can't convert the weird minus in that case
     # and would otherwise break down
     nhst_parsed <- nhst_parsed[!is.na(nhst_parsed$Value), ]
+    
+    # remove missing test comparisons or p comparisons 
+    # reason: these are marked as NA in cases where multiple comparisons were
+    # reported. E.g., t(23) >= ..., p >= ...
+    nhst_parsed <- nhst_parsed[!is.na(nhst_parsed$Test.Comparison) &
+                                 !is.na(nhst_parsed$Reported.Comparison), ]
     
     # only return selected stats
     # to that end, rename test-types to match argument stat

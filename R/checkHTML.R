@@ -8,8 +8,7 @@ checkHTML <- function(files,
     files <- tcltk::tk_choose.files()
   
   txts <-  sapply(files, getHTML)
-  names(txts) <- gsub(".html", "", basename(files))
-  names(txts) <- gsub(".htm", "", names(txts))
+  names(txts) <- basename(files)
   return(statcheck(txts, ...))
   
 }
