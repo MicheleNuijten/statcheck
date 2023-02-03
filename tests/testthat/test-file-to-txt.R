@@ -165,7 +165,13 @@ test_that("stats from all pdfs and htmls in a folder are correctly retrieved
 
 # tests concerning pdf encoding ----------------------------------------------
 
+# for all tests below, we compare statcheck output to manually extracted stats
+# from papers with known encoding peculiarities.
+# the csv files contain all comlete NHST results reported in full text, so not
+# necessarily only APA results.
+
 # stats from mausbach et al. 2012, health psych (apa journal)
+# DOI: 10.1037/a0027783
 test_that("all stats from apa pdf are extracted with pdftools", {
   
   # SKIP IF ARTICLE IS NOT AVAILABLE
@@ -208,6 +214,7 @@ test_that("all stats from apa pdf are extracted with pdftools", {
 
 
 # stats from costa et al. 2018, jrnl environmental psych (elsevier journal)
+# DOI: 10.1016/j.jenvp.2017.12.004
 test_that("all stats from elsevier pdf are extracted with pdftools", {
   
   # SKIP IF ARTICLE IS NOT AVAILABLE
@@ -241,7 +248,9 @@ test_that("all stats from elsevier pdf are extracted with pdftools", {
   
 })
 
-# read the letters b and N in a NHST result as < and >
+
+# stats from todd et al. 2011, jrnl exp soc psych (elsevier journal)
+# DOI: 10.1016/j.jesp.2010.08.00
 test_that("b and N in a NHST result are read as < and >", {
   
   # SKIP IF ARTICLE IS NOT AVAILABLE
@@ -275,7 +284,8 @@ test_that("b and N in a NHST result are read as < and >", {
 })
 
 
-# read p and ! as = and <
+# stats from zhang et al. 2010, jrnl of consumer research (oxford university press)
+# DOI: 10.1086/655417
 test_that("p and ! in a NHST result are read as = and <", {
   
   # SKIP IF ARTICLE IS NOT AVAILABLE
@@ -314,7 +324,8 @@ test_that("p and ! in a NHST result are read as = and <", {
   
 })
 
-# don't throw errors in case of unusal spacing
+# stats from sandoval et al. (2017), child development
+# DOI: 10.1111/cdev.12723
 test_that("cases with unusual spacing don't cause errors", {
   
   # SKIP IF ARTICLE IS NOT AVAILABLE
@@ -336,7 +347,8 @@ test_that("cases with unusual spacing don't cause errors", {
 })
 
 
-# don't read QError as a correlation or QT as t-test
+# stats from Aloe et al. (2009), Educational Researcher
+# DOI: 10.3102/0013189X09353939
 test_that("subscripts are not read as test statistics", {
   
   # SKIP IF ARTICLE IS NOT AVAILABLE
