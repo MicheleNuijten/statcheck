@@ -4,6 +4,7 @@
 checkPDFdir <-
   function(dir,
            subdir = TRUE,
+           method,
            ...) {
     if (missing(dir))
       dir <- tcltk::tk_choose.dir()

@@ -5,12 +5,17 @@
 statcheck.Rproj
 
 # test materials
-# can't share because of copyright restrictions
-aloe*
-chung*
-costa*
-mausbach*
-nuijten*
-sandoval*
-todd*
-zhang*
+# can't share papers itself because of copyright restrictions
+# only share csv files with summary results
+#aloe*
+#chung*
+#costa*
+#mausbach*
+#nuijten*
+#sandoval*
+#todd*
+#zhang*
+
+inst/test_materials/*.pdf
+inst/test_materials/*.html
+inst/test_materials/*.txt
