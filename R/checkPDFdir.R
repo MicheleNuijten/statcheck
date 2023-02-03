@@ -30,7 +30,7 @@ checkPDFdir <-
     
     close(pb)
     
-    names(txts) <- gsub("\\.pdf$", "", basename(files))
+    names(txts) <- basename(files)
     
     return(statcheck(txts, ...))
   }

@@ -1,3 +1,16 @@
 ^\.Rproj\.user$
 ^.*\.Rproj$
 README.Rmd
+.gitignore
+.Rhistory
+cran-comments.md
+
+aloe*
+chung*
+costa*
+mausbach*
+nuijten*
+sandoval*
+todd*
+zhang*
+^CRAN-SUBMISSION$

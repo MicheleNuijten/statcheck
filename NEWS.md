@@ -1,5 +1,6 @@
 # statcheck 1.4.0
-<!---searched in commits on statcheck repo: `committer-date:2020-03-15..2020-04-30` --->
+<!---searched in commits on statcheck repo: `committer-date:2020-03-15..2020-04-30`
+and checked out changes in the beta releases --->
 
 ## Major external changes
 * The variable names from the output of `statcheck()` have changed to increase consistency in style and naming. This means that the variable names in the output of `checkPDF()`, `checkHTML()`, `checkdir()`, `checkPDFdir()`, and `checkHTMLdir()` have also changed.
@@ -14,10 +15,20 @@ There have been major updates to the internal structure of statcheck. Some of th
 * All documentation and the NAMESPACE are now generated with roxygen2
 * The variable names in the output are now based on a file with constants. This makes it easier to update the names in a later stage if necessary, without having to go through every script
 
+An overview of all internal functions and how they relate to each other can be found in the file `man/figures/overview_functions.pdf`. In this file, you'll also find a schematic overview of which results will be counted as an inconsistency or a decision inconsistency.
+
 ## Small updates
 * Don't show a message to warn for the potential presence of one-tailed tests and other significance levels. This text was mainly distracting.
+* When numbering unnamed sources, add leading zeros to allow for ordering of the data frame
+* Include file extension in source name (mainly useful if there are different file types with the same file name; those might give different results)
 
 ## Bug fixes
+* accurately take correct rounding into account with negative test statistics
+* extract punctuation that could signal a wrongly encoded minus sign
+* added additional html encodings of mathematical symbols
+* ignore result when test value == NA
+* don't throw an error when input is NA (e.g.: statcheck(NA))
+* test results with multiple comparison signs are no longer extracted (e.g.: "t(38) >= 2.25, p = .03")
 
 # statcheck 1.3.2
 <!---searched in commits on statcheck repo: `committer-date:2018-05-28..2020-03-15` --->

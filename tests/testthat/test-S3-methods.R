@@ -18,7 +18,7 @@ test_that("summary.statcheck() works for a single source", {
   summary <- summary(result)
   
   expect_equal(nrow(summary), 2)
-  expect_equal(as.vector(summary[[VAR_SOURCE]]), c("1", "Total"))
+  expect_equal(as.vector(summary[[VAR_SOURCE]]), c("01", "Total"))
   expect_equal(summary[[VAR_NR_PVALUES]], c(6, 6))
   expect_equal(summary[[VAR_NR_ERRORS]], c(5, 5))
   expect_equal(summary[[VAR_NR_DEC_ERRORS]], c(2, 2))

@@ -44,6 +44,9 @@ test_that("pdftools is called if method is not specified", {
   pdf_file <- system.file("test_materials/nuijten.pdf",
                           package = "statcheck")
   
+  # skip test if file is not available
+  if(pdf_file == "") skip("Test file not available.")
+  
   result <- checkPDF(pdf_file, messages = FALSE)
   expect_equal(nrow(result), 8)
   
@@ -89,6 +92,9 @@ test_that("stats from all pdfs in a folder are correctly retrieved & parsed", {
   # one of the pdf papers doesn't contain any stats
   pdf_folder <- system.file("test_materials/test_dir", package = "statcheck")
   
+  # skip test if files are not available
+  if(!any(grepl(".pdf", list.files(pdf_folder)))) skip("Test files not available.")
+  
   result <- checkPDFdir(pdf_folder, messages = FALSE, subdir = FALSE)
   
   # extract 11 tests from 3 papers
@@ -103,8 +109,11 @@ test_that("stats from all pdfs in a folder are correctly retrieved & parsed", {
 test_that("statistics from a html are correctly retrieved and parsed", {
   
   html_file <- system.file("test_materials/nuijten.html",
-                           package = "statcheck")
+                          package = "statcheck")
   
+  # skip test if file is not available
+  if(html_file == "") skip("Test file not available.")
+
   result <- checkHTML(html_file, messages = FALSE)
   result_1tailed <- checkHTML(html_file, messages = FALSE, OneTailedTxt = TRUE)
   
@@ -127,6 +136,9 @@ test_that("statistics from a html are correctly retrieved and parsed", {
 test_that("stats from all htmls in a folder are correctly retrieved & parsed", {
   
   html_dir <- system.file("test_materials/test_dir", package = "statcheck")
+  
+  # skip test if files are not available
+  if(!any(grepl(".htm*", list.files(html_dir)))) skip("Test files not available.")
   
   result <- checkHTMLdir(html_dir, messages = FALSE, subdir = FALSE)
   
@@ -191,8 +203,7 @@ test_that("all stats from apa pdf are extracted with pdftools", {
   
   # compare results statcheck with manually extracted stats
   expect_equal(nrow(reference), nrow(result_ordered))
-  expect_equal(reference$test_value, result_ordered$test_value)
-  
+  expect_equal(reference$test_value, result_ordered$test_value)  
 })
 
 
