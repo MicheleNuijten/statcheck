@@ -16,7 +16,7 @@ RGX_Z <- "([^a-z](z|Z))"
 # z-tests do not have dfs
 RGX_DF_T_R_Q <- "\\(\\s?\\d*\\.?\\d+\\s?\\)"
 RGX_DF_F <- "\\(\\s?\\d*\\.?(I|l|\\d+)\\s?,\\s?\\d*\\.?\\d+\\s?\\)"
-RGX_DF_CHI2 <- "\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?\\)"
+RGX_DF_CHI2 <- "\\(\\s?\\d*\\.?\\d+\\s?(,\\s?(N|n)\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?\\)"
 
 # combine test types with the correct type of df
 # put regex between () to create regex groups
