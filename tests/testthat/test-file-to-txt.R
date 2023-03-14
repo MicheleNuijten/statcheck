@@ -311,6 +311,17 @@ test_that("p and ! in a NHST result are read as = and <", {
   # t(43) p \0011.19, NS
   reference <- manual[-c(8, 31, 38, 41, 44),]
   
+  # remove bottom two "summary" rows
+  reference <- reference[reference$raw_result != "", ]
+  
+  # also not read by statcheck: 
+  # F(1, 21) p 2.95, NS 
+  # t(43) p \001.50, NS
+  # t(43) p  2.57, p ! .05.
+  # t(43) p  3.01, p ! .01
+  # t(42) p \001.83, NS
+  # t(42) p 1.09, NS 
+  
   result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
   
   # compare results statcheck with manually extracted stats
