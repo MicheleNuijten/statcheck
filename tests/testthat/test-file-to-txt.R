@@ -231,6 +231,9 @@ test_that("all stats from elsevier pdf are extracted with pdftools", {
   
   reference <- manual[-c(2, 3, 8), ]
   
+  # remove bottom two "summary" rows
+  reference <- reference[reference$raw_result != "", ]
+  
   # compare results statcheck with manually extracted stats
   expect_equal(nrow(reference), nrow(result))
   expect_equal(reference$test_value, result$test_value)
@@ -263,6 +266,9 @@ test_that("b and N in a NHST result are read as < and >", {
   # Fs(1, 702)b1.55, psN.21
   # remove from manual reference
   reference <- manual[-c(9, 18, 20), ]
+  
+  # remove bottom two "summary" rows
+  reference <- reference[reference$raw_result != "", ]
   
   result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
   
