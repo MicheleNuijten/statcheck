@@ -12,6 +12,9 @@ test_that("pdftools correctly retrieves and parses statistics from a pdf", {
   pdf_file <- system.file("test_materials/nuijten.pdf",
                           package = "statcheck")
   
+  # skip test if file is not available
+  if(pdf_file == "") skip("Test file not available.")
+  
   result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
   result_1tailed <- checkPDF(pdf_file, method = "pdftools", messages = FALSE,
                              OneTailedTxt = TRUE)
@@ -60,6 +63,9 @@ test_that("xpdf correctly retrieves and parses statistics from a pdf", {
   # https://doi.org/10.3758/s13428-015-0664-2
   pdf_file <- system.file("test_materials/nuijten.pdf",
                           package = "statcheck")
+  
+  # skip test if file is not available
+  if(pdf_file == "") skip("Test file not available.")
   
   result <- checkPDF(pdf_file, method = "xpdf", messages = FALSE)
   result_1tailed <- checkPDF(pdf_file, method = "xpdf", messages = FALSE, 
@@ -385,3 +391,4 @@ test_that("subscripts are not read as test statistics", {
   expect_equal(reference$test_value, result$test_value)
   
 })
+
