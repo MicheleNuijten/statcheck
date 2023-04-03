@@ -1,7 +1,7 @@
 Package: statcheck
 Title: Extract Statistics from Articles and Recompute P-Values
-Version: 1.4.0
-Date: 2023-01-23
+Version: 1.4.1
+Date: 2023-04-03
 Authors@R: c(
     person("Michele B.", "Nuijten", email = "m.b.nuijten@uvt.nl", 
            role = c("aut", "cre"), comment = c(ORCID = "0000-0002-1468-8585")),
@@ -9,12 +9,13 @@ Authors@R: c(
             comment = c(ORCID = "0000-0003-4884-8118")),
     person("Willem", "Sleegers", role = "ctb", 
             comment = c(ORCID = "0000-0001-9058-3817")),
+    person("Edoardo", "Costantini", role = "ctb"),
+    person("Paul", "van der Laken", role = "ctb", 
+            comment = c(ORCID = "0000-0002-0404-9114")),
     person("Sean", "Rife", role = "ctb", 
             comment = c(ORCID = "0000-0002-6748-0841")),
     person("John", "Sakaluk", role = "ctb", 
             comment = c(ORCID = "0000-0002-2515-9822")),
-    person("Paul", "van der Laken", role = "ctb", 
-            comment = c(ORCID = "0000-0002-0404-9114")),
     person("Chris", "Hartgerink", role = "ctb", 
             comment = c(ORCID = "0000-0003-1050-6809")),
     person("Steve", "Haroz", role = "ctb", 
