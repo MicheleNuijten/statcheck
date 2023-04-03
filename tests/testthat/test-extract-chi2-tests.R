@@ -62,3 +62,4 @@ test_that("chi2-tests with different spacing are retrieved from text", {
   
   expect_equal(nrow(result), 2)
 })
+
