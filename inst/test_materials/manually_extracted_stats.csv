@@ -1,97 +1,147 @@
 file_id;paper_id;file_name;file_type;doi;paper_id_SCORE_project;journal;year;coder_initials;raw_result;page;test_type;df1;df2;test_comparison;test_value;p_comparison;p;error;decision_error;one_tailed;error_1tail;decision_error_1tail;extract_apa;pdf_conversion_issues;typesetting_issues;remarks
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QT(26) = 252.78, p < .001;616;QT;26;;"""=""";252.78;"""<""";0.001;;;;;;0;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QT(16) = 42.39, p < .05;617;QT;16;;"""=""";42.39;"""<""";0.05;;;;;;0;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;"QBetween(1) = 14.59, p =
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QT(26) = 252.78, p < .001;616;QT;26;;"""=""";252.78;"""<""";0.001;;;;;;0;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QT(16) = 42.39, p < .05;617;QT;16;;"""=""";42.39;"""<""";0.05;;;;;;0;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;"QBetween(1) = 14.59, p =
 .0001";617;QBetween;1;;"""=""";14.59;"""=""";0.001;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;z = 2.17, p = .03;617;z;;;"""=""";2.17;"""=""";0.03;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;"QWithin(12) = 9.20,
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;z = 2.17, p = .03;617;z;;;"""=""";2.17;"""=""";0.03;;;;;;1;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;"QWithin(12) = 9.20,
 p = .69";617;QWithin;12;;"""=""";9.2;"""=""";0.69;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;"QBetween(4) = 16.57, p < .05, R2
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;"QBetween(4) = 16.57, p < .05, R2
 Meta = .40";618;QBetween;4;;"""=""";16.57;"""<""";0.05;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QWithin(4) = 22.91, p < .05;618;QWithin;4;;"""=""";22.91;"""<""";0.05;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;"QBetween(2) = 11.46, was statistically significant at the .05
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QWithin(4) = 22.91, p < .05;618;QWithin;4;;"""=""";22.91;"""<""";0.05;;;;;;1;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;"QBetween(2) = 11.46, was statistically significant at the .05
 level";618;QBetween;2;;"""=""";11.46;"""<""";0.05;;;;;;0;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;z = 0.197, p = .84;618;z;;;"""=""";0.197;"""=""";0.84;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;"QBetween(3) = 7.03 (p = .07, R2
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;z = 0.197, p = .84;618;z;;;"""=""";0.197;"""=""";0.84;;;;;;1;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;"QBetween(3) = 7.03 (p = .07, R2
 Meta = .01";618;QBetween;3;;"""=""";7.03;"""=""";0.07;;;;;;0;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QWithin(15) = 31.71, p < .05;618;QWithin;15;;"""=""";31.71;"""<""";0.05;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;z = 2.65, p = .008;618;z;;;"""=""";2.65;"""=""";0.008;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QT(17) = 56.41, p < .05;619;QT;17;;"""=""";56.41;"""<""";0.05;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;"QBetween(1) =
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QWithin(15) = 31.71, p < .05;618;QWithin;15;;"""=""";31.71;"""<""";0.05;;;;;;1;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;z = 2.65, p = .008;618;z;;;"""=""";2.65;"""=""";0.008;;;;;;1;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QT(17) = 56.41, p < .05;619;QT;17;;"""=""";56.41;"""<""";0.05;;;;;;1;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;"QBetween(1) =
 31.33, p < .05, R2
 Meta = .67";619;QBetween;1;;"""=""";31.33;"""<""";0.05;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;z = 1.43, p = .15;619;z;;;"""=""";1.43;"""=""";0.15;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QWithin(6) = 24.86, p < .05;620;QWithin;6;;"""=""";24.86;"""<""";0.05;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QWithin(3) = 0.11, p = .99;620;QWithin;3;;"""=""";0.11;"""=""";0.99;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QWithin(6) = 0.03, p = 1.00;620;QWithin;6;;"""=""";0.03;"""=""";1;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;z = 0.17, p > .5;620;z;;;"""=""";0.17;""">""";0.5;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QBetween(2) = 31.41, p < .05;620;QBetween;2;;"""=""";31.41;"""<""";0.05;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QWithin(5) = 38.98, p < .05;620;QWithin;5;;"""=""";38.98;"""<""";0.05;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QBetween(1) = 17.22, p < .05, R2 Meta = .17;620;QBetween;1;;"""=""";17.22;"""<""";0.05;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;z = 1.39, p = .16;620;z;;;"""=""";1.39;"""=""";0.16;;;;;;1;0;0;
-aloe_pdf;aloe;Aloe_EduRes_2009_OrYv;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QError(16) = 26.05, p = .10;620;QError;16;;"""=""";26.05;"""=""";0.1;;;;;;0;0;0;
-costa_pdf;costa;Costa_JournEnvPsych_2018_PkRz;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MN;t(196) <bc> 38.73, p < .001, h2 <bc> .88;57;t;;196;"""=""";38.73;"""<""";0.01;;;;;;1;1;0;"""="" copied as 1/4. - copied as square"
-costa_pdf;costa;Costa_JournEnvPsych_2018_PkRz;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MS;t(191) <bc> 8.22, p < . 001, h2 <bc> .26;61;t;;191;"""=""";8.22;"""<""";0.001;;;;;;1;1;0;
-costa_pdf;costa;Costa_JournEnvPsych_2018_PkRz;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MS;t(191) <bc> 9.54, p < . 001, h2 <bc> .32;61;t;;191;"""=""";-9.54;"""<""";0.001;;;;;;1;1;0;
-costa_pdf;costa;Costa_JournEnvPsych_2018_PkRz;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MS;t(191) <bc> 7.79, p < .001, h2 <bc> .24;61;t;;191;"""=""";-7.79;"""<""";0.001;;;;;;1;1;0;
-costa_pdf;costa;Costa_JournEnvPsych_2018_PkRz;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MN;F(1, 186) <bc> 5.73, p <bc> .01, h2 <bc> .03;61;F;1;186;"""=""";5.73;"""=""";0.01;;;;;;1;1;0;
-costa_pdf;costa;Costa_JournEnvPsych_2018_PkRz;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MS;t(191) <bc> 10.40, p < .001, h2 <bc> .36;62;t;;191;"""=""";10.4;"""<""";0.001;;;;;;1;1;0;
-costa_pdf;costa;Costa_JournEnvPsych_2018_PkRz;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MS;F(1, 186) <bc> 5.51, p <bc> .02, h2 <bc> .03;62;F;1;186;"""=""";5.51;"""=""";0.02;;;;;;1;1;0;
-costa_pdf;costa;Costa_JournEnvPsych_2018_PkRz;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MS;t(191) <bc> 4.55, p < . 001, h2 <bc> .10;62;t;;191;"""=""";4.55;"""<""";0.001;;;;;;1;1;0;
-costa_pdf;costa;Costa_JournEnvPsych_2018_PkRz;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MN;F(1,18) <bc> 12.34, p <bc> .002,;65;F;1;18;"""=""";12.34;"""=""";0.002;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.36, t(261.38) = -2.27, p = .024;436;t;;261.38;"""=""";-2.27;"""=""";0.024;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -1.90, t(233.85) = -4.42, p < .001;436;t;;233.85;"""=""";-4.42;"""<""";0.001;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.18, t(112.23) = -2.02, p = .046;436;t;;112.23;"""=""";-2.02;"""=""";0.046;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;"B = 0.15, t(187.65) = 2.54, p = .012
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;z = 1.43, p = .15;619;z;;;"""=""";1.43;"""=""";0.15;;;;;;1;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QWithin(6) = 24.86, p < .05;620;QWithin;6;;"""=""";24.86;"""<""";0.05;;;;;;1;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QWithin(3) = 0.11, p = .99;620;QWithin;3;;"""=""";0.11;"""=""";0.99;;;;;;1;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QWithin(6) = 0.03, p = 1.00;620;QWithin;6;;"""=""";0.03;"""=""";1;;;;;;1;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;z = 0.17, p > .5;620;z;;;"""=""";0.17;""">""";0.5;;;;;;1;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QBetween(2) = 31.41, p < .05;620;QBetween;2;;"""=""";31.41;"""<""";0.05;;;;;;1;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QWithin(5) = 38.98, p < .05;620;QWithin;5;;"""=""";38.98;"""<""";0.05;;;;;;1;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QBetween(1) = 17.22, p < .05, R2 Meta = .17;620;QBetween;1;;"""=""";17.22;"""<""";0.05;;;;;;1;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;z = 1.39, p = .16;620;z;;;"""=""";1.39;"""=""";0.16;;;;;;1;0;0;
+aloe_pdf;aloe;aloe.pdf;pdf;10.3102/0013189X09353939;OrYv;Educational Researcher;2009;ME;QError(16) = 26.05, p = .10;620;QError;16;;"""=""";26.05;"""=""";0.1;;;;;;0;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN; t(604) = 6.88, p < .001;;t;;604;"""=""";6.88;"""<""";0.001;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(604) = 2.62, p < .01;;t;;604;"""=""";2.62;"""<""";0.01;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;?2(374, N = 488) = 1,224.08, p < .001;;Chi2;374;;"""=""";1224.08;"""<""";0.001;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;?2(19, N = 488) = 57.45, p < .001;;Chi2;19;;"""=""";57.45;"""<""";0.001;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;?2(115, N = 478) = 304.73, p < .001;;Chi2;115;;"""=""";304.73;"""<""";0.001;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;?2(71, N = 488) = 144.55, p < .001;;Chi2;71;;"""=""";144.55;"""<""";0.001;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;?2(71, N = 488) = 77.45, ns.;;Chi2;71;;"""=""";77.45;ns;;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;?2(17, N = 310) = 28.05, p < .05;;Chi2;17;;"""=""";28.05;"""<""";0.05;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;??2(20) = 17.08, ns;;Chi2;20;;"""=""";17.08;ns;;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;?2(37, N = 310) = 45.13, ns;;Chi2;37;;"""=""";45.13;ns;;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;?2(37, N = 310) = 45.13, ns;;Chi2;37;;"""=""";45.13;ns;;;;;;;1;0;0;in figure caption
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(68) = 4.46, p < .001;;t;;68;"""=""";4.46;"""<""";0.001;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN; t(68) = 0.60, ns;;t;;68;"""=""";0.6;ns;;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(68) = ?2.15, p < .05;;t;;68;"""=""";-2.15;"""<""";0.05;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(68) = .05, ns;;t;;68;"""=""";0.05;ns;;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(68) = .03, ns;;t;;68;"""=""";0.03;ns;;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(68) = 1.69, ns;;t;;68;"""=""";1.69;ns;;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(309) = 3.25, p < .01;;t;;309;"""=""";3.25;"""<""";0.01;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(309) = 0.67, ns;;t;;309;"""=""";0.67;ns;;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN; t(309) = 0.02, ns;;t;;;"""=""";0.02;ns;;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;z = ?2.07, p < .05;;z;;;"""=""";-2.07;"""<""";0.05;;;;;;1;1;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;z = ?2.05, p < .05;;z;;;"""=""";-2.05;"""<""";0.05;;;;;;1;1;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(309) = 5.33, p < .001;;t;;309;"""=""";5.33;"""<""";0.001;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(309) = 4.82, p < .001;;t;;309;"""=""";4.82;"""<""";0.001;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(309) = 2.12, p < .05;;t;;309;"""=""";2.12;"""<""";0.05;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;z = 2.24, p < .05;;z;;;"""=""";2.24;"""<""";0.05;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;z = ?3.16, p < .001;;z;;;"""=""";-3.16;"""<""";0.001;;;;;;1;1;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(309) = ?4.18, p < .001;;t;;309;"""=""";-4.18;"""<""";0.001;;;;;;1;1;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(309) = ?1.54, ns;;t;;309;"""=""";-1.54;ns;;;;;;;1;1;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;z = ?4.68, p < .001;;z;;;"""=""";-4.68;"""<""";0.001;;;;;;1;1;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN; ?2(37, N = 310) = 44.34, ns;;Chi2;37;;"""=""";44.34;ns;;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;??2(10) = 11.22, ns;;Chi2;10;;"""=""";11.22;ns;;;;;;;1;0;0;
+chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;??2(10) = 8.67, ns;;Chi2;10;;"""=""";8.67;ns;;;;;;;1;0;0;
+costa_pdf;costa;costa.pdf;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MN;t(196) <bc> 38.73, p < .001, h2 <bc> .88;57;t;;196;"""=""";38.73;"""<""";0.01;;;;;;1;1;0;"""="" copied as 1/4. - copied as square"
+costa_pdf;costa;costa.pdf;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MS;t(191) <bc> 8.22, p < . 001, h2 <bc> .26;61;t;;191;"""=""";8.22;"""<""";0.001;;;;;;0;1;0;wrong spacing
+costa_pdf;costa;costa.pdf;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MS;t(191) <bc> 9.54, p < . 001, h2 <bc> .32;61;t;;191;"""=""";-9.54;"""<""";0.001;;;;;;0;1;0;wrong spacing
+costa_pdf;costa;costa.pdf;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MS;t(191) <bc> 7.79, p < .001, h2 <bc> .24;61;t;;191;"""=""";-7.79;"""<""";0.001;;;;;;1;1;0;
+costa_pdf;costa;costa.pdf;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MN;F(1, 186) <bc> 5.73, p <bc> .01, h2 <bc> .03;61;F;1;186;"""=""";5.73;"""=""";0.01;;;;;;1;1;0;
+costa_pdf;costa;costa.pdf;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MS;t(191) <bc> 10.40, p < .001, h2 <bc> .36;62;t;;191;"""=""";10.4;"""<""";0.001;;;;;;1;1;0;
+costa_pdf;costa;costa.pdf;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MS;F(1, 186) <bc> 5.51, p <bc> .02, h2 <bc> .03;62;F;1;186;"""=""";5.51;"""=""";0.02;;;;;;1;1;0;
+costa_pdf;costa;costa.pdf;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MS;t(191) <bc> 4.55, p < . 001, h2 <bc> .10;62;t;;191;"""=""";4.55;"""<""";0.001;;;;;;0;1;0;wrong spacing
+costa_pdf;costa;costa.pdf;pdf;10.1016/j.jenvp.2017.12.004;PkRz;Journal of Environmental Psychology;2018;MN;F(1,18) <bc> 12.34, p <bc> .002,;65;F;1;18;"""=""";12.34;"""=""";0.002;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.36, t(261.38) = -2.27, p = .024;436;t;;261.38;"""=""";-2.27;"""=""";0.024;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -1.90, t(233.85) = -4.42, p < .001;436;t;;233.85;"""=""";-4.42;"""<""";0.001;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.18, t(112.23) = -2.02, p = .046;436;t;;112.23;"""=""";-2.02;"""=""";0.046;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;"B = 0.15, t(187.65) = 2.54, p = .012
 ";436;t;;187.65;"""=""";2.54;"""=""";0.012;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 0.16, t(226.15) = 1.25, p = .213;436;t;;226.15;"""=""";1.25;"""=""";0.213;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 0.05, t(236.03) = 0.84, p = .403;436;t;;236.03;"""=""";0.84;"""=""";0.403;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.10, t(254.16) = -1.45, p = .149;436;t;;254.16;"""=""";-1.45;"""=""";0.149;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.04, t(124.78) = -1.34, p = .182;436;t;;124.78;"""=""";-1.34;"""=""";0.182;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -1.24, t(229.88) = -1.41, p = .160;436;t;;229.88;"""=""";-1.41;"""=""";0.16;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -1.11, t(94.95) = -0.84, p = .189;436;t;;94.95;"""=""";-0.84;"""=""";0.189;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 1.35, t(270.63) = 1.63, p =  .104;436;t;;270.63;"""=""";1.63;"""=""";0.104;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 0.02, t(142.71) = 0.01, p = .990;436;t;;142.71;"""=""";0.01;"""=""";0.99;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -2.19, t(236.50) = -4.87, p < .001;436;t;;236.5;"""=""";-4.87;"""<""";0.001;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;"B = -0.36, t(260.52) = 2.27, p = .024
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 0.16, t(226.15) = 1.25, p = .213;436;t;;226.15;"""=""";1.25;"""=""";0.213;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 0.05, t(236.03) = 0.84, p = .403;436;t;;236.03;"""=""";0.84;"""=""";0.403;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.10, t(254.16) = -1.45, p = .149;436;t;;254.16;"""=""";-1.45;"""=""";0.149;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.04, t(124.78) = -1.34, p = .182;436;t;;124.78;"""=""";-1.34;"""=""";0.182;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -1.24, t(229.88) = -1.41, p = .160;436;t;;229.88;"""=""";-1.41;"""=""";0.16;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -1.11, t(94.95) = -0.84, p = .189;436;t;;94.95;"""=""";-0.84;"""=""";0.189;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 1.35, t(270.63) = 1.63, p =  .104;436;t;;270.63;"""=""";1.63;"""=""";0.104;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 0.02, t(142.71) = 0.01, p = .990;436;t;;142.71;"""=""";0.01;"""=""";0.99;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -2.19, t(236.50) = -4.87, p < .001;436;t;;236.5;"""=""";-4.87;"""<""";0.001;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;"B = -0.36, t(260.52) = 2.27, p = .024
 
 ";437;t;;260.52;"""=""";2.27;"""=""";0.024;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.18, t(112.01) = -2.03, p = .045;437;t;;112.01;"""=""";-2.03;"""=""";0.045;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.66, t(188.83) = 2.90, p = .004;437;t;;188.83;"""=""";2.9;"""=""";0.004;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.12, t(253.82) = -1.63, p = .104;437;t;;253.82;"""=""";-1.63;"""=""";0.104;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 0.06, t(235.65) = 1.08, p = .280;437;t;;235.65;"""=""";1.08;"""=""";0.28;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.05, t(124.76) = -1.40, p = .165;437;t;;124.76;"""=""";-1.4;"""=""";0.165;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -1.17, t(94.73) = -1.39, p = .169;437;t;;94.73;"""=""";-1.39;"""=""";0.169;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 0.09, t(143.00) = 0.07, p = .948;437;t;;143;"""=""";0.07;"""=""";0.948;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 1.53, t(269.88) = 1.86, p = .064;437;t;;269.88;"""=""";1.86;"""=""";0.064;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.95, t(234.28) = -1.09, p = .277;437;t;;234.28;"""=""";-1.09;"""=""";0.277;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -1.79, t(235.11) = -4.09, p < .001;437;t;;235.11;"""=""";-4.09;"""<""";0.001;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.37, t(263.15) = -2.30, p = .022;437;t;;263.15;"""=""";-2.3;"""=""";0.022;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.05, t(184.83) = -0.38, p = .703;437;t;;184.83;"""=""";-0.38;"""=""";0.703;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 0.11, t(182.26) = 0.79, p = .432;437;t;;182.26;"""=""";0.79;"""=""";0.432;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 0.12, t(185.73) = 1.97, p = .050;437;t;;185.73;"""=""";1.97;"""=""";0.05;;;;;;1;1;0;
-mausbach_pdf;mausbach;Mausbach_HealthPsych_2012_zzzY;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.57, t(186.24) = 2.41, p = .017;437;t;;186.24;"""=""";2.41;"""=""";0.017;;;;;;1;1;0;
-nuijten_pdf;nuijten;NuijtenEtAl_2016_ReportingErrorsPsychology.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;t(37) = -4.93, p < .001;1206;t;;37;"""=""";-4.93;"""<""";0.001;0;0;0;0;0;1;0;0;
-nuijten_pdf;nuijten;NuijtenEtAl_2016_ReportingErrorsPsychology.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;B2(1, N = 226) = 6.90, p <.01;1206;Chi2;1;;"""=""";6.9;"""<""";0.01;0;0;0;0;0;1;0;0;
-nuijten_pdf;nuijten;NuijtenEtAl_2016_ReportingErrorsPsychology.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"BF(2,
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.18, t(112.01) = -2.03, p = .045;437;t;;112.01;"""=""";-2.03;"""=""";0.045;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.66, t(188.83) = 2.90, p = .004;437;t;;188.83;"""=""";2.9;"""=""";0.004;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.12, t(253.82) = -1.63, p = .104;437;t;;253.82;"""=""";-1.63;"""=""";0.104;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 0.06, t(235.65) = 1.08, p = .280;437;t;;235.65;"""=""";1.08;"""=""";0.28;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.05, t(124.76) = -1.40, p = .165;437;t;;124.76;"""=""";-1.4;"""=""";0.165;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -1.17, t(94.73) = -1.39, p = .169;437;t;;94.73;"""=""";-1.39;"""=""";0.169;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 0.09, t(143.00) = 0.07, p = .948;437;t;;143;"""=""";0.07;"""=""";0.948;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 1.53, t(269.88) = 1.86, p = .064;437;t;;269.88;"""=""";1.86;"""=""";0.064;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.95, t(234.28) = -1.09, p = .277;437;t;;234.28;"""=""";-1.09;"""=""";0.277;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -1.79, t(235.11) = -4.09, p < .001;437;t;;235.11;"""=""";-4.09;"""<""";0.001;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.37, t(263.15) = -2.30, p = .022;437;t;;263.15;"""=""";-2.3;"""=""";0.022;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.05, t(184.83) = -0.38, p = .703;437;t;;184.83;"""=""";-0.38;"""=""";0.703;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 0.11, t(182.26) = 0.79, p = .432;437;t;;182.26;"""=""";0.79;"""=""";0.432;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = 0.12, t(185.73) = 1.97, p = .050;437;t;;185.73;"""=""";1.97;"""=""";0.05;;;;;;1;1;0;
+mausbach_pdf;mausbach;mausbach.pdf;pdf;10.1037/a0027783;zzzY;Health Psychology;2012;ME;B = -0.57, t(186.24) = 2.41, p = .017;437;t;;186.24;"""=""";2.41;"""=""";0.017;;;;;;1;1;0;
+nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;t(37) = -4.93, p < .001;1206;t;;37;"""=""";-4.93;"""<""";0.001;0;0;0;0;0;1;0;0;
+nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;B2(1, N = 226) = 6.90, p <.01;1206;Chi2;1;;"""=""";6.9;"""<""";0.01;0;0;0;0;0;1;0;0;
+nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;BF(2, 70) = 4.48, MSE = 6.61, p <.02^) ;1206;F;2;70;"""=""";4.48;"""<""";0.02;0;0;0;0;0;0;0;0;
+nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"BF(1, 15) = 19.9 and
+5.16, p <.001 and p <.05";1207;;1;15;"""=""";19.9;"""<""";0.001;0;0;0;0;0;0;0;0;two results combined in a sentence
+nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"BF(1, 15) = 19.9 and
+5.16, p <.001 and p <.05";1207;F;1;15;"""=""";5.16;"""<""";0.05;0;0;0;0;0;0;0;0;two results combined in a sentence
+nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;t(28) = 2.0, p<.05;1207;t;;28;"""=""";2;"""<""";0.05;0;0;0;0;0;1;0;0;
+nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"F(2, 70) = 4.48,
+MSE = 6.61, p <.02";1207;F;2;70;"""=""";4.48;"""<""";0.02;0;0;0;0;0;0;0;1;table not scraped in html
+nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"BF(2,56) = 1.203,
+p < .001^";1214;F;2;56;"""=""";1.203;"""<""";0.001;1;1;0;1;1;1;0;0;
+nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;BF(2,56) = 12.03, p < .001^;1214;F;2;56;"""=""";12.03;"""<""";0.001;0;0;0;0;0;1;0;0;
+nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"F(l, 76)
+= 23.95, p <.001;";1220;F;1;76;"""=""";23.95;"""<""";0.001;0;0;0;0;0;0;0;1;df1 wrongly printed as letter l instead of 1
+nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;G2(1) = 6.53, p =.011;1220;Chi2;1;;"""=""";6.53;"""=""";0.011;0;0;0;0;0;1;0;1;table not scraped in html
+nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;t(14) = 2.0, p <.03;1221;t;;14;"""=""";2;"""<""";0.03;1;1;1;0;0;1;0;0;footnote
+nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;t(37) = -4.93, p < .001;1206;t;;37;"""=""";-4.93;"""<""";0.001;0;0;0;0;0;1;0;0;
+nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;B2(1, N = 226) = 6.90, p <.01;1206;Chi2;1;;"""=""";6.9;"""<""";0.01;0;0;0;0;0;1;0;0;
+nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"BF(2,
 
  Behav Res (2016) 48:1205-1226
 
-70) = 4.48, MSE = 6.61, p <.02^) ";1206;F;2;70;"""=""";4.48;"""<""";0.02;0;0;0;0;0;1;0;1;spanning two pages (header in between)
-nuijten_pdf;nuijten;NuijtenEtAl_2016_ReportingErrorsPsychology.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"BF(1, 15) = 19.9 and
+70) = 4.48, MSE = 6.61, p <.02^) ";1206;F;2;70;"""=""";4.48;"""<""";0.02;0;0;0;0;0;0;0;1;spanning two pages (header in between)
+nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"BF(1, 15) = 19.9 and
 5.16, p <.001 and p <.05";1207;;1;15;"""=""";19.9;"""<""";0.001;0;0;0;0;0;0;0;0;two results combined in a sentence
-nuijten_pdf;nuijten;NuijtenEtAl_2016_ReportingErrorsPsychology.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"BF(1, 15) = 19.9 and
+nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"BF(1, 15) = 19.9 and
 5.16, p <.001 and p <.05";1207;F;1;15;"""=""";5.16;"""<""";0.05;0;0;0;0;0;0;0;0;two results combined in a sentence
-nuijten_pdf;nuijten;NuijtenEtAl_2016_ReportingErrorsPsychology.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;t(28) = 2.0, p<.05;1207;t;;28;"""=""";2;"""<""";0.05;0;0;0;0;0;1;0;0;
-nuijten_pdf;nuijten;NuijtenEtAl_2016_ReportingErrorsPsychology.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"F(2, 70) = 4.48,
+nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;t(28) = 2.0, p<.05;1207;t;;28;"""=""";2;"""<""";0.05;0;0;0;0;0;1;0;0;
+nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"F(2, 70) = 4.48,
 MSE = 6.61, p <.02";1207;F;2;70;"""=""";4.48;"""<""";0.02;0;0;0;0;0;0;0;0;
-nuijten_pdf;nuijten;NuijtenEtAl_2016_ReportingErrorsPsychology.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"BF(2,56) = 1.203,
+nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"BF(2,56) = 1.203,
 p < .001^";1214;F;2;56;"""=""";1.203;"""<""";0.001;1;1;0;1;1;1;0;0;
-nuijten_pdf;nuijten;NuijtenEtAl_2016_ReportingErrorsPsychology.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;BF(2,56) = 12.03, p < .001^;1214;F;2;56;"""=""";12.03;"""<""";0.001;0;0;0;0;0;1;0;0;
-nuijten_pdf;nuijten;NuijtenEtAl_2016_ReportingErrorsPsychology.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"F(l, 76)
+nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;BF(2,56) = 12.03, p < .001^;1214;F;2;56;"""=""";12.03;"""<""";0.001;0;0;0;0;0;1;0;0;
+nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"F(l, 76)
 = 23.95, p <.001;";1220;F;1;76;"""=""";23.95;"""<""";0.001;0;0;0;0;0;0;0;1;df1 wrongly printed as letter l instead of 1
-nuijten_pdf;nuijten;NuijtenEtAl_2016_ReportingErrorsPsychology.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;G2(1) = 6.53, p =.011;1220;Chi2;1;;"""=""";6.53;"""=""";0.011;0;0;0;0;0;1;0;0;
-nuijten_pdf;nuijten;NuijtenEtAl_2016_ReportingErrorsPsychology.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;t(14) = 2.0, p <.03;1221;t;;14;"""=""";2;"""<""";0.03;1;1;1;0;0;1;0;0;
+nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;G2(1) = 6.53, p =.011;1220;Chi2;1;;"""=""";6.53;"""=""";0.011;0;0;0;0;0;1;0;0;
+nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;t(14) = 2.0, p <.03;1221;t;;14;"""=""";2;"""<""";0.03;1;1;1;0;0;1;0;0;
 sandoval_pdf;sandoval;sandoval.pdf;pdf;10.1111/cdev.12723;;Child Development;2017;MN;"t
 (28.30) = 1.14, p > .25";;t;;28.3;"""=""";1.14;""">""";0.25;;;;;;1;0;0;
 sandoval_pdf;sandoval;sandoval.pdf;pdf;10.1111/cdev.12723;;Child Development;2017;MN;"F = 6.74,
@@ -209,36 +259,3 @@ zhang_pdf;zhang;Zhang_JournConsRes_2010_egKl;pdf;10.1086/655417;egKl;Journal of 
 zhang_pdf;zhang;Zhang_JournConsRes_2010_egKl;pdf;10.1086/655417;egKl;Journal of Consumer Research;2010;MS;b p .43, t(43) p 3.16, p ! .01;650;t;;43;"""=""";3.16;"""<""";0.01;;;;;;1;1;0;
 zhang_pdf;zhang;Zhang_JournConsRes_2010_egKl;pdf;10.1086/655417;egKl;Journal of Consumer Research;2010;MS;b p .16, t(42) p 1.09, NS;650;t;;42;"""=""";1.09;ns;;;;;;;1;1;0;
 zhang_pdf;zhang;Zhang_JournConsRes_2010_egKl;pdf;10.1086/655417;egKl;Journal of Consumer Research;2010;MS;p . 38, t(42) p 2.55, p ! .05;650;t;;42;"""=""";2.55;"""<""";0.05;;;;;;1;1;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN; t(604) = 6.88, p < .001;;t;;604;"""=""";6.88;"""<""";0.001;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(604) = 2.62, p < .01;;t;;604;"""=""";2.62;"""<""";0.01;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;?2(374, N = 488) = 1,224.08, p < .001;;Chi2;374;;"""=""";1224.08;"""<""";0.001;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;?2(19, N = 488) = 57.45, p < .001;;Chi2;19;;"""=""";57.45;"""<""";0.001;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;?2(115, N = 478) = 304.73, p < .001;;Chi2;115;;"""=""";304.73;"""<""";0.001;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;?2(71, N = 488) = 144.55, p < .001;;Chi2;71;;"""=""";144.55;"""<""";0.001;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;?2(71, N = 488) = 77.45, ns.;;Chi2;71;;"""=""";77.45;ns;;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;?2(17, N = 310) = 28.05, p < .05;;Chi2;17;;"""=""";28.05;"""<""";0.05;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;??2(20) = 17.08, ns;;Chi2;20;;"""=""";17.08;ns;;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;?2(37, N = 310) = 45.13, ns;;Chi2;37;;"""=""";45.13;ns;;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;?2(37, N = 310) = 45.13, ns;;Chi2;37;;"""=""";45.13;ns;;;;;;;1;0;0;in figure caption
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(68) = 4.46, p < .001;;t;;68;"""=""";4.46;"""<""";0.001;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN; t(68) = 0.60, ns;;t;;68;"""=""";0.6;ns;;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(68) = ?2.15, p < .05;;t;;68;"""=""";-2.15;"""<""";0.05;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(68) = .05, ns;;t;;68;"""=""";0.05;ns;;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(68) = .03, ns;;t;;68;"""=""";0.03;ns;;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(68) = 1.69, ns;;t;;68;"""=""";1.69;ns;;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(309) = 3.25, p < .01;;t;;309;"""=""";3.25;"""<""";0.01;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(309) = 0.67, ns;;t;;309;"""=""";0.67;ns;;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN; t(309) = 0.02, ns;;t;;;"""=""";0.02;ns;;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;z = ?2.07, p < .05;;z;;;"""=""";-2.07;"""<""";0.05;;;;;;1;1;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;z = ?2.05, p < .05;;z;;;"""=""";-2.05;"""<""";0.05;;;;;;1;1;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(309) = 5.33, p < .001;;t;;309;"""=""";5.33;"""<""";0.001;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(309) = 4.82, p < .001;;t;;309;"""=""";4.82;"""<""";0.001;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(309) = 2.12, p < .05;;t;;309;"""=""";2.12;"""<""";0.05;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;z = 2.24, p < .05;;z;;;"""=""";2.24;"""<""";0.05;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;z = ?3.16, p < .001;;z;;;"""=""";-3.16;"""<""";0.001;;;;;;1;1;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(309) = ?4.18, p < .001;;t;;309;"""=""";-4.18;"""<""";0.001;;;;;;1;1;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;t(309) = ?1.54, ns;;t;;309;"""=""";-1.54;ns;;;;;;;1;1;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;z = ?4.68, p < .001;;z;;;"""=""";-4.68;"""<""";0.001;;;;;;1;1;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN; ?2(37, N = 310) = 44.34, ns;;Chi2;37;;"""=""";44.34;ns;;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;??2(10) = 11.22, ns;;Chi2;10;;"""=""";11.22;ns;;;;;;;1;0;0;
-chung_html;chung;chung.html;html;10.1037/0012-1649.42.2.319;;Developmental Psychology;2006;MN;??2(10) = 8.67, ns;;Chi2;10;;"""=""";8.67;ns;;;;;;;1;0;0;
