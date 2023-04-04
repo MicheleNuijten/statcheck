@@ -328,23 +328,6 @@ test_that("p and ! in a NHST result are read as = and <", {
                         file_id = "zhang_pdf", apa = TRUE, 
                         pdf_conversion_issues = TRUE, typesetting_issues = FALSE)
   
-  # 4 results are not read for unclear reasons
-  # all similar results are read, nothing went wrong with the columns,
-  # and there is no weird spacing etc.
-  
-  # x2 (1, N p 3,479) p 3.67, p p .05
-  # F(1, 43) p 4.17, p ! .05 
-  # t(42) p 3.19, p ! .01
-  # F(1, 82) p 6.29, p p .01
-  
-  # also not read by statcheck: 
-  # F(1, 21) p 2.95, NS 
-  # t(43) p \001.50, NS
-  # t(43) p  2.57, p ! .05.
-  # t(43) p  3.01, p ! .01
-  # t(42) p \001.83, NS
-  # t(42) p 1.09, NS 
-  
   result <- checkPDF(pdf_file, method = "pdftools", messages = FALSE)
   
   # compare results statcheck with manually extracted stats
