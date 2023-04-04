@@ -160,7 +160,7 @@ sandoval_pdf;sandoval;sandoval.pdf;pdf;10.1111/cdev.12723;;Child Development;201
 sandoval_pdf;sandoval;sandoval.pdf;pdf;10.1111/cdev.12723;;Child Development;2017;MN;"t
 (24) = 0.12, p > .25.";;t;;24;"""=""";0.12;""">""";0.25;;;;;;1;0;0;
 sandoval_pdf;sandoval;sandoval.pdf;pdf;10.1111/cdev.12723;;Child Development;2017;MN;"F(1,
-36) = 4.03, p = .05";;F;1;36;"""=""";4.03;"""=""";0.05;;;;;;1;0;0;
+36) = 4.03, p = .05";;F;1;36;"""=""";4.03;"""=""";0.05;;;;;;1;0;1;problem with rearranging columns: there is a lot of whitespace before the next column
 sandoval_pdf;sandoval;sandoval.pdf;pdf;10.1111/cdev.12723;;Child Development;2017;MN;t(19) = 3.66, p < .001;;t;;19;"""=""";3.66;"""<""";0.001;;;;;;1;0;0;
 sandoval_pdf;sandoval;sandoval.pdf;pdf;10.1111/cdev.12723;;Child Development;2017;MN;t(19) = 0.36, p > .25;;t;;19;"""=""";0.36;""">""";0.25;;;;;;1;0;0;
 sandoval_pdf;sandoval;sandoval.pdf;pdf;10.1111/cdev.12723;;Child Development;2017;MN;t(32) = 0.32, p > .25.;;t;;32;"""=""";0.32;""">""";0.25;;;;;;1;0;0;
