@@ -34,15 +34,15 @@ test_that("pdftools correctly retrieves and parses statistics from a pdf", {
   
   # check errors
   expect_equal(as.numeric(result[[VAR_ERROR]]), 
-               manual_nuijten_apa$error)
+               manual$error)
   expect_equal(as.numeric(result[[VAR_DEC_ERROR]]), 
-               manual_nuijten_apa$decision_error)
+               manual$decision_error)
   
   # check errors with one-tailed test detection
   expect_equal(as.numeric(result_1tailed[[VAR_ERROR]]), 
-               manual_nuijten_apa$error_1tail)
+               manual$error_1tail)
   expect_equal(as.numeric(result_1tailed[[VAR_DEC_ERROR]]), 
-               manual_nuijten_apa$decision_error_1tail)
+               manual$decision_error_1tail)
   
 })
 
@@ -120,9 +120,9 @@ test_that("stats from all pdfs in a folder are correctly retrieved & parsed", {
   
   # extract 11 tests from 3 papers
   expect_equal(nrow(result), 
-               nrow(manual_pdf))
+               nrow(manual))
   expect_equal(length(unique(result[[VAR_SOURCE]])), 
-               length(unique(manual_pdf$paper_id)))
+               length(unique(manual$paper_id)))
   
 })
 
