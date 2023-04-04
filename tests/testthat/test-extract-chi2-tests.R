@@ -16,7 +16,7 @@ test_that("chi2-tests are correctly parsed", {
   expect_equal(result[[VAR_TEST_VALUE]], 2.2)
   expect_equal(as.character(result[[VAR_P_COMPARISON]]), "=")
   expect_equal(result[[VAR_REPORTED_P]], 0.03)
-  expect_equal(as.character(result[[VAR_RAW]]), "i2(28) = 2.20, p = .03")
+  expect_equal(as.character(result[[VAR_RAW]]), "chi2(28) = 2.20, p = .03")
 })
 
 # standard chi2-tests in text

@@ -14,11 +14,10 @@ extract_pattern <- function(txt, pattern, ignore.case = TRUE) {
                          ignore.case = ignore.case,
                          perl = TRUE)[[1]] # perl is necessary for lookbehinds
   
-  # if no match is found, or result is a missing value, return NULL
-  if(string_loc[1] == -1 | is.na(string_loc[1])){
+  # if no match is found, return NULL
+  if(string_loc[1] == -1){
     return(NULL)
   }
-  
   
   # if a match is found:
   # extract the raw text of the regex match:
@@ -36,17 +35,49 @@ extract_pattern <- function(txt, pattern, ignore.case = TRUE) {
   return(string)
 }
 
+# function to detect the number of p-values in a text --------------------------
+
+detect_p_values <- function(txt, apa_style){
+  
+  if(apa_style == TRUE){
+    rgx_p_ns <- RGX_P_NS
+  } else {
+    rgx_p_ns <- RGX_P_NS_NONAPA
+  }
+  
+  p_raw <- extract_pattern(txt = txt,
+                           pattern = rgx_p_ns)
+  
+  return(p_raw)
+  
+}
+
 # function to extract dfs from a raw nhst result -------------------------------
 
 extract_df <- function(raw, test_type){
   
-  # z tests do not have dfs, so return df1 = NA, and df2 = NA for z-tests
   if(test_type == "Z"){
+    # z tests do not have dfs, so return df1 = NA, and df2 = NA for z-tests
     
     df1 <- NA
     df2 <- NA
     
-  } else {
+  } else if(test_type == "r" & grepl(RGX_DFN_R_NRS, raw)){
+    # if correlations report N instead of df, transform to df
+    
+    # extract full string with N
+    dfn <- extract_pattern(txt = raw,
+                           pattern = RGX_DFN_R_NRS)[[1]]
+    
+    # only extract numbers
+    n <- as.numeric(extract_pattern(txt = dfn,
+                                    pattern = "\\d+"))
+    
+    # convert into df (df = n-2) and save as output
+    df1 <- NA
+    df2 <- n-2
+    
+  } else { 
     # for all other test types, extract dfs from the raw nhst result
     df_raw <- extract_pattern(txt = raw,
                               pattern = RGX_DF)[[1]]
@@ -74,14 +105,6 @@ extract_df <- function(raw, test_type){
       df2 <- df
       
     } else if(test_type == "F"){
-      
-      # for some reason, typesetting in articles sometimes goes wrong with 
-      # F-tests and when df1 == 1, it gets typeset as the letter l or I 
-      # If this happens, replace the l or I with a 1
-      
-      if(grepl(RGX_DF1_I_L, df[1])){
-        df[1] <- 1
-      }
       
       df1 <- df[1]
       df2 <- df[2]
@@ -129,7 +152,10 @@ remove_1000_sep <- function(raw){
 recover_minus_sign <- function(raw){
   
   # replace any weird string before the test value with a minus sign
-  return(gsub(RGX_WEIRD_MINUS, " -", raw, perl = TRUE))
+  minus_replaced <- gsub(RGX_WEIRD_MINUS, " -", raw, perl = TRUE)
+  
+  # remove a space in between a minus sign and the numeric value
+  space_removed <- gsub(RGX_MINUS_SPACE, "-", minus_replaced, perl = TRUE)
   
 }
 
@@ -137,14 +163,32 @@ recover_minus_sign <- function(raw){
 
 # function to extract test-values and test comparisons -------------------------
 
-extract_test_stats <- function(raw){
+extract_test_stats <- function(raw, apa_style){
+  
+  # specify whether to search for APA NHST results or also to include non-APA
+  if(apa_style == TRUE){
+    rgx_test_df_value <- RGX_TEST_DF_VALUE
+  } else {
+    rgx_test_df_value <- RGX_TEST_DF_BRACK_VALUE
+  }
+  
+  # first select the test type, df, and test value
+  # this will remove anything between the test value and p-value that could
+  # otherwise be mistaken for another test value
+  test_raw <- extract_pattern(txt = raw,
+                              pattern = rgx_test_df_value)
   
   # remove N = ... from chi-square tests
   # otherwise, these sample sizes will wrongly be classified as test statistics
-  raw_noN <- gsub(RGX_DF_CHI2, "", raw)
+  test_raw_noN <- gsub(RGX_DF_CHI2, "", test_raw)
+  
+  # remove N = from correlations
+  # this is only relevant when apa_style == FALSE
+  # otherwise r(N=...) wouldn't even be extracted
+  test_raw_noN2 <- gsub(RGX_DFN_R_NRS, "", test_raw_noN)
   
   # extract test comparison and test value
-  test_raw <- extract_pattern(txt = raw_noN,
+  test_raw <- extract_pattern(txt = test_raw_noN2,
                               pattern = RGX_TEST_VALUE)
   
   # extract test comparison
@@ -160,8 +204,8 @@ extract_test_stats <- function(raw){
   # replace weird coding before a test value with a minus sign
   test_value <- recover_minus_sign(test_value)
   
-  # remove whitespaces 
-  test_value <- gsub("\\s*", "", test_value)
+  # remove leading/trailing whitespaces 
+  test_value <- trimws(test_value, which = "both")
   
   # remove comma at the end of the value
   test_value <- gsub(",$", "", test_value)
@@ -170,14 +214,8 @@ extract_test_stats <- function(raw){
   test_dec <- attr(regexpr(RGX_DEC, test_value), "match.length") - 1
   test_dec[test_dec < 0] <- 0
   
-  # make test_value numeric; suppress warnings (these could arive if the test
-  # value is unusual, e.g., a weird minus followed by a space can't be made
-  # numeric)
-  # note: this needs to happen AFTER extracting the nr of decimals
-  test_value <- suppressWarnings(as.numeric(test_value))
-  
   return(data.frame(test_comp = test_comp,
-                    test_value = test_value,
+                    test_value = as.numeric(test_value),
                     test_dec = test_dec,
                     stringsAsFactors = FALSE))
   
@@ -185,10 +223,16 @@ extract_test_stats <- function(raw){
 
 # function to extract and parse p-values --------------------------------------
 
-extract_p_value <- function(raw){
+extract_p_value <- function(raw, apa_style){
+  
+  if(apa_style == TRUE){
+    rgx_p_ns <- RGX_P_NS
+  } else {
+    rgx_p_ns <- RGX_P_NS_NONAPA
+  }
   
   p_raw <- extract_pattern(txt = raw,
-                           pattern = RGX_P_NS)
+                           pattern = rgx_p_ns)
   
   p_comp <- character()
   p_value <- numeric()
@@ -196,7 +240,7 @@ extract_p_value <- function(raw){
   
   for(i in seq_along(p_raw)){
     
-    if(grepl(RGX_NS, p_raw[i], ignore.case = TRUE)){
+    if(grepl(RGX_NS, p_raw[i], perl = TRUE)){
       
       p_comp[i] <- "ns"
       p_value[i] <- NA
@@ -206,7 +250,7 @@ extract_p_value <- function(raw){
       
       # extract p-comparison
       p_comp[i] <- extract_pattern(txt = p_raw[i],
-                                pattern = RGX_COMP)
+                                   pattern = RGX_COMP)
       
       # remove p comparison to only keep numbers
       # split the string on the comparison, that splits the string into a p and
