@@ -102,6 +102,16 @@ getPDF <- function(x, method = "pdftools"){
     # Revert to UTF-8 encoding
     txtfiles <- stringi::stri_enc_fromutf32(txtfiles)
     
+    
+    # Arrange text according to paper column layout
+    txtfiles <- pdf_columns(txtfiles)
+    
+    # Paste the differente pages together, so that each pdf is converted to 
+    # one string of text
+    txtfiles <- stringr::str_c(unlist(txtfiles), collapse = "")
+    
+    
+    
     # substitute the letter "b" in a NHST result for a "<". This is not feasible
     # in utf32 encoding, because making a regex that only substitutes the b in
     # a statistical result instead of ALL b's in the paper is very hard in 
@@ -141,13 +151,6 @@ getPDF <- function(x, method = "pdftools"){
                        pattern = RGX_B_QUOTE,
                        replacement = '"', perl = TRUE)
     
-    
-    # Arrange text according to paper column layout
-    txtfiles <- pdf_columns(txtfiles)
-    
-    # Paste the differente pages together, so that each pdf is converted to 
-    # one string of text
-    txtfiles <- stringr::str_c(unlist(txtfiles), collapse = "")
   }
   
   if(method[1] == "xpdf"){
