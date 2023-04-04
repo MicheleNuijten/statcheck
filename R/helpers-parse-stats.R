@@ -160,8 +160,8 @@ extract_test_stats <- function(raw){
   # replace weird coding before a test value with a minus sign
   test_value <- recover_minus_sign(test_value)
   
-  # remove leading/trailing whitespaces 
-  test_value <- trimws(test_value, which = "both")
+  # remove whitespaces 
+  test_value <- gsub("\\s*", "", test_value)
   
   # remove comma at the end of the value
   test_value <- gsub(",$", "", test_value)
