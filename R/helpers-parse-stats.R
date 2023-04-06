@@ -15,7 +15,7 @@ extract_pattern <- function(txt, pattern, ignore.case = TRUE) {
                          perl = TRUE)[[1]] # perl is necessary for lookbehinds
   
   # if no match is found, return NULL
-  if(string_loc[1] == -1){
+  if(string_loc[1] == -1 | is.na(string_loc[1])){
     return(NULL)
   }
   
