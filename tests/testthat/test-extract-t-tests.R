@@ -63,11 +63,12 @@ test_that("variations in the p-value are retrieved from text", {
   txt4 <- "t(28) = 2.20, ns"
   txt5 <- "t(28) = 2.20, ns."
   txt6 <- "t(28) = 2.20, n.s."
-  txt7 <- "t(28) = 2.20, p = .5e-3"
+  txt7 <- "t(28) = 2.20, NS"
+  txt8 <- "t(28) = 2.20, p = .5e-3"
   
-  result <- statcheck(c(txt1, txt2, txt3, txt4, txt5, txt6, txt7), messages = FALSE)
+  result <- statcheck(c(txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8), messages = FALSE)
   
-  expect_equal(nrow(result), 7)
+  expect_equal(nrow(result), 8)
 })
 
 # corrected degrees of freedom
