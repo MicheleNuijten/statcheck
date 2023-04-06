@@ -227,8 +227,10 @@ extract_p_value <- function(raw, apa_style){
   
   if(apa_style == TRUE){
     rgx_p_ns <- RGX_P_NS
+    rgx_ns <- RGX_NS
   } else {
     rgx_p_ns <- RGX_P_NS_NONAPA
+    rgx_ns <- RGX_NS_NONAPA
   }
   
   p_raw <- extract_pattern(txt = raw,
@@ -259,6 +261,11 @@ extract_p_value <- function(raw, apa_style){
       
       # remove leading/trailing whitespaces 
       p_value[i] <- trimws(p_value[i], which = "both")
+      
+      # in case of apa_style == FALSE, remove all spacing
+      if(apa_style == FALSE){
+        p_value[i] <- gsub("\\s+", "", p_value[i])
+      }
       
       # record the number of decimals of the p-value
       dec <- attr(regexpr(RGX_DEC, p_value[i]), "match.length") - 1

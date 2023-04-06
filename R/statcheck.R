@@ -170,7 +170,7 @@ statcheck <- function(texts,
     # append and close:
     # in each repetition of the loop, the extracted p-values are appended 
     # to the existing pRes data frame, so it grows in each step
-    if(length(pvalues) > 0){
+    if(nrow(pvalues) > 0){
       pvalues <- cbind(Source = names(txt), pvalues)
       
       pRes <- rbind(pRes, pvalues)
