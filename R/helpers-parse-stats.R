@@ -242,7 +242,7 @@ extract_p_value <- function(raw, apa_style){
   
   for(i in seq_along(p_raw)){
     
-    if(grepl(RGX_NS, p_raw[i], perl = TRUE)){
+    if(grepl(rgx_ns, p_raw[i], perl = TRUE)){
       
       p_comp[i] <- "ns"
       p_value[i] <- NA
