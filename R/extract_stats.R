@@ -28,6 +28,9 @@ extract_stats <- function(txt, apa_style, stat){
   
   # when non-apa results are extracted, it needs to be "translated" in the apa
   # equivalent, to enable parsing of the result
+  # also "clean" apa results, to make sure apa and non-apa are parsed in the 
+  # same way eventually. For apa results, there shouldn't be many changes, other
+  # than that spaces are removed.
   nhst_clean <- clean_non_apa(nhst_raw)
   
   # step 3: parse the extracted results ------------------------------------------

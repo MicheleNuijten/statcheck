@@ -225,7 +225,7 @@ RGX_DF_T_R_Q_NRS <- "\\s*\\d*\\s*\\.?\\s*\\d+\\s*"
 
 # Allow for sample size instead of df in correlations
 # E.g, r(N = 95) = .12, p < .05
-RGX_DFN_R_NRS <- "\\s*(N|n)\\s*\\=\\s*\\d+"
+RGX_DFN_R_NRS <- "\\(\\s*(N|n)\\s*\\=\\s*\\d+"
 RGX_DF_R_NRS <- paste0("(", RGX_DF_T_R_Q_NRS, "|", RGX_DFN_R_NRS, ")")
 
 # For df of F and chi2, also allow for ; to separate dfs
