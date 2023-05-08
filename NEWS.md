@@ -1,3 +1,17 @@
+# statcheck 1.4.1
+
+## Major external changes
+
+## Major internal changes
+
+## Small updates
+* Simplified regular expression to detect chi-square test. There were some unused/unnecessary parts in the regexes.
+* Also recognize lower case n in sample size reporting in chi-square tests. E.g.: chi2(12, n = 323) = ...
+
+## Bug fixes
+* Recognize "narrow non-breaking spaces" in HTML files. This was an issue in articles in the Journal of Experimental Social Psychology, especially in papers published in 2019
+
+
 # statcheck 1.4.0
 <!---searched in commits on statcheck repo: `committer-date:2020-03-15..2020-04-30`
 and checked out changes in the beta releases --->
