@@ -2,8 +2,6 @@
 
 ## Major changes
 
-## Major changes
-
 ## Small updates
 * Added a new function `trim()` to quickly show the most relevant columns of statcheck output.
 * Simplified regular expression to detect chi-square test. There were some unused/unnecessary parts in the regexes.
