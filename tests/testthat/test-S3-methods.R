@@ -44,3 +44,20 @@ test_that("summary.statcheck() works for multiple sources", {
   expect_equal(summary[[VAR_NR_DEC_ERRORS]], c(1,0,0,0,0,1,2))
   
 })
+
+# technically, trim() is not an S3 method, but it serves the same function
+
+test_that("trim() works on statcheck output", {
+  
+  txt <- "t(28) = 2.20, p = .06"
+  result <- statcheck(txt, messages = FALSE)
+  
+  concise_output <- trim(result)
+  
+  colnames_concise <- c(VAR_SOURCE, VAR_RAW, VAR_COMPUTED_P,
+                        VAR_ERROR, VAR_DEC_ERROR)
+  
+  expect_equal(colnames(concise_output), colnames_concise)
+  expect_equal(nrow(result), nrow(concise_output))
+  
+})
