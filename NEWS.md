@@ -1,10 +1,11 @@
 # statcheck 1.4.1
 
-## Major external changes
+## Major changes
 
-## Major internal changes
+## Major changes
 
 ## Small updates
+* Added a new function `trim()` to quickly show the most relevant columns of statcheck output.
 * Simplified regular expression to detect chi-square test. There were some unused/unnecessary parts in the regexes.
 * Also recognize lower case n in sample size reporting in chi-square tests. E.g.: chi2(12, n = 323) = ...
 

@@ -109,9 +109,10 @@ Authors:
 Other contributors:
 \itemize{
   \item Willem Sleegers (\href{https://orcid.org/0000-0001-9058-3817}{ORCID}) [contributor]
+  \item Edoardo Costantini [contributor]
+  \item Paul van der Laken (\href{https://orcid.org/0000-0002-0404-9114}{ORCID}) [contributor]
   \item Sean Rife (\href{https://orcid.org/0000-0002-6748-0841}{ORCID}) [contributor]
   \item John Sakaluk (\href{https://orcid.org/0000-0002-2515-9822}{ORCID}) [contributor]
-  \item Paul van der Laken (\href{https://orcid.org/0000-0002-0404-9114}{ORCID}) [contributor]
   \item Chris Hartgerink (\href{https://orcid.org/0000-0003-1050-6809}{ORCID}) [contributor]
   \item Steve Haroz (\href{https://orcid.org/0000-0002-2725-9173}{ORCID}) [contributor]
 }
