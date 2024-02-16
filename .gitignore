@@ -4,6 +4,12 @@
 .RData
 statcheck.Rproj
 
+# files to check for reverse dependencies
+# automatically created with the revdep_check from usethis
+# these files are not necessary to share on git (and seem to create some issues
+# when syncing, so ignoring here)
+^revdep$
+
 # test materials
 # can't share because of copyright restrictions
 aloe*
