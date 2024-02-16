@@ -54,3 +54,5 @@ ByteCompile: yes
 Encoding: UTF-8
 LazyLoad: yes
 RoxygenNote: 7.3.1
+URL: https://github.com/MicheleNuijten/statcheck
+BugReports: https://github.com/MicheleNuijten/statcheck/issues
