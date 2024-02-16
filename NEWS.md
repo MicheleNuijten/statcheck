@@ -9,6 +9,7 @@
 * Recognize "narrow non-breaking spaces" in HTML files. This was an issue in articles in the Journal of Experimental Social Psychology, especially in papers published in 2019
 
 ## Bug fixes
+* Fixed some CRAN issues: explicitly import the package stringi and fix package alias.
 
 # statcheck 1.4.0
 <!---searched in commits on statcheck repo: `committer-date:2020-03-15..2020-04-30`
