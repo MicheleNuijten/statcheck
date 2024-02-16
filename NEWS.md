@@ -1,4 +1,4 @@
-# statcheck 1.4.1
+# statcheck 1.5.0
 
 ## Major changes
 
