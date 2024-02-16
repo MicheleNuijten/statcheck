@@ -3,6 +3,7 @@
 \docType{package}
 \name{statcheck-package}
 \alias{statcheck-package}
+\alias{{statcheck}-package}
 \title{statcheck: Extract statistics from articles and recompute p-values}
 \description{
 The package \code{statcheck} can extract Null Hypothesis Significance Test
@@ -64,7 +65,7 @@ found that statcheck’s sensitivity (true positive rate) and specificity (true
 negative rate) were high: between 85.3% and 100%, and between 96.0% and 100%, 
 respectively, depending on the assumptions and settings. The overall accuracy 
 of statcheck ranged from 96.2% to 99.9%. More details on the validity study
-can be found in \href{https://osf.io/preprints/psyarxiv/tcxaj}{Nuijten et al., 2017}.
+can be found in \href{https://osf.io/preprints/psyarxiv/tcxaj/}{Nuijten et al., 2017}.
 }
 
 \section{Manual}{
@@ -94,7 +95,15 @@ and statistical reporting inconsistencies in psychology.
 Nuijten, M. B., Van Assen, M. A. L. M., Hartgerink, C. H. J., Epskamp, S., & 
 Wicherts, J. M. (2017). The validity of the tool "statcheck" in discovering 
 statistical reporting inconsistencies. \emph{Preprint retrieved from 
-https://osf.io/preprints/psyarxiv/tcxaj.}
+https://osf.io/preprints/psyarxiv/tcxaj/.}
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/MicheleNuijten/statcheck}
+  \item Report bugs at \url{https://github.com/MicheleNuijten/statcheck/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Michele B. Nuijten \email{m.b.nuijten@uvt.nl} (\href{https://orcid.org/0000-0002-1468-8585}{ORCID})
