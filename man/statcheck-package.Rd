@@ -3,8 +3,6 @@
 \docType{package}
 \name{statcheck-package}
 \alias{statcheck-package}
-\alias{_PACKAGE}
-\alias{{statcheck}-package}
 \title{statcheck: Extract statistics from articles and recompute p-values}
 \description{
 The package \code{statcheck} can extract Null Hypothesis Significance Test
