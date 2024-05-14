@@ -15,6 +15,18 @@ getHTML <- function(x){
   # Remove HTML tags:
   strings <- lapply(strings, gsub, pattern = "<(.|\n)*?>", replacement = "")
   
+  # encode everything in UTF-32 
+  # this should ensure the same output accross multiple operating systems
+  strings <- stringi::stri_enc_toutf32(strings) 
+  
+  # substitute a narrow no-break space (UTF-32 Decimal 8239) with a normal space 
+  # (UTF-32 Decimal 61) [issue in JESP 2019 papers]
+  strings <- lapply(strings, gsub, pattern = "8239",
+                     replacement = "32", fixed = TRUE)
+  
+  # Revert back to UTF-8 encoding
+  strings <- stringi::stri_enc_fromutf32(strings)
+  
   # Replace html codes:
   # from: https://dev.w3.org/html5/html-author/charref 
   strings <- lapply(strings, gsub, pattern = "&#60;", replacement = "<", fixed = TRUE)
@@ -37,9 +49,29 @@ getHTML <- function(x){
   
   strings <- lapply(strings, gsub, pattern = "&thinsp;", replacement = " ", fixed = TRUE)
   strings <- lapply(strings, gsub, pattern = "&nbsp;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&nnbsp;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#8239;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#x202F;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#32;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#160;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&ensp;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#8194;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&emsp;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#8195;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#8201;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&zwnj;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#8204;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&zwj;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#8205;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&lrm;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#8206;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&rlm;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "&#8207;", replacement = " ", fixed = TRUE)
+  strings <- lapply(strings, gsub, pattern = "\\s+", replacement = " ")
+  
   strings <- lapply(strings, gsub, pattern = "\n", replacement = "")
   strings <- lapply(strings, gsub, pattern = "\r", replacement = "")
-  strings <- lapply(strings, gsub, pattern = "\\s+", replacement = " ")
+  
   
   strings <- lapply(strings, gsub, pattern = "&minus;", replacement = "-", fixed = TRUE)
   strings <- lapply(strings, gsub, pattern = "&#x02212;", replacement = "-", fixed = TRUE)

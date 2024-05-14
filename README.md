@@ -8,7 +8,7 @@
 
 [![](https://www.r-pkg.org/badges/version/statcheck?color=green)](https://cran.r-project.org/package=statcheck)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/statcheck?color=green)](https://cran.r-project.org/package=statcheck)
-[![](https://img.shields.io/badge/devel%20version-1.4.0-yellow.svg)](https://github.com/MicheleNuijten/statcheck)
+[![](https://img.shields.io/badge/devel%20version-1.5.0-yellow.svg)](https://github.com/MicheleNuijten/statcheck)
 <!-- badges: end -->
 
 ## What is statcheck?
@@ -39,10 +39,10 @@ result as an error.
 3.  **Research**: `statcheck` can be used to automatically extract
     statistical test results from articles that can then be analyzed.
     You can for instance investigate whether you can predict statistical
-    inconsistencies (see e.g., [Nuijten et al.,
-    2017](https://doi.org/10.1525/collabra.102)), or use it to analyze
-    p-value distributions (see e.g., [Hartgerink et al.,
-    2016](https://peerj.com/articles/1935/)).
+    inconsistencies (see e.g., Nuijten et al., 2017
+    <doi:10.1525/collabra.102>), or use it to analyze p-value
+    distributions (see e.g., Hartgerink et al., 2016
+    <doi:10.7717/peerj.1935>).
 
 ## How does statcheck work?
 
@@ -58,9 +58,9 @@ The algorithm behind `statcheck` consists of four basic steps:
     degrees of freedom.
 4.  **Compare** the reported and recomputed *p*-value. If the reported
     *p*-value does not match the computed one, the result is marked as
-    an *inconsistency* (`Error` in the output). If the reported
+    an *inconsistency* (`error` in the output). If the reported
     *p*-value is significant and the computed is not, or vice versa, the
-    result is marked as a *gross inconsistency* (`DecisionError` in the
+    result is marked as a *gross inconsistency* (`decision_error` in the
     output).
 
 `statcheck` takes into account correct rounding of the test statistic,
@@ -72,5 +72,5 @@ and has the option to take into account one-tailed testing. See the
 For detailed information about installing and using `statcheck`, see the
 [manual on RPubs](http://rpubs.com/michelenuijten/statcheckmanual).
 
-[statcheck.io](http://statcheck.io/) is a web-based interface for
+Also see [statcheck.io](http://statcheck.io/), a web-based interface for
 statcheck.

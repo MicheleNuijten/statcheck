@@ -6,8 +6,10 @@ RGX_T <- "t"
 RGX_R <- "r"
 RGX_Q <- "Q\\s?-?\\s?(w|W|(w|W)ithin|b|B|(b|B)etween)?"
 RGX_F <- "F"
-RGX_CHI2 <- "((\\[CHI\\]|\\[DELTA\\]G)\\s?|(\\s[^trFzZQWnD ]\\s?)|([^trFzZQWnD ]2\\s?))2?"
 RGX_Z <- "([^a-z](z|Z))"
+# for chi2: effectively extract everything that is NOT a t, r, F, z, Q, W, n, or 
+# D, followed by *maybe* a 2 (and later followed by a result in a chi2 layout)
+RGX_CHI2 <- "((\\s[^trFzZQWnD ]\\s?)|([^trFzZQWnD ]2\\s?))2?"
 
 # degrees of freedom
 # the way dfs are reported differs per test type, except for t, r, and Q, where
@@ -16,7 +18,7 @@ RGX_Z <- "([^a-z](z|Z))"
 # z-tests do not have dfs
 RGX_DF_T_R_Q <- "\\(\\s?\\d*\\.?\\d+\\s?\\)"
 RGX_DF_F <- "\\(\\s?\\d*\\.?(I|l|\\d+)\\s?,\\s?\\d*\\.?\\d+\\s?\\)"
-RGX_DF_CHI2 <- "\\(\\s?\\d*\\.?\\d+\\s?(,\\s?N\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?\\)"
+RGX_DF_CHI2 <- "\\(\\s?\\d*\\.?\\d+\\s?(,\\s?(N|n)\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?\\)"
 
 # combine test types with the correct type of df
 # put regex between () to create regex groups

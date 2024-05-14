@@ -1,51 +1,58 @@
 Package: statcheck
 Title: Extract Statistics from Articles and Recompute P-Values
-Version: 1.4.0
-Date: 2023-01-23
+Version: 1.5.0
+Date: 2024-02-16
 Authors@R: c(
-    person("Michele B.", "Nuijten", email = "m.b.nuijten@uvt.nl", 
-           role = c("aut", "cre"), comment = c(ORCID = "0000-0002-1468-8585")),
-    person("Sacha", "Epskamp", email = "mail@sachaepskamp.com", role = "aut", 
-            comment = c(ORCID = "0000-0003-4884-8118")),
-    person("Willem", "Sleegers", role = "ctb", 
-            comment = c(ORCID = "0000-0001-9058-3817")),
-    person("Sean", "Rife", role = "ctb", 
-            comment = c(ORCID = "0000-0002-6748-0841")),
-    person("John", "Sakaluk", role = "ctb", 
-            comment = c(ORCID = "0000-0002-2515-9822")),
-    person("Paul", "van der Laken", role = "ctb", 
-            comment = c(ORCID = "0000-0002-0404-9114")),
-    person("Chris", "Hartgerink", role = "ctb", 
-            comment = c(ORCID = "0000-0003-1050-6809")),
-    person("Steve", "Haroz", role = "ctb", 
-            comment = c(ORCID = "0000-0002-2725-9173"))
+    person("Michele B.", "Nuijten", , "m.b.nuijten@uvt.nl", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-1468-8585")),
+    person("Sacha", "Epskamp", , "mail@sachaepskamp.com", role = "aut",
+           comment = c(ORCID = "0000-0003-4884-8118")),
+    person("Willem", "Sleegers", role = "ctb",
+           comment = c(ORCID = "0000-0001-9058-3817")),
+    person("Edoardo", "Costantini", role = "ctb"),
+    person("Paul", "van der Laken", role = "ctb",
+           comment = c(ORCID = "0000-0002-0404-9114")),
+    person("Sean", "Rife", role = "ctb",
+           comment = c(ORCID = "0000-0002-6748-0841")),
+    person("John", "Sakaluk", role = "ctb",
+           comment = c(ORCID = "0000-0002-2515-9822")),
+    person("Chris", "Hartgerink", role = "ctb",
+           comment = c(ORCID = "0000-0003-1050-6809")),
+    person("Steve", "Haroz", role = "ctb",
+           comment = c(ORCID = "0000-0002-2725-9173"))
   )
-Description: A "spellchecker" for statistics. It checks whether your p-values match their accompanying test statistic and 
-  degrees of freedom. statcheck searches for null-hypothesis significance test 
-  (NHST) in APA style (e.g., t(28) = 2.2, p < .05). It recalculates the p-value 
-  using the reported test statistic and degrees of freedom. If the reported and 
-  computed p-values don't match, statcheck will flag the result as an error. If
-  the reported p-value is statistically significant and the recomputed one is not,
-  or vice versa, the result will be flagged as a decision error. 
-  You can use statcheck directly on a string of text, but you can also scan a PDF 
-  or HTML file, or even a folder of PDF and/or HTML files. 
-  Statcheck needs an external program to convert PDF to text: Xpdf. Instructions
-  on where and how to download this program, how to install statcheck, and more
-  details on what statcheck can and cannot do can be found in the online manual: 
-  <https://rpubs.com/michelenuijten/statcheckmanual>. 
-  You can find a point-and-click web interface to scan PDF or HTML or DOCX 
-  articles on <http://statcheck.io>.
-Depends: R (>= 2.14.2)
+Description: A "spellchecker" for statistics. It checks whether your
+    p-values match their accompanying test statistic and degrees of
+    freedom. statcheck searches for null-hypothesis significance test
+    (NHST) in APA style (e.g., t(28) = 2.2, p < .05). It recalculates the
+    p-value using the reported test statistic and degrees of freedom. If
+    the reported and computed p-values don't match, statcheck will flag
+    the result as an error. If the reported p-value is statistically
+    significant and the recomputed one is not, or vice versa, the result
+    will be flagged as a decision error.  You can use statcheck directly
+    on a string of text, but you can also scan a PDF or HTML file, or even
+    a folder of PDF and/or HTML files.  Statcheck needs an external
+    program to convert PDF to text: Xpdf. Instructions on where and how to
+    download this program, how to install statcheck, and more details on
+    what statcheck can and cannot do can be found in the online manual:
+    <https://rpubs.com/michelenuijten/statcheckmanual>.  You can find a
+    point-and-click web interface to scan PDF or HTML or DOCX articles on
+    <http://statcheck.io>.
 License: GPL-3
+Depends: 
+    R (>= 2.14.2)
 Imports: 
-    tcltk,
-    plyr, 
-    ggplot2, 
+    ggplot2,
+    plyr,
     rlang,
-    rmarkdown
+    rmarkdown,
+    stringi,
+    tcltk
 Suggests: 
     testthat
-LazyLoad: yes
 ByteCompile: yes
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+LazyLoad: yes
+RoxygenNote: 7.3.1
+URL: https://github.com/MicheleNuijten/statcheck
+BugReports: https://github.com/MicheleNuijten/statcheck/issues

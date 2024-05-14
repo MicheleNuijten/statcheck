@@ -1,3 +1,16 @@
+# statcheck 1.5.0
+
+## Major changes
+
+## Small updates
+* Added a new function `trim()` to quickly show the most relevant columns of statcheck output.
+* Simplified regular expression to detect chi-square test. There were some unused/unnecessary parts in the regexes.
+* Also recognize lower case n in sample size reporting in chi-square tests. E.g.: chi2(12, n = 323) = ...
+* Recognize "narrow non-breaking spaces" in HTML files. This was an issue in articles in the Journal of Experimental Social Psychology, especially in papers published in 2019
+
+## Bug fixes
+* Fixed some CRAN issues: explicitly import the package stringi and fix package alias.
+
 # statcheck 1.4.0
 <!---searched in commits on statcheck repo: `committer-date:2020-03-15..2020-04-30`
 and checked out changes in the beta releases --->

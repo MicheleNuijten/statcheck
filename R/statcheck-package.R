@@ -79,7 +79,7 @@
 #' https://psyarxiv.com/tcxaj/.}
 
 #' @keywords internal
-#' @aliases {statcheck}-package
+#' @aliases statcheck-package
 "_PACKAGE"
 
 #' @name statcheck

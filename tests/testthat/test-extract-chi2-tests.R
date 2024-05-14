@@ -45,10 +45,11 @@ test_that("variations in spelling the Greek letter chi are picked up", {
 test_that("different variations in df of chi2 are parsed correctly", {
   txt1 <- "chi2(28, N = 129) = 2.2, p = .03"
   txt2 <- "chi2(1, N = 11,455) = 16.78, p <.001"
+  txt3 <- "chi2(1, n = 81) = 3.25, p = 0.07" # also extract lowercase n
   
-  result <- statcheck(c(txt1, txt2), messages = FALSE)
+  result <- statcheck(c(txt1, txt2, txt3), messages = FALSE)
   
-  expect_equal(nrow(result), 2)
+  expect_equal(nrow(result), 3)
   
 })
 
@@ -61,3 +62,4 @@ test_that("chi2-tests with different spacing are retrieved from text", {
   
   expect_equal(nrow(result), 2)
 })
+
