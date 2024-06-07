@@ -80,6 +80,8 @@
 #' results in APA format.
 #' @param messages Logical. If TRUE, statcheck will print a progress bar while 
 #' it's extracting statistics from text.
+#' @param ignore_case Logical. If TRUE, statcheck will ignore the difference
+#' between upper and lower case letters, treating f and F the same.
 #' 
 #' @return A data frame containing for each extracted statistic:
 #' \describe{
