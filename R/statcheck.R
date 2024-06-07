@@ -121,7 +121,8 @@ statcheck <- function(texts,
                       pZeroError = TRUE,
                       OneTailedTxt = FALSE,
                       AllPValues = FALSE,
-                      messages = TRUE){
+                      messages = TRUE,
+                      ignore_case = TRUE){
   
   # We need empty data frames to store extracted statistics in
   # One for NHST results (Res) and one for p-values (pRes)
@@ -180,7 +181,8 @@ statcheck <- function(texts,
     # reported NHST results and parses it so that the separate elements are
     # returned in one large dataframe
     nhst <- extract_stats(txt = txt,
-                          stat = stat)
+                          stat = stat,
+                          ignore_case = ignore_case)
     
     # append and close: same logic as for the pvalues dataframe above
     if(nrow(nhst) > 0){
