@@ -1,4 +1,4 @@
-extract_stats <- function(txt, stat){
+extract_stats <- function(txt, stat, ignore_case = FALSE){
   
   # step 1: extract all NHST results from text -----------------------------------
   
@@ -8,9 +8,8 @@ extract_stats <- function(txt, stat){
                               # nhst is the regex for nhst results
                               # it came from the regex.R script within the package
                               pattern = RGX_NHST,
-                              # don't ignore case here: we only want to extract
-                              # stats reported in a specific way (e.g., t, not T)
-                              ignore.case = FALSE) 
+                              # option to only extract stats reported in a specific way (e.g., t, not T)
+                              ignore.case = ignore_case) 
   
   # if there are no nhst results in the text, return an empty data frame
   if(is.null(nhst_raw)){
@@ -33,7 +32,8 @@ extract_stats <- function(txt, stat){
     
     # extract the test types from the nhst results 
     test_raw <- extract_pattern(txt = nhst_raw[i],
-                                pattern = RGX_TEST_TYPE)
+                                pattern = RGX_TEST_TYPE,
+                                ignore.case = ignore_case)
     
     # classify the test types in standard classifications
     
@@ -43,25 +43,25 @@ extract_stats <- function(txt, stat){
     # otherwise the regex for t will also match Qwithin and Qbetween, because
     # both have a t in them. Similarly: first check for Qb, because Qbetween
     # also has a w in it
-    if (grepl(pattern = RGX_Q, x = test_raw)){
+    if (grepl(pattern = RGX_Q, x = test_raw, ignore.case = ignore_case)){
       
       # distinguish between Q, Qw, and Qb
-      if(grepl(pattern = RGX_QB, x = test_raw)){
+      if(grepl(pattern = RGX_QB, x = test_raw, ignore.case = ignore_case)){
         test_type[i] <- "Qb"
-      } else if (grepl(pattern = RGX_QW, x = test_raw)){
+      } else if (grepl(pattern = RGX_QW, x = test_raw, ignore.case = ignore_case)){
         test_type[i] <- "Qw"
       } else {
         test_type[i] <- "Q"
       }
-    } else if(grepl(pattern = RGX_T, x = test_raw)){
+    } else if(grepl(pattern = RGX_T, x = test_raw, ignore.case = ignore_case)){
       test_type[i] <- "t"
-    } else if (grepl(pattern = RGX_F, x = test_raw)){
+    } else if (grepl(pattern = RGX_F, x = test_raw, ignore.case = ignore_case)){
       test_type[i] <- "F"
-    } else if (grepl(pattern = RGX_R, x = test_raw)){
+    } else if (grepl(pattern = RGX_R, x = test_raw, ignore.case = ignore_case)){
       test_type[i] <- "r"
-    } else if (grepl(pattern = RGX_Z, x = test_raw)){
+    } else if (grepl(pattern = RGX_Z, x = test_raw, ignore.case = ignore_case)){
       test_type[i] <- "Z"
-    } else if (grepl(pattern = RGX_CHI2, x = test_raw)){
+    } else if (grepl(pattern = RGX_CHI2, x = test_raw, ignore.case = ignore_case)){
       test_type[i] <- "Chi2"
     }
     
