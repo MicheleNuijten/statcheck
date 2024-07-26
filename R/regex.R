@@ -139,6 +139,11 @@ RGX_DEC <- "\\.\\d+"
 RGX_WEIRD_MINUS <- "\\s?[^\\d\\.\\s]+(?=\\d|\\.)"
 RGX_MINUS_SPACE <- "-\\s"
 
+# regex for weird df1 in F-tests
+# for some reason, typesetting in articles sometimes goes wrong with 
+# F-tests and when df1 == 1, it gets typeset as the letter l or I 
+RGX_DF1_I_L <- "I|l"
+
 ################################################################################
 ###################### REGEXES FOR WEIRD PDF ENCODING ##########################
 ################################################################################
