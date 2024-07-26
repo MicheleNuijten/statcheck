@@ -1,12 +1,27 @@
 # this script contains the regular expressions that statcheck uses to extract
 # NHST results from text
 
-# test types
-RGX_T <- "t"
-RGX_R <- "r"
-RGX_Q <- "Q\\s?-?\\s?(w|W|(w|W)ithin|b|B|(b|B)etween)?"
-RGX_F <- "F"
-RGX_Z <- "([^a-z](z|Z))"
+################################################################################
+########## MAIN REGEXES TO EXTRACT APA REPORTED NHST RESULTS FROM TEXT #########
+################################################################################
+
+# test types -----------------------------------------
+
+# start of string
+# only extract test statistics when they are the start of the "word"
+# e.g., do extract t(14) = ..., but not Qt(14) = ... (the latter would be
+# wrongly read as a t-test, whereas the t is only a subscript)
+# use a negative lookbehind to only match test statistics not directly preceded
+# by a letter (but do match test stats preceded by spaces or punctuation signs)
+RGX_START <- "(?<![a-zA-Z])"
+
+RGX_T <- paste0(RGX_START, "t")
+RGX_R <- paste0(RGX_START, "r")
+# (?i) = case insensitive mode
+RGX_Q <- paste0(RGX_START, "Q\\s?-?\\s?(?i)(w|within|b|between)?") 
+RGX_F <- paste0(RGX_START, "F")
+RGX_Z <- paste0(RGX_START, "(?i)z")
+
 # for chi2: effectively extract everything that is NOT a t, r, F, z, Q, W, n, or 
 # D, followed by *maybe* a 2 (and later followed by a result in a chi2 layout)
 RGX_CHI2 <- "((\\s[^trFzZQWnD ]\\s?)|([^trFzZQWnD ]2\\s?))2?"
@@ -47,6 +62,8 @@ RGX_P_NS <- paste0("(", RGX_NS, "|", RGX_P, ")")
 # full result
 RGX_NHST <- paste(RGX_TEST_DF, RGX_TEST_VALUE, RGX_P_NS, sep = "\\s?")
 
+################################################################################
+####################### HELPER REGEXES TO PARSE NHST ###########################
 ################################################################################
 
 # regex to recognize test type
