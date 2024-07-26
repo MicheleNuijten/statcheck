@@ -2,8 +2,6 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- after editing README.Rmd, run devtools::build_readme() -->
 
-    #> Warning: package 'badger' was built under R version 4.3.3
-
 # statcheck <a href='http://statcheck.io'><img src='man/figures/logo.jpg' align="right" height="100" /></a>
 
 <!-- badges: start -->
