@@ -51,6 +51,11 @@ RGX_DF1_CHI2_NRS <- "\\s?\\d*\\.?\\d+\\s?"
 RGX_DFN_CHI2_NRS <- "\\s?(N|n)\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?"
 RGX_DF_CHI2_NRS <- paste0(RGX_DF1_CHI2_NRS, "(", RGX_SEP, RGX_DFN_CHI2_NRS, ")?")
 
+# combine df numbers with parentheses
+RGX_DF_T_R_Q <- paste0(RGX_PRTS_1, RGX_DF_T_R_Q_NRS, RGX_PRTS_2)
+RGX_DF_F <- paste0(RGX_PRTS_1, RGX_DF_F_NRS, RGX_PRTS_2)
+RGX_DF_CHI2 <- paste0(RGX_PRTS_1, RGX_DF_CHI2_NRS, RGX_PRTS_2)
+
 # combine test types with the correct type of df -----
 # put regex between () to create regex groups
 RGX_T_DF <- paste0("(", RGX_T, "\\s?", RGX_DF_T_R_Q, ")")
