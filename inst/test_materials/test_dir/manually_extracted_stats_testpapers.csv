@@ -1,0 +1,23 @@
+paper_id;file_name;file_type;doi;paper_id_SCORE_project;journal;year;coder_initials;raw_result;page;test_type;df1;df2;test_comparison;test_value;p_comparison;p;error;decision_error;one_tailed;error_1tail;decision_error_1tail;extract_apa;pdf_conversion_issues;typesetting_issues;remarks
+paper1_html;Paper1.htm;html;;;;;MN;Qb(1) = 3.78, p < .05;;Qb;1;;"""=""";3.78;"""<""";0.05;1;1;1;1;1;1;0;0;
+paper1_html;Paper1.htm;html;;;;;MN;"t(37) = -4.93, p <.001;";;t;;37;"""=""";-4.93;"""<""";0.001;0;0;1;0;0;1;0;0;
+paper1_html;Paper1.htm;html;;;;;MN;"Z = 1.54, p = .14;";;Z;;;"""=""";1.54;"""=""";0.14;1;0;1;1;0;1;0;0;
+paper1_html;Paper1.htm;html;;;;;MN;F(2,56) = 1.203, p < .001;;F;2;56;"""=""";1.203;"""<""";0.001;1;1;1;1;1;1;0;0;
+paper1_pdf;Paper1.pdf;pdf;;;;;MN;Qb(1) = 3.78, p < .05;;Qb;1;;"""=""";3.78;"""<""";0.05;1;1;1;1;1;1;0;0;
+paper1_pdf;Paper1.pdf;pdf;;;;;MN;"t(37) = -4.93, p <.001;";;t;;37;"""=""";-4.93;"""<""";0.001;0;0;1;0;0;1;0;0;
+paper1_pdf;Paper1.pdf;pdf;;;;;MN;"Z = 1.54, p = .14;";;Z;;;"""=""";1.54;"""=""";0.14;1;0;1;1;0;1;0;0;
+paper1_pdf;Paper1.pdf;pdf;;;;;MN;F(2,56) = 1.203, p < .001;;F;2;56;"""=""";1.203;"""<""";0.001;1;1;1;1;1;1;0;0;
+paper3_html;Paper3.htm;html;;;;;MN;"t(37) = -4.93, p <.001;";;t;;37;"""=""";-4.93;"""<""";0.001;0;0;1;0;0;1;0;0;
+paper3_html;Paper3.htm;html;;;;;MN;"F(2, 56) = 1.203, p < .001;";;F;2;56;"""=""";1.203;"""<""";0.001;1;1;1;1;1;1;0;0;
+paper3_html;Paper3.htm;html;;;;;MN;"Q(1) = 6.9, p < .01;";;Q;1;;"""=""";6.9;"""<""";0.01;0;0;1;0;0;1;0;0;
+paper3_html;Paper3.htm;html;;;;;MN;r(46) = .34, p = .03;;r;;46;"""=""";0.34;"""=""";0.03;1;0;1;1;0;1;0;0;
+paper3_pdf;Paper3.pdf;pdf;;;;;MN;"t(37) = -4.93, p <.001;";;t;;37;"""=""";-4.93;"""<""";0.001;0;0;1;0;0;1;0;0;
+paper3_pdf;Paper3.pdf;pdf;;;;;MN;"F(2, 56) = 1.203, p < .001;";;F;2;56;"""=""";1.203;"""<""";0.001;1;1;1;1;1;1;0;0;
+paper3_pdf;Paper3.pdf;pdf;;;;;MN;"Q(1) = 6.9, p < .01;";;Q;1;;"""=""";6.9;"""<""";0.01;0;0;1;0;0;1;0;0;
+paper3_pdf;Paper3.pdf;pdf;;;;;MN;r(46) = .34, p = .03;;r;;46;"""=""";0.34;"""=""";0.03;1;0;1;1;0;1;0;0;
+paper4_html;Paper4_multiplepages.html;html;;;;;MN;"t(37) = -4.93, p <.001;";;t;;37;"""=""";-4.93;"""<""";0.001;0;0;1;0;0;1;0;0;
+paper4_html;Paper4_multiplepages.html;html;;;;;MN;"Z = 1.54, p = .14;";;Z;;;"""=""";1.54;"""=""";0.14;1;0;1;1;0;1;0;0;
+paper4_html;Paper4_multiplepages.html;html;;;;;MN;F(2,56) = 1.203, p < .001;;F;2;56;"""=""";1.203;"""<""";0.001;1;1;1;1;1;1;0;0;
+paper4_pdf;Paper4_multiplepages.pdf;pdf;;;;;MN;"t(37) = -4.93, p <.001;";;t;;37;"""=""";-4.93;"""<""";0.001;0;0;1;0;0;1;0;0;
+paper4_pdf;Paper4_multiplepages.pdf;pdf;;;;;MN;"Z = 1.54, p = .14;";;Z;;;"""=""";1.54;"""=""";0.14;1;0;1;1;0;1;0;0;
+paper4_pdf;Paper4_multiplepages.pdf;pdf;;;;;MN;F(2,56) = 1.203, p < .001;;F;2;56;"""=""";1.203;"""<""";0.001;1;1;1;1;1;1;0;0;
