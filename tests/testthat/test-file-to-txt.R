@@ -46,20 +46,30 @@ test_that("pdftools correctly retrieves and parses statistics from a pdf", {
 })
 
 # pdfs in folder
-test_that("statistics from all pdfs in a folder are correctly retrieved and parsed", {
+test_that("stats from all pdfs in a folder are correctly retrieved & parsed", {
   
-  pdf_folder <- system.file("test_materials", package = "statcheck")
+  # this folder contains 4 "fake" pdf papers and 3 "fake" html/htm papers
+  # one of the pdf papers doesn't contain any stats
+  pdf_dir <- system.file("test_materials/test_dir", package = "statcheck")
   
   # skip test if files are not available
-  if(!any(grepl(".pdf", list.files(pdf_folder)))) skip("Test files not available.")
+  if(!any(grepl(".pdf", list.files(pdf_dir)))) skip("Test files not available.")
   
-  result <- checkPDFdir(pdf_folder, messages = FALSE, subdir = FALSE)
+  # load the reference file with manually extracted statistics
+  manual <- 
+    load_manual(path_manual = "test_materials/test_dir/manually_extracted_stats_testpapers.csv",
+                apa = TRUE, file_type = "pdf")
   
-  # extract 53 tests from 4 papers
-  expect_equal(nrow(result), 53)
-  expect_equal(length(unique(result[[VAR_SOURCE]])), 4)
+  result <- checkPDFdir(pdf_dir, messages = FALSE, subdir = FALSE)
+  
+  # extract 11 tests from 3 papers
+  expect_equal(nrow(result), 
+               nrow(manual))
+  expect_equal(length(unique(result[[VAR_SOURCE]])), 
+               length(unique(manual$paper_id)))
   
 })
+
 
 # tests concerning parsing stats from html files ------------------------------
 
