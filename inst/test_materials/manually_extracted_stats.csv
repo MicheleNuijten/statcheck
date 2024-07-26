@@ -118,7 +118,7 @@ nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Resea
 p < .001^";1214;F;2;56;"""=""";1.203;"""<""";0.001;1;1;0;1;1;1;0;0;
 nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;BF(2,56) = 12.03, p < .001^;1214;F;2;56;"""=""";12.03;"""<""";0.001;0;0;0;0;0;1;0;0;
 nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"F(l, 76)
-= 23.95, p <.001;";1220;F;1;76;"""=""";23.95;"""<""";0.001;0;0;0;0;0;0;0;0;"tables not scraped; df1 wrongly printed as letter l instead of 1; statcheck accepts this"
+= 23.95, p <.001;";1220;F;1;76;"""=""";23.95;"""<""";0.001;0;0;0;0;0;0;0;1;"tables not scraped; df1 wrongly printed as letter l instead of 1"
 nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;G2(1) = 6.53, p =.011;1220;Chi2;1;;"""=""";6.53;"""=""";0.011;0;0;0;0;0;1;0;1;table not scraped in html
 nuijten_html;nuijten;nuijten.html;html;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;t(14) = 2.0, p <.03;1221;t;;14;"""=""";2;"""<""";0.03;1;1;1;0;0;1;0;0;footnote
 nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;t(37) = -4.93, p < .001;1206;t;;37;"""=""";-4.93;"""<""";0.001;0;0;0;0;0;1;0;0;
@@ -139,7 +139,7 @@ nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research
 p < .001^";1214;F;2;56;"""=""";1.203;"""<""";0.001;1;1;0;1;1;1;0;0;
 nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;BF(2,56) = 12.03, p < .001^;1214;F;2;56;"""=""";12.03;"""<""";0.001;0;0;0;0;0;1;0;0;
 nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;"F(l, 76)
-= 23.95, p <.001;";1220;F;1;76;"""=""";23.95;"""<""";0.001;0;0;0;0;0;1;0;0;"df1 wrongly printed as letter l instead of 1; statcheck accepts this"
+= 23.95, p <.001;";1220;F;1;76;"""=""";23.95;"""<""";0.001;0;0;0;0;0;0;0;1;df1 wrongly printed as letter l instead of 1
 nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;G2(1) = 6.53, p =.011;1220;Chi2;1;;"""=""";6.53;"""=""";0.011;0;0;0;0;0;1;0;0;
 nuijten_pdf;nuijten;nuijten.pdf;pdf;10.3758/s13428-015-0664-2;;Behavior Research Methods;2016;MN;t(14) = 2.0, p <.03;1221;t;;14;"""=""";2;"""<""";0.03;1;1;1;0;0;1;0;0;
 sandoval_pdf;sandoval;sandoval.pdf;pdf;10.1111/cdev.12723;;Child Development;2017;MN;"t
