@@ -23,7 +23,7 @@ library("badger")
 ```{r, echo = FALSE, results='asis'}
 cat(
 	badge_cran_release("statcheck", "green"),
-	badge_cran_download("statcheck", "grand-total", "green"),
+	badge_cran_download("statcheck", "grand-total", "blue"),
 	badge_github_version("MicheleNuijten/statcheck", "yellow")
 )
 ```

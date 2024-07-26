@@ -7,8 +7,8 @@
 <!-- badges: start -->
 
 [![](https://www.r-pkg.org/badges/version/statcheck?color=green)](https://cran.r-project.org/package=statcheck)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/statcheck?color=green)](https://cran.r-project.org/package=statcheck)
-[![](https://img.shields.io/badge/devel%20version-1.5.0-yellow.svg)](https://github.com/MicheleNuijten/statcheck)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/statcheck?color=blue)](https://cran.r-project.org/package=statcheck)
+[![](https://img.shields.io/badge/devel%20version-1.6.0-yellow.svg)](https://github.com/MicheleNuijten/statcheck)
 <!-- badges: end -->
 
 ## What is statcheck?
