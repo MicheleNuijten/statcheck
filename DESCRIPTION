@@ -1,7 +1,7 @@
 Package: statcheck
 Title: Extract Statistics from Articles and Recompute P-Values
-Version: 1.5.0
-Date: 2024-02-16
+Version: 1.6.0
+Date: 2024-07-26
 Authors@R: c(
     person("Michele B.", "Nuijten", , "m.b.nuijten@uvt.nl", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-1468-8585")),
@@ -48,6 +48,7 @@ Imports:
     rmarkdown,
     stringi,
     tcltk,
+    stringr,
     pdftools
 Suggests: 
     testthat
