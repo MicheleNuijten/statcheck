@@ -196,7 +196,7 @@ extract_p_value <- function(raw){
   
   for(i in seq_along(p_raw)){
     
-    if(grepl(RGX_NS, p_raw[i], ignore.case = TRUE)){
+    if(grepl(RGX_NS, p_raw[i], ignore.case = TRUE, perl = TRUE)){
       
       p_comp[i] <- "ns"
       p_value[i] <- NA
