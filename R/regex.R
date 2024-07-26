@@ -26,16 +26,32 @@ RGX_Z <- paste0(RGX_START, "(?i)z")
 # D, followed by *maybe* a 2 (and later followed by a result in a chi2 layout)
 RGX_CHI2 <- "((\\s[^trFzZQWnD ]\\s?)|([^trFzZQWnD ]2\\s?))2?"
 
-# degrees of freedom
+# degrees of freedom ---------------------------------
+
 # the way dfs are reported differs per test type, except for t, r, and Q, where
 # they are always in the format "(28)". The regex for these tests can therefore
 # be combined
 # z-tests do not have dfs
-RGX_DF_T_R_Q <- "\\(\\s?\\d*\\.?\\d+\\s?\\)"
-RGX_DF_F <- "\\(\\s?\\d*\\.?(I|l|\\d+)\\s?,\\s?\\d*\\.?\\d+\\s?\\)"
-RGX_DF_CHI2 <- "\\(\\s?\\d*\\.?\\d+\\s?(,\\s?(N|n)\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?)?\\)"
 
-# combine test types with the correct type of df
+# regex for parentheses
+# make this flexible to allow replacement with other bracket types for non-APA 
+RGX_PRTS_1 <- "\\("
+RGX_PRTS_2 <- "\\)"
+
+# regex for df themselves
+RGX_DF_T_R_Q_NRS <- "\\s?\\d*\\.?\\d+\\s?"
+
+RGX_SEP <- ","
+
+RGX_DF1_F_NRS <- "\\s?\\d*\\.?\\d+\\s?"
+RGX_DF2_F_NRS <- "\\s?\\d*\\.?\\d+\\s?"
+RGX_DF_F_NRS <- paste0(RGX_DF1_F_NRS, RGX_SEP, RGX_DF2_F_NRS)
+
+RGX_DF1_CHI2_NRS <- "\\s?\\d*\\.?\\d+\\s?"
+RGX_DFN_CHI2_NRS <- "\\s?(N|n)\\s?\\=\\s?\\d*\\,?\\d*\\,?\\d+\\s?"
+RGX_DF_CHI2_NRS <- paste0(RGX_DF1_CHI2_NRS, "(", RGX_SEP, RGX_DFN_CHI2_NRS, ")?")
+
+# combine test types with the correct type of df -----
 # put regex between () to create regex groups
 RGX_T_DF <- paste0("(", RGX_T, "\\s?", RGX_DF_T_R_Q, ")")
 RGX_R_DF <- paste0("(", RGX_R, "\\s?", RGX_DF_T_R_Q, ")")
@@ -43,24 +59,26 @@ RGX_Q_DF <- paste0("(", RGX_Q, "\\s?", RGX_DF_T_R_Q, ")")
 RGX_F_DF <- paste0("(", RGX_F, "\\s?", RGX_DF_F, ")")
 RGX_CHI2_DF <- paste0("(", RGX_CHI2, "\\s?", RGX_DF_CHI2, ")")
 
-RGX_TEST_DF <- paste0("(", RGX_T_DF, "|", RGX_R_DF, "|", RGX_Q_DF, "|", RGX_F_DF, 
-                      "|", RGX_CHI2_DF, "|", RGX_Z, ")")
+RGX_TEST_DF <- paste0("(", RGX_T_DF, "|", RGX_R_DF, "|", RGX_Q_DF, "|", 
+                      RGX_F_DF, "|", RGX_CHI2_DF, "|", RGX_Z, ")")
 
-# test value
-# this is the same for every type of test
-# the part "[^a-zA-Z\\d\\.]{0,3}" is to extract punctuation marks that could 
-# signal a weirdly encoded minus sign
-# note that impossible values such as r > 1 are excluded at a later stage
-RGX_TEST_VALUE <- "[<>=]\\s?[^a-zA-Z\\d\\.]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,"
+# test value ------------------------------------------
 
-# p-values
 # this is the same for every type of test
-RGX_NS <- "([^a-z]n\\.?s\\.?)"
-RGX_P <- "(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*)"
+# the snippet [^a-z\\d]{0,3} searches for weird symbols that could indicate a
+# minus sign. Don't search for <>= again, otherwise cases like <= .1 would be
+# extracted as well, and these can't be parsed
+RGX_TEST_VALUE <- "[<>=]\\s?[^a-z\\d<>=]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?"
+
+# p-values --------------------------------------------
+
+# this is the same for every type of test
+RGX_NS <- paste0("(", RGX_START, "(n|N)\\.?(s|S)\\.?)")
+RGX_P <- "(p\\s?[<>=]\\s?\\d?\\.\\d+(e-?\\d*)?)"
 RGX_P_NS <- paste0("(", RGX_NS, "|", RGX_P, ")")
 
-# full result
-RGX_NHST <- paste(RGX_TEST_DF, RGX_TEST_VALUE, RGX_P_NS, sep = "\\s?")
+# full result ----------------------------------------
+RGX_NHST <- paste(RGX_TEST_DF_VALUE, RGX_P_NS, sep = "\\s?")
 
 ################################################################################
 ####################### HELPER REGEXES TO PARSE NHST ###########################
