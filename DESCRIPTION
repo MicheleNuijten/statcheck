@@ -47,7 +47,8 @@ Imports:
     rlang,
     rmarkdown,
     stringi,
-    tcltk
+    tcltk,
+    pdftools
 Suggests: 
     testthat
 ByteCompile: yes
