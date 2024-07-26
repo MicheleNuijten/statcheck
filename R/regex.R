@@ -75,6 +75,10 @@ RGX_TEST_DF <- paste0("(", RGX_T_DF, "|", RGX_R_DF, "|", RGX_Q_DF, "|",
 # extracted as well, and these can't be parsed
 RGX_TEST_VALUE <- "[<>=]\\s?[^a-z\\d<>=]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?"
 
+# combine test type, df, value ------------------------
+
+RGX_TEST_DF_VALUE <- paste0(RGX_TEST_DF, "\\s?", RGX_TEST_VALUE, RGX_SEP)
+
 # p-values --------------------------------------------
 
 # this is the same for every type of test
