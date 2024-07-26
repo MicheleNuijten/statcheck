@@ -126,3 +126,4 @@ test_that("t-values with multiple comparison signs are not retrieved", {
   
   expect_output(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
 })
+
