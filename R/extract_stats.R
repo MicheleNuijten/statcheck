@@ -43,26 +43,36 @@ extract_stats <- function(txt, stat){
     # otherwise the regex for t will also match Qwithin and Qbetween, because
     # both have a t in them. Similarly: first check for Qb, because Qbetween
     # also has a w in it
-    if (grepl(pattern = RGX_Q, x = test_raw)){
-      
-      # distinguish between Q, Qw, and Qb
-      if(grepl(pattern = RGX_QB, x = test_raw)){
-        test_type[i] <- "Qb"
-      } else if (grepl(pattern = RGX_QW, x = test_raw)){
-        test_type[i] <- "Qw"
-      } else {
-        test_type[i] <- "Q"
+    if(!is.null(test_raw)){
+      if (grepl(pattern = RGX_Q, x = test_raw, perl = TRUE)){
+        
+        # distinguish between Q, Qw, and Qb
+        if(grepl(pattern = RGX_QB, x = test_raw, perl = TRUE)){
+          test_type[i] <- "Qb"
+        } else if (grepl(pattern = RGX_QW, x = test_raw, perl = TRUE)){
+          test_type[i] <- "Qw"
+        } else {
+          test_type[i] <- "Q"
+        }
+      } else if(grepl(pattern = RGX_T, x = test_raw, perl = TRUE)){
+        test_type[i] <- "t"
+      } else if (grepl(pattern = RGX_F, x = test_raw, perl = TRUE)){
+        test_type[i] <- "F"
+      } else if (grepl(pattern = RGX_R, x = test_raw, perl = TRUE)){
+        test_type[i] <- "r"
+      } else if (grepl(pattern = RGX_Z, x = test_raw, perl = TRUE)){
+        test_type[i] <- "Z"
+      } else if (grepl(pattern = RGX_CHI2, x = test_raw, perl = TRUE)){
+        test_type[i] <- "Chi2"
       }
-    } else if(grepl(pattern = RGX_T, x = test_raw)){
-      test_type[i] <- "t"
-    } else if (grepl(pattern = RGX_F, x = test_raw)){
-      test_type[i] <- "F"
-    } else if (grepl(pattern = RGX_R, x = test_raw)){
-      test_type[i] <- "r"
-    } else if (grepl(pattern = RGX_Z, x = test_raw)){
-      test_type[i] <- "Z"
-    } else if (grepl(pattern = RGX_CHI2, x = test_raw)){
-      test_type[i] <- "Chi2"
+    } else {
+      # if test_raw == NULL, chances are that the result is a chi2
+      # check if the nhst_raw matches the regex for chi2 and manually
+      # add test type
+      if(grepl(pattern = RGX_CHI2_DF, x = nhst_clean[i], 
+               perl = TRUE)){
+        test_type[i] <- "Chi2"
+      }
     }
     
     # extract degrees of freedom
