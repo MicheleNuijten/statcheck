@@ -51,7 +51,7 @@ process_stats <- function(test_type, test_stat, df1, df2, reported_p,
   # tailed test, classify the result as consistent
   # don't apply this correction if OneTailedTests == FALSE, because this already
   # forces statcheck to treat all results as one-tailed tests
-  if(OneTailedTxt == TRUE & OneTailedTests == FALSE){
+  if(OneTailedTxt && !OneTailedTests){
     
     # select only results where the phrase "one-tailed", "one-sided" or
     # "directional" was mentioned in text, and that were an error when

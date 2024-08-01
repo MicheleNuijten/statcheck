@@ -21,14 +21,14 @@ checkdir <-
     if (htmls)
       htmlres <- checkHTMLdir(dir, subdir, ...)
     
-    if (pdfs & htmls) {
+    if (pdfs && htmls) {
       if (!is.null(pdfres) & !is.null(htmlres))
         Res <- rbind(pdfres, htmlres)
       else
         stop("statcheck did not find any results")
       
     } else
-      if (pdfs & !htmls) {
+      if (pdfs && !htmls) {
         if (!is.null(pdfres))
           Res <- pdfres
         else
@@ -36,7 +36,7 @@ checkdir <-
       }
     
     else
-      if (!pdfs & htmls) {
+      if (!pdfs && htmls) {
         if (!is.null(htmlres))
           Res <- htmlres
         else
@@ -44,7 +44,7 @@ checkdir <-
       }
     
     else
-      if (!pdfs & !htmls)
+      if (!pdfs && !htmls)
         stop("No PDF or HTML found")
     
     
