@@ -133,6 +133,11 @@ getPDF <- function(x){
   txtfiles <- lapply(txtfiles, gsub, pattern = "9273",
                      replacement = "967", fixed = TRUE)
   
+  # substitute superscript 2 with normal 2 to better detect chi2 tests, so:
+  # substitute UTF-32 decimal 178 with UTF-32 decimal 50.
+  txtfiles <- lapply(txtfiles, gsub, pattern = "178",
+                     replacement = "50", fixed = TRUE)
+  
   # Revert to UTF-8 encoding
   txtfiles <- stringi::stri_enc_fromutf32(txtfiles)
   
