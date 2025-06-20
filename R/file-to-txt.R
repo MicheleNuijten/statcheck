@@ -9,6 +9,10 @@ getHTML <- function(x){
     return(raw_strings)
   })
   
+  
+  # Convert to valid UTF-8 (try to fix invalid bytes)
+  strings <- lapply(strings, iconv,  from = "", to = "UTF-8", sub = "byte")
+  
   # Remove subscripts (except for p_rep)
   strings <- lapply(strings, gsub, pattern = "<sub>(?!rep).*?</sub>", replacement = "", perl = TRUE)
   
