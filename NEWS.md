@@ -1,9 +1,19 @@
-# statcheck 1.6.0
+# statcheck 1.6.1
 
 ## Major changes
 
 ## Small updates
+* Finetuned html and pdf conversion to better read chi-square tests.
+
+## Bug fixes
+
+
+# statcheck 1.6.0
+
+## Major changes
 * Changed the way pdf files are converted to text. Initially, statcheck relied on the external program Xpdf, which needed to be installed separately and added to the path. To simplify the workflow (and also have improved pdf conversions) statcheck now uses the R package pdftools.
+
+## Small updates
 * Updated the test files for testing text-to-file. Before, I hard coded the true values statcheck should extract, but this was error prone. Now, there is a spreadsheet with manually extracted values (the gold standard) that is used as a reference. This is easier to update if necessary; the updates then only need to happen in one place (the spreadsheet) and no longer at multiple places in the code.
 
 ## Bug fixes

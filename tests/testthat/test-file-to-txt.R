@@ -62,7 +62,7 @@ test_that("stats from all pdfs in a folder are correctly retrieved & parsed", {
   
   result <- checkPDFdir(pdf_dir, messages = FALSE, subdir = FALSE)
   
-  # extract 11 tests from 3 papers
+  # extract 12 tests from 4 papers
   expect_equal(nrow(result), 
                nrow(manual))
   expect_equal(length(unique(result[[VAR_SOURCE]])), 
@@ -114,7 +114,7 @@ test_that("statistics from a html are correctly retrieved and parsed", {
 # htmls in folder
 test_that("stats from all htmls in a folder are correctly retrieved & parsed", {
   
-  # this folder contains 4 "fake" pdf papers and 3 "fake" html/htm papers
+  # this folder contains 5 "fake" pdf papers and 5 "fake" html/htm papers
   # one of the pdf papers doesn't contain any stats
   html_dir <- system.file("test_materials/test_dir", package = "statcheck")
   
@@ -128,7 +128,7 @@ test_that("stats from all htmls in a folder are correctly retrieved & parsed", {
   
   result <- checkHTMLdir(html_dir, messages = FALSE, subdir = FALSE)
   
-  # extract 11 tests from 3 papers
+  # extract 12 tests from 4 papers
   expect_equal(nrow(result), 
                nrow(manual))
   expect_equal(length(unique(result[[VAR_SOURCE]])), 
@@ -154,8 +154,7 @@ test_that("stats from all pdfs and htmls in a folder are correctly retrieved
             
             result <- checkdir(dir, subdir = FALSE, messages = FALSE)
             
-            # extract 2*11 tests from 2*3 papers
-            # extract 11 tests from 3 papers
+            # extract 2*12 tests from 2*5 papers
             expect_equal(nrow(result), 
                          nrow(manual))
             expect_equal(length(unique(result[[VAR_SOURCE]])), 

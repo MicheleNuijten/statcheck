@@ -9,6 +9,10 @@ getHTML <- function(x){
     return(raw_strings)
   })
   
+  
+  # Convert to valid UTF-8 (try to fix invalid bytes)
+  strings <- lapply(strings, iconv,  from = "", to = "UTF-8", sub = "byte")
+  
   # Remove subscripts (except for p_rep)
   strings <- lapply(strings, gsub, pattern = "<sub>(?!rep).*?</sub>", replacement = "", perl = TRUE)
   
@@ -128,6 +132,11 @@ getPDF <- function(x){
   # (UTF-32 Decimal 967) [issue in APA journals]
   txtfiles <- lapply(txtfiles, gsub, pattern = "9273",
                      replacement = "967", fixed = TRUE)
+  
+  # substitute superscript 2 with normal 2 to better detect chi2 tests, so:
+  # substitute UTF-32 decimal 178 with UTF-32 decimal 50.
+  txtfiles <- lapply(txtfiles, gsub, pattern = "178",
+                     replacement = "50", fixed = TRUE)
   
   # Revert to UTF-8 encoding
   txtfiles <- stringi::stri_enc_fromutf32(txtfiles)

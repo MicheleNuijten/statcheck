@@ -1,7 +1,7 @@
 Package: statcheck
 Title: Extract Statistics from Articles and Recompute P-Values
-Version: 1.6.0
-Date: 2024-07-26
+Version: 1.6.1
+Date: 2025-06-20
 Authors@R: c(
     person("Michele B.", "Nuijten", , "m.b.nuijten@uvt.nl", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-1468-8585")),
@@ -40,7 +40,7 @@ Description: A "spellchecker" for statistics. It checks whether your
     <http://statcheck.io>.
 License: GPL-3
 Depends: 
-    R (>= 2.14.2)
+    R (>= 3.6.0)
 Imports: 
     ggplot2,
     plyr,
