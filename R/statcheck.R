@@ -80,6 +80,8 @@
 #' results in APA format.
 #' @param messages Logical. If TRUE, statcheck will print a progress bar while 
 #' it's extracting statistics from text.
+#' @param ignore_case Logical. If TRUE, statcheck will ignore the difference
+#' between upper and lower case letters, treating f and F the same.
 #' 
 #' @return A data frame containing for each extracted statistic:
 #' \describe{
@@ -121,7 +123,8 @@ statcheck <- function(texts,
                       pZeroError = TRUE,
                       OneTailedTxt = FALSE,
                       AllPValues = FALSE,
-                      messages = TRUE){
+                      messages = TRUE,
+                      ignore_case = TRUE){
   
   # We need empty data frames to store extracted statistics in
   # One for NHST results (Res) and one for p-values (pRes)
@@ -180,7 +183,8 @@ statcheck <- function(texts,
     # reported NHST results and parses it so that the separate elements are
     # returned in one large dataframe
     nhst <- extract_stats(txt = txt,
-                          stat = stat)
+                          stat = stat,
+                          ignore_case = ignore_case)
     
     # append and close: same logic as for the pvalues dataframe above
     if(nrow(nhst) > 0){

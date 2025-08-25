@@ -92,10 +92,16 @@ test_that("incorrect punctuation in t-tests are not retrieved from text", {
   expect_output(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
 })
 
-test_that("capital t's are not retrieved from text", {
+# case sensitivity
+test_that("case sensitivity is optional", {
   txt1 <- "T(28) = 2.20, p = .03"
+  txt2 <- "t(28) = 2.20, p = .03"
   
-  expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
+  expect_output(statcheck(txt1, messages = FALSE, ignore_case = FALSE), "did not find any results")
+  expect_equal(
+    tolower(statcheck(txt1, messages = FALSE, ignore_case = TRUE)$raw),
+    tolower(statcheck(txt2, messages = FALSE, ignore_case = TRUE)$raw)
+  )
 })
 
 # not a p-value

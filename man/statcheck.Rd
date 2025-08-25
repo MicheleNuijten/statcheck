@@ -13,7 +13,8 @@ statcheck(
   pZeroError = TRUE,
   OneTailedTxt = FALSE,
   AllPValues = FALSE,
-  messages = TRUE
+  messages = TRUE,
+  ignore_case = TRUE
 )
 }
 \arguments{
@@ -50,6 +51,9 @@ results in APA format.}
 
 \item{messages}{Logical. If TRUE, statcheck will print a progress bar while 
 it's extracting statistics from text.}
+
+\item{ignore_case}{Logical. If TRUE, statcheck will ignore the difference
+between upper and lower case letters, treating f and F the same.}
 }
 \value{
 A data frame containing for each extracted statistic:
