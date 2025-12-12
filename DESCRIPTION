@@ -1,4 +1,4 @@
-Package: statcheck with bounds and truncation
+Package: statcheck
 Title: Extract Statistics from Articles and Recompute P-Values
 Version: 1.6.2
 Date: 2025-12-12
