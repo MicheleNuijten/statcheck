@@ -13,7 +13,8 @@ statcheck(
   pZeroError = TRUE,
   OneTailedTxt = FALSE,
   AllPValues = FALSE,
-  messages = TRUE
+  messages = TRUE,
+  robust_rounding = FALSE
 )
 }
 \arguments{
@@ -50,11 +51,17 @@ results in APA format.}
 
 \item{messages}{Logical. If TRUE, statcheck will print a progress bar while 
 it's extracting statistics from text.}
+
+\item{robust_rounding}{If FALSE (default), treat the input as potentially 
+rounded (trailing values of 5 rounded). If TRUE, treat the input as 
+potentially truncated(floored) or ceilinged, which produces
+wider bounds on the recalculated bounds of the p value.}
 }
 \value{
 A data frame containing for each extracted statistic:
 \describe{
     \item{source}{Name of the file of which the statistic is extracted}
+    \item{robust_rounding}{Logical indicating whether robust rounding assumptions were used}
     \item{test_type}{Character indicating the statistic that is extracted}
     \item{df1}{First degree of freedom (if applicable)}
     \item{df2}{Second degree of freedom}
@@ -66,6 +73,8 @@ A data frame containing for each extracted statistic:
     \item{reported_p}{The reported p-value, or NA if the reported value was 
     n.s.}
     \item{computed_p}{The recomputed p-value}
+    \item{computed_p_bounds_lower}{The recomputed p-value's lower bound given rounding}
+    \item{computed_p_bounds_upper}{The recomputed p-value's upper bound given rounding}
     \item{raw}{Raw string of the statistical reference that is extracted}
     \item{error}{The computed p value is not congruent with the reported 
     p-value}

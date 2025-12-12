@@ -64,7 +64,7 @@ found that statcheck’s sensitivity (true positive rate) and specificity (true
 negative rate) were high: between 85.3% and 100%, and between 96.0% and 100%, 
 respectively, depending on the assumptions and settings. The overall accuracy 
 of statcheck ranged from 96.2% to 99.9%. More details on the validity study
-can be found in \href{https://osf.io/preprints/psyarxiv/tcxaj/}{Nuijten et al., 2017}.
+can be found in \href{https://psyarxiv.com/tcxaj/}{Nuijten et al., 2017}.
 }
 
 \section{Manual}{
@@ -94,7 +94,7 @@ and statistical reporting inconsistencies in psychology.
 Nuijten, M. B., Van Assen, M. A. L. M., Hartgerink, C. H. J., Epskamp, S., & 
 Wicherts, J. M. (2017). The validity of the tool "statcheck" in discovering 
 statistical reporting inconsistencies. \emph{Preprint retrieved from 
-https://osf.io/preprints/psyarxiv/tcxaj/.}
+https://psyarxiv.com/tcxaj/.}
 }
 \seealso{
 Useful links:
@@ -121,6 +121,7 @@ Other contributors:
   \item John Sakaluk (\href{https://orcid.org/0000-0002-2515-9822}{ORCID}) [contributor]
   \item Chris Hartgerink (\href{https://orcid.org/0000-0003-1050-6809}{ORCID}) [contributor]
   \item Steve Haroz (\href{https://orcid.org/0000-0002-2725-9173}{ORCID}) [contributor]
+  \item Ian Hussey (\href{https://orcid.org/0000-0001-8906-7559}{ORCID}) [contributor]
 }
 
 }

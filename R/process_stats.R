@@ -3,7 +3,8 @@ process_stats <- function(test_type, test_stat, df1, df2, reported_p,
                           OneTailedInTxt,
                           # options:
                           two_tailed, alpha, pZeroError, pEqualAlphaSig,
-                          OneTailedTxt, OneTailedTests){
+                          OneTailedTxt, OneTailedTests,
+                          robust_rounding = FALSE){ 
   
   # compute p-value ----------------------------------------------------------
   computed_p <- compute_p(test_type = test_type,
@@ -13,27 +14,40 @@ process_stats <- function(test_type, test_stat, df1, df2, reported_p,
                           two_tailed = two_tailed)
   
   # check if the result is an error ------------------------------------------
-  error <- error_test(reported_p = reported_p, 
-                      test_type = test_type, 
-                      test_stat = test_stat,
-                      df1 = df1,
-                      df2 = df2,
-                      p_comparison = p_comparison, 
-                      test_comparison = test_comparison, 
-                      p_dec = p_dec, 
-                      test_dec = test_dec,
-                      two_tailed = two_tailed,
-                      alpha = alpha,
-                      pZeroError = pZeroError)
+  
+  # <--- 2. Capture the Data Frame returned by error_test
+  error_result_df <- error_test(reported_p = reported_p, 
+                                test_type = test_type, 
+                                test_stat = test_stat,
+                                df1 = df1,
+                                df2 = df2,
+                                p_comparison = p_comparison, 
+                                test_comparison = test_comparison, 
+                                p_dec = p_dec, 
+                                test_dec = test_dec,
+                                two_tailed = two_tailed,
+                                alpha = alpha,
+                                pZeroError = pZeroError,
+                                robust_rounding = robust_rounding) 
+  
+  # <--- 3. Extract values from the data frame
+  error <- error_result_df$error
+  p_lower <- error_result_df$lower_bound
+  p_upper <- error_result_df$upper_bound
   
   # check if the result is a decision error ----------------------------------
   
-  if(!error){
-    # if a result is not an error, it's automatically also  not a decision error
+  if (is.na(error)) {
+    # If the error status is unknown (e.g. because of missing DF or NA p-values),
+    # we cannot determine if there is a decision error.
+    decision_error <- NA
+    
+  } else if (!error) {
+    # If a result is not an error, it's automatically also not a decision error
     decision_error <- FALSE
+    
   } else {
-    # only if a result is an error, it makes sense to check if it's also a 
-    # decision error
+    # Only if a result is definitely an error, check if it's a decision error
     decision_error <- decision_error_test(reported_p = reported_p, 
                                           computed_p = computed_p,
                                           test_comparison = test_comparison,
@@ -70,7 +84,8 @@ process_stats <- function(test_type, test_stat, df1, df2, reported_p,
                                     two_tailed = FALSE)
       
       # check whether result would still be an error if 1-tailed
-      error_1tail <- 
+      # <--- 4. Capture Data Frame for 1-tailed check
+      error_1tail_df <- 
         error_test(reported_p = reported_p, 
                    test_type = test_type, 
                    test_stat = test_stat,
@@ -82,10 +97,14 @@ process_stats <- function(test_type, test_stat, df1, df2, reported_p,
                    test_dec = test_dec,
                    two_tailed = FALSE,
                    alpha = alpha,
-                   pZeroError = pZeroError)
+                   pZeroError = pZeroError,
+                   robust_rounding = robust_rounding) # Pass arg
+      
+      # <--- 5. Extract boolean error for logic check
+      error_1tail <- error_1tail_df$error
       
       if(!error_1tail){
-        # if a result is not an error, it's automatically also  not a decision error
+        # if a result is not an error, it's automatically also not a decision error
         decision_error_1tail <- FALSE
       } else {
         # only if a result is an error, it makes sense to check if it's also a 
@@ -100,17 +119,23 @@ process_stats <- function(test_type, test_stat, df1, df2, reported_p,
       }
       
       # if the 1-tailed p-value is no longer an error, the original values of
-      # error, decisionerror, and computed_p should be overwritten with the 1-
-      # tailed versions
+      # error, decisionerror, computed_p AND BOUNDS should be overwritten 
       if(error != error_1tail){
         computed_p <- computed_p_1tail
         error <- error_1tail
         decision_error <- decision_error_1tail
+        
+        # <--- 6. Update bounds to reflect the 1-tailed calculation
+        p_lower <- error_1tail_df$lower_bound
+        p_upper <- error_1tail_df$upper_bound
       }
     }    
   }
   
+  # <--- 7. Return Data Frame with new columns
   result <- data.frame(computed_p = computed_p,
+                       computed_p_lower = p_lower,
+                       computed_p_upper = p_upper,
                        error = error,
                        decision_error = decision_error)
   
