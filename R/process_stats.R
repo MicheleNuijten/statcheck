@@ -37,12 +37,17 @@ process_stats <- function(test_type, test_stat, df1, df2, reported_p,
   
   # check if the result is a decision error ----------------------------------
   
-  if(!error){
-    # if a result is not an error, it's automatically also not a decision error
+  if (is.na(error)) {
+    # If the error status is unknown (e.g. because of missing DF or NA p-values),
+    # we cannot determine if there is a decision error.
+    decision_error <- NA
+    
+  } else if (!error) {
+    # If a result is not an error, it's automatically also not a decision error
     decision_error <- FALSE
+    
   } else {
-    # only if a result is an error, it makes sense to check if it's also a 
-    # decision error
+    # Only if a result is definitely an error, check if it's a decision error
     decision_error <- decision_error_test(reported_p = reported_p, 
                                           computed_p = computed_p,
                                           test_comparison = test_comparison,
