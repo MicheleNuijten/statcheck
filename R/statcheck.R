@@ -80,13 +80,15 @@
 #' results in APA format.
 #' @param messages Logical. If TRUE, statcheck will print a progress bar while 
 #' it's extracting statistics from text.
-#' @param assume_truncation If FALSE (default), treat the input as potentially 
-#' rounded. If TRUE, treat the input as potentially truncated, which produces
+#' @param robust_rounding If FALSE (default), treat the input as potentially 
+#' rounded (trailing values of 5 rounded). If TRUE, treat the input as 
+#' potentially truncated(floored) or ceilinged, which produces
 #' wider bounds on the recalculated bounds of the p value. 
 #' 
 #' @return A data frame containing for each extracted statistic:
 #' \describe{
 #'     \item{source}{Name of the file of which the statistic is extracted}
+#'     \item{robust_rounding}{Logical indicating whether robust rounding assumptions were used}
 #'     \item{test_type}{Character indicating the statistic that is extracted}
 #'     \item{df1}{First degree of freedom (if applicable)}
 #'     \item{df2}{Second degree of freedom}
@@ -98,6 +100,8 @@
 #'     \item{reported_p}{The reported p-value, or NA if the reported value was 
 #'     n.s.}
 #'     \item{computed_p}{The recomputed p-value}
+#'     \item{computed_p_bounds_lower}{The recomputed p-value's lower bound given rounding}
+#'     \item{computed_p_bounds_upper}{The recomputed p-value's upper bound given rounding}
 #'     \item{raw}{Raw string of the statistical reference that is extracted}
 #'     \item{error}{The computed p value is not congruent with the reported 
 #'     p-value}
@@ -125,7 +129,7 @@ statcheck <- function(texts,
                       OneTailedTxt = FALSE,
                       AllPValues = FALSE,
                       messages = TRUE,
-                      assume_truncation = FALSE){
+                      robust_rounding = FALSE){
   
   # We need empty data frames to store extracted statistics in
   # One for NHST results (Res) and one for p-values (pRes)
@@ -254,7 +258,7 @@ statcheck <- function(texts,
                               pEqualAlphaSig = pEqualAlphaSig,
                               OneTailedTxt = OneTailedTxt,
                               OneTailedTests = OneTailedTests,
-                              assume_truncation = assume_truncation)
+                              robust_rounding = robust_rounding)
       
       Res$Computed[i] <- result$computed_p
       Res$Computed_Lower[i] <- result$computed_p_lower 
@@ -270,10 +274,12 @@ statcheck <- function(texts,
     
     Res$APAfactor <- calc_APA_factor(pRes, Res)
     
+    Res$Truncation <- robust_rounding
+    
     ###---------------------------------------------------------------------
     
     # select & reorder columns for final data frame
-    Res <- Res[ , c("Source", "Statistic", "df1", "df2", "Test.Comparison",
+    Res <- Res[ , c("Source", "Truncation", "Statistic", "df1", "df2", "Test.Comparison",
                     "Value", "Reported.Comparison", "Reported.P.Value",
                     "Computed", "Computed_Lower", "Computed_Upper", 
                     "Raw", "Error", "DecisionError", 
@@ -281,10 +287,10 @@ statcheck <- function(texts,
     
     # rename columns based on the variable names in the script constants.R
     # NOTE: We added 2 columns, so we need 2 new names in this vector.
-    colnames(Res) <- c(VAR_SOURCE, VAR_TYPE, VAR_DF1, VAR_DF2, 
+    colnames(Res) <- c(VAR_SOURCE, "robust_rounding", VAR_TYPE, VAR_DF1, VAR_DF2, 
                        VAR_TEST_COMPARISON, VAR_TEST_VALUE, VAR_P_COMPARISON,
                        VAR_REPORTED_P, VAR_COMPUTED_P, 
-                       "Computed.Lower", "Computed.Upper",
+                       "computed_p_lower_bound", "computed_p_upper_bound",
                        VAR_RAW, VAR_ERROR, 
                        VAR_DEC_ERROR, VAR_1TAILTXT, VAR_APAFACTOR)
     

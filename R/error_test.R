@@ -4,7 +4,7 @@ error_test <- function(reported_p, test_type, test_stat,
                        p_dec, test_dec, 
                        two_tailed,
                        alpha, pZeroError,
-                       assume_truncation = FALSE) { 
+                       robust_rounding = FALSE) { 
   
   # replace 'ns' for > alpha -----------------------------------------------
   
@@ -19,40 +19,37 @@ error_test <- function(reported_p, test_type, test_stat,
   # Calculate the step size based on decimals (e.g., 2 decimals -> 0.01)
   step <- 1 / (10 ^ test_dec)
   
-  if (assume_truncation == FALSE) {
-    # --- ROUNDING LOGIC (Original statcheck behavior) ---
-    # The true value is within +/- 0.5 step of the reported value.
-    # e.g., Reported 2.00 could be [1.995, 2.005]
+  if (robust_rounding == FALSE) {
+    # --- STANDARD ROUNDING (Default) ---
+    # The true value is within +/- 0.5 step.
+    # Total Width: 1 step
     
     half_step <- step / 2
     
     if(test_stat >= 0){
       low_stat <- test_stat - half_step
-      up_stat <- test_stat + half_step
+      up_stat  <- test_stat + half_step
     } else {
-      # For negatives:
-      # low_stat (closer to 0, higher p-val) is mathematically larger (e.g. -1.995 vs -2.0)
-      low_stat <- test_stat + half_step
-      # up_stat (further from 0, lower p-val) is mathematically smaller (e.g. -2.005 vs -2.0)
-      up_stat <- test_stat - half_step
+      # For negatives, reverse directions for "low" and "up" bounds
+      low_stat <- test_stat + half_step 
+      up_stat  <- test_stat - half_step
     }
     
   } else {
-    # --- TRUNCATION LOGIC ---
-    # The true value is the reported value extended by the step size.
-    # e.g., Reported 2.4 could be [2.40, 2.50)
+    # --- ROBUST / CATCH-ALL LOGIC (New) ---
+    # The true value is within +/- 1.0 step to cover floor, ceiling, or round.
+    # Total Width: 2 steps
     
     if(test_stat >= 0){
-      # Positive: Range is [Reported, Reported + step]
-      low_stat <- test_stat
-      up_stat <- test_stat + step
+      low_stat <- test_stat - step
+      up_stat  <- test_stat + step
     } else {
-      # Negative: Range is [Reported - step, Reported]
-      # e.g., Reported -2.4 implied truncation of -2.45...
-      # low_stat (closer to 0) is the reported value
-      low_stat <- test_stat
-      # up_stat (further from 0) extends "downward"
-      up_stat <- test_stat - step 
+      # For negatives:
+      # If reported is -2.42, it could be -2.41 (step up) or -2.43 (step down)
+      # low_stat (closer to 0) is the "higher" algebraic value
+      low_stat <- test_stat + step
+      # up_stat (further from 0) is the "lower" algebraic value
+      up_stat  <- test_stat - step 
     }
   }
   

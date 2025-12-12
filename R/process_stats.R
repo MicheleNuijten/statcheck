@@ -4,7 +4,7 @@ process_stats <- function(test_type, test_stat, df1, df2, reported_p,
                           # options:
                           two_tailed, alpha, pZeroError, pEqualAlphaSig,
                           OneTailedTxt, OneTailedTests,
-                          assume_truncation = FALSE){ 
+                          robust_rounding = FALSE){ 
   
   # compute p-value ----------------------------------------------------------
   computed_p <- compute_p(test_type = test_type,
@@ -28,7 +28,7 @@ process_stats <- function(test_type, test_stat, df1, df2, reported_p,
                                 two_tailed = two_tailed,
                                 alpha = alpha,
                                 pZeroError = pZeroError,
-                                assume_truncation = assume_truncation) 
+                                robust_rounding = robust_rounding) 
   
   # <--- 3. Extract values from the data frame
   error <- error_result_df$error
@@ -93,7 +93,7 @@ process_stats <- function(test_type, test_stat, df1, df2, reported_p,
                    two_tailed = FALSE,
                    alpha = alpha,
                    pZeroError = pZeroError,
-                   assume_truncation = assume_truncation) # Pass arg
+                   robust_rounding = robust_rounding) # Pass arg
       
       # <--- 5. Extract boolean error for logic check
       error_1tail <- error_1tail_df$error
