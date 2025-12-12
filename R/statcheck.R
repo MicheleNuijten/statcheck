@@ -284,7 +284,7 @@ statcheck <- function(texts,
     colnames(Res) <- c(VAR_SOURCE, VAR_TYPE, VAR_DF1, VAR_DF2, 
                        VAR_TEST_COMPARISON, VAR_TEST_VALUE, VAR_P_COMPARISON,
                        VAR_REPORTED_P, VAR_COMPUTED_P, 
-                       Computed.Lower, Computed.Upper,
+                       "Computed.Lower", "Computed.Upper",
                        VAR_RAW, VAR_ERROR, 
                        VAR_DEC_ERROR, VAR_1TAILTXT, VAR_APAFACTOR)
     
