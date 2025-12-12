@@ -1,7 +1,7 @@
-Package: statcheck
+Package: statcheck with bounds and truncation
 Title: Extract Statistics from Articles and Recompute P-Values
-Version: 1.6.1
-Date: 2025-06-20
+Version: 1.6.2
+Date: 2025-12-12
 Authors@R: c(
     person("Michele B.", "Nuijten", , "m.b.nuijten@uvt.nl", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-1468-8585")),
@@ -19,7 +19,9 @@ Authors@R: c(
     person("Chris", "Hartgerink", role = "ctb",
            comment = c(ORCID = "0000-0003-1050-6809")),
     person("Steve", "Haroz", role = "ctb",
-           comment = c(ORCID = "0000-0002-2725-9173"))
+           comment = c(ORCID = "0000-0002-2725-9173")),
+    person("Ian", "Hussey", role = "ctb",
+           comment = c(ORCID = "0000-0001-8906-7559"))
   )
 Description: A "spellchecker" for statistics. It checks whether your
     p-values match their accompanying test statistic and degrees of
