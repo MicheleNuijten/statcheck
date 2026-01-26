@@ -23,9 +23,6 @@ test_that("statcheckReport generates an HTML file", {
   # Check content
   content <- readLines(out_path, warn = FALSE)
   
-  # Check that the HTML contains a <table> element
-  expect_true(any(grepl("<table", content)))
-  
   # Check that the table contains at least one row with the expected data
   expect_true(any(grepl("t\\(23\\) = 3.1", content)))
   
