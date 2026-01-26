@@ -1,5 +1,5 @@
 ---
-title: 'Report: statcheck results'
+title: 'Statcheck Report'
 output: html_document
 params:
   statcheckOutput: NULL
@@ -18,13 +18,15 @@ year <- format(Sys.Date(), "%Y")
 
 *These results were automatically generated with the R package "statcheck" (Nuijten & Epskamp, `r year`), version `r version`.*
 
-# Statcheck Results
+# Detected NHST Results and Consistency
 
 The table below shows the statcheck results for your manuscript. Each row represents a reported Null Hypothesis Significance Test (NHST), with the original and recomputed p-values. The **Status** column uses colored bullets to indicate consistency:
 
 * **Green** = consistent
 * **Yellow** = inconsistent but does not affect significance
 * **Red** = inconsistent and affects significance at the .05 level
+
+---
 
 ```{r}
 # Load the statcheck output
@@ -75,15 +77,17 @@ datatable(
 )
 ```
 
+---
+
 ## Table Interpretation
 
 | Variable               | Description                                                                                     |
 |------------------------|-------------------------------------------------------------------------------------------------|
-| Status                 | Colored bullet indicating the result’s consistency: Green = Consistent, Yellow = Inconsistency, Red = Decision Inconsistency |
 | Article                | Name of the file that was checked                                                               |
 | Result As Given In Text | Original statistical result extracted from the manuscript                                       |
 | Computed P-Value       | P-value recomputed from the test statistic and degrees of freedom                                |
 | Consistency            | Classification of the result (Consistent, Inconsistency, Decision Inconsistency)               |
+| Status                 | Colored bullet indicating the result’s consistency: Green = Consistent, Yellow = Inconsistency, Red = Decision Inconsistency |
 
 ## Important Notes
 
