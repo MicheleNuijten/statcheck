@@ -1,4 +1,4 @@
-test_that("statcheck_report generates an HTML file", {
+test_that("statcheckReport generates an HTML file", {
   
   # Create a temporary directory
   tmp_dir <- tempdir()
@@ -22,5 +22,18 @@ test_that("statcheck_report generates an HTML file", {
   
   # Check content
   content <- readLines(out_path, warn = FALSE)
-  expect_true(any(grepl("Consistent", content)))
+  
+  # Check that the HTML contains a <table> element
+  expect_true(any(grepl("<table", content)))
+  
+  # Check that the table contains at least one row with the expected data
+  expect_true(any(grepl("t\\(23\\) = 3.1", content)))
+  
+})
+
+test_that("report fails with empty statcheckOutput", {
+  expect_error(
+    statcheckReport(data.frame(), outputFile = "test", outputDir = tempdir()),
+    "No statcheck results to report"
+  )
 })

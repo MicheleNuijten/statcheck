@@ -21,12 +21,9 @@ year <- format(Sys.Date(), "%Y")
 
 The table below reports the statcheck results of your manuscript. The table lists all Null Hypothesis Significance Tests that are reported according to the APA style, and indicates whether the reported p-value matches a recomputed p-value based on the reported test statistic and degrees of freedom. The first column provides green dots to indicate a consistent result, yellow dots for an inconsistent result not bearing on significance, and red dots to indicate an inconsistent result that bears on significance at the .05 level.
 
-```{r data, include=FALSE}
-stopifnot(!is.null(params$statcheckOutput))
-stat <- params$statcheckOutput
-```
-
 ```{r}
+stat <- params$statcheckOutput
+
 stat$Consistency[stat$error == FALSE & stat$decision_error == FALSE] <- "Consistent"
 stat$Consistency[stat$error == TRUE & stat$decision_error == FALSE] <- "**Inconsistency**"
 stat$Consistency[stat$decision_error == TRUE] <- "**Decision Inconsistency**"
@@ -54,8 +51,6 @@ stat_sparse <- cbind(stat_sparse, Code)
 
 knitr::kable(stat_sparse)
 ```
-
-
 
 ***
 

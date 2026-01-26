@@ -46,6 +46,13 @@ statcheckReport <-
            outputFile,
            outputDir = getwd()) {
     
+    # Check input
+    if (is.null(statcheckOutput) || 
+        !is.data.frame(statcheckOutput) || 
+        nrow(statcheckOutput) == 0) {
+      stop("No statcheck results to report. The input `statcheckOutput` is empty or invalid.")
+    }
+    
     template <- system.file(
       "rmd/statcheckReport_template.Rmd",
       package = "statcheck"
@@ -61,4 +68,6 @@ statcheckReport <-
       params = list(statcheckOutput = statcheckOutput),
       envir = new.env(parent = globalenv())
     )
+    
+    message("Report generated: ", file.path(outputDir, outputFile))
   }
