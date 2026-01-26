@@ -1,4 +1,4 @@
-# statcheck 1.6.1
+# statcheck 1.6.1.9000
 
 ## Major changes
 
@@ -6,7 +6,7 @@
 * Finetuned html and pdf conversion to better read chi-square tests.
 
 ## Bug fixes
-
+* No longer give a warning when there is a minus sign used as a dash right after a statistical test (e.g., "p = .09-we are very sad"). HT Lisa DeBruine!
 
 # statcheck 1.6.0
 

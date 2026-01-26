@@ -41,7 +41,7 @@ RGX_TEST_VALUE <- "[<>=]\\s?[^a-zA-Z\\d\\.]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,"
 # p-values
 # this is the same for every type of test
 RGX_NS <- "([^a-z]n\\.?s\\.?)"
-RGX_P <- "(p\\s?[<>=]\\s?\\d?\\.\\d+e?-?\\d*)"
+RGX_P <- "(p\\s?[<>=]\\s?\\d?\\.\\d+(?:[eE]-?\\d+)?)"
 RGX_P_NS <- paste0("(", RGX_NS, "|", RGX_P, ")")
 
 # full result
