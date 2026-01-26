@@ -13,14 +13,14 @@
 #' \code{\link{statcheck}}, \code{\link{checkPDFdir}}, \code{\link{checkPDF}}, 
 #' \code{\link{checkHTMLdir}}, \code{\link{checkHTML}}, or
 #' \code{\link{checkdir}}.
-#' @param outputFileName String specifying the file name under which you want to 
+#' @param outputFile String specifying the file name under which you want to 
 #' save the generated HTML report. The extension ".html" is automatically added, 
 #' so doesn't need to be specified in this argument.
 #' @param outputDir String specifying the directory in which you want to save 
 #' the generated HTML report.
 #' 
 #' @return An HTML report, saved in the directory specified in the argument 
-#' "outputDir".
+#' "output_dir".
 #' 
 #' @examples \dontrun{
 #' 
@@ -30,9 +30,9 @@
 #' txt <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"
 #' stat <- statcheck(txt)
 #' 
-#' # next, use this output to generate a nice HTML report of the results
-#' statcheckReport(stat, outputFileName="statcheckHTMLReport", 
-#'                 outputDir="C:/mydocuments/results")
+#' # next, use this output to generate a formatted HTML report of the results
+#' statcheckReport(stat, output_file = "statcheckHTMLReport", 
+#'                 output_dir = "C:/mydocuments/results")
 #' 
 #' # you can now find your HTML report in the folder 
 #' # "C:/mydocuments/results" under the name "statcheckHTMLReport.html".
@@ -43,30 +43,22 @@
 
 statcheckReport <-
   function(statcheckOutput,
-           outputFileName,
-           outputDir) {
+           outputFile,
+           outputDir = getwd()) {
     
-    # set working directory to output file in statcheck package library
-    currentWD <- getwd()
-    setwd(system.file("inst/rmd", package = "statcheck"))
-    
-    # temporarily save statcheck output as RData in the selected working directory
-    save(statcheckOutput, file = "statcheckOutput.RData")
-    
-    # run the markdown/knitr script
-    statcheckReport_template <-
-      system.file("rmd/statcheckReport_template.Rmd", package = "statcheck")
-    rmarkdown::render(statcheckReport_template)
-    
-    # save/move the file in/to the specified output directory
-    curDir <- system.file("rmd", package = "statcheck")
-    file.rename(
-      from = paste(curDir, "statcheckReport_template.html", sep = "/"),
-      to = paste(outputDir, "/", outputFileName, ".html", sep = "")
+    template <- system.file(
+      "rmd/statcheckReport_template.Rmd",
+      package = "statcheck"
     )
     
-    # remove .RData file from package library folder
-    file.remove(paste(curDir, "statcheckOutput.RData", sep = "/"))
+    tmp <- tempfile(fileext = ".Rmd")
+    file.copy(template, tmp)
     
-    setwd(currentWD)
+    rmarkdown::render(
+      input = tmp,
+      output_file = outputFile,
+      output_dir = outputDir,
+      params = list(statcheckOutput = statcheckOutput),
+      envir = new.env(parent = globalenv())
+    )
   }

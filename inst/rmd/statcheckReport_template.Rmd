@@ -1,37 +1,37 @@
 ---
 title: 'Report: statcheck results'
 output: html_document
+params:
+  statcheckOutput: NULL
+  one_tailed: NULL
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, eval=TRUE, message=FALSE, warning=FALSE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 ```
 
 ```{r}
-library(statcheck)
-pack <- sessionInfo()$otherPkgs 
-info_statcheck <- pack[[which(names(pack)=="statcheck")]]
-version <- info_statcheck$Version
-date <- info_statcheck$Date
-year <- strsplit(date,"-")[[1]][1]
+version <- as.character(utils::packageVersion("statcheck"))
+year <- format(Sys.Date(), "%Y")
 ```
 
-*These results were automatically generated with the R package "statcheck" (Epskamp & Nuijten, `r year`), version `r version`.*
+*These results were automatically generated with the R package "statcheck" (Nuijten & Epskamp, `r year`), version `r version`.*
 
 ## Output statcheck
 
 The table below reports the statcheck results of your manuscript. The table lists all Null Hypothesis Significance Tests that are reported according to the APA style, and indicates whether the reported p-value matches a recomputed p-value based on the reported test statistic and degrees of freedom. The first column provides green dots to indicate a consistent result, yellow dots for an inconsistent result not bearing on significance, and red dots to indicate an inconsistent result that bears on significance at the .05 level.
 
+```{r data, include=FALSE}
+stopifnot(!is.null(params$statcheckOutput))
+stat <- params$statcheckOutput
+```
+
 ```{r}
-setwd(system.file("rmd", package="statcheck"))
-load("statcheckOutput.RData")
-stat <- statcheckOutput
+stat$Consistency[stat$error == FALSE & stat$decision_error == FALSE] <- "Consistent"
+stat$Consistency[stat$error == TRUE & stat$decision_error == FALSE] <- "**Inconsistency**"
+stat$Consistency[stat$decision_error == TRUE] <- "**Decision Inconsistency**"
 
-stat$Consistency[stat$Error==FALSE & stat$DecisionError==FALSE] <- "Consistent"
-stat$Consistency[stat$Error==TRUE & stat$DecisionError==FALSE] <- "**Inconsistency**"
-stat$Consistency[stat$Error==TRUE & stat$DecisionError==TRUE] <- "**Decision Inconsistency**"
-
-stat_sparse <- stat[c("Source","Raw","Computed","Consistency")]
+stat_sparse <- stat[c("source","raw","computed_p","Consistency")]
 
 colnames(stat_sparse) <- c("Article","Result As Given In Text","Computed P-Value","Consistency")
 
@@ -50,7 +50,7 @@ Code[stat_sparse$Consistency == "Consistent"] <- green
 
 ## 
 
-stat_sparse <- cbind(Code,stat_sparse)
+stat_sparse <- cbind(stat_sparse, Code)
 
 knitr::kable(stat_sparse)
 ```
@@ -61,7 +61,7 @@ knitr::kable(stat_sparse)
 
 ## What is statcheck?
 
-statcheck (Epskamp & Nuijten, `r year`) is an R package that automatically extracts statistical results from papers and checks the internal consistency of those results.
+statcheck (Nuijten & Epskamp, `r year`) is an R package that automatically extracts statistical results from papers and checks the internal consistency of those results.
 
 statcheck roughly works as follows:
 
@@ -88,15 +88,15 @@ Consistency | Consistent = The reported p-value is consistent; Inconsistency = T
 
 ## Disclaimer
 
-Please note that statcheck is an automated procedure and does not offer any explanations for detected inconsistencies (e.g., incorrect rounding, erroneous retrieval from computer output, a copy-paste error, or a a typo).
+Please note that statcheck is an automated procedure and does not offer any explanations for detected inconsistencies (e.g., incorrect rounding, erroneous retrieval from computer output, a copy-paste error, or a typo).
 
 Also note that in the case of a flagged inconsistency, statcheck assumes that the p-value is the number that is misreported. However, it could well be the case that an inconsistent result is caused by a wrong test statistic or degrees of freedom.
 
-For more details on what statcheck can and cannot do, and a list of common reasons why statcheck either does not find statistics or flags them as inconsistent, see the manual at <http://rpubs.com/michelenuijten/statcheckmanual>. 
+For more details on what statcheck can and cannot do, and a list of common reasons why statcheck either does not find statistics or flags them as inconsistent, see the FAQ at <https://statcheck.io>. 
 
 ***
 
 ## References
 Nuijten, M.B., Hartgerink, C. H. J., van Assen, M. A. L. M., Epskamp, S., & Wicherts, J. M. (2016). The prevalence of statistical reporting errors in psychology (1985-2013). *Behavior Research Methods*, *48 (4)*, 1205-1226..  DOI: 10.3758/s13428-015-0664-2
 
-Epskamp, S., & Nuijten, M. B. (`r year`). statcheck: Extract statistics from articles and recompute p-values. R package version `r version`.
+Nuijten, M. B. & Epskamp, S. (`r year`). statcheck: Extract statistics from articles and recompute p-values. R package version `r version`.
