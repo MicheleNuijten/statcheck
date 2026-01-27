@@ -5,9 +5,9 @@ context("Extract chi2-tests from string")
 # standard chi2-test
 test_that("chi2-tests are correctly parsed", {
   txt1 <- "chi2(28) = 2.20, p = .03"
-  
+
   result <- statcheck(txt1, messages = FALSE)
-  
+
   expect_equal(nrow(result), 1)
   expect_equal(as.character(result[[VAR_TYPE]]), "Chi2")
   expect_equal(result[[VAR_DF1]], 28)
@@ -23,9 +23,9 @@ test_that("chi2-tests are correctly parsed", {
 test_that("chi2-tests are retrieved from sentences", {
   txt1 <- "The effect was very significant, chi2(28) = 2.20, p = .03."
   txt2 <- "Both effects were very significant, chi2(28) = 2.20, p = .03, chi2(28) = 1.23, p = .04."
-  
+
   result <- statcheck(c(txt1, txt2), messages = FALSE)
-  
+
   expect_equal(nrow(result), 3)
   expect_equal(as.character(result[[VAR_SOURCE]]), c("1", "2", "2"))
 })
@@ -35,10 +35,24 @@ test_that("variations in spelling the Greek letter chi are picked up", {
   txt1 <- "X2(28) = 2.20, p = .03"
   txt2 <- "x2(28) = 2.20, p = .03"
   txt3 <- "chi_2(28) = 2.20, p = .03"
-  
-  result <- statcheck(c(txt1, txt2, txt3), messages = FALSE)
-  
-  expect_equal(nrow(result), 3)
+  # lowercase chi
+  txt4 <- "\u03C72(28) = 2.20, p = .03"
+  set <- c(txt1, txt2, txt3, txt4)
+  result <- statcheck(set, messages = FALSE)
+
+  expect_equal(nrow(result), length(set))
+})
+
+# variations in extracted 2
+test_that("variations in spelling the chi-squared 2 are picked up", {
+  txt1 <- "X2(28) = 2.20, p = .03"
+  txt2 <- "x^2(28) = 2.20, p = .03"
+  # superscript 2
+  txt3 <- "chi\u00B2(28) = 2.20, p = .03"
+  set <- c(txt1, txt2, txt3)
+  result <- statcheck(set, messages = FALSE)
+
+  expect_equal(nrow(result), length(set))
 })
 
 # variation in degrees of freedom
@@ -46,20 +60,20 @@ test_that("different variations in df of chi2 are parsed correctly", {
   txt1 <- "chi2(28, N = 129) = 2.2, p = .03"
   txt2 <- "chi2(1, N = 11,455) = 16.78, p <.001"
   txt3 <- "chi2(1, n = 81) = 3.25, p = 0.07" # also extract lowercase n
-  
+
   result <- statcheck(c(txt1, txt2, txt3), messages = FALSE)
-  
+
   expect_equal(nrow(result), 3)
-  
+
 })
 
 # variation in spacing
 test_that("chi2-tests with different spacing are retrieved from text", {
   txt1 <- " chi2 ( 28 ) = 2.20 , p = .03"
   txt2 <- "chi2(28)=2.20,p=.03"
-  
+
   result <- statcheck(c(txt1, txt2), messages = FALSE)
-  
+
   expect_equal(nrow(result), 2)
 })
 

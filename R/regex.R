@@ -7,9 +7,9 @@ RGX_R <- "r"
 RGX_Q <- "Q\\s?-?\\s?(w|W|(w|W)ithin|b|B|(b|B)etween)?"
 RGX_F <- "F"
 RGX_Z <- "([^a-z](z|Z))"
-# for chi2: effectively extract everything that is NOT a t, r, F, z, Q, W, n, or 
+# for chi2: effectively extract everything that is NOT a t, r, F, z, Q, W, n, or
 # D, followed by *maybe* a 2 (and later followed by a result in a chi2 layout)
-RGX_CHI2 <- "((\\s[^trFzZQWnD ]\\s?)|([^trFzZQWnD ]2\\s?))2?"
+RGX_CHI2 <- "((\\s[^trFzZQWnD ](\\^2|\u00B2)?\\s?)|([^trFzZQWnD ](\\^2|2|\u00B2)\\s?))"
 
 # degrees of freedom
 # the way dfs are reported differs per test type, except for t, r, and Q, where
@@ -28,12 +28,12 @@ RGX_Q_DF <- paste0("(", RGX_Q, "\\s?", RGX_DF_T_R_Q, ")")
 RGX_F_DF <- paste0("(", RGX_F, "\\s?", RGX_DF_F, ")")
 RGX_CHI2_DF <- paste0("(", RGX_CHI2, "\\s?", RGX_DF_CHI2, ")")
 
-RGX_TEST_DF <- paste0("(", RGX_T_DF, "|", RGX_R_DF, "|", RGX_Q_DF, "|", RGX_F_DF, 
+RGX_TEST_DF <- paste0("(", RGX_T_DF, "|", RGX_R_DF, "|", RGX_Q_DF, "|", RGX_F_DF,
                       "|", RGX_CHI2_DF, "|", RGX_Z, ")")
 
 # test value
 # this is the same for every type of test
-# the part "[^a-zA-Z\\d\\.]{0,3}" is to extract punctuation marks that could 
+# the part "[^a-zA-Z\\d\\.]{0,3}" is to extract punctuation marks that could
 # signal a weirdly encoded minus sign
 # note that impossible values such as r > 1 are excluded at a later stage
 RGX_TEST_VALUE <- "[<>=]\\s?[^a-zA-Z\\d\\.]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,"
@@ -53,7 +53,7 @@ RGX_NHST <- paste(RGX_TEST_DF, RGX_TEST_VALUE, RGX_P_NS, sep = "\\s?")
 
 # match everything up until the first occurence of a "(" with a positive look
 # ahead. A "(" signals the start of the degrees of freedom, so everything before
-# that should be the test statistic. Also match the regex for a z-test 
+# that should be the test statistic. Also match the regex for a z-test
 # (because a z-test has no df)
 
 RGX_OPEN_BRACKET <- "(.+?(?=\\())"
@@ -70,7 +70,7 @@ RGX_QB <- "b"
 # regex for degrees of freedom
 
 # combine the separate regexes for the different types of dfs
-# in one all-encompassing regex. Group the df-types with parentheses and 
+# in one all-encompassing regex. Group the df-types with parentheses and
 # separate with an OR sign
 RGX_DF <- paste0("(", RGX_DF_T_R_Q, ")|(", RGX_DF_F, ")|(", RGX_DF_CHI2, ")")
 
@@ -86,14 +86,14 @@ RGX_1000_SEP <- "(?<=\\d),(?=\\d+)"
 RGX_DEC <- "\\.\\d+"
 
 # regex for weird symbols that should be a minus sign
-# match potentially a space, followed by one or more characters that are not a 
-# digit, period, or space, followed by a digit or period (using a positive 
+# match potentially a space, followed by one or more characters that are not a
+# digit, period, or space, followed by a digit or period (using a positive
 # lookahead)
 RGX_WEIRD_MINUS <- "\\s?[^\\d\\.\\s]+(?=\\d|\\.)"
 
 # regex for weird df1 in F-tests
-# for some reason, typesetting in articles sometimes goes wrong with 
-# F-tests and when df1 == 1, it gets typeset as the letter l or I 
+# for some reason, typesetting in articles sometimes goes wrong with
+# F-tests and when df1 == 1, it gets typeset as the letter l or I
 RGX_DF1_I_L <- "I|l"
 
 ################################################################################
