@@ -80,7 +80,7 @@ test_that("corrected degrees of freedom in t-tests are retrieved from text", {
 
 # no test found
 test_that("statcheck doesn't throw an error when input is missing", {
-  expect_output(statcheck(NA, messages = FALSE), "did not find any results")
+  expect_message(statcheck(NA, messages = FALSE), "did not find any results")
 })
 
 # punctuation
@@ -89,34 +89,34 @@ test_that("incorrect punctuation in t-tests are not retrieved from text", {
   txt2 <- "t[28] = 2.20, p = .03"
   txt3 <- "t(28) = .2.20, p = .03"
   
-  expect_output(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
+  expect_message(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
 })
 
 test_that("capital t's are not retrieved from text", {
   txt1 <- "T(28) = 2.20, p = .03"
   
-  expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
+  expect_message(statcheck(txt1, messages = FALSE), "did not find any results")
 })
 
 # not a p-value
 test_that("tests with 'p-values' larger than 1 are not retrieved from text", {
   txt1 <- "t(28) = 2.20, p = 1.03"
   
-  expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
+  expect_message(statcheck(txt1, messages = FALSE), "did not find any results")
 })
 
 # wrong df
 test_that("t-tests with 2 dfs are not retrieved from text", {
   txt1 <- "t(2,28) = 2.20, p = .03"
   
-  expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
+  expect_message(statcheck(txt1, messages = FALSE), "did not find any results")
 })
 
 # weird encoding in minus sign followed by space
 test_that("t-values with a weird minus sign and a space do not result in errors", {
     txt1 <- " t(553) = − 4.46, p < .0001" # this is an em dash or something
     
-    expect_output(statcheck(txt1, messages = FALSE), "did not find any results")
+    expect_message(statcheck(txt1, messages = FALSE), "did not find any results")
 })
 
 # multiple comparison signs 
@@ -124,5 +124,5 @@ test_that("t-values with multiple comparison signs are not retrieved", {
   txt1 <- "t(38) >= 2.25, p = .03"
   txt2 <- "t(38) = 2.25, p >= .03"
   
-  expect_output(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
+  expect_message(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
 })

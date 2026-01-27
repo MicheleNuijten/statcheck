@@ -62,7 +62,7 @@ test_that("stats that only look like Q-tests are not retrieved", {
   txt2 <- "Qs(2) = 2.2, p = .03"
   txt3 <- "Qb(2, N = 187) = 2.20, p = .03"
   
-  expect_output(statcheck(c(txt2, txt3), messages = FALSE), "did not find any results")
+  expect_message(statcheck(c(txt2, txt3), messages = FALSE), "did not find any results")
   
 })
 
