@@ -4,6 +4,7 @@
 
 ## Small updates
 * Finetuned html and pdf conversion to better read chi-square tests.
+* Fixed and improved the report that can be generated with `statcheckReport()`
 
 ## Bug fixes
 * No longer give a warning when there is a minus sign used as a dash right after a statistical test (e.g., "p = .09-we are very sad"). HT Lisa DeBruine!
