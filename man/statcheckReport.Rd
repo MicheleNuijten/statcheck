@@ -4,7 +4,7 @@
 \alias{statcheckReport}
 \title{Generate HTML report for statcheck output}
 \usage{
-statcheckReport(statcheckOutput, outputFileName, outputDir)
+statcheckReport(statcheckOutput, outputFile, outputDir = getwd())
 }
 \arguments{
 \item{statcheckOutput}{statcheck output of one of the following functions: 
@@ -12,7 +12,7 @@ statcheckReport(statcheckOutput, outputFileName, outputDir)
 \code{\link{checkHTMLdir}}, \code{\link{checkHTML}}, or
 \code{\link{checkdir}}.}
 
-\item{outputFileName}{String specifying the file name under which you want to 
+\item{outputFile}{String specifying the file name under which you want to 
 save the generated HTML report. The extension ".html" is automatically added, 
 so doesn't need to be specified in this argument.}
 
@@ -21,7 +21,7 @@ the generated HTML report.}
 }
 \value{
 An HTML report, saved in the directory specified in the argument 
-"outputDir".
+"output_dir".
 }
 \description{
 This function uses R Markdown to generate a nicely formatted HTML report of 
@@ -43,9 +43,9 @@ function
 txt <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"
 stat <- statcheck(txt)
 
-# next, use this output to generate a nice HTML report of the results
-statcheckReport(stat, outputFileName="statcheckHTMLReport", 
-                outputDir="C:/mydocuments/results")
+# next, use this output to generate a formatted HTML report of the results
+statcheckReport(stat, output_file = "statcheckHTMLReport", 
+                output_dir = "C:/mydocuments/results")
 
 # you can now find your HTML report in the folder 
 # "C:/mydocuments/results" under the name "statcheckHTMLReport.html".

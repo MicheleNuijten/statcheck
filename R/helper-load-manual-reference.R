@@ -12,7 +12,7 @@ load_manual <- function(
 ){
   
   # load the reference file with manually extracted statistics
-  manual <- read.csv2(system.file(path_manual, package = "statcheck"), header = TRUE)
+  manual <- utils::read.csv2(system.file(path_manual, package = "statcheck"), header = TRUE)
   
   # row selection based on arguments
   if(apa == TRUE){
