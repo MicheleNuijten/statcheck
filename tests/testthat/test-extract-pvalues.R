@@ -44,7 +44,7 @@ test_that("minus signs used as a dash are correctly parsed", {
 test_that("page numbers are not extracted", {
   txt1 <- "see p. 01"
   
-  expect_output(statcheck(txt1, messages = FALSE,
+  expect_message(statcheck(txt1, messages = FALSE,
                           AllPValues = TRUE), "did not find any p-values")
 })
   
