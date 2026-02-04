@@ -21,7 +21,7 @@ calc_APA_factor <- function(pRes, Res){
   
   APAfactor <-
     round(as.numeric(apply(Res, 1, function(x)
-      APA[which(names(APA) == x["Source"])])), 2)
+      APA[names(APA) == x["Source"]])), 2)
   
   return(APAfactor)
   

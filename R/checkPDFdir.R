@@ -22,7 +22,7 @@ checkPDFdir <-
     message("Importing PDF files...")
     pb <- utils::txtProgressBar(max = length(files), style = 3)
     
-    for (i in 1:length(files)){
+    for (i in seq_along(files)){
       txts[i] <-  getPDF(files[i])
       utils::setTxtProgressBar(pb, i)
     }

@@ -9,11 +9,11 @@ checkHTMLdir <- function(dir,
     dir <- tcltk::tk_choose.dir()
   }
   
-  if (extension == TRUE) {
+  if (extension) {
     pat = ".html|.htm"
   }
   
-  if (extension == FALSE) {
+  if (!extension) {
     pat = ""
   }
   
@@ -31,7 +31,7 @@ checkHTMLdir <- function(dir,
   message("Importing HTML files...")
   pb <- utils::txtProgressBar(max = length(files), style = 3)
   
-  for (i in 1:length(files)) {
+  for (i in seq_along(files)) {
     txts[i] <-  getHTML(files[i])
     utils::setTxtProgressBar(pb, i)
   }

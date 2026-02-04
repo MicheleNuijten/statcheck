@@ -142,7 +142,7 @@ statcheck <- function(texts,
   # progress bar. This is mainly useful for the unit tests; otherwise hundreds
   # of progress bars would be printed during testing and that makes the test 
   # results hard to read
-  if(messages == TRUE){
+  if(messages){
     message("Extracting statistics...")
     pb <- utils::txtProgressBar(max = length(text), style = 3)
   }
@@ -195,14 +195,14 @@ statcheck <- function(texts,
     rm(nhst)
     
     # update the progress bar
-    if(messages == TRUE){
+    if(messages){
       utils::setTxtProgressBar(pb, i)
     }
     
   }
   
   # close progress bar
-  if(messages == TRUE){
+  if(messages){
     close(pb)
   }
   
@@ -215,11 +215,8 @@ statcheck <- function(texts,
     # same as the automated 1-tailed test detection (switched on with the 
     # argument: OneTailedTxt). The latter works more subtly (see comments in 
     # process_stats()). 
-    if (OneTailedTests == TRUE) {
-      two_tailed <- FALSE
-    } else {
-      two_tailed <- TRUE
-    }
+    two_tailed <- !OneTailedTests
+    
     
     # create empty variables to fill out during the loop
     Res$Computed <- rep(NA, nrow(Res))
@@ -279,7 +276,7 @@ statcheck <- function(texts,
   
   # Return ------------------------------------------------------------------
   
-  if (AllPValues == FALSE) {
+  if (!AllPValues) {
     
     # Return message when there are no results
     if (nrow(Res) > 0) {
