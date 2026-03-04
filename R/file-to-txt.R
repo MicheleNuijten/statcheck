@@ -93,6 +93,8 @@ getHTML <- function(x){
 }
 
 # PDF TO TXT -------------------------------------------------------------------
+#' @importFrom pdftools pdf_text
+
 getPDF <- function(x){
   
   txtfiles <- sapply(x, pdftools::pdf_text) 
