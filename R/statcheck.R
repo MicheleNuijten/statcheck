@@ -115,6 +115,7 @@
 
 statcheck <- function(texts,
                       stat = c("t", "F", "cor", "chisq", "Z", "Q"),
+                      apa_style = TRUE,
                       OneTailedTests = FALSE,
                       alpha = .05,
                       pEqualAlphaSig = TRUE,
@@ -159,7 +160,7 @@ statcheck <- function(texts,
     # later on to calculate the APA factor: the ratio (statcheck results)/
     # (total # of p values). It is also possible to let statcheck return this
     # dataframe instead of the data frame with NHST results.
-    pvalues <- extract_p_value(txt)
+    pvalues <- extract_p_value(txt, apa_style = apa_style)
     
     # append and close:
     # in each repetition of the loop, the extracted p-values are appended 
@@ -180,6 +181,7 @@ statcheck <- function(texts,
     # reported NHST results and parses it so that the separate elements are
     # returned in one large dataframe
     nhst <- extract_stats(txt = txt,
+                          apa_style = apa_style,
                           stat = stat)
     
     # append and close: same logic as for the pvalues dataframe above
@@ -258,8 +260,14 @@ statcheck <- function(texts,
     
     # APAfactor: proportion of APA results (that statcheck reads) 
     # in total number of p values
+    # don't calculate if apa_style == FALSE, because then we didn't determine
+    # how many results were in APA style. We just scraped everything we could.
     
-    Res$APAfactor <- calc_APA_factor(pRes, Res)
+    if(apa_style == TRUE){
+      Res$APAfactor <- calc_APA_factor(pRes, Res)
+    } else {
+      Res$APAfactor <- rep(NA, nrow(Res))
+    }
     
     ###---------------------------------------------------------------------
     
