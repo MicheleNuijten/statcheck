@@ -29,7 +29,7 @@ test_that("F with MSE is extracted and parsed",{
   expect_equal(result[[VAR_TEST_VALUE]], rep(11.37, 2))
   
   # don't extract these results when apa_style is TRUE
-  expect_output(statcheck(c(txt1, txt2), messages = FALSE), 
+  expect_message(statcheck(c(txt1, txt2), messages = FALSE), 
                 "did not find any results")
   
 })
@@ -50,7 +50,7 @@ test_that("df between square, curly, or no brackets are extracted and parsed",{
   expect_equal(result[[VAR_DF2]], rep(28, 6))
   
   # don't extract these results when apa_style is TRUE
-  expect_output(statcheck(c(txt1, txt2, txt3, txt4, txt5, txt6), 
+  expect_message(statcheck(c(txt1, txt2, txt3, txt4, txt5, txt6), 
                           messages = FALSE), "did not find any results")
 })
 
@@ -67,7 +67,7 @@ test_that("DF in degrees of freedom is extracted and parsed", {
   expect_equal(result[[VAR_DF2]], c(NA, 1115, NA))
   
   # don't extract these results when apa_style is TRUE
-  expect_output(statcheck(c(txt1, txt2, txt3), messages = FALSE), 
+  expect_message(statcheck(c(txt1, txt2, txt3), messages = FALSE), 
                 "did not find any results")
   
 })
@@ -80,7 +80,7 @@ test_that("semi-colons instead of commas are extracted and parsed", {
   expect_equal(nrow(result), 1)
   
   # don't extract these results when apa_style is TRUE
-  expect_output(statcheck(txt1, messages = FALSE), 
+  expect_message(statcheck(txt1, messages = FALSE), 
                 "did not find any results")
   
 })
@@ -96,7 +96,7 @@ test_that("DF in degrees of freedom AND semi-colons are extracted and parsed", {
   expect_equal(result[[VAR_DF2]], c(NA, 1115))
   
   # don't extract these results when apa_style is TRUE
-  expect_output(statcheck(c(txt1, txt2), messages = FALSE), 
+  expect_message(statcheck(c(txt1, txt2), messages = FALSE), 
                 "did not find any results")
   
 })
@@ -109,7 +109,7 @@ test_that("correlations with N instead of df are extracted and parsed", {
   expect_equal(nrow(result), 1)
   
   # don't extract these results when apa_style is TRUE
-  expect_output(statcheck(txt1, messages = FALSE), 
+  expect_message(statcheck(txt1, messages = FALSE), 
                 "did not find any results")
   
 })
@@ -126,7 +126,7 @@ test_that("incorrect spacing is still extracted and parsed", {
   expect_equal(nrow(result), 4)
   
   # don't extract these results when apa_style is TRUE
-  expect_output(statcheck(c(txt1, txt2), messages = FALSE), 
+  expect_message(statcheck(c(txt1, txt2), messages = FALSE), 
                 "did not find any results")
   
 })
@@ -148,10 +148,10 @@ test_that("tests with superfluous comparison signs are not extracted", {
   txt2 <- "t = (13) = .52, p > .05"
   
   # don't extract these results when apa_style is TRUE or FALSE
-  expect_output(statcheck(c(txt1, txt2), messages = FALSE), 
+  expect_message(statcheck(c(txt1, txt2), messages = FALSE), 
                 "did not find any results")
   
-  expect_output(statcheck(c(txt1, txt2), apa_style = FALSE, messages = FALSE), 
+  expect_message(statcheck(c(txt1, txt2), apa_style = FALSE, messages = FALSE), 
                 "did not find any results")
 })
 
@@ -161,6 +161,8 @@ test_that("tests with 'subscripts' extracted and parsed", {
   txt2 <- "F2(1, 62) = 15.760, MSE = 212146, p < .001"
   txt3 <- "t2(39) = 41.2, p > .01"
   
+  result <- statcheck(c(txt1, txt2, txt3),
+                      apa_style = FALSE, messages = FALSE)
   
   
 })
