@@ -108,7 +108,6 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Michele B. Nuijten \email{m.b.nuijten@uvt.nl} (\href{https://orcid.org/0000-0002-1468-8585}{ORCID})
   \item Sacha Epskamp \email{mail@sachaepskamp.com} (\href{https://orcid.org/0000-0003-4884-8118}{ORCID})
 }
 
