@@ -44,8 +44,8 @@ txt <- "blablabla the effect was very significant (t(100)=1, p < 0.001)"
 stat <- statcheck(txt)
 
 # next, use this output to generate a formatted HTML report of the results
-statcheckReport(stat, output_file = "statcheckHTMLReport", 
-                output_dir = "C:/mydocuments/results")
+statcheckReport(stat, outputFile = "statcheckHTMLReport", 
+                outputDir = "C:/mydocuments/results")
 
 # you can now find your HTML report in the folder 
 # "C:/mydocuments/results" under the name "statcheckHTMLReport.html".
