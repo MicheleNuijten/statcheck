@@ -42,14 +42,18 @@ License: GPL-3
 Depends: 
     R (>= 3.6.0)
 Imports: 
+    DT,
     ggplot2,
+    graphics,
+    pdftools,
     plyr,
     rlang,
     rmarkdown,
+    stats,
     stringi,
-    tcltk,
     stringr,
-    pdftools
+    tcltk,
+    utils
 Suggests: 
     testthat
 ByteCompile: yes
