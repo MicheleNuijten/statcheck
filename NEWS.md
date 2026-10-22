@@ -1,23 +1,33 @@
-# statcheck 1.6.1.9000
+# statcheck 1.6.1
 
 ## Major changes
+* PDF files are now converted to text with the R package 'pdftools' instead of
+  the external program Xpdf. You no longer need to install Xpdf or add it to
+  your path.
+* `statcheckReport()` has been rewritten: the report now has an interactive
+  results table and a clearer layout. Note: the argument `outputFileName` is
+  renamed to `outputFile`.
 
 ## Small updates
-* Finetuned html and pdf conversion to better read chi-square tests.
-* Fixed and improved the report that can be generated with `statcheckReport()`
+* Improved PDF conversion: characters that some journals typeset in unusual
+  ways (e.g., =, <, -, chi) are recognized, and two-column layouts are read in
+  the right order.
+* Fine-tuned HTML and PDF conversion to better read chi-square tests (including
+  superscript 2 and Greek chi).
+* When `statcheck()` finds no results, it now uses `message()`, so the note is
+  suppressed with `messages = FALSE`.
+* Unreadable PDF files now give an error from 'pdftools' instead of a warning
+  and an empty result.
+* Tests now compare statcheck output against a file with manually extracted
+  statistics.
+* The package logo is now a PNG file.
 
 ## Bug fixes
-* No longer give a warning when there is a minus sign used as a dash right after a statistical test (e.g., "p = .09-we are very sad"). HT Lisa DeBruine!
+* No longer give a warning when a minus sign is used as a dash right after a
+  statistical test (e.g., "p = .09-we are very sad"). HT Lisa DeBruine!
+* Character substitution in PDF conversion no longer accidentally changes
+  other characters, such as accented letters.
 
-# statcheck 1.6.0
-
-## Major changes
-* Changed the way pdf files are converted to text. Initially, statcheck relied on the external program Xpdf, which needed to be installed separately and added to the path. To simplify the workflow (and also have improved pdf conversions) statcheck now uses the R package pdftools.
-
-## Small updates
-* Updated the test files for testing text-to-file. Before, I hard coded the true values statcheck should extract, but this was error prone. Now, there is a spreadsheet with manually extracted values (the gold standard) that is used as a reference. This is easier to update if necessary; the updates then only need to happen in one place (the spreadsheet) and no longer at multiple places in the code.
-
-## Bug fixes
 
 # statcheck 1.5.0
 
