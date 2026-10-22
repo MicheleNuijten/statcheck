@@ -34,7 +34,7 @@ Description: A "spellchecker" for statistics. It checks whether your p-values
   text using the R package 'pdftools', so no additional software installation is 
   necessary. You can find more information on what 'statcheck' can and cannot do 
   and a point-and-click web interface to scan PDF or HTML or DOCX articles on 
-<https: //statcheck.io>.
+  <https://statcheck.io>.
 License: GPL-3
 Depends: 
     R (>= 3.6.0)
