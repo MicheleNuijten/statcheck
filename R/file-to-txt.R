@@ -101,46 +101,26 @@ getPDF <- function(x){
   # this should ensure the same output accross multiple operating systems
   txtfiles <- stringi::stri_enc_toutf32(txtfiles) 
   
-  # Replace known weird characters
+  # substitute known weird characters (UTF-32 decimal code points);
+  # match whole code points only, not substrings
+  replacements <- c(
+    "11005" = 61L,  # double solidus -> = [APA journals]
+    "188"   = 61L,  # 1/4 -> = [J Environmental Psychology]
+    "11021" = 60L,  # U+2B0D -> < [APA journals]
+    "33"    = 60L,  # ! -> < [J Consumer Research]
+    "11002" = 45L,  # U+2AFA -> - [APA journals]
+    "9273"  = 967L, # U+2439 -> chi [APA journals]
+    "178"   = 50L   # superscript 2 -> 2 [chi2 tests]
+  )
   
-  # substitute double solidous (UTF-32 Decimal 11005) with equal sign (UTF-32
-  # Decimal 61) [issue in APA journals]
-  txtfiles <- lapply(txtfiles, gsub, pattern = "11005",
-                     replacement = "61", fixed = TRUE)
-  
-  # substitute 1/4 (UTF-32 decimal 188) with equal sign (UTF-32 Decimal 61);
-  # [issue in Elsevier journal: Journal of Environmental Psychology]
-  txtfiles <- lapply(txtfiles, gsub, pattern = "188",
-                     replacement = "61", fixed = TRUE)
-  
-  # substitute U+2B0D (C++ \u2b0d; UTF-32 Decimal 11021) with less than
-  # sign (UTF-32 Decimal 60) [issue in APA journals]
-  txtfiles <- lapply(txtfiles, gsub, pattern = "11021",
-                     replacement = "60", fixed = TRUE)
-  
-  # substitute ! (UTF-32 decimal 33) with less than sign (UTF-32 Decimal 60);
-  # [issue in Oxford journal: Journal of Consumer Research]
-  txtfiles <- lapply(txtfiles, gsub, pattern = "33",
-                     replacement = "60", fixed = TRUE)
-  
-  # substitute U+2AFA (UTF-32 Decimal 11002) with HYPHEN-MINUS sign (UTF-32
-  # Decimal 45) [issue in APA journals]
-  txtfiles <- lapply(txtfiles, gsub, pattern = "11002",
-                     replacement = "45", fixed = TRUE)
-  
-  # substitute U+2439 (C++ \u2439; UTF-32 Decimal 9273) with small greek chi
-  # (UTF-32 Decimal 967) [issue in APA journals]
-  txtfiles <- lapply(txtfiles, gsub, pattern = "9273",
-                     replacement = "967", fixed = TRUE)
-  
-  # substitute superscript 2 with normal 2 to better detect chi2 tests, so:
-  # substitute UTF-32 decimal 178 with UTF-32 decimal 50.
-  txtfiles <- lapply(txtfiles, gsub, pattern = "178",
-                     replacement = "50", fixed = TRUE)
+  txtfiles <- lapply(txtfiles, function(cp) {
+    hit <- match(cp, as.integer(names(replacements)))
+    cp[!is.na(hit)] <- replacements[hit[!is.na(hit)]]
+    cp
+  })
   
   # Revert to UTF-8 encoding
   txtfiles <- stringi::stri_enc_fromutf32(txtfiles)
-  
   
   # Arrange text according to paper column layout
   txtfiles <- pdf_columns(txtfiles)
