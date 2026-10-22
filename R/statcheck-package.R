@@ -54,13 +54,12 @@
 #' can be found in \href{https://psyarxiv.com/tcxaj/}{Nuijten et al., 2017}.
 #' 
 #' @section Manual: 
-#' Details on what statcheck can and cannot do, and how to install the package
-#' and the necessary program Xpdf can be found in the 
+#' Details on what statcheck can and cannot do can be found in the 
 #' \href{https://rpubs.com/michelenuijten/statcheckmanual}{online manual}.
 #' 
 #' @section Web app:
 #' \code{statcheck} is also available as a free, online web app at 
-#' \url{http://statcheck.io}. 
+#' \url{https://statcheck.io}. 
 #' 
 #' @references 
 #' Hartgerink, C. H. J., Van Aert, R. C. M., Nuijten, M. B., Wicherts, J. M., 

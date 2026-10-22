@@ -37,8 +37,8 @@
 #' plot(result)
 #' 
 #' @importFrom ggplot2 theme theme_bw element_blank element_line ggplot aes 
-#' geom_point geom_vline geom_hline geom_abline annotate scale_x_continuous
-#' scale_y_continuous scale_color_manual facet_grid
+#'   geom_point geom_vline geom_hline geom_abline annotate scale_x_continuous
+#'   scale_y_continuous scale_color_manual facet_grid
 #' @importFrom rlang .data
 #' @importFrom graphics plot.default points abline text par legend
 #' 

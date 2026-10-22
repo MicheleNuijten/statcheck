@@ -69,15 +69,14 @@ can be found in \href{https://psyarxiv.com/tcxaj/}{Nuijten et al., 2017}.
 
 \section{Manual}{
  
-Details on what statcheck can and cannot do, and how to install the package
-and the necessary program Xpdf can be found in the 
+Details on what statcheck can and cannot do can be found in the 
 \href{https://rpubs.com/michelenuijten/statcheckmanual}{online manual}.
 }
 
 \section{Web app}{
 
 \code{statcheck} is also available as a free, online web app at 
-\url{http://statcheck.io}.
+\url{https://statcheck.io}.
 }
 
 \references{
@@ -109,6 +108,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Michele B. Nuijten \email{m.b.nuijten@uvt.nl} (\href{https://orcid.org/0000-0002-1468-8585}{ORCID})
   \item Sacha Epskamp \email{mail@sachaepskamp.com} (\href{https://orcid.org/0000-0003-4884-8118}{ORCID})
 }
 
