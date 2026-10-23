@@ -3,7 +3,7 @@ Title: Extract Statistics from Articles and Recompute P-Values
 Version: 1.6.1
 Date: 2026-10-22
 Authors@R: c(
-    person("Michele B.", "Nuijten", , "m.b.nuijten@uvt.nl", role = c("aut", "cre"),
+    person("Michele B.", "Nuijten", , "m.b.nuijten@tilburguniversity.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-1468-8585")),
     person("Sacha", "Epskamp", , "mail@sachaepskamp.com", role = "aut",
            comment = c(ORCID = "0000-0003-4884-8118")),
