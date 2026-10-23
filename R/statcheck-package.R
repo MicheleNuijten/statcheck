@@ -16,9 +16,9 @@
 #'     \item \strong{Research}: statcheck can be used to automatically extract 
 #'     statistical test results from articles that can then be analyzed. You can 
 #'     for instance investigate whether you can predict statistical 
-#'     inconsistencies (see e.g., Nuijten et al., 2017 <doi:10.1525/collabra.102>), 
+#'     inconsistencies (see e.g., Nuijten et al., 2017, \doi{10.1525/collabra.102}), 
 #'     or use it to analyze p-value distributions (see e.g., 
-#'     Hartgerink et al., 2016 <doi:10.7717/peerj.1935>).
+#'     Hartgerink et al., 2016, \doi{10.7717/peerj.1935}).
 #' }
 #' 
 #' @section Using statcheck on a string of text:
@@ -51,7 +51,7 @@
 #' negative rate) were high: between 85.3% and 100%, and between 96.0% and 100%, 
 #' respectively, depending on the assumptions and settings. The overall accuracy 
 #' of statcheck ranged from 96.2% to 99.9%. More details on the validity study
-#' can be found in \href{https://doi.org/10.31234/osf.io/tcxaj}{Nuijten et al., 2017}.
+#' can be found in Nuijten et al., 2017, \doi{10.31234/osf.io/tcxaj}.
 #' 
 #' @section Manual: 
 #' Details on what statcheck can and cannot do can be found in the 
@@ -65,17 +65,17 @@
 #' Hartgerink, C. H. J., Van Aert, R. C. M., Nuijten, M. B., Wicherts, J. M., 
 #' Van Assen, M. A. L. M. (2016). Distributions of p-values smaller than .05 in 
 #' psychology: What is going on? \emph{PeerJ}, \emph{4}, e1935. 
-#' doi: 10.7717/peerj.1935
+#' \doi{10.7717/peerj.1935}
 #' 
 #' Nuijten, M. B., Borghuis, J., Veldkamp, C. L. S., Dominguez-Alvarez, L., Van 
 #' Assen, M. A. L. M., & Wicherts, J. M. (2017).  Journal data sharing policies 
 #' and statistical reporting inconsistencies in psychology. 
-#' \emph{Collabra: Psychology}, \emph{3}(1), 1-22. doi: 10.1525/collabra.102.
+#' \emph{Collabra: Psychology}, \emph{3}(1), 1-22. \doi{10.1525/collabra.102}
 #' 
 #' Nuijten, M. B., Van Assen, M. A. L. M., Hartgerink, C. H. J., Epskamp, S., & 
 #' Wicherts, J. M. (2017). The validity of the tool "statcheck" in discovering 
 #' statistical reporting inconsistencies. \emph{Preprint retrieved from 
-#' https://doi.org/10.31234/osf.io/tcxaj.}
+#' \doi{10.31234/osf.io/tcxaj}.}
 
 #' @keywords internal
 #' @aliases statcheck-package
