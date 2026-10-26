@@ -28,13 +28,23 @@ test_that("results reported as ns are correctly parsed", {
   expect_true(is.na(result[[VAR_REPORTED_P]]))
 })
 
+
+# minus sign as a dash, following a p-value
+test_that("minus signs used as a dash are correctly parsed", {
+  txt <- "p = .09-and we are sad"
+  
+  expect_no_warning(statcheck(txt, messages = FALSE,
+                   AllPValues = TRUE))
+  
+})
+
 # test if the following non p-values are not retrieved ------------------
 
 # page number
 test_that("page numbers are not extracted", {
   txt1 <- "see p. 01"
   
-  expect_output(statcheck(txt1, messages = FALSE,
+  expect_message(statcheck(txt1, messages = FALSE,
                           AllPValues = TRUE), "did not find any p-values")
 })
   

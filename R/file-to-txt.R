@@ -9,6 +9,10 @@ getHTML <- function(x){
     return(raw_strings)
   })
   
+  
+  # Convert to valid UTF-8 (try to fix invalid bytes)
+  strings <- lapply(strings, iconv,  from = "", to = "UTF-8", sub = "byte")
+  
   # Remove subscripts (except for p_rep)
   strings <- lapply(strings, gsub, pattern = "<sub>(?!rep).*?</sub>", replacement = "", perl = TRUE)
   
@@ -91,27 +95,135 @@ getHTML <- function(x){
 # PDF TO TXT -------------------------------------------------------------------
 getPDF <- function(x){
   
-  txtfiles <- character(length(x))
-  for (i in 1:length(x)){
-    
-    system(paste('pdftotext -q -enc "ASCII7" "', x[i], '"', sep = ""))
-    if (file.exists(gsub("\\.pdf$", "\\.txt", x[i]))) {
-      fileName <- gsub("\\.pdf$", "\\.txt", x[i])
-      strings <- readChar(fileName, file.info(fileName)$size)
-      
-      # remove carriage returns and new lines
-      strings <- gsub(x = strings, pattern = "[\r\n]", replacement = "")
-      
-      # save result in vector
-      txtfiles[i] <- strings
-      
-    } else{
-      
-      warning(paste("Failure in file", x[i]))
-      txtfiles[i] <- ""
-      
-    }
-  }
+  txtfiles <- sapply(x, pdftools::pdf_text) 
+  
+  # encode everything in UTF-32 
+  # this should ensure the same output accross multiple operating systems
+  txtfiles <- stringi::stri_enc_toutf32(txtfiles) 
+  
+  # substitute known weird characters (UTF-32 decimal code points);
+  # match whole code points only, not substrings
+  replacements <- c(
+    "11005" = 61L,  # double solidus -> = [APA journals]
+    "188"   = 61L,  # 1/4 -> = [J Environmental Psychology]
+    "11021" = 60L,  # U+2B0D -> < [APA journals]
+    "33"    = 60L,  # ! -> < [J Consumer Research]
+    "11002" = 45L,  # U+2AFA -> - [APA journals]
+    "9273"  = 967L, # U+2439 -> chi [APA journals]
+    "178"   = 50L   # superscript 2 -> 2 [chi2 tests]
+  )
+  
+  txtfiles <- lapply(txtfiles, function(cp) {
+    hit <- match(cp, as.integer(names(replacements)))
+    cp[!is.na(hit)] <- replacements[hit[!is.na(hit)]]
+    cp
+  })
+  
+  # Revert to UTF-8 encoding
+  txtfiles <- stringi::stri_enc_fromutf32(txtfiles)
+  
+  # Arrange text according to paper column layout
+  txtfiles <- pdf_columns(txtfiles)
+  
+  # Paste the differente pages together, so that each pdf is converted to 
+  # one string of text
+  txtfiles <- stringr::str_c(unlist(txtfiles), collapse = "")
+  
+  
+  
+  # substitute the letter "b" in a NHST result for a "<". This is not feasible
+  # in utf32 encoding, because making a regex that only substitutes the b in
+  # a statistical result instead of ALL b's in the paper is very hard in 
+  # utf32 encoding. [issue in Elsevier journal: JESP]
+  txtfiles <- lapply(txtfiles, gsub, 
+                     # don't match a b preceded by =<>, because the b itself 
+                     # should be the comparison sign.
+                     # only match a b followed by a number, that gives further
+                     # proof that the b is in fact the comparison sign.
+                     pattern = RGX_B_SMALLER,
+                     replacement = "<", perl = TRUE)
+  
+  # substitute the letter "N" in a NHST result for a ">", for the same reason 
+  # as above. [issue in Elsevier journal: JESP]
+  txtfiles <- lapply(txtfiles, gsub, 
+                     # don't match a N preceded by =<>, because the N itself 
+                     # should be the comparison sign.
+                     # only match a N followed by a number, that gives further
+                     # proof that the N is in fact the comparison sign.
+                     pattern = RGX_N_LARGER,
+                     replacement = ">", perl = TRUE)
+  
+  # substitute the letter "p" that should be a "=". [issue in Oxford journal:
+  # journal of consumer research]
+  txtfiles <- lapply(txtfiles, gsub, 
+                     # don't match a p preceded by a "," or a ",\\s", because 
+                     # that is the actual p-value.
+                     # only match a p followed by a number, that gives further
+                     # proof that the p is in fact the comparison sign.
+                     pattern = RGX_P_EQUAL,
+                     replacement = "=", perl = TRUE)
+  
+  # substitute the letter "B" that should be a '"'. [issue in BRM]
+  txtfiles <- lapply(txtfiles, gsub, 
+                     # only match a B followed by a letter that could indicate
+                     # a test statistic
+                     pattern = RGX_B_QUOTE,
+                     replacement = '"', perl = TRUE)
+  
   
   return(txtfiles)
+}
+
+
+# helper function for getPDF() -------------------------------------------------
+
+# This function helps maintaining the format of pdf files with a multiple 
+# columns layout.
+# Credits to:  
+# https://github.com/fsingletonthorn/EffectSizeScraping/blob/master/R/pdf_process.R 
+# for original function
+
+true_false <- function(x, chars) {
+  x > chars
+}
+
+pdf_columns <- function(x, pattern = "\\p{WHITE_SPACE}{3,}") {
+  # \p{L} matches a single code point in the category "letter".
+  # {3,} three or more
+  
+  # This function is slightly adapted from pdfsearch
+  # see: https://github.com/lebebr01/pdfsearch/blob/master/R/split_pdf.r
+  
+  x_lines <- stringi::stri_split_lines(x)
+  x_lines <- lapply(x_lines, gsub,
+                    pattern = "^\\s{1,20}",
+                    # ^ string that starts with
+                    # \ creates regular expression containing following...
+                    # \s matches any whitespace
+                    # {1,20} between 1 and 20 of these [ in your case this will become +]
+                    replacement = "")
+  
+  x_page <- lapply(
+    x_lines,
+    stringi::stri_split_regex,
+    pattern = pattern,
+    omit_empty = NA,
+    simplify = TRUE
+  )
+  
+  page_lines <- unlist(lapply(x_page, nrow))
+  columns <- unlist(lapply(x_page, ncol))
+  
+  num_chars <- lapply(x_page, base::nchar)
+  num_chars_tf <- lapply(num_chars, true_false, chars = 3)
+  
+  for (xx in seq_along(num_chars_tf)) {
+    num_chars_tf[[xx]][is.na(num_chars_tf[[xx]])] <- FALSE
+  }
+  
+  output <- lapply(seq_along(x_page), function(xx)
+    x_page[[xx]][num_chars_tf[[xx]]])
+  
+  output <- lapply(output, paste, collapse = " ")
+  return(output)
 }

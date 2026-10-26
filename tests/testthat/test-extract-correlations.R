@@ -47,6 +47,6 @@ test_that("correlations with impossible values are ignored", {
   txt1 <- "r(16) = 26.05, p = .10"
   txt2 <- "r(28) = −59, p = .0008"
   
-  expect_output(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
+  expect_message(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
   
 })

@@ -11,25 +11,30 @@ export(checkdir)
 export(statcheck)
 export(statcheckReport)
 export(trim)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,annotate)
-importFrom(ggplot2,element_blank)
-importFrom(ggplot2,element_line)
-importFrom(ggplot2,facet_grid)
-importFrom(ggplot2,geom_abline)
-importFrom(ggplot2,geom_hline)
-importFrom(ggplot2,geom_point)
-importFrom(ggplot2,geom_vline)
-importFrom(ggplot2,ggplot)
-importFrom(ggplot2,scale_color_manual)
-importFrom(ggplot2,scale_x_continuous)
-importFrom(ggplot2,scale_y_continuous)
-importFrom(ggplot2,theme)
-importFrom(ggplot2,theme_bw)
-importFrom(graphics,abline)
-importFrom(graphics,legend)
-importFrom(graphics,par)
-importFrom(graphics,plot.default)
-importFrom(graphics,points)
-importFrom(graphics,text)
+importFrom(DT,datatable)
+importFrom(ggplot2,
+  aes,
+  annotate,
+  element_blank,
+  element_line,
+  facet_grid,
+  geom_abline,
+  geom_hline,
+  geom_point,
+  geom_vline,
+  ggplot,
+  scale_color_manual,
+  scale_x_continuous,
+  scale_y_continuous,
+  theme,
+  theme_bw
+)
+importFrom(graphics,
+  abline,
+  legend,
+  par,
+  plot.default,
+  points,
+  text
+)
 importFrom(rlang,.data)

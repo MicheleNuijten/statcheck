@@ -286,7 +286,7 @@ statcheck <- function(texts,
       class(Res) <- c("statcheck", "data.frame")
       return(Res)
     } else {
-      cat("statcheck did not find any results\n")
+      message("statcheck did not find any results")
     }
     
   } else {
@@ -299,7 +299,7 @@ statcheck <- function(texts,
       
       return(pRes)
     } else {
-      cat("statcheck did not find any p-values\n")
+      message("statcheck did not find any p-values")
     }
   }
 }

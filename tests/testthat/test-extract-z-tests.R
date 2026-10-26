@@ -56,6 +56,6 @@ test_that("a z followed by degrees of freedom is not matched", {
   txt1 <- " z(28) = 2.20, p = .03"
   txt2 <- " Z(28) = 2.20, p = .03"
   
-  expect_output(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
+  expect_message(statcheck(c(txt1, txt2), messages = FALSE), "did not find any results")
   
 })
