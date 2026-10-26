@@ -1,6 +1,6 @@
 Package: statcheck
 Title: Extract Statistics from Articles and Recompute P-Values
-Version: 1.6.1
+Version: 1.6.1.9000
 Date: 2026-10-23
 Authors@R: c(
     person("Michele B.", "Nuijten", , "m.b.nuijten@tilburguniversity.edu", role = c("aut", "cre"),

@@ -1,3 +1,5 @@
+# statcheck (development version)
+
 # statcheck 1.6.1
 
 ## Major changes
