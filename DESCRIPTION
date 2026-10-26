@@ -1,9 +1,9 @@
 Package: statcheck
 Title: Extract Statistics from Articles and Recompute P-Values
-Version: 1.6.1.9000
-Date: 2026-01-26
+Version: 1.6.1
+Date: 2026-10-23
 Authors@R: c(
-    person("Michele B.", "Nuijten", , "m.b.nuijten@uvt.nl", role = c("aut", "cre"),
+    person("Michele B.", "Nuijten", , "m.b.nuijten@tilburguniversity.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-1468-8585")),
     person("Sacha", "Epskamp", , "mail@sachaepskamp.com", role = "aut",
            comment = c(ORCID = "0000-0003-4884-8118")),
@@ -21,40 +21,41 @@ Authors@R: c(
     person("Steve", "Haroz", role = "ctb",
            comment = c(ORCID = "0000-0002-2725-9173"))
   )
-Description: A "spellchecker" for statistics. It checks whether your
-    p-values match their accompanying test statistic and degrees of
-    freedom. statcheck searches for null-hypothesis significance test
-    (NHST) in APA style (e.g., t(28) = 2.2, p < .05). It recalculates the
-    p-value using the reported test statistic and degrees of freedom. If
-    the reported and computed p-values don't match, statcheck will flag
-    the result as an error. If the reported p-value is statistically
-    significant and the recomputed one is not, or vice versa, the result
-    will be flagged as a decision error.  You can use statcheck directly
-    on a string of text, but you can also scan a PDF or HTML file, or even
-    a folder of PDF and/or HTML files.  Statcheck needs an external
-    program to convert PDF to text: Xpdf. Instructions on where and how to
-    download this program, how to install statcheck, and more details on
-    what statcheck can and cannot do can be found in the online manual:
-    <https://rpubs.com/michelenuijten/statcheckmanual>.  You can find a
-    point-and-click web interface to scan PDF or HTML or DOCX articles on
-    <http://statcheck.io>.
+Description: A "spellchecker" for statistics. It checks whether your p-values 
+  match their accompanying test statistic and degrees of freedom. statcheck 
+  searches for null-hypothesis significance tests (NHST) in APA style (e.g., t(28) 
+  = 2.2, p < .05), using pattern-matching ("regular expressions"). It recalculates 
+  the p-value using the reported test statistic and degrees of freedom. If the 
+  reported and computed p-values don't match, 'statcheck' will flag the result as 
+  an error. If the reported p-value is statistically significant and the computed 
+  one is not, or vice versa, the result will be flagged as a decision error. You 
+  can use 'statcheck' directly on a string of text, but you can also scan a PDF or 
+  HTML file, or even a folder of PDF and/or HTML files. PDF files are converted to 
+  text using the R package 'pdftools', so no additional software installation is 
+  necessary. You can find more information on what 'statcheck' can and cannot do 
+  and a point-and-click web interface to scan PDF or HTML or DOCX articles on 
+  <https://statcheck.io>.
 License: GPL-3
 Depends: 
     R (>= 3.6.0)
 Imports: 
+    DT,
     ggplot2,
+    graphics,
+    pdftools,
     plyr,
     rlang,
     rmarkdown,
+    stats,
     stringi,
-    tcltk,
     stringr,
-    pdftools
+    tcltk,
+    utils
 Suggests: 
     testthat
 ByteCompile: yes
 Encoding: UTF-8
 LazyLoad: yes
-RoxygenNote: 7.3.2
 URL: https://github.com/MicheleNuijten/statcheck
 BugReports: https://github.com/MicheleNuijten/statcheck/issues
+Config/roxygen2/version: 8.1.1

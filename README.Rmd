@@ -13,14 +13,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r echo=FALSE, results="hide", message=FALSE}
+```{r echo=FALSE, results="hide", message=FALSE, warnings = FALSE}
 library("badger")
 ```
 
-# statcheck <a href='http://statcheck.io'><img src='man/figures/logo.jpg' align="right" height="100" /></a>
+# statcheck <a href='http://statcheck.io'><img src='man/figures/statcheck-logo.png' align="right" height="100" /></a>
 
 <!-- badges: start -->
-```{r, echo = FALSE, results='asis'}
+```{r, echo = FALSE, results='asis', message=FALSE, warning=FALSE}
 cat(
 	badge_cran_release("statcheck", "green"),
 	badge_cran_download("statcheck", "grand-total", "blue"),
@@ -61,4 +61,3 @@ The algorithm behind `statcheck` consists of four basic steps:
 For detailed information about installing and using `statcheck`, see the [manual on RPubs](http://rpubs.com/michelenuijten/statcheckmanual).
 
 Also see [statcheck.io](http://statcheck.io/), a web-based interface for statcheck.
-

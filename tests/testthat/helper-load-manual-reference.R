@@ -30,7 +30,7 @@ load_manual <- function(
   if(file_type[1] == "pdf"){
     manual <- manual[manual$file_type == "pdf", ]
   } else if(file_type[1] == "html") {
-    manual <- manual[manual$file_type == "pdf", ]
+    manual <- manual[manual$file_type == "html", ]
   } 
   
   if(!is.null(file_id)){
