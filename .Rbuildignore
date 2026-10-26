@@ -16,3 +16,4 @@ zhang*
 ^CRAN-SUBMISSION$
 ^revdep$
 ^cran-comments\.md$
+^vignettes/articles$

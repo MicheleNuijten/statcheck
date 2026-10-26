@@ -59,3 +59,4 @@ LazyLoad: yes
 URL: https://github.com/MicheleNuijten/statcheck
 BugReports: https://github.com/MicheleNuijten/statcheck/issues
 Config/roxygen2/version: 8.1.1
+Config/Needs/website: rmarkdown
