@@ -141,6 +141,13 @@ Van Assen, Epskamp, & Wicherts,
 Assen, Hartgerink, Epskamp, & Wicherts,
 2017](https://doi.org/10.31234/osf.io/tcxaj).
 
+**How accurate is statcheck?** In typical psychology journals, statcheck
+detects about 60% of the null hypothesis significance tests. In
+classifying the extracted results as consistent or inconsistent,
+statcheck has an accuracy between 96.2% and 99.9%, depending on its
+settings ([Nuijten, Van Assen, Hartgerink, Epskamp, & Wicherts,
+2017](https://doi.org/10.31234/osf.io/tcxaj)).
+
 Note that statcheck assumes that the p-value is the inconsistent value,
 but it could just as well be the case that the test statistic or degrees
 of freedom contain a reporting error. statcheck merely detects whether a
@@ -913,11 +920,12 @@ the rows by the column "Consistency" (see below).
 knitr::include_graphics("figures/web-order.png")
 ```
 
-# Common Errors and Problems
+# Common Questions and Problems
 
-There are several errors that can arise when installing or running
-statcheck. This list is far from complete, so if you have an error you
-can't solve, or come across something that you think could be a bug,
+Below are some common questions about statcheck's results, and errors
+that can arise when installing or running statcheck. This list is far
+from complete, so if you have an error you can't solve, or come across
+something that you think could be a bug,
 please open an issue on
 [GitHub](https://github.com/MicheleNuijten/statcheck/issues) or contact
 me at
@@ -953,6 +961,50 @@ The list below gives some of the most common sources of inconsistencies.
 - Copy-paste errors: copying a previously reported result as a
   "template", but forgetting to change one or more of the numbers
 - Using a one-tailed test without explicitly mentioning this in the text
+
+## How do I correct an inconsistency?
+
+statcheck flags a result as inconsistent when the reported test
+statistic, degrees of freedom, and p-value do not match. It cannot tell
+you which of the three numbers is wrong. To correct an inconsistency, go
+back to the output of your statistical software and check which of the
+reported numbers deviates from the output. Correct that number in your
+manuscript, and run statcheck again to check if the result is now
+consistent.
+
+## statcheck says my result is consistent, but I think it's not
+
+statcheck takes rounding of the reported test statistic into account.
+For instance, a reported t = 2.35 could correspond to an actual value
+anywhere between 2.345 and 2.354. statcheck computes the range of
+p-values that belongs to this range of test statistics, and considers
+the reported p-value consistent if it falls within this range. This
+means that a result can be consistent even if recomputing the p-value
+from the rounded test statistic gives a slightly different number.
+Similarly, a reported p = .05 can be counted as significant (see the
+argument `pEqualAlphaSig`). If you still think statcheck made a
+mistake, please let me know (see the contact details at the start of
+this chapter).
+
+## statcheck says my result is inconsistent, but I think it's not
+
+Sometimes a reported result deliberately deviates from the p-value that
+statcheck computes. Examples are one-tailed tests (statcheck only takes
+these into account if the words "one-tailed", "one-sided", or
+"directional" appear in the text and you use the argument
+`OneTailedTxt = TRUE`), p-values corrected for multiple testing (e.g.,
+a Bonferroni correction), or degrees of freedom that were corrected for
+violations of assumptions (e.g., a Greenhouse-Geisser correction).
+statcheck cannot recognize such corrections, so in these cases the flag
+is not necessarily an error. If you report such a result, it helps
+readers to state the correction explicitly in the text.
+
+It is also possible that statcheck made a mistake. For instance, a
+symbol may have been read wrongly when converting a PDF or HTML file to
+plain text, or a result may be reported in an unconventional way. You
+can check the `raw` column in the output to see what statcheck
+extracted. If you think statcheck made a mistake, please let me know
+(see the contact details at the start of this chapter).
 
 ## A PDF cannot be read
 
