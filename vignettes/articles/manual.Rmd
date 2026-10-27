@@ -925,8 +925,7 @@ knitr::include_graphics("figures/web-order.png")
 Below are some common questions about statcheck's results, and errors
 that can arise when installing or running statcheck. This list is far
 from complete, so if you have an error you can't solve, or come across
-something that you think could be a bug,
-please open an issue on
+something that you think could be a bug, please open an issue on
 [GitHub](https://github.com/MicheleNuijten/statcheck/issues) or contact
 me at
 [m.b.nuijten\@tilburguniversity.edu](mailto:m.b.nuijten@tilburguniversity.edu){.email}.
@@ -982,9 +981,9 @@ the reported p-value consistent if it falls within this range. This
 means that a result can be consistent even if recomputing the p-value
 from the rounded test statistic gives a slightly different number.
 Similarly, a reported p = .05 can be counted as significant (see the
-argument `pEqualAlphaSig`). If you still think statcheck made a
-mistake, please let me know (see the contact details at the start of
-this chapter).
+argument `pEqualAlphaSig`). If you still think statcheck made a mistake,
+please let me know (see the contact details at the start of this
+chapter).
 
 ## statcheck says my result is inconsistent, but I think it's not
 
@@ -992,8 +991,8 @@ Sometimes a reported result deliberately deviates from the p-value that
 statcheck computes. Examples are one-tailed tests (statcheck only takes
 these into account if the words "one-tailed", "one-sided", or
 "directional" appear in the text and you use the argument
-`OneTailedTxt = TRUE`), p-values corrected for multiple testing (e.g.,
-a Bonferroni correction), or degrees of freedom that were corrected for
+`OneTailedTxt = TRUE`), p-values corrected for multiple testing (e.g., a
+Bonferroni correction), or degrees of freedom that were corrected for
 violations of assumptions (e.g., a Greenhouse-Geisser correction).
 statcheck cannot recognize such corrections, so in these cases the flag
 is not necessarily an error. If you report such a result, it helps
