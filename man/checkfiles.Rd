@@ -30,6 +30,9 @@ file path manually instead of relying on the dialog.
 
 Also, make sure that the files you provide are actual HTML or PDF documents.
 Passing other file types may result in errors.
+
+Sources use file basenames. If basenames are repeated, their full paths are
+used instead so that results from different articles remain separate.
 }
 \note{
 This package has been primarily tested on Windows. Mac users may experience
