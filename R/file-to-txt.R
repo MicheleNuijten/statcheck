@@ -10,8 +10,12 @@ getHTML <- function(x){
   })
   
   
-  # Convert to valid UTF-8 (try to fix invalid bytes)
-  strings <- lapply(strings, iconv,  from = "", to = "UTF-8", sub = "byte")
+  # Preserve valid UTF-8 independently of the system locale. Fall back to the
+  # native encoding for legacy files, retaining the existing invalid-byte repair.
+  strings <- lapply(strings, function(text) {
+    from <- if (stringi::stri_enc_isutf8(text)) "UTF-8" else ""
+    iconv(text, from = from, to = "UTF-8", sub = "byte")
+  })
   
   # Remove subscripts (except for p_rep)
   strings <- lapply(strings, gsub, pattern = "<sub>(?!rep).*?</sub>", replacement = "", perl = TRUE)
