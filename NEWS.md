@@ -1,5 +1,7 @@
 # statcheck (development version)
 
+* Fix rendering of APA-style plots grouped by source or another variable.
+
 # statcheck 1.6.1
 
 ## Major changes

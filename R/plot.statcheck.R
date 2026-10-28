@@ -144,8 +144,8 @@ plot.statcheck <- function(
       #color to the Type variable created earlier. Environment command allows apatheme to
       #be applied later because of bug when creating functions with ggplot2
       p <- ggplot(x,
-                  aes(y = rlang::.data[[VAR_COMPUTED_P]],
-                      x = rlang::.data[[VAR_REPORTED_P]],
+                  aes(y = .data[[VAR_COMPUTED_P]],
+                      x = .data[[VAR_REPORTED_P]],
                       col = Type),
                   environment = environment())
       
