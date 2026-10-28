@@ -1,5 +1,8 @@
 # statcheck (development version)
 
+* Correct p-value rounding precision in scientific notation, recognize Z-tests
+  at the beginning of text, and correctly classify uppercase Q-test subtypes.
+
 # statcheck 1.6.1
 
 ## Major changes

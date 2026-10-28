@@ -6,7 +6,7 @@ RGX_T <- "t"
 RGX_R <- "r"
 RGX_Q <- "Q\\s?-?\\s?(w|W|(w|W)ithin|b|B|(b|B)etween)?"
 RGX_F <- "F"
-RGX_Z <- "([^a-z](z|Z))"
+RGX_Z <- "((^|[^a-z])(z|Z))"
 # for chi2: effectively extract everything that is NOT a t, r, F, z, Q, W, n, or 
 # D, followed by *maybe* a 2 (and later followed by a result in a chi2 layout)
 RGX_CHI2 <- "((\\s[^trFzZQWnD ]\\s?)|([^trFzZQWnD ]2\\s?))2?"

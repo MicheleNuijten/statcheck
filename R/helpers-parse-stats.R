@@ -219,6 +219,13 @@ extract_p_value <- function(raw){
       # record the number of decimals of the p-value
       dec <- attr(regexpr(RGX_DEC, p_value[i]), "match.length") - 1
       dec[dec < 0] <- 0
+
+      # Scientific notation shifts the precision of the mantissa: 3.4e-3
+      # has the same rounding precision as .0034, rather than .3.
+      if(grepl("[eE]", p_value[i])){
+        exponent <- as.numeric(sub(".*[eE]", "", p_value[i]))
+        dec <- dec - exponent
+      }
       
       p_dec[i] <- dec
       
