@@ -40,6 +40,10 @@ certain folder and send the extracted statistics to \code{statcheck}.
 On macOS, the file selection dialog can sometimes be unreliable or fail to open
 when using `tk_choose.files()`. If you encounter this issue, it is recommended
 to manually type the filename or path instead of using the dialog.
+
+File extensions are matched without regard to case. Sources use file basenames
+unless names are repeated in subfolders, in which case paths relative to
+\code{dir} are used to keep articles separate.
 }
 \note{
 This package was primarily tested on Windows. Mac users may experience issues

@@ -1,5 +1,9 @@
 # statcheck (development version)
 
+* Directory scans now recognize uppercase file extensions and retain results
+  when only one file format contains statistics. Files with repeated names in
+  different folders keep distinct source names and APA factors.
+
 # statcheck 1.6.1
 
 ## Major changes
