@@ -17,15 +17,16 @@ error_test <- function(reported_p, test_type, test_stat,
   # based on the number of decimals that it was reported with. E.g., 
   # a t-value of 2.0 could have been rounded from anywhere between 1.95-2.05.
   
-  if(test_stat >= 0){
-    
+  if(test_type %in% c("t", "Z", "r")){
+    # These p-values decrease with the absolute statistic. An interval that
+    # crosses zero includes the maximum p-value, and correlations cannot
+    # extend beyond one even when their rounded value is exactly +/-1.
+    low_stat <- max(0, abs(test_stat) - (.5 / 10 ^ test_dec))
+    up_stat <- abs(test_stat) + (.5 / 10 ^ test_dec)
+    if(test_type == "r") up_stat <- min(1, up_stat)
+  } else {
     low_stat <- test_stat - (.5 / 10 ^ test_dec)
     up_stat <- test_stat + (.5 / 10 ^ test_dec)
-  
-    # switch around for negative test statistics
-    } else if (test_stat < 0){
-    low_stat <- test_stat + (.5 / 10 ^ test_dec)
-    up_stat <- test_stat - (.5 / 10 ^ test_dec)
   }
   
   # Compute the p-values that belong to the upper and lower bound of the test
@@ -44,12 +45,25 @@ error_test <- function(reported_p, test_type, test_stat,
   
   # p values smaller or equal to zero are errors ---------------------------
   
-  if(pZeroError == TRUE & reported_p <= 0){
+  if(reported_p <= 0 & (pZeroError == TRUE | p_comparison == "<")){
     error <- TRUE
     return(error)
   }
   
   # check errors for different combinations of <>= -------------------------
+
+  test_comparison <- magnitude_comparison(test_type, test_stat, test_comparison)
+
+  if(test_comparison == "any"){
+    # This signed bound permits statistics arbitrarily close to zero and
+    # magnitudes up to the upper end of the test's domain.
+    # Under the package's smaller-tail convention the maximum is .5 for
+    # one-tailed tests, and 1 for two-tailed tests.
+    max_p <- if(two_tailed) 1 else .5
+    if(p_comparison == ">") return(reported_p >= max_p)
+    if(p_comparison == "<") return(FALSE)
+    return(reported_p > max_p)
+  }
   
   if(test_comparison == "="){
     
@@ -111,4 +125,20 @@ error_test <- function(reported_p, test_type, test_stat,
   
   return(NA)
   
+}
+
+
+magnitude_comparison <- function(test_type, test_stat, test_comparison){
+  # Preserve the established interpretation of positive bounds as bounds
+  # on magnitude. Negative bounds are signed: x < -a implies |x| > a,
+  # whereas x > -a permits both zero and arbitrarily large positive values.
+  # Either strict inequality at zero also permits the full magnitude range.
+  if(test_type %in% c("t", "Z", "r")){
+    if(test_stat == 0 && test_comparison %in% c("<", ">")) return("any")
+    if(test_stat < 0){
+      if(test_comparison == "<") return(">")
+      if(test_comparison == ">") return("any")
+    }
+  }
+  return(test_comparison)
 }
