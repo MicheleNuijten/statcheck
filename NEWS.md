@@ -1,5 +1,8 @@
 # statcheck (development version)
 
+* Speed up p-value-only scans, collect extracted results before binding rows,
+  and group sources once when summarizing results.
+
 # statcheck 1.6.1
 
 ## Major changes

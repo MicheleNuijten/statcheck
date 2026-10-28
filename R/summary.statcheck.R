@@ -26,26 +26,19 @@ summary.statcheck <-
   function(object, ...) {
     x <- object
     
-    # Source
-    Source <-
-      c(as.vector(plyr::ddply(x, VAR_SOURCE, function(x)
-        unique(x[[VAR_SOURCE]]))[, 1]), "Total")
-    
-    # Number of p values extracted per article and in total
-    pValues <- c(plyr::ddply(x, VAR_SOURCE, function(x)
-      nrow(x))[, 2], nrow(x))
-    
-    # Number of errors per article and in total
-    Errors <-
-      c(plyr::ddply(x, VAR_SOURCE, function(x)
-        sum(x[[VAR_ERROR]], na.rm = TRUE))[, 2], 
-        sum(x[[VAR_ERROR]], na.rm = TRUE))
-    
-    # Number of decision errors per article and in total
-    DecisionErrors <-
-      c(plyr::ddply(x, VAR_SOURCE, function(x)
-        sum(x[[VAR_DEC_ERROR]], na.rm = TRUE))[, 2],
-        sum(x[[VAR_DEC_ERROR]], na.rm = TRUE))
+    # Group the rows once for all counts, preserving plyr's source ordering.
+    counts <- plyr::ddply(x, VAR_SOURCE, function(group) {
+      c(
+        pValues = nrow(group),
+        Errors = sum(group[[VAR_ERROR]], na.rm = TRUE),
+        DecisionErrors = sum(group[[VAR_DEC_ERROR]], na.rm = TRUE)
+      )
+    })
+
+    Source <- c(as.vector(counts[[VAR_SOURCE]]), "Total")
+    pValues <- c(counts$pValues, nrow(x))
+    Errors <- c(counts$Errors, sum(counts$Errors))
+    DecisionErrors <- c(counts$DecisionErrors, sum(counts$DecisionErrors))
     
     # Results in dataframe
     res <- data.frame(
