@@ -1,5 +1,8 @@
 # statcheck (development version)
 
+* Correct rounding bounds at zero and for perfect correlations, and handle
+  negative statistic inequalities when classifying inconsistencies.
+
 # statcheck 1.6.1
 
 ## Major changes

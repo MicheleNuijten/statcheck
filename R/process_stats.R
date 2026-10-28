@@ -27,6 +27,9 @@ process_stats <- function(test_type, test_stat, df1, df2, reported_p,
                       pZeroError = pZeroError)
   
   # check if the result is a decision error ----------------------------------
+
+  decision_comparison <- magnitude_comparison(test_type, test_stat,
+                                              test_comparison)
   
   if(!error){
     # if a result is not an error, it's automatically also  not a decision error
@@ -36,7 +39,7 @@ process_stats <- function(test_type, test_stat, df1, df2, reported_p,
     # decision error
     decision_error <- decision_error_test(reported_p = reported_p, 
                                           computed_p = computed_p,
-                                          test_comparison = test_comparison,
+                                          test_comparison = decision_comparison,
                                           p_comparison = p_comparison,
                                           alpha = alpha, 
                                           pEqualAlphaSig = pEqualAlphaSig)
@@ -93,7 +96,7 @@ process_stats <- function(test_type, test_stat, df1, df2, reported_p,
         decision_error_1tail <- 
           decision_error_test(reported_p = reported_p, 
                               computed_p = computed_p_1tail,
-                              test_comparison = test_comparison,
+                              test_comparison = decision_comparison,
                               p_comparison = p_comparison,
                               alpha = alpha, 
                               pEqualAlphaSig = pEqualAlphaSig)
