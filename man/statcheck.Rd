@@ -104,6 +104,9 @@ exactly according to the APA guidelines:
 \code{statcheck} takes into account that test statistics and p values may be 
 exactly (=) or inexactly (< or >) reported. Different spacing has also been 
 taken into account.
+Mathematical Unicode letters (such as italic or bold t, F, and p),
+mathematical digits, and Unicode minus signs are normalized before
+extraction. The \code{raw} output contains this normalized text.
 
 \strong{2. Recompute p-value}
 
