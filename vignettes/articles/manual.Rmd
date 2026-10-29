@@ -52,9 +52,9 @@ freedom.
 style (e.g., *t*(28) = 2.2, *p* \< .05). It recalculates the p-value
 using the reported test statistic and degrees of freedom. If the
 reported and computed p-values don't match, `statcheck` will flag the
-result as an error.
+result as an inconsistency.
 
-![](man/figures/infograph.png)
+![](figures/infograph.png)
 
 # What can I use statcheck for?
 
@@ -89,10 +89,11 @@ files are read in by R and automatically converted to raw text files.
 
 **2. Scan text for statistical results**
 
-statcheck searches for specific patterns and recognizes statistical
-results from correlations and t, F, $\chi^2$, Z tests and Q tests.
-statcheck can only read these results if the results are reported
-exactly according to the APA guidelines:
+`statcheck` uses so-called "regular expressions" to search for specific
+patterns. It recognizes statistical results from correlations and t, F,
+$\chi^2$, Z tests and Q tests. `statcheck` can only read these results
+if the results are reported completely and according to the APA
+guidelines:
 
 - t(df) = value, p = value
 - F(df1, df2) = value, p = value
@@ -109,7 +110,7 @@ spacing has also been taken into account, and case is ignored.
 
 **3. Use test statistics and degrees of freedom to recompute p value**
 
-By default the recomputed p value is two sided.
+By default, the recomputed p value is two sided.
 
 **4. Compare reported and recomputed p value**
 
@@ -119,39 +120,27 @@ marked as an "error". If the reported result is significant and the
 recomputed result is not, or vice versa, the result is marked as a
 "decision error".
 
-Correct rounding is taken into account. For instance, a reported t value
-of 2.35 could correspond to an actual value of 2.345 to 2.354 with a
-range of p values that can slightly deviate from the recomputed p value.
-statcheck will not count cases like this as errors.
+`statcheck` takes correct rounding is into account. For instance, a
+reported *t*-value of 2.35 could correspond to an actual value of 2.345
+to 2.354 with a range of *p*-values that can slightly deviate from the
+recomputed *p*-value. `statcheck` will not count cases like this as
+errors.
 
 Furthermore, one-sided testing can be taken into account: if somewhere
 in the article the words "one-tailed", "one-sided", or "directional" are
 mentioned, and the result would have been correct if it was one-sided,
 it can be counted as a correctly reported one-sided test (see the
-argument `OneTailedTxt` below). However, as [Felix
-Thoemmes](https://www.human.cornell.edu/people/fjt36) pointed out to me,
-this only works if the one-tailed result was in line with the one-tailed
-hypothesis. If you expected a negative effect, but found a positive one,
-your p-value would be 1-p/2. Unfortunately statcheck can't recognize
-this and will wrongly flag this as an inconsistency.
+argument `OneTailedTxt` below). However, as Felix Thoemmes pointed out
+to me, this only works if the one-tailed result was in line with the
+one-tailed hypothesis. If you expected a negative effect, but found a
+positive one, your p-value would be 1-p/2. Unfortunately statcheck can't
+recognize this and will wrongly flag this as an inconsistency.
 
-For a detailed validity study of statcheck, see [Nuijten, Hartgerink,
-Van Assen, Epskamp, & Wicherts,
-2016](https://doi.org/10.3758/s13428-015-0664-2) and [Nuijten, Van
-Assen, Hartgerink, Epskamp, & Wicherts,
-2017](https://doi.org/10.31234/osf.io/tcxaj).
-
-**How accurate is statcheck?** In typical psychology journals, statcheck
-detects about 60% of the null hypothesis significance tests. In
-classifying the extracted results as consistent or inconsistent,
-statcheck has an accuracy between 96.2% and 99.9%, depending on its
-settings ([Nuijten, Van Assen, Hartgerink, Epskamp, & Wicherts,
-2017](https://doi.org/10.31234/osf.io/tcxaj)).
-
-Note that statcheck assumes that the p-value is the inconsistent value,
-but it could just as well be the case that the test statistic or degrees
-of freedom contain a reporting error. statcheck merely detects whether a
-set of numbers is consistent with each other.
+Note that by recalculating the p-value, statcheck seems to imply that
+any inconsistencies are due to the reported p-value. However, it could
+just as well be the case that the test statistic or degrees of freedom
+contain a reporting error. statcheck merely detects whether a set of
+numbers is consistent with each other.
 
 Also note that corrected statistical results can also cause statcheck to
 flag them as inconsistent. For instance, if you want to perform a
@@ -162,13 +151,13 @@ statistic, degrees of freedom, or p-value are adjusted (such as e.g.,
 Greenhouse-Geisser). Note that when using these corrections it is
 advised to still report the result in a consistent manner (so don't
 report the uncorrected degrees of freedom with the corrected test
-statistic and p-value). See [Nuijten et al.,
-2017](https://doi.org/10.31234/osf.io/tcxaj) for details on this issue.
+statistic and p-value). See [Nuijten, Van Assen, Hartgerink, Epskamp, &
+Wicherts (2017)](https://doi.org/10.31234/osf.io/tcxaj) for details on
+this issue.
 
-Finally, as [Nick Brown](https://www.rug.nl/staff/n.j.l.brown) pointed
-out to me, note that some cases are not flagged as an inconsistency,
-whereas they might look suspicious to a human reader. For instance, take
-the following case:
+Finally, as Nick Brown pointed out to me, note that some cases are not
+flagged as an inconsistency, whereas they might look suspicious to a
+human reader. For instance, take the following case:
 
 > We found a significant difference, t(99) = 1.95, p = .05.
 
@@ -179,6 +168,26 @@ this result as an inconsistency, since, well, it's not. If you round
 in which a human might raise their eyebrows, but statcheck strictly
 adheres to the math: .054 is correctly rounded to .05, and hence not
 inconsistent.
+
+## **How accurate is statcheck?**
+
+In typical psychology journals, we estimate that `statcheck` detects
+about 60% of the null hypothesis significance tests. Tests it does not
+detect are often either not reported according to APA guidelines, are
+reported in tables rather than in running text, are combinations of
+results ("all *p*s \< .05"), or are not converted from PDF/HTML to plain
+text correctly.
+
+In classifying the extracted results as consistent or inconsistent,
+statcheck has an accuracy between 96.2% and 99.9%, depending on its
+settings [Nuijten et al., 2017](https://doi.org/10.31234/osf.io/tcxaj).
+These estimates are based on comparisons between manual coding from
+[Bakker & Wicherts (2011)](https://doi.org/10.3758/s13428-011-0089-5)
+and `statcheck`'s results. They are based on a subset of statistics (t,
+F, and $\chi^2$ tests with p-values \< .05) and the results pertain to
+statcheck version 1.2.2. Later versions have incorporated multiple
+improvements, which implies an increased validity, but this has not been
+formally reassessed.
 
 # Installation
 
@@ -194,9 +203,9 @@ download it from <https://cran.r-project.org/>. If you want you can now
 run R via RStudio. RStudio is an interface for R and it has several nice
 tricks that can make programming in R easier (syntax highlighting, more
 point-and-click options, etc.). You can obtain the latest version of
-RStudio from <https://posit.co/download/rstudio-desktop/>.
+RStudio from <https://docs.posit.co/ide/user/download.html>.
 
-## statcheck from CRAN
+## Install statcheck from CRAN
 
 You can install and load the R package statcheck with the following
 lines of code:
@@ -213,7 +222,7 @@ PDF files installs automatically. On Linux, you may first need to
 install the system library poppler, for instance on Ubuntu or Debian
 with `sudo apt-get install libpoppler-cpp-dev`.
 
-## Optional: statcheck from GitHub
+## Optional: install statcheck from GitHub
 
 statcheck is constantly being updated, which means that the version on
 CRAN is not always the latest version. Instead of downloading statcheck
@@ -245,16 +254,16 @@ While statcheck extracts statistics, it shows a progress bar. You can
 turn this off with the argument `messages = FALSE`. I'll do that in the
 rest of this manual to keep the output readable.
 
-Note that when you want to scan a Z test at the very start of a string,
+Note that if you want to scan a Z test at the very start of a string,
 you need to place a space in front of Z. This is because of an ugly hack
 I had to build in: sometimes Z tests were read as $\chi^2$ and this was
 the easiest way to avoid that:
 
 ```{r, eval = FALSE}
+# this line will give no output
 statcheck("z = 1.95, p = .05")
 
-# instead, type
-
+# instead, type this
 statcheck(" z = 1.95, p = .05")
 ```
 
@@ -343,9 +352,9 @@ means that some of the flagged inconsistencies might not be inconsistent
 at all.
 
 Finally, the column `apa_factor` indicates the proportion of all
-detected p-values that were part of a fully APA reported NHST result. It
-gives a rough indication of how many statistical tests statcheck may
-have missed because of reporting issues.
+detected p-values that were part of a fully statcheck-detected APA
+reported NHST result. It gives a rough indication of how many
+statistical tests statcheck may have missed because of reporting issues.
 
 ### statcheck output: no results found
 
@@ -362,8 +371,9 @@ statcheck(txt, messages = FALSE)
 
 One of the main advantages of statcheck is that it can automatically
 extract statistical results from articles, so that you don't have to
-enter them manually. Instead of the `statcheck()` function, you use the
-`checkPDF()` function, which automatically calls statcheck.
+copy the statistics and enter them manually. Instead of the
+`statcheck()` function, you use the `checkPDF()` function, which
+automatically calls statcheck.
 
 There are three ways to select an article using `checkPDF()`.
 
@@ -410,6 +420,9 @@ article again, or use the HTML version.
 You can use statcheck on an HTML article by using the function
 `checkHTML()`. This function works in the same way as `checkPDF()` (see
 the section above).
+
+Behind the scenes, statcheck removes the html tags and does some
+additional light clean-up so it can search through the raw text.
 
 If you have access to both the PDF and the HTML version of an article, I
 would advise to check the HTML article to avoid typesetting issues.
@@ -526,8 +539,6 @@ correlations:
 statcheck(txt, stat = c("t", "cor"), messages = FALSE)
 ```
 
-By default, statcheck extracts all statistics it can read.
-
 ### OneTailedTests
 
 The argument `OneTailedTests` defines whether we treat all extracted
@@ -577,9 +588,9 @@ By convention, a result is deemed significant when p \< $\alpha$, which
 would correspond with the setting `pEqualAlphaSig = FALSE`. However,
 when we inspected all instances of published papers in which statcheck
 found "p = .05", we found that in almost 95% of the cases the authors
-had interpreted the result as significant (Nuijten et al., 2016).
-Because of this finding, we decided to count p \<= $\alpha$ as
-significant by default.
+had interpreted the result as significant ([Nuijten et al.,
+2016](https://doi.org/10.3758/s13428-015-0664-2)). Because of this
+finding, we decided to count p \<= $\alpha$ as significant by default.
 
 This example illustrates the difference between the two options:
 
@@ -609,10 +620,11 @@ The argument `pZeroError` controls whether statcheck will count a
 p-value reported as "p = .000" as an error (default,
 `pZeroError = TRUE`) or not (`pZeroError = FALSE`).
 
-We decided to count these cases as an error, because according to the
-APA reporting guidelines, a p-value smaller than .001 should be reported
-as "p \< .001", and never as "p = .000". Furthermore, a p-value can
-never be exactly zero, so it makes no sense to report it as such.
+We decided to count these cases as an error by default, because
+according to the APA reporting guidelines, a p-value smaller than .001
+should be reported as "p \< .001", and never as "p = .000". Furthermore,
+a p-value can never be exactly zero, so it makes no sense to report it
+as such.
 
 If you find these criteria too stringent, you can set `pZeroError` to
 `FALSE`.
@@ -622,8 +634,8 @@ If you find these criteria too stringent, you can set `pZeroError` to
 The argument `OneTailedTxt` controls whether statcheck will try to
 identify and correct for one-tailed tests. This is one of the most
 important arguments in statcheck. Our validity study showed that
-statcheck's accuracy improved when `OneTailedTxt = TRUE` (Nuijten et
-al., 2017).
+statcheck's accuracy improved when `OneTailedTxt = TRUE` ([Nuijten et
+al., 2017](https://doi.org/10.31234/osf.io/tcxaj)).
 
 By default, `OneTailedTxt = FALSE` and statcheck will treat all tests it
 finds the same, depending on your settings for `OneTailedTests`.
@@ -632,10 +644,11 @@ one-tailed by setting `OneTailedTxt = TRUE`.
 
 When `OneTailedTxt = TRUE`, statcheck will search the entire text for
 the keywords "one-tailed", "one-sided", and "directional" (taking
-spacing issues etc. into account). When statcheck finds at least one of
-those keywords AND an initially inconsistent result would be consistent
-if it was a one-tailed test, then statcheck treats this case as a
-one-tailed test and counts it as consistent.
+differences in spacing and hyphenation etc. into account). When
+statcheck finds at least one of those keywords AND an initially
+inconsistent result would be consistent if it was a one-tailed test,
+then statcheck treats this case as a one-tailed test and counts it as
+consistent.
 
 ```{r}
 txt <- "... t(48) = 1.82, p < .05, all tests were one-tailed."
@@ -667,6 +680,10 @@ statcheck(txt, AllPValues = TRUE, messages = FALSE)
 This option merely allows you to extract the p-values, it doesn't
 extract enough information to recalculate anything.
 
+Note that this has a higher prevalence of false positives than when
+extracting a full result: mentions of things like page numbers are more
+easily mistaken for a p-value.
+
 ### messages
 
 The argument `messages` controls whether statcheck shows a progress bar
@@ -695,9 +712,9 @@ on the diagonal. The dotted lines indicate the region of significance
 this particular p-value was an inconsistency or even a decision error.
 
 By default, the plot is created with ggplot2 (Wickham, 2016) in APA
-style. Many thanks to [John Sakaluk](https://johnsakaluk.com/) for
-writing the APA style plot function. It is also possible to plot the
-statcheck results without using ggplot2:
+style. Many thanks to John Sakaluk for writing the APA style plot
+function. It is also possible to plot the statcheck results without
+using ggplot2:
 
 ```{r}
 plot(stat, APAstyle = FALSE)
@@ -771,7 +788,7 @@ With `statcheckReport()` you can turn statcheck output into a formatted
 HTML report with an interactive results table:
 
 ```{r, eval = FALSE}
-stat <- statcheck(txt2)
+stat <- statcheck(c(txt1,txt2))
 statcheckReport(stat,
                 outputFile = "statcheck_report",
                 outputDir = "C:/mydocuments/results")
@@ -780,6 +797,12 @@ statcheckReport(stat,
 You can now find your report in the folder "C:/mydocuments/results"
 under the name "statcheck_report.html". Note that in versions before
 1.6.1, the argument `outputFile` was called `outputFileName`.
+
+The report contains an overview of the results, an explanatory table,
+and some additional notes on the interpretation of the results (see
+screenshot below).
+
+![](figures/html-report.png)
 
 # The statcheck Web App
 
@@ -793,14 +816,14 @@ To upload an article to scan, simply click on the "Browse..." button
 format.
 
 You have the option to count one-tailed tests as consistent if they're
-explicitly identified as one-tailed tests. To do so, simply check the
-box "Try to identify and correct for one-tailed tests" (see the
-screenshot below). If you check this box, statcheck will consider
-results as correct if (1) the p-value would have been consistent if the
-test was one-tailed, and (2) if the words "one-tailed", "one-sided", or
-"directional" are somewhere in the full text. This is equivalent to the
-argument `OneTailedTxt = TRUE` in the R package (see the section on
-`OneTailedTxt`).
+explicitly identified as one-tailed tests with the check box "Try to
+identify and correct for one-tailed tests" (see the screenshot below).
+If you check this box (which is done by default), statcheck will
+consider results as correct if (1) the p-value would have been
+consistent if the test was one-tailed, and (2) if the words
+"one-tailed", "one-sided", or "directional" are somewhere in the full
+text. This is equivalent to the argument `OneTailedTxt = TRUE` in the R
+package (see the section on `OneTailedTxt`).
 
 ```{r, echo = FALSE, out.width = "664px", fig.align = "center"}
 knitr::include_graphics("figures/web-homescreen.png")
@@ -935,18 +958,21 @@ me at
 There are several reasons why statcheck sometimes does not pick up
 results. Some of the most common reasons are listed below.
 
+- Tests other than t, F, $\chi^2$, r, Z, or Q
 - Result is not reported exactly according to APA style, e.g.:
   - degrees of freedom in subscript
   - square brackets instead of parentheses
   - semi-colons instead of commas
   - effect size in between test statistic and p-value
   - statistics reported in tables
-- Tests other than t, F, $\chi^2$, r, Z, or Q
+- Results are not reported in the running text but in a table
 - Typesetting issues in PDF documents. In some journals, mathematical
   symbols such as "=" are replaced by an image of this symbol, which
-  can't be converted to plain text. To quickly check if a reported
-  result has issues like this, copy-paste it to a text editor: if all
-  symbols show up normally, there are no (obvious) typesetting issues.
+  can't be converted to plain text. Other symbols, such as minus signs
+  or Greek letters, can turn into different or unreadable characters
+  during conversion. To quickly check if a reported result has issues
+  like this, copy-paste it to a text editor: if all symbols show up
+  normally, there are no (obvious) typesetting issues.
 
 ## Common sources of inconsistencies
 
@@ -1023,6 +1049,10 @@ Fedora with `sudo dnf install poppler-cpp-devel`, and then install
 statcheck again.
 
 # References
+
+Bakker, M., & Wicherts, J. M. (2011). The (mis)reporting of statistical
+results in psychology journals. *Behavior Research Methods*, *43*(3),
+666-678. <https://doi.org/10.3758/s13428-011-0089-5>
 
 Nuijten, M. B. & Epskamp, S. (2026). statcheck: Extract statistics from
 articles and recompute p values. R package version 1.6.1.
