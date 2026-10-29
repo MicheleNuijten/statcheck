@@ -57,7 +57,7 @@ plot.statcheck <- function(
   x[[VAR_P_COMPARISON]][ns] <- ">"
   x[[VAR_REPORTED_P]][ns] <- alpha
   
-  if (APAstyle == TRUE) {
+  if (APAstyle) {
     
     # Add vector "Type" to statcheck object, specifying whether observations are
     # correctly reported, reporting inconsistencies, or decision errors.

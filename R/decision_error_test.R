@@ -9,7 +9,7 @@ decision_error_test <- function(reported_p, computed_p,
   # check errors for different combinations of <>= -------------------------
   
   # treat p = alpha as significant
-  if(pEqualAlphaSig == TRUE){
+  if(pEqualAlphaSig){
     if(test_comparison == "="){
       
       if(p_comparison == "="){
@@ -73,7 +73,7 @@ decision_error_test <- function(reported_p, computed_p,
     return(NA)
     
     # treat p = alpha as significant
-  } else if (pEqualAlphaSig == FALSE){
+  } else if (!pEqualAlphaSig){
     
     if(test_comparison == "="){
       

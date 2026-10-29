@@ -44,7 +44,7 @@ error_test <- function(reported_p, test_type, test_stat,
   
   # p values smaller or equal to zero are errors ---------------------------
   
-  if(pZeroError == TRUE & reported_p <= 0){
+  if(pZeroError && reported_p <= 0){
     error <- TRUE
     return(error)
   }
