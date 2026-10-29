@@ -54,6 +54,12 @@ using the reported test statistic and degrees of freedom. If the
 reported and computed p-values don't match, `statcheck` will flag the
 result as an inconsistency.
 
+`statcheck` is not based on any form of Artifical Intelligence (AI) or
+Large Language Models (LLMs). It is a deterministic program that
+searches for prespecified patterns in text, it does not upload any
+content anywhere, and running it on the same input multiple times will
+give the same output each time.
+
 ![](figures/infograph.png)
 
 # What can I use statcheck for?
@@ -75,19 +81,19 @@ result as an inconsistency.
     distributions (see e.g., Hartgerink et al., 2016
     <doi:10.7717/peerj.1935>).
 
-# What statcheck can and cannot do
+# How statcheck works
 
 Before I get to the technical parts of installing and using statcheck,
 please consider for a moment what statcheck can and cannot do. The
 package statcheck is a program that automatically extracts statistics
 from articles and recomputes their p-values. It works as follows:
 
-**1. Convert PDF and HTML files to plain text.**
+## Step 1: Convert PDF and HTML files to text
 
 PDF files are converted to plain text with the R package pdftools. HTML
 files are read in by R and automatically converted to raw text files.
 
-**2. Scan text for statistical results**
+## Step 2: Find statistical results
 
 `statcheck` uses so-called "regular expressions" to search for specific
 patterns. It recognizes statistical results from correlations and t, F,
@@ -108,11 +114,11 @@ All regular expressions take into account that test statistics and p
 values may be exactly (=) or inexactly (\< or \>) reported. Different
 spacing has also been taken into account, and case is ignored.
 
-**3. Use test statistics and degrees of freedom to recompute p value**
+## Step 3: Recompute the p-value
 
 By default, the recomputed p value is two sided.
 
-**4. Compare reported and recomputed p value**
+## Step 4: Compare reported and recomputed p-values
 
 This comparison takes into account how the results were reported, e.g. p
 \< .05 is treated differently than p = .05. Incongruent p values are
@@ -126,28 +132,36 @@ to 2.354 with a range of *p*-values that can slightly deviate from the
 recomputed *p*-value. `statcheck` will not count cases like this as
 errors.
 
-Furthermore, one-sided testing can be taken into account: if somewhere
-in the article the words "one-tailed", "one-sided", or "directional" are
-mentioned, and the result would have been correct if it was one-sided,
-it can be counted as a correctly reported one-sided test (see the
-argument `OneTailedTxt` below). However, as Felix Thoemmes pointed out
-to me, this only works if the one-tailed result was in line with the
-one-tailed hypothesis. If you expected a negative effect, but found a
-positive one, your p-value would be 1-p/2. Unfortunately statcheck can't
-recognize this and will wrongly flag this as an inconsistency.
+## Limitations
 
-Note that by recalculating the p-value, statcheck seems to imply that
-any inconsistencies are due to the reported p-value. However, it could
-just as well be the case that the test statistic or degrees of freedom
+### One-tailed tests
+
+One-sided testing can be taken into account: if somewhere in the article
+the words "one-tailed", "one-sided", or "directional" are mentioned, and
+the result would have been correct if it was one-sided, it can be
+counted as a correctly reported one-sided test (see the argument
+`OneTailedTxt` below). However, as Felix Thoemmes pointed out to me,
+this only works if the one-tailed result was in line with the one-tailed
+hypothesis. If you expected a negative effect, but found a positive one,
+your p-value would be 1-p/2. Unfortunately statcheck can't recognize
+this and will wrongly flag this as an inconsistency.
+
+### statcheck can't tell which number is wrong
+
+By recalculating the p-value, statcheck seems to imply that any
+inconsistencies are due to the reported p-value. However, it could just
+as well be the case that the test statistic or degrees of freedom
 contain a reporting error. statcheck merely detects whether a set of
 numbers is consistent with each other.
 
-Also note that corrected statistical results can also cause statcheck to
-flag them as inconsistent. For instance, if you want to perform a
-Bonferroni correction for multiple testing and multiply your p-value
-instead of dividing your $\alpha$, statcheck will flag your result as
-inconsistent. This also holds for other corrections in which the test
-statistic, degrees of freedom, or p-value are adjusted (such as e.g.,
+### Corrected results (e.g., Bonferroni, Greenhouse-Geisser)
+
+Corrected statistical results can also cause statcheck to flag them as
+inconsistent. For instance, if you want to perform a Bonferroni
+correction for multiple testing and multiply your p-value instead of
+dividing your $\alpha$, statcheck will flag your result as inconsistent.
+This also holds for other corrections in which the test statistic,
+degrees of freedom, or p-value are adjusted (such as e.g.,
 Greenhouse-Geisser). Note that when using these corrections it is
 advised to still report the result in a consistent manner (so don't
 report the uncorrected degrees of freedom with the corrected test
@@ -155,9 +169,11 @@ statistic and p-value). See [Nuijten, Van Assen, Hartgerink, Epskamp, &
 Wicherts (2017)](https://doi.org/10.31234/osf.io/tcxaj) for details on
 this issue.
 
-Finally, as Nick Brown pointed out to me, note that some cases are not
-flagged as an inconsistency, whereas they might look suspicious to a
-human reader. For instance, take the following case:
+### Consistent results that still look suspicious
+
+As Nick Brown pointed out to me, note that some cases are not flagged as
+an inconsistency, whereas they might look suspicious to a human reader.
+For instance, take the following case:
 
 > We found a significant difference, t(99) = 1.95, p = .05.
 
@@ -169,7 +185,7 @@ in which a human might raise their eyebrows, but statcheck strictly
 adheres to the math: .054 is correctly rounded to .05, and hence not
 inconsistent.
 
-## **How accurate is statcheck?**
+## How accurate is statcheck?
 
 In typical psychology journals, we estimate that `statcheck` detects
 about 60% of the null hypothesis significance tests. Tests it does not
@@ -279,7 +295,7 @@ trim(stat)
 
 I'll go over the different parts of the full output below.
 
-### statcheck output: part 1
+### statcheck output: extracted statistics
 
 The first part of the output (as shown below) shows which statistics are
 extracted from the input.
@@ -305,7 +321,7 @@ you for instance want to investigate how many F-values an article or set
 of articles contains, or if you want to investigate the distribution of
 extracted p-values.
 
-### statcheck output: part 2
+### statcheck output: consistency check
 
 The second part of the output, as shown below, shows the result of the
 consistency check.
@@ -335,7 +351,7 @@ the statistical conclusion: the reported p-value is significant, whereas
 the recomputed one is not. Note that a result can only be a
 `decision_error` when it is also an `error`.
 
-### statcheck output: part 3
+### statcheck output: article information
 
 The last part of the output shows some extra information about the
 extracted result and the article it was extracted from.
@@ -356,7 +372,7 @@ detected p-values that were part of a fully statcheck-detected APA
 reported NHST result. It gives a rough indication of how many
 statistical tests statcheck may have missed because of reporting issues.
 
-### statcheck output: no results found
+### statcheck output: when no results are found
 
 It is of course possible that the text you want to check doesn't contain
 any (correctly reported) APA results. In that case, statcheck will give
@@ -403,8 +419,13 @@ which you can select the article you want to scan.
 
 Note that there can be typesetting issues in PDF articles. To be able to
 read a PDF, statcheck uses the R package pdftools to convert it into
-plain text. statcheck recognizes several characters that some journals
-typeset in unusual ways (e.g., =, \<, -, and $\chi$). However, sometimes
+plain text. In addition to the functionality of pdftools, statcheck adds
+some additional finetuning, solving common issues in converting
+psychology articles to text (many thanks to Edoardo Costantini for his
+help with this!).
+
+statcheck recognizes several characters that some journals typeset in
+unusual ways (e.g., =, \<, -, and $\chi$). However, sometimes
 mathematical symbols are replaced by images in the text, which cannot be
 translated into plain text. If that is the case, statcheck will miss
 these results. I would therefore advise to use HTML articles when
@@ -807,7 +828,8 @@ screenshot below).
 # The statcheck Web App
 
 A quick and easy way to scan an article with statcheck is by using the
-web app at <https://statcheck.io>.
+web app at <https://statcheck.io>. Many thanks to Willem Sleegers and
+Sean Rife for their help with this app.
 
 ## Using the web app
 
