@@ -46,9 +46,9 @@ extract_stats <- function(txt, stat){
     if (grepl(pattern = RGX_Q, x = test_raw)){
       
       # distinguish between Q, Qw, and Qb
-      if(grepl(pattern = RGX_QB, x = test_raw)){
+      if(grepl(pattern = RGX_QB, x = test_raw, ignore.case = TRUE)){
         test_type[i] <- "Qb"
-      } else if (grepl(pattern = RGX_QW, x = test_raw)){
+      } else if (grepl(pattern = RGX_QW, x = test_raw, ignore.case = TRUE)){
         test_type[i] <- "Qw"
       } else {
         test_type[i] <- "Q"
