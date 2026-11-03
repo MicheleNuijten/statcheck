@@ -8,12 +8,12 @@ checkPDFdir <-
     if (missing(dir))
       dir <- tcltk::tk_choose.dir()
     
-    all.files <-
+    files <-
       list.files(dir,
-                 pattern = "\\.pdf",
+                 pattern = "\\.pdf$",
                  full.names = TRUE,
-                 recursive = subdir)
-    files <- all.files[grepl("\\.pdf$", all.files)]
+                 recursive = subdir,
+                 ignore.case = TRUE)
     
     if (length(files) == 0)
       stop("No PDF found")
@@ -29,7 +29,7 @@ checkPDFdir <-
     
     close(pb)
     
-    names(txts) <- basename(files)
+    names(txts) <- file_sources(files, dir)
     
     return(statcheck(txts, ...))
   }

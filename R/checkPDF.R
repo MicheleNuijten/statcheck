@@ -7,6 +7,6 @@ checkPDF <-
       files <- tcltk::tk_choose.files()
     
     txts <-  sapply(files, getPDF)
-    names(txts) <-  basename(files)
+    names(txts) <- file_sources(files)
     return(statcheck(txts, ...))
   }

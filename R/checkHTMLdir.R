@@ -10,7 +10,7 @@ checkHTMLdir <- function(dir,
   }
   
   if (extension == TRUE) {
-    pat = ".html|.htm"
+    pat = "\\.html?$"
   }
   
   if (extension == FALSE) {
@@ -21,7 +21,8 @@ checkHTMLdir <- function(dir,
     list.files(dir,
                pattern = pat,
                full.names = TRUE,
-               recursive = subdir)
+               recursive = subdir,
+               ignore.case = TRUE)
   
   if (length(files) == 0) {
     stop("No HTML found")
@@ -38,6 +39,6 @@ checkHTMLdir <- function(dir,
   
   close(pb)
   
-  names(txts) <- basename(files)
+  names(txts) <- file_sources(files, dir)
   return(statcheck(txts, ...))
 }
