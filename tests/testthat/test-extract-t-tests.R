@@ -113,10 +113,12 @@ test_that("t-tests with 2 dfs are not retrieved from text", {
 })
 
 # weird encoding in minus sign followed by space
-test_that("t-values with a weird minus sign and a space do not result in errors", {
-    txt1 <- " t(553) = − 4.46, p < .0001" # this is an em dash or something
+test_that("t-values with a Unicode minus sign and a space are recognized", {
+    txt1 <- " t(553) = \u2212 4.46, p < .0001"
     
-    expect_message(statcheck(txt1, messages = FALSE), "did not find any results")
+    result <- statcheck(txt1, messages = FALSE)
+    expect_equal(nrow(result), 1)
+    expect_equal(result[[VAR_TEST_VALUE]], -4.46)
 })
 
 # multiple comparison signs 

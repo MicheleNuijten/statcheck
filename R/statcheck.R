@@ -26,6 +26,9 @@
 #' \code{statcheck} takes into account that test statistics and p values may be 
 #' exactly (=) or inexactly (< or >) reported. Different spacing has also been 
 #' taken into account.
+#' Mathematical Unicode letters (such as italic or bold t, F, and p),
+#' mathematical digits, and Unicode minus signs are normalized before
+#' extraction. The \code{raw} output contains this normalized text.
 #' 
 #' \strong{2. Recompute p-value}
 #' 
@@ -123,6 +126,13 @@ statcheck <- function(texts,
                       AllPValues = FALSE,
                       messages = TRUE){
   
+  # Normalize mathematical fonts for all input routes, preserving source names.
+  # Limit compatibility normalization to these blocks so numeric superscripts
+  # and subscripts (e.g., footnotes after a p-value) do not become extra digits.
+  texts[] <- stringi::stri_trans_general(
+    texts, "[\\U0001D400-\\U0001D7FF\\u2100-\\u214F] NFKC")
+  texts[] <- gsub("\u2212\\s*", "-", texts, perl = TRUE)
+
   # We need empty data frames to store extracted statistics in
   # One for NHST results (Res) and one for p-values (pRes)
   Res <- data.frame(NULL)

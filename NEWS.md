@@ -1,5 +1,8 @@
 # statcheck (development version)
 
+* Recognize mathematical Unicode letters and minus signs in PDF, HTML, and
+  plain-text input. Extracted `raw` results use normalized characters.
+
 # statcheck 1.6.1
 
 ## Major changes
