@@ -5,6 +5,10 @@ decision_error_test <- function(reported_p, computed_p,
   # replace 'ns' for > alpha -----------------------------------------------
   reported_p[p_comparison == "ns"] <- alpha
   p_comparison[p_comparison == "ns"] <- ">"
+
+  # This signed statistic bound permits every magnitude, so the test
+  # statistic cannot establish significance or nonsignificance.
+  if(test_comparison == "any") return(FALSE)
   
   # check errors for different combinations of <>= -------------------------
   
