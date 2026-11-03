@@ -19,12 +19,12 @@ extract_stats <- function(txt, stat){
   
   # step 2: parse the extracted results ------------------------------------------
   
-  # empty vectors and data frames to store results in
-  # where relevant, force the output to be of type "character"
-  test_type <- character()
-  df_result <- data.frame(NULL)  # will contain both df1 and df2
-  test_stats <- data.frame(NULL) # will contain both test comparison and value
-  pvals <- data.frame(NULL)      # will contain both p-comparison and p-value
+  # Collect each parsed result once, then bind the rows after the loop.
+  # Repeatedly growing data frames copies all preceding results each time.
+  test_type <- character(length(nhst_raw))
+  df_result <- vector("list", length(nhst_raw))
+  test_stats <- vector("list", length(nhst_raw))
+  pvals <- vector("list", length(nhst_raw))
   
   # loop over all extracted, raw nhst results
   # each nhst result is parsed individually, in the order that they were extracted
@@ -70,7 +70,7 @@ extract_stats <- function(txt, stat){
       dfs <- extract_df(raw = nhst_raw[i],
                         test_type = test_type[i])
       
-      df_result <- rbind(df_result, dfs)
+      df_result[[i]] <- dfs
     
     # extract test comparison and test value 
     
@@ -83,7 +83,7 @@ extract_stats <- function(txt, stat){
                          test_dec = NA)
     } 
     
-    test_stats <- rbind(test_stats, test)  
+    test_stats[[i]] <- test
     
     # extract p-comparison and p-value
     
@@ -96,12 +96,16 @@ extract_stats <- function(txt, stat){
                       p_dec = NA)
     }
     
-    pvals <- rbind(pvals, p)
+    pvals[[i]] <- p
     
     
   }
   
   # create final data frame ------------------------------------------------------
+
+  df_result <- do.call(rbind, df_result)
+  test_stats <- do.call(rbind, test_stats)
+  pvals <- do.call(rbind, pvals)
   
   nhst_parsed <- data.frame(
     # return raw result without leading/trailing whitespaces

@@ -123,10 +123,9 @@ statcheck <- function(texts,
                       AllPValues = FALSE,
                       messages = TRUE){
   
-  # We need empty data frames to store extracted statistics in
-  # One for NHST results (Res) and one for p-values (pRes)
-  Res <- data.frame(NULL)
-  pRes <- data.frame(NULL)
+  # Collect frames per text, then bind once to avoid copying previous rows.
+  results <- vector("list", length(texts))
+  p_results <- vector("list", length(texts))
   
   # to indicate where the statistics came from, we need a name for the input
   # texts. In some cases, this is the name of the file the text came from, but
@@ -161,38 +160,22 @@ statcheck <- function(texts,
     # dataframe instead of the data frame with NHST results.
     pvalues <- extract_p_value(txt)
     
-    # append and close:
-    # in each repetition of the loop, the extracted p-values are appended 
-    # to the existing pRes data frame, so it grows in each step
     if(nrow(pvalues) > 0){
-      pvalues <- cbind(Source = names(txt), pvalues)
-      
-      pRes <- rbind(pRes, pvalues)
+      p_results[[i]] <- cbind(Source = names(txt), pvalues)
     }
-    
-    # after appending the pvalues dataframe to the main pRes dataframe,
-    # the temporary dataframe pvalues can be removed. 
-    rm(pvalues)
     
     # extract NHST results ------------------------------------------
     
-    # extract all NHST results. This function scrapes the text for all APA 
-    # reported NHST results and parses it so that the separate elements are
-    # returned in one large dataframe
-    nhst <- extract_stats(txt = txt,
-                          stat = stat)
-    
-    # append and close: same logic as for the pvalues dataframe above
-    if(nrow(nhst) > 0){
-      
-      nhst$Source <- names(txt)
-      nhst$OneTailedInTxt <- extract_1tail(txt)
-      
-      Res <- rbind(Res, nhst)
-      rownames(Res) <- NULL # to avoid having duplicated row names (1, 1, 2 etc.)
+    # P-value-only output does not need NHST extraction or recomputation.
+    if(AllPValues == FALSE){
+      nhst <- extract_stats(txt = txt, stat = stat)
+
+      if(nrow(nhst) > 0){
+        nhst$Source <- names(txt)
+        nhst$OneTailedInTxt <- extract_1tail(txt)
+        results[[i]] <- nhst
+      }
     }
-    
-    rm(nhst)
     
     # update the progress bar
     if(messages == TRUE){
@@ -205,6 +188,12 @@ statcheck <- function(texts,
   if(messages == TRUE){
     close(pb)
   }
+
+  Res <- do.call(rbind, results)
+  pRes <- do.call(rbind, p_results)
+  if(is.null(Res)) Res <- data.frame(NULL)
+  if(is.null(pRes)) pRes <- data.frame(NULL)
+  rownames(Res) <- NULL
   
   ###---------------------------------------------------------------------
   
