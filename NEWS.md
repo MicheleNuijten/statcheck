@@ -1,5 +1,8 @@
 # statcheck (development version)
 
+* Preserve valid UTF-8 HTML text even when the system locale uses another
+  encoding.
+
 # statcheck 1.6.1
 
 ## Major changes
