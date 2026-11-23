@@ -1,5 +1,23 @@
 context("Check if statistics from an article are correctly retrieved and parsed")
 
+test_that("file readers reject the other format even with matching extensions", {
+  html <- tempfile(fileext = ".pdf")
+  pdf <- tempfile(fileext = ".html")
+  on.exit(unlink(c(html, pdf)))
+  writeLines("<p>t(28) = 2.20, p = .04</p>", html)
+  fixture <- system.file("test_materials/test_dir/Paper1.pdf", package = "statcheck")
+  expect_true(file.copy(fixture, pdf))
+
+  expect_silent(expect_error(checkPDF(html, messages = FALSE), "Could not read a PDF"))
+  expect_error(checkHTML(pdf, messages = FALSE), "Use checkPDF\\(\\) for PDF files")
+  expect_gt(nrow(checkHTML(html, messages = FALSE)), 0)
+  expect_gt(nrow(checkPDF(pdf, messages = FALSE)), 0)
+
+  writeLines(c("<pre>", "%PDF-1.7", "</pre>", "<p>t(28) = 2.20, p = .04</p>"), html)
+  expect_gt(nrow(checkHTML(html, messages = FALSE)), 0)
+  expect_silent(expect_error(checkPDF(html, messages = FALSE), "Could not read a PDF"))
+})
+
 # tests concerning parsing stats from pdf files ------------------------------
 
 # individual pdf files
