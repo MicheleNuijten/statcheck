@@ -1,8 +1,20 @@
+has_pdf_header <- function(path) {
+  header <- readBin(path, what = "raw", n = 1024L)
+  # An HTML article may quote a PDF header later in its text.
+  pattern <- "^(\xef\xbb\xbf)?[[:space:]]*%PDF-[0-9]+\\.[0-9]+"
+  length(grepRaw(pattern, header)) > 0L
+}
+
 # HTML TO TXT ------------------------------------------------------------------
 
 getHTML <- function(x){
   
   strings <- lapply(x, function(fileName){
+    if (file.exists(fileName) && !dir.exists(fileName) &&
+        has_pdf_header(fileName)) {
+      stop(sQuote(fileName), " is a PDF. Use checkPDF() for PDF files.",
+           call. = FALSE)
+    }
     con <- file(fileName)
     on.exit(close(con))
     raw_strings <- readChar(con, file.info(fileName)$size, useBytes = TRUE)
@@ -95,7 +107,18 @@ getHTML <- function(x){
 # PDF TO TXT -------------------------------------------------------------------
 getPDF <- function(x){
   
-  txtfiles <- sapply(x, pdftools::pdf_text) 
+  txtfiles <- sapply(x, function(fileName) {
+    if (file.exists(fileName) && !dir.exists(fileName) &&
+        !has_pdf_header(fileName)) {
+      # Poppler can recover PDFs with leading junk or a damaged header.
+      return(tryCatch(suppressMessages(pdftools::pdf_text(fileName)),
+                      error = function(e) {
+                        stop("Could not read a PDF from ", sQuote(fileName), ".",
+                             call. = FALSE)
+                      }))
+    }
+    pdftools::pdf_text(fileName)
+  })
   
   # encode everything in UTF-32 
   # this should ensure the same output accross multiple operating systems
