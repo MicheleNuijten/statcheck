@@ -41,7 +41,12 @@ RGX_TEST_VALUE <- "[<>=]\\s?[^a-zA-Z\\d\\.]{0,3}\\s?\\d*,?\\d*\\.?\\d+\\s?,"
 # p-values
 # this is the same for every type of test
 RGX_NS <- "([^a-z]n\\.?s\\.?)"
-RGX_P <- "(p\\s?[<>=]\\s?\\d?\\.\\d+(?:[eE]-?\\d+)?)"
+# Multiplication by ten needs either a caret or an explicit exponent sign.
+RGX_TIMES_TEN <- "\\s*\u00d7\\s*10\\s*(?:\\^\\s*|(?=[+\u2212-]))"
+RGX_P_EXP <- paste0("(?:[eE]|", RGX_TIMES_TEN, ")[+\u2212-]?\\d+")
+RGX_P <- paste0(
+  "(p\\s?[<>=]\\s?(?:(?:\\d*\\.\\d+|\\d+)", RGX_P_EXP, "|\\d?\\.\\d+))"
+)
 RGX_P_NS <- paste0("(", RGX_NS, "|", RGX_P, ")")
 
 # full result

@@ -50,6 +50,10 @@ error_test <- function(reported_p, test_type, test_stat,
   }
   
   # check errors for different combinations of <>= -------------------------
+  if (p_comparison == "=") {
+    # Compare the reported value and the bounds at the same decimal precision.
+    reported_p <- round(reported_p, p_dec)
+  }
   
   if(test_comparison == "="){
     
