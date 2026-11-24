@@ -23,7 +23,7 @@ checkPDFdir <-
     pb <- utils::txtProgressBar(max = length(files), style = 3)
     
     for (i in 1:length(files)){
-      txts[i] <-  getPDF(files[i])
+      txts[i] <- read_directory_file(files[i], getPDF)
       utils::setTxtProgressBar(pb, i)
     }
     
