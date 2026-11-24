@@ -227,3 +227,13 @@ pdf_columns <- function(x, pattern = "\\p{WHITE_SPACE}{3,}") {
   output <- lapply(output, paste, collapse = " ")
   return(output)
 }
+
+read_directory_file <- function(path, reader) {
+  tryCatch(
+    reader(path),
+    error = function(error) {
+      message("Skipping ", sQuote(path), ": ", conditionMessage(error))
+      ""
+    }
+  )
+}
