@@ -216,10 +216,15 @@ extract_p_value <- function(raw){
       # remove leading/trailing whitespaces 
       p_value[i] <- trimws(p_value[i], which = "both")
       
-      # record the number of decimals of the p-value
-      dec <- attr(regexpr(RGX_DEC, p_value[i]), "match.length") - 1
-      dec[dec < 0] <- 0
-      
+      p_value[i] <- sub(RGX_TIMES_TEN, "e", p_value[i], perl = TRUE)
+      p_value[i] <- chartr("\u2212", "-", p_value[i])
+
+      # Record the decimal place of the last reported digit.
+      parts <- strsplit(p_value[i], "[eE]")[[1]]
+      dec <- max(0L, attr(regexpr(RGX_DEC, parts[1]), "match.length") - 1)
+      if (length(parts) == 2) {
+        dec <- max(0, dec - as.numeric(parts[2]))
+      }
       p_dec[i] <- dec
       
     }
